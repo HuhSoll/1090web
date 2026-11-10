@@ -14,6 +14,10 @@ export interface HighlightRoute {
   end: Vec3;
   /** 0..1 normalised weight */
   weight: number;
+  /** Override the tier palette (e.g. change colours in compare mode). */
+  color?: string;
+  /** Draw dashed (notable tier only; used for routes no longer seen). */
+  dashed?: boolean;
 }
 
 interface Palette {
@@ -48,6 +52,8 @@ export class HighlightLayer {
   private readonly connectedMat: LineMaterial;
   private readonly focusMat: LineMaterial;
   private readonly notable: Tier;
+  private readonly notableDashed: Tier;
+  private readonly notableDashedMat: LineMaterial;
   private readonly connected: Tier;
   private readonly focus: Tier;
   private flat = false;
@@ -70,17 +76,22 @@ export class HighlightLayer {
       return { wrapped: new Wrapped(obj).addTo(this.group), arcs: new Map(), lift };
     };
     this.notable = tier(this.notableMat, 3, 0.0003);
+    // Dash lengths are in world units: ~0.02 reads well on both the unit globe and the flat map.
+    this.notableDashedMat = new LineMaterial({ ...additive, linewidth: 2.4, dashed: true, dashSize: 0.018, gapSize: 0.014 });
+    this.notableDashed = tier(this.notableDashedMat, 3, 0.0003);
     this.connected = tier(this.connectedMat, 4, 0.0006);
     this.focus = tier(this.focusMat, 5, 0.001);
   }
 
-  /** Picking candidates: the connected tier when it has routes, otherwise the notable tier. */
+  /** Picking candidates: the connected tier when it has routes, otherwise the notable tiers. */
   get pickArcs(): ReadonlyMap<number, Float32Array> {
-    return this.connected.arcs.size > 0 ? this.connected.arcs : this.notable.arcs;
+    if (this.connected.arcs.size > 0) return this.connected.arcs;
+    if (this.notableDashed.arcs.size === 0) return this.notable.arcs;
+    return new Map([...this.notable.arcs, ...this.notableDashed.arcs]);
   }
 
   setResolution(width: number, height: number): void {
-    for (const m of [this.notableMat, this.connectedMat, this.focusMat]) m.resolution.set(width, height);
+    for (const m of [this.notableMat, this.notableDashedMat, this.connectedMat, this.focusMat]) m.resolution.set(width, height);
   }
 
   /** Switches the line geometry between globe and flat map and rebuilds every tier. */
@@ -96,17 +107,20 @@ export class HighlightLayer {
   setHidden(hidden: boolean, copies: boolean | readonly boolean[]): void {
     this.hidden = hidden;
     this.copies = copies;
-    for (const t of [this.notable, this.connected, this.focus]) this.applyVisibility(t);
+    for (const t of [this.notable, this.notableDashed, this.connected, this.focus]) this.applyVisibility(t);
   }
 
   setNotable(routes: readonly HighlightRoute[]): void {
     this.lastNotable = routes;
-    this.buildTier(this.notable, routes, NOTABLE_PALETTE);
+    this.buildTier(this.notable, routes.filter((r) => !r.dashed), NOTABLE_PALETTE);
+    this.buildTier(this.notableDashed, routes.filter((r) => r.dashed), NOTABLE_PALETTE);
+    if (this.notableDashed.arcs.size > 0) this.notableDashed.wrapped.main.computeLineDistances();
   }
 
-  /** While something is selected the notable tier recedes like the rest of the network. */
+  /** While something is selected the notable tiers recede like the rest of the network. */
   setNotableDimmed(dimmed: boolean): void {
     this.notableMat.opacity = dimmed ? 0.12 : 1;
+    this.notableDashedMat.opacity = dimmed ? 0.12 : 1;
   }
 
   setConnected(routes: readonly HighlightRoute[]): void {
@@ -146,9 +160,11 @@ export class HighlightLayer {
     routes.forEach((r, ri) => {
       const arc = this.sample(r.start, r.end, tier.lift);
       tier.arcs.set(r.routeId, arc);
-      c.copy(palette.low)
-        .lerp(palette.high, r.weight)
-        .multiplyScalar(palette.floor + (1 - palette.floor) * r.weight);
+      if (r.color) c.set(r.color).multiplyScalar(0.55 + 0.45 * r.weight);
+      else
+        c.copy(palette.low)
+          .lerp(palette.high, r.weight)
+          .multiplyScalar(palette.floor + (1 - palette.floor) * r.weight);
       for (let s = 0; s < HIGHLIGHT_SEGMENTS; s++) {
         const o = (ri * HIGHLIGHT_SEGMENTS + s) * 6;
         positions.set(arc.subarray(s * 3, s * 3 + 6), o);
@@ -181,8 +197,9 @@ export class HighlightLayer {
   }
 
   dispose(): void {
-    for (const t of [this.notable, this.connected, this.focus]) t.wrapped.main.geometry.dispose();
+    for (const t of [this.notable, this.notableDashed, this.connected, this.focus]) t.wrapped.main.geometry.dispose();
     this.notableMat.dispose();
+    this.notableDashedMat.dispose();
     this.connectedMat.dispose();
     this.focusMat.dispose();
   }

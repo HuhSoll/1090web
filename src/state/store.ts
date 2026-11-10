@@ -31,6 +31,8 @@ interface AppState {
   /** Month comparison: the current month (monthIndex) is compared against compareBaseIndex. */
   compareEnabled: boolean;
   compareBaseIndex: number;
+  /** Change categories hidden via the compare legend (ChangeKind values). */
+  compareHiddenKinds: readonly number[];
   /** Month data for compareBaseIndex (loaded only while comparing). */
   baseMonth: MonthData | null;
   filters: NetworkFilters;
@@ -63,6 +65,7 @@ interface AppState {
   setPlaying: (p: boolean) => void;
   setCompareEnabled: (v: boolean) => void;
   setCompareBaseIndex: (i: number) => void;
+  toggleCompareKind: (kind: number) => void;
   setBaseMonth: (m: MonthData | null) => void;
   setFilters: (f: Partial<NetworkFilters>) => void;
   resetFilters: () => void;
@@ -120,6 +123,7 @@ export const useAppStore = create<AppState>((set) => ({
   playing: false,
   compareEnabled: false,
   compareBaseIndex: 0,
+  compareHiddenKinds: [],
   baseMonth: null,
   filters: DEFAULT_FILTERS,
   selectedAirport: null,
@@ -159,6 +163,12 @@ export const useAppStore = create<AppState>((set) => ({
       compareBaseIndex: compareEnabled ? Math.max(0, s.monthIndex - 1) : s.compareBaseIndex,
     })),
   setCompareBaseIndex: (compareBaseIndex) => set({ compareBaseIndex }),
+  toggleCompareKind: (kind) =>
+    set((s) => ({
+      compareHiddenKinds: s.compareHiddenKinds.includes(kind)
+        ? s.compareHiddenKinds.filter((k) => k !== kind)
+        : [...s.compareHiddenKinds, kind],
+    })),
   setBaseMonth: (baseMonth) => set({ baseMonth }),
   setFilters: (f) => set((s) => ({ filters: { ...s.filters, ...f } })),
   resetFilters: () => set({ filters: DEFAULT_FILTERS }),

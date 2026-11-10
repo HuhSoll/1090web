@@ -20,6 +20,8 @@ ${PROJECTION_GLSL}
 
 in vec3 aStart;
 in vec3 aEnd;
+/** Route id: index into the state texture (instances may be a compacted subset of routes). */
+in float aRouteId;
 
 uniform sampler2D uState;
 uniform int uStateWidth;
@@ -29,9 +31,14 @@ uniform float uCompare;
 
 out float vAlpha;
 out vec3 vColor;
+/** Distance along the arc in dash units; vDashed > 0.5 draws the route dashed. */
+out float vDashPos;
+out float vDashed;
 
 void main() {
-  int id = gl_InstanceID;
+  int id = int(aRouteId + 0.5);
+  vDashed = 0.0;
+  vDashPos = 0.0;
   vec4 s = texelFetch(uState, ivec2(id % uStateWidth, id / uStateWidth), 0);
   float encoded = s.r;
   if (encoded <= 0.0) {
@@ -69,10 +76,18 @@ void main() {
   float alpha = 0.035 + 0.45 * w * w;
   if (uCompare > 0.5) {
     // Diverging, colour-blind-safe: blue = more flights, orange = fewer, grey = unchanged.
+    // New and no-longer-seen routes are told apart by line style too, not by hue alone:
+    // new = bright near-white solid, gone = dashed orange.
     if (kind == 2) { vColor = vec3(0.30, 0.70, 1.00); alpha *= 1.6; }        // up
     else if (kind == 3) { vColor = vec3(1.00, 0.58, 0.25); alpha *= 1.6; }   // down
-    else if (kind == 4) { vColor = vec3(0.55, 0.88, 1.00); alpha = max(alpha * 2.2, 0.12); } // new
-    else if (kind == 5) { vColor = vec3(1.00, 0.42, 0.20); alpha = max(alpha * 2.2, 0.12); } // gone
+    else if (kind == 4) { vColor = vec3(0.80, 1.00, 0.90); alpha = max(alpha * 2.8, 0.22); } // new
+    else if (kind == 5) {                                                     // gone
+      vColor = vec3(1.00, 0.45, 0.22);
+      alpha = max(alpha * 2.8, 0.22);
+      vDashed = 1.0;
+      // Roughly constant dash length: more dashes on longer arcs.
+      vDashPos = t * max(6.0, ang * 90.0);
+    }
     else { vColor = vec3(0.45, 0.52, 0.62); alpha *= 0.45; }                // stable
   }
   // When something is selected, everything that is not connected recedes.
@@ -92,11 +107,14 @@ uniform float uOpacity;
 
 in float vAlpha;
 in vec3 vColor;
+in float vDashPos;
+in float vDashed;
 
 out vec4 outColor;
 
 void main() {
   if (vAlpha <= 0.0) discard;
+  if (vDashed > 0.5 && fract(vDashPos) > 0.55) discard;
   outColor = vec4(vColor * vAlpha * uOpacity, 1.0);
 }
 `;

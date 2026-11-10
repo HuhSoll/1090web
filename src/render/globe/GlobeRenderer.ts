@@ -42,9 +42,10 @@ export interface GlobeCallbacks {
 
 const DEG2RAD = Math.PI / 180;
 const GLOBE_DEFAULT_DISTANCE = 3.5;
-const GLOBE_MIN_DISTANCE = 1.32;
+// Closest zoom: about 400 km above the surface on the globe, a ~2 degree wide view on the map.
+const GLOBE_MIN_DISTANCE = 1.06;
 const GLOBE_MAX_DISTANCE = 6;
-const FLAT_MIN_HEIGHT = 0.3;
+const FLAT_MIN_HEIGHT = 0.05;
 const FLAT_MAX_HEIGHT = 7.5;
 /** Flat-map camera height per unit of globe altitude (keeps the zoom level similar across modes). */
 const FLAT_PER_GLOBE_ALTITUDE = 1.9;
@@ -153,7 +154,8 @@ export class GlobeRenderer {
     this.routes = new RouteLayer(this.morph);
     this.airports = new AirportLayer(this.morph);
 
-    this.camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
+    // Near plane small enough for the closest zoom levels above.
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.004, 100);
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
@@ -270,12 +272,14 @@ export class GlobeRenderer {
   }
 
   /** Highest-volume routes drawn slightly thicker; also hoverable when nothing is selected. */
-  setNotableRoutes(routes: readonly { routeId: number; weight: number }[]): void {
+  setNotableRoutes(
+    routes: readonly { routeId: number; weight: number; color?: string; dashed?: boolean }[],
+  ): void {
     this.highlight.setNotable(
-      routes.map(({ routeId, weight }) => {
+      routes.map(({ routeId, weight, color, dashed }) => {
         const a = this.routeEndpoints[routeId * 2]!;
         const b = this.routeEndpoints[routeId * 2 + 1]!;
-        return { routeId, weight, start: this.unit(a), end: this.unit(b) };
+        return { routeId, weight, color, dashed, start: this.unit(a), end: this.unit(b) };
       }),
     );
     this.markDirty();

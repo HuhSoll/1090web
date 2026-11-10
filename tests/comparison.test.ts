@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { buildStaticNetwork } from '../src/data/loaders/datasetLoader';
 import type { MonthData } from '../src/data/model/network';
 import type { AirportRecord, DatasetManifest } from '../src/data/model/schema';
-import { ChangeKind, classifyChange, computeComparison, relativeChange } from '../src/domain/comparison';
+import {
+  ChangeKind,
+  classifyChange,
+  comparisonAsView,
+  computeComparison,
+  relativeChange,
+  standoutChanges,
+} from '../src/domain/comparison';
 import { DEFAULT_FILTERS } from '../src/domain/networkView';
 
 const manifest = {
@@ -90,6 +97,27 @@ describe('computeComparison', () => {
     const c = computeComparison(network, base, target, DEFAULT_FILTERS);
     expect(c.airportBase[0]).toBeCloseTo(20); // A: routes 0 and 1
     expect(c.airportTarget[0]).toBeCloseTo(15);
+  });
+});
+
+describe('compare display helpers', () => {
+  const base: MonthData = { month: '2026-01', observedDays: 30, records: [[2, 0, 'x', 90, 0, 0, 0], [0, 0, 'x', 300, 0, 0, 0]] };
+  const target: MonthData = { month: '2026-02', observedDays: 30, records: [[3, 0, 'x', 60, 0, 0, 0], [0, 0, 'x', 300, 0, 0, 0]] };
+  const c = computeComparison(network, base, target, DEFAULT_FILTERS);
+
+  it('picks new and no-longer-seen routes to stand out, busiest first', () => {
+    expect(standoutChanges(c, [])).toEqual([
+      { routeId: 2, kind: ChangeKind.Gone },
+      { routeId: 3, kind: ChangeKind.New },
+    ]);
+    expect(standoutChanges(c, [ChangeKind.Gone])).toEqual([{ routeId: 3, kind: ChangeKind.New }]);
+  });
+
+  it('hides categories switched off in the legend', () => {
+    const v = comparisonAsView(c, [ChangeKind.Stable]);
+    expect(v.routeFlights[0]).toBe(0); // stable route hidden
+    expect(v.routeFlights[2]).toBeGreaterThan(0);
+    expect(v.visibleRouteCount).toBe(2);
   });
 });
 

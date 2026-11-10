@@ -137,6 +137,7 @@ export const en = {
   'compare.routeChanges': 'Routes by change',
   'compare.sameMonth': 'Pick a different month to compare with.',
   'compare.legend': 'Change',
+  'compare.legendHint': 'Click to show or hide. Thick lines: busiest new / no longer seen.',
 
   'globe.autoRotate': 'Auto-rotate',
   'globe.zoomIn': 'Zoom in',
@@ -306,6 +307,7 @@ export const ja: Messages = {
   'compare.routeChanges': '変化の大きい路線',
   'compare.sameMonth': '比較元には別の月を選んでください。',
   'compare.legend': '変化',
+  'compare.legendHint': 'クリックで表示・非表示。太線は便数の多い「新たに観測」「観測されなくなった」路線。',
 
   'globe.autoRotate': '自動回転',
   'globe.zoomIn': 'ズームイン',

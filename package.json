@@ -1,6 +1,7 @@
 {
   "name": "1090web",
   "private": true,
+  "license": "MIT",
   "version": "0.1.0",
   "description": "Explore the world's aviation network on an interactive 3D globe.",
   "type": "module",

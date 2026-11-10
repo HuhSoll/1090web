@@ -33,7 +33,7 @@ void main() {
   float facing = clamp(dot(normalize(globe), normalize(cameraPosition - worldP)) * 3.0, 0.0, 1.0);
   vFacing = mix(facing, 1.0, uMorph);
   float size = aSize;
-  if (aState >= 2.0) size = max(size, 8.0) + 4.0;
+  if (aState >= 2.0) size = max(size, 11.0) + 4.0;
   else if (aState >= 1.0) size += 1.5;
   gl_PointSize = size * uPixelRatio;
   vSize = size;
@@ -74,8 +74,9 @@ void main() {
     alpha = dot_;
   } else {
     color = vec3(0.62, 0.89, 1.0);
-    // Smaller (quieter) airports are fainter; everything recedes while something is selected.
-    float quiet = mix(0.5, 0.95, clamp((vSize - 2.5) / 7.0, 0.0, 1.0));
+    // Smaller (quieter) airports are slightly fainter, but still clearly visible; everything
+    // recedes while something is selected.
+    float quiet = mix(0.75, 1.0, clamp((vSize - 4.5) / 10.0, 0.0, 1.0));
     alpha = dot_ * quiet * mix(1.0, 0.35, uHasSelection);
   }
   outColor = vec4(color, alpha * vFacing);

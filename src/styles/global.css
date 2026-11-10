@@ -7,7 +7,7 @@
   --panel-border-strong: rgba(120, 190, 240, 0.28);
   --text: #dbe7f3;
   --text-dim: #8193a8;
-  --text-faint: #56667a;
+  --text-faint: #72849a;
   --accent: #7fd6ff;
   --accent-strong: #b8ecff;
   --accent-warm: #ffd27a;
@@ -866,10 +866,38 @@ input[type='range'] {
 }
 
 .swatch {
-  width: 18px;
+  width: 20px;
   height: 3px;
   border-radius: 2px;
   flex: none;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 2px 4px;
+  border: none;
+  border-radius: 5px;
+  background: none;
+  text-align: left;
+}
+
+.legend-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.legend-item.is-off {
+  opacity: 0.35;
+}
+
+.legend-item .muted.small {
+  margin-left: auto;
+}
+
+.compare-legend {
+  max-width: 250px;
 }
 
 .delta-up {

@@ -143,10 +143,27 @@ export function relativeChange(base: number, target: number): number | null {
 }
 
 /**
+ * Routes that should stand out in compare mode: the busiest new and no-longer-seen routes
+ * (by the larger month's flights), excluding hidden categories.
+ */
+export function standoutChanges(c: Comparison, hidden: readonly number[], limit = 120): { routeId: number; kind: ChangeKind }[] {
+  const out: { routeId: number; kind: ChangeKind; w: number }[] = [];
+  c.kind.forEach((k, routeId) => {
+    if ((k === ChangeKind.New || k === ChangeKind.Gone) && !hidden.includes(k)) out.push({ routeId, kind: k as ChangeKind, w: c.weight[routeId]! });
+  });
+  return out
+    .sort((a, b) => b.w - a.w)
+    .slice(0, limit)
+    .map(({ routeId, kind }) => ({ routeId, kind }));
+}
+
+/**
  * The comparison as a NetworkView, so the map and panels can reuse the normal code paths:
  * route and airport values are the larger of the two months, as flights per 30 days.
+ * Routes in hidden categories (compare legend) are left out.
  */
-export function comparisonAsView(c: Comparison): NetworkView {
+export function comparisonAsView(c: Comparison, hidden: readonly number[] = []): NetworkView {
+  const routeFlights = hidden.length === 0 ? c.weight : c.weight.map((w, i) => (hidden.includes(c.kind[i]!) ? 0 : w));
   const airportFlights = new Float32Array(c.airportBase.length);
   let maxAirportFlights = 0;
   let visibleAirportCount = 0;
@@ -157,10 +174,10 @@ export function comparisonAsView(c: Comparison): NetworkView {
     if (v > maxAirportFlights) maxAirportFlights = v;
   }
   let visibleRouteCount = 0;
-  for (const k of c.kind) if (k !== ChangeKind.Hidden) visibleRouteCount++;
+  for (const w of routeFlights) if (w > 0) visibleRouteCount++;
   return {
     month: `${c.base.month}..${c.target.month}`,
-    routeFlights: c.weight,
+    routeFlights,
     airportFlights,
     visibleRouteCount,
     visibleAirportCount,

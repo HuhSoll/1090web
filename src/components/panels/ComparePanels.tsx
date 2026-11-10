@@ -4,16 +4,17 @@ import { ChangeKind, relativeChange, type Comparison, type RouteChange } from '.
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
 
-/** Swatch colours; must match the compare branch of render/shaders/routeShaders.ts. */
-const CHANGE_COLORS = {
-  up: '#4db3ff',
-  down: '#ff944d',
-  new: '#8ce0ff',
-  gone: '#ff6b33',
-  stable: '#73859e',
+/** Swatch styles; must match the compare branch of render/shaders/routeShaders.ts. */
+const CHANGE_SWATCH = {
+  up: { background: '#4db3ff' },
+  down: { background: '#ff944d' },
+  new: { background: '#ccffe6', height: 4 },
+  gone: { background: 'repeating-linear-gradient(90deg, #ff7338 0 5px, transparent 5px 9px)', height: 4 },
+  stable: { background: '#73859e' },
 } as const;
 
-const ORDER = ['up', 'down', 'new', 'gone', 'stable'] as const;
+const ORDER = ['new', 'gone', 'up', 'down', 'stable'] as const;
+const KIND_OF = { up: ChangeKind.Up, down: ChangeKind.Down, new: ChangeKind.New, gone: ChangeKind.Gone, stable: ChangeKind.Stable } as const;
 
 function useMonthPair(c: Comparison) {
   const { monthLabel } = useI18n();
@@ -35,20 +36,29 @@ function Delta({ base, target }: { base: number; target: number }) {
 
 const perDay = (v: number) => (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10);
 
+/** Legend doubling as a filter: click a category to show or hide it on the map. */
 export function CompareLegend({ comparison }: { comparison: Comparison }) {
   const { t, number } = useI18n();
+  const hidden = useAppStore((s) => s.compareHiddenKinds);
+  const toggle = useAppStore((s) => s.toggleCompareKind);
   return (
     <div className="compare-legend panel" aria-label={t('compare.legend')}>
       <span className="section-title">{t('compare.legend')}</span>
       <ul>
-        {ORDER.map((k) => (
-          <li key={k}>
-            <span className="swatch" style={{ background: CHANGE_COLORS[k] }} />
-            <span>{t(`compare.${k}`)}</span>
-            <span className="muted small">{number(comparison.counts[k])}</span>
-          </li>
-        ))}
+        {ORDER.map((k) => {
+          const shown = !hidden.includes(KIND_OF[k]);
+          return (
+            <li key={k}>
+              <button type="button" className={`legend-item ${shown ? '' : 'is-off'}`} aria-pressed={shown} onClick={() => toggle(KIND_OF[k])}>
+                <span className="swatch" style={CHANGE_SWATCH[k]} />
+                <span>{t(`compare.${k}`)}</span>
+                <span className="muted small">{number(comparison.counts[k])}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
+      <span className="muted tiny">{t('compare.legendHint')}</span>
     </div>
   );
 }

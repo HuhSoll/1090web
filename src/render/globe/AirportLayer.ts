@@ -63,7 +63,7 @@ export class AirportLayer {
       const w = weights[i] ?? 0;
       // Size grows steeply with traffic so that, with thousands of airports, hubs stand out and
       // small airports stay small.
-      this.sizes[i] = w > 0 ? 2.5 + 7.5 * w * w : 0;
+      this.sizes[i] = w > 0 ? 4.5 + 10 * w * w : 0;
     }
     this.geometry.getAttribute('aSize').needsUpdate = true;
   }

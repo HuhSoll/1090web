@@ -16,9 +16,12 @@ export function densityOpacity(visibleRoutes: number): number {
 /**
  * All routes in a single draw call.
  *
- * Memory per route: 2 x vec3 endpoints (24 bytes) + 4 bytes of state texture. The arc shape is
- * computed on the GPU from a shared 32-segment template, so 50k routes cost ~1.4 MB of buffers
- * regardless of segment count. Filtering/selection only rewrites the state texture.
+ * Memory per route: 2 x vec3 endpoints + route id (28 bytes) + 4 bytes of state texture. The
+ * arc shape is computed on the GPU from a shared 32-segment template.
+ *
+ * Only routes with flights in the current view are uploaded as instances (the dataset has ~150k
+ * routes but a month uses ~65k), so hidden routes cost no vertex work. Selection changes only
+ * rewrite the state texture; filter/month changes also re-pack the instance list.
  */
 export class RouteLayer {
   readonly object: THREE.LineSegments;
@@ -28,6 +31,13 @@ export class RouteLayer {
   private stateTexture: THREE.DataTexture;
   private stateData: Uint8Array;
   private routeCount = 0;
+  /** Endpoints of every route (by route id); instances are packed from these. */
+  private allStart = new Float32Array(0);
+  private allEnd = new Float32Array(0);
+  private instStart!: THREE.InstancedBufferAttribute;
+  private instEnd!: THREE.InstancedBufferAttribute;
+  private instId!: THREE.InstancedBufferAttribute;
+  private packedWeights: Float32Array | null = null;
 
   constructor(morph: MorphUniform) {
     this.geometry = new THREE.InstancedBufferGeometry();
@@ -88,9 +98,18 @@ export class RouteLayer {
       start.set(endpoints.subarray(i * 6, i * 6 + 3), i * 3);
       end.set(endpoints.subarray(i * 6 + 3, i * 6 + 6), i * 3);
     }
-    this.geometry.setAttribute('aStart', new THREE.InstancedBufferAttribute(start, 3));
-    this.geometry.setAttribute('aEnd', new THREE.InstancedBufferAttribute(end, 3));
-    this.geometry.instanceCount = count;
+    this.allStart = start;
+    this.allEnd = end;
+    // Instance buffers sized for the worst case; updateState() fills a prefix.
+    this.instStart = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3);
+    this.instEnd = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3);
+    this.instId = new THREE.InstancedBufferAttribute(new Float32Array(count), 1);
+    for (const a of [this.instStart, this.instEnd, this.instId]) a.setUsage(THREE.DynamicDrawUsage);
+    this.geometry.setAttribute('aStart', this.instStart);
+    this.geometry.setAttribute('aEnd', this.instEnd);
+    this.geometry.setAttribute('aRouteId', this.instId);
+    this.geometry.instanceCount = 0;
+    this.packedWeights = null;
 
     const rows = Math.max(1, Math.ceil(count / STATE_TEXTURE_WIDTH));
     this.stateData = new Uint8Array(rows * STATE_TEXTURE_WIDTH * 4);
@@ -115,12 +134,47 @@ export class RouteLayer {
       data[o + 2] = kinds ? kinds[i]! : 0;
       if (w > 0) visible++;
     }
+    // Re-pack the instance list only when the set of visible routes may have changed
+    // (a new weights array means a new month/filter; selection reuses the same array).
+    if (weights !== this.packedWeights) this.packInstances(weights);
     this.material.uniforms.uHasSelection!.value = connected ? 1 : 0;
     this.material.uniforms.uCompare!.value = kinds ? 1 : 0;
     // Additive blending saturates as line count grows; scale overall opacity so that density
     // (not raw count) drives brightness. ~1 for hundreds of routes, ~0.1 for 50k.
     this.material.uniforms.uOpacity!.value = densityOpacity(visible);
     this.stateTexture.needsUpdate = true;
+  }
+
+  private packInstances(weights: Float32Array): void {
+    this.packedWeights = weights;
+    if (!this.instStart) return;
+    const s = this.instStart.array as Float32Array;
+    const e = this.instEnd.array as Float32Array;
+    const id = this.instId.array as Float32Array;
+    let k = 0;
+    const n = Math.min(this.routeCount, weights.length);
+    for (let i = 0; i < n; i++) {
+      if (!(weights[i]! > 0)) continue;
+      s[k * 3] = this.allStart[i * 3]!;
+      s[k * 3 + 1] = this.allStart[i * 3 + 1]!;
+      s[k * 3 + 2] = this.allStart[i * 3 + 2]!;
+      e[k * 3] = this.allEnd[i * 3]!;
+      e[k * 3 + 1] = this.allEnd[i * 3 + 1]!;
+      e[k * 3 + 2] = this.allEnd[i * 3 + 2]!;
+      id[k] = i;
+      k++;
+    }
+    for (const [a, size] of [[this.instStart, 3], [this.instEnd, 3], [this.instId, 1]] as const) {
+      a.clearUpdateRanges();
+      a.addUpdateRange(0, Math.max(1, k * size));
+      a.needsUpdate = true;
+    }
+    this.geometry.instanceCount = k;
+  }
+
+  /** Number of route instances currently drawn (for diagnostics/tests). */
+  get drawnInstances(): number {
+    return this.geometry.instanceCount;
   }
 
   dispose(): void {

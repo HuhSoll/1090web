@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { comparisonAsView, type Comparison } from '../../domain/comparison';
+import { ChangeKind, comparisonAsView, standoutChanges, type Comparison } from '../../domain/comparison';
 import { connectedRoutes, notableRoutes, type NetworkView } from '../../domain/networkView';
 import { GlobeRenderer, WebGLUnavailableError, type PickHit } from '../../render/globe/GlobeRenderer';
 import { useAppStore } from '../../state/store';
@@ -14,6 +14,10 @@ interface Props {
   comparison: Comparison | null;
 }
 
+/** Thick-line colours for new / no-longer-seen routes; match the route shader's compare branch. */
+const NEW_COLOR = '#ccffe6';
+const GONE_COLOR = '#ff7338';
+
 const logNorm = (v: number, max: number) => (v > 0 && max > 0 ? Math.log1p(v) / Math.log1p(max) : 0);
 
 /**
@@ -21,7 +25,11 @@ const logNorm = (v: number, max: number) => (v > 0 && max > 0 ? Math.log1p(v) / 
  * typed arrays and selection descriptors, and reports picks back through callbacks.
  */
 export function GlobeView({ view: monthView, comparison }: Props) {
-  const view = useMemo(() => (comparison ? comparisonAsView(comparison) : monthView), [comparison, monthView]);
+  const hiddenKinds = useAppStore((s) => s.compareHiddenKinds);
+  const view = useMemo(
+    () => (comparison ? comparisonAsView(comparison, hiddenKinds) : monthView),
+    [comparison, monthView, hiddenKinds],
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<GlobeRenderer | null>(null);
   const [webglError, setWebglError] = useState<string | null>(null);
@@ -120,13 +128,19 @@ export function GlobeView({ view: monthView, comparison }: Props) {
   useEffect(() => {
     const r = rendererRef.current;
     if (!r || !network || !view) return;
-    // In compare mode colour carries the meaning; thick white lines would compete with it.
+    // In compare mode the thick lines go to the busiest new / no-longer-seen routes, which are
+    // otherwise easy to miss among thousands of thin lines.
     r.setNotableRoutes(
       comparison
-        ? []
+        ? standoutChanges(comparison, hiddenKinds).map(({ routeId, kind }) => ({
+            routeId,
+            weight: logNorm(comparison.weight[routeId]!, comparison.maxWeight),
+            color: kind === ChangeKind.New ? NEW_COLOR : GONE_COLOR,
+            dashed: kind === ChangeKind.Gone,
+          }))
         : notableRoutes(view).map((n) => ({ routeId: n.routeId, weight: logNorm(n.flights, view.maxRouteFlights) })),
     );
-  }, [network, view, comparison]);
+  }, [network, view, comparison, hiddenKinds]);
 
   // 4. Selection / hover.
   const hoveredAirport = hover?.kind === 'airport' ? hover.id : null;

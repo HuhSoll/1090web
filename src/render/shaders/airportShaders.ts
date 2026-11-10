@@ -19,6 +19,7 @@ uniform float uRadius;
 out float vState;
 out float vVisible;
 out float vFacing;
+out float vSize;
 
 void main() {
   vState = aState;
@@ -35,6 +36,7 @@ void main() {
   if (aState >= 2.0) size = max(size, 14.0) + 6.0;
   else if (aState >= 1.0) size += 2.0;
   gl_PointSize = size * uPixelRatio;
+  vSize = size;
 }
 `;
 
@@ -46,8 +48,12 @@ uniform float uHasSelection;
 in float vState;
 in float vVisible;
 in float vFacing;
+in float vSize;
 
 out vec4 outColor;
+
+// Markers smaller than this (CSS px) are drawn as a plain dot; a ring would not be legible.
+const float RING_MIN_SIZE = 9.0;
 
 // Anti-aliased band between radii a and b (r is 0 at the centre, 1 at the sprite edge).
 float band(float r, float a, float b, float aa) {
@@ -81,9 +87,19 @@ void main() {
     strength = mix(1.0, 0.35, uHasSelection);
   }
 
-  float mark = max(core, ring * 0.9);
+  float mark;
+  float haloAlpha;
+  if (vSize < RING_MIN_SIZE && vState < 2.0) {
+    // Small airport: soft dot, fainter the smaller it is, no halo.
+    mark = 1.0 - smoothstep(0.55, 1.0, r);
+    strength *= mix(0.45, 0.85, clamp((vSize - 3.0) / (RING_MIN_SIZE - 3.0), 0.0, 1.0));
+    haloAlpha = 0.0;
+  } else {
+    mark = max(core, ring * 0.9);
+    haloAlpha = halo * 0.55;
+  }
   vec3 rgb = mix(vec3(0.01, 0.03, 0.07), color, mark);
-  float alpha = max(mark, halo * 0.55) * strength * vFacing;
+  float alpha = max(mark, haloAlpha) * strength * vFacing;
   outColor = vec4(rgb, alpha);
 }
 `;

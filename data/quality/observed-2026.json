@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-11-10T09:49:35Z",
+  "raw_rows": 43083171,
+  "raw_rows_without_airline": 14981253,
+  "flights_in_scope": 26862421,
+  "removed_quarter_overlap_or_bad_time": 1239497,
+  "basis": {
+    "observed": 17514377,
+    "unknown": 2724832,
+    "callsign": 6623212
+  },
+  "end_basis": {
+    "origin": {
+      "unknown": 1867649,
+      "callsign": 3574085,
+      "observed": 21420687
+    },
+    "destination": {
+      "unknown": 1735759,
+      "observed": 21078937,
+      "callsign": 4047725
+    }
+  },
+  "observed_vs_callsign_conflicts": {
+    "origin": 1537737,
+    "destination": 1612965
+  },
+  "same_airport_excluded": 1228915,
+  "class": {
+    "unknown": 6446808,
+    "cargo": 604368,
+    "passenger": 17086413
+  },
+  "routes": 154010,
+  "airports": 4653,
+  "airlines": 5586,
+  "months": [
+    {
+      "month": "2026-01",
+      "file": "months/2026-01.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 179130
+    },
+    {
+      "month": "2026-02",
+      "file": "months/2026-02.json",
+      "observedDays": 28,
+      "daysInMonth": 28,
+      "recordCount": 175593
+    },
+    {
+      "month": "2026-03",
+      "file": "months/2026-03.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 195363
+    },
+    {
+      "month": "2026-04",
+      "file": "months/2026-04.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 196608
+    },
+    {
+      "month": "2026-05",
+      "file": "months/2026-05.json",
+      "observedDays": 30,
+      "daysInMonth": 31,
+      "recordCount": 200016
+    },
+    {
+      "month": "2026-06",
+      "file": "months/2026-06.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 213399
+    },
+    {
+      "month": "2026-07",
+      "file": "months/2026-07.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 214425
+    },
+    {
+      "month": "2026-08",
+      "file": "months/2026-08.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 220532
+    },
+    {
+      "month": "2026-09",
+      "file": "months/2026-09.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 218319
+    }
+  ]
+}

@@ -15,6 +15,7 @@ export interface DatasetSource {
   license: string;
   url?: string;
   retrievedAt?: string;
+  files?: string[];
 }
 
 export interface MonthEntry {
@@ -24,6 +25,8 @@ export interface MonthEntry {
   file: string;
   /** Number of days that actually have observations in this month. */
   observedDays: number;
+  /** Calendar days in the month (absent in older/demo manifests). */
+  daysInMonth?: number;
   recordCount: number;
 }
 
@@ -33,6 +36,8 @@ export interface CarrierInfo {
   id: string;
   name: string;
   operatorType: OperatorType;
+  /** Total flights in the dataset (observed datasets list carriers busiest first). */
+  flights?: number;
 }
 
 export interface DatasetManifest {
@@ -45,6 +50,17 @@ export interface DatasetManifest {
   carriers: CarrierInfo[];
   sources: DatasetSource[];
   disclaimer: string;
+  quality?: DatasetQuality;
+}
+
+/** Data-quality summary produced by the pipeline (observed datasets only). */
+export interface DatasetQuality {
+  flightsWithAirlineCode: number;
+  flightsOnMap: number;
+  basis: Partial<Record<'observed' | 'callsign' | 'unknown', number>>;
+  classes: Partial<Record<'passenger' | 'cargo' | 'unknown', number>>;
+  observedVsCallsignConflicts: { origin: number; destination: number };
+  flightsWithoutAirlineCode: number;
 }
 
 export interface AirportRecord {
@@ -66,12 +82,24 @@ export type RouteTuple = [number, string, string];
 /** 0 = A→B, 1 = B→A */
 export type Direction = 0 | 1;
 
-/** [routeId, direction, carrierId, passengerFlights, cargoFlights, unknownFlights] */
-export type MonthRecordTuple = [number, Direction, string, number, number, number];
+/**
+ * How the airports of the counted flights were determined.
+ * 0 = observed in the ADS-B track (or track + callsign route agree), 1 = callsign route only.
+ */
+export type Basis = 0 | 1;
+
+/**
+ * [routeId, direction, carrierId, passengerFlights, cargoFlights, unknownFlights, basis?]
+ * basis is omitted in the demo dataset (treated as observed).
+ */
+export type MonthRecordTuple =
+  | [number, Direction, string, number, number, number]
+  | [number, Direction, string, number, number, number, Basis];
 
 export interface MonthFile {
   month: string;
   observedDays: number;
+  daysInMonth?: number;
   recordColumns: string[];
   records: MonthRecordTuple[];
 }

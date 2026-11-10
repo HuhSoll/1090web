@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data:demo": "node scripts/generate-demo-data.mjs",
-    "og:geometry": "node scripts/og/export-geometry.mjs og-geometry.json",
+    "og:geometry": "node scripts/og/export-geometry.mjs og-geometry.json observed-2026",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "engines": {

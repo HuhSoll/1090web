@@ -75,6 +75,12 @@ export function App() {
           <span>{stress !== null ? t('stress.banner', { count: number(stress) }) : t('demo.banner')}</span>
         </div>
       )}
+      {kind === 'observed' && stress === null && (
+        <div className="banner banner-info" role="note">
+          <span className="badge info-badge">{t('observed.badge')}</span>
+          <span>{t('observed.banner')}</span>
+        </div>
+      )}
 
       {/* Mobile only: compact header that opens the sidebar as a drawer. */}
       <div className="mobile-bar">

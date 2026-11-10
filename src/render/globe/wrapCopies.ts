@@ -34,9 +34,15 @@ export class Wrapped<T extends Drawable> {
     for (const o of this.all) o.geometry = g;
   }
 
-  /** @param copies whether the wrapped copies are drawn (flat map only) */
-  setVisible(visible: boolean, copies: boolean): void {
+  /**
+   * @param copies whether the wrapped copies are drawn (flat map only): a boolean for both, or
+   *               one flag per entry of COPY_OFFSETS (so off-screen copies are skipped)
+   */
+  setVisible(visible: boolean, copies: boolean | readonly boolean[]): void {
     this.main.visible = visible;
-    for (let i = 1; i < this.all.length; i++) this.all[i]!.visible = visible && copies;
+    for (let i = 1; i < this.all.length; i++) {
+      const c = typeof copies === 'boolean' ? copies : (copies[i - 1] ?? false);
+      this.all[i]!.visible = visible && c;
+    }
   }
 }

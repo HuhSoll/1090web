@@ -64,6 +64,7 @@ export function validateMonth(raw: unknown, routeCount: number): MonthFile {
     assert(r[0] >= 0 && r[0] < routeCount, `month ${m.month}: route id out of range`);
     assert(r[1] === 0 || r[1] === 1, `month ${m.month}: bad direction`);
     assert(r[3] >= 0 && r[4] >= 0 && r[5] >= 0, `month ${m.month}: negative counts`);
+    assert(r.length === 6 || r[6] === 0 || r[6] === 1, `month ${m.month}: bad basis`);
   }
   return m;
 }

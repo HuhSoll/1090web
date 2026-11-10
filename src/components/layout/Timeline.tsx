@@ -50,7 +50,11 @@ export function Timeline() {
           <strong>{stress !== null ? t('timeline.disabled') : current ? monthLabel(current.month) : '—'}</strong>
           {stress === null && month && (
             <span className="muted small">
-              {monthLoading ? t('app.loadingMonth', { month: current ? monthLabel(current.month) : '' }) : t('timeline.observedDays', { days: month.observedDays })}
+              {monthLoading
+                ? t('app.loadingMonth', { month: current ? monthLabel(current.month) : '' })
+                : month.daysInMonth && month.observedDays < month.daysInMonth
+                  ? t('timeline.partialDays', { days: month.observedDays, total: month.daysInMonth })
+                  : t('timeline.observedDays', { days: month.observedDays })}
             </span>
           )}
         </div>

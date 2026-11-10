@@ -430,6 +430,16 @@ input[type='range'] {
   border: 1px solid rgba(242, 180, 90, 0.35);
 }
 
+.info-badge {
+  background: rgba(127, 214, 255, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(127, 214, 255, 0.3);
+}
+
+.banner.banner-info {
+  border-color: rgba(127, 214, 255, 0.18);
+}
+
 /* ---------- info (right) ---------- */
 
 .info {

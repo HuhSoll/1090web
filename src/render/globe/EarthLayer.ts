@@ -94,7 +94,7 @@ export class EarthLayer {
   }
 
   /** Called every frame with the current morph and whether the flat copies should be drawn. */
-  update(copies: boolean): void {
+  update(copies: boolean | readonly boolean[]): void {
     const m = this.morph.value;
     this.atmosphere.visible = m < 0.99;
     this.atmosphereMaterial.uniforms.uIntensity!.value = 0.32 * (1 - m) * (1 - m);

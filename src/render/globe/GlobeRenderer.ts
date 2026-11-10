@@ -502,6 +502,11 @@ export class GlobeRenderer {
   private constrainFlat(): void {
     const t = this.controls.target;
     const cam = this.camera.position;
+    // Zoom-to-cursor moves the target along the view ray; keep it on the map plane.
+    if (t.z !== 0) {
+      cam.z -= t.z;
+      t.z = 0;
+    }
     const dy = THREE.MathUtils.clamp(t.y, -FLAT_MAX_LAT, FLAT_MAX_LAT) - t.y;
     let dx = 0;
     if (t.x > Math.PI) dx = -FLAT_WORLD_WIDTH;
@@ -532,6 +537,16 @@ export class GlobeRenderer {
     const pr = this.renderer.getPixelRatio();
     this.highlight.setResolution(this.width * pr, this.height * pr);
     this.markDirty();
+  }
+
+  /** Which of the side copies (COPY_OFFSETS) overlap the current flat-map view. */
+  private visibleCopies(): boolean[] {
+    const t = this.controls.target;
+    const h = this.camera.position.z - t.z;
+    const halfW = h * Math.tan((this.camera.fov * DEG2RAD) / 2) * this.camera.aspect * 1.15;
+    // Each copy spans [-PI + dx, PI + dx]; arcs can overshoot the edge, hence the margin.
+    const margin = 0.6;
+    return COPY_OFFSETS.map((dx) => Math.PI + dx + margin > t.x - halfW && -Math.PI + dx - margin < t.x + halfW);
   }
 
   private applyViewOffset(): void {
@@ -571,10 +586,11 @@ export class GlobeRenderer {
 
     if (!this.dirty) return;
     this.dirty = false;
-    const copies = this.mode === 'flat' && !this.transition;
+    const copies = this.mode === 'flat' && !this.transition ? this.visibleCopies() : false;
     this.earth.update(copies);
     this.routes.wrapped.setVisible(true, copies);
     this.airports.wrapped.setVisible(true, copies);
+    this.highlight.setHidden(this.transition !== null, copies);
     this.airports.update(this.renderer.getPixelRatio());
     this.renderer.render(this.scene, this.camera);
   };

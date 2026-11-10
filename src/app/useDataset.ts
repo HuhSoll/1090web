@@ -3,7 +3,7 @@ import { DatasetLoader } from '../data/loaders/datasetLoader';
 import { buildStressNetwork } from '../data/demo/stressNetwork';
 import { computeNetworkView, type NetworkView } from '../domain/networkView';
 import { useAppStore } from '../state/store';
-import { DATASET_ID, PLAYBACK_INTERVAL_MS } from './config';
+import { PLAYBACK_INTERVAL_MS, resolveDatasetId } from './config';
 
 function readStressParam(): number | null {
   const raw = new URLSearchParams(window.location.search).get('stress');
@@ -27,7 +27,7 @@ export function useDataset(): { retry: () => void } {
   const loadStatic = useCallback(() => {
     const st = useAppStore.getState();
     const controller = new AbortController();
-    const loader = new DatasetLoader(import.meta.env.BASE_URL, DATASET_ID);
+    const loader = new DatasetLoader(import.meta.env.BASE_URL, resolveDatasetId());
     loaderRef.current = loader;
     st.setStatus({ state: 'loading' });
     loader

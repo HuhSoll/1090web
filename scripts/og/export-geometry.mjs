@@ -5,6 +5,7 @@
  * Step 2 (render-og.py) draws the PNG.
  *
  * Usage: node scripts/og/export-geometry.mjs <out.json> [datasetId]
+ * Only the busiest MAX_ROUTES routes are exported; the rest would be invisible at this size.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -15,7 +16,7 @@ import { feature } from 'topojson-client';
 
 const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const [, , outPath, datasetId = 'demo'] = process.argv;
+const [, , outPath, datasetId = 'observed-2026'] = process.argv;
 if (!outPath) {
   console.error('usage: node scripts/og/export-geometry.mjs <out.json> [datasetId]');
   process.exit(1);
@@ -27,6 +28,7 @@ const LON0 = 25; // map centre longitude (degrees)
 const LAT0 = 18; // map centre latitude (degrees)
 const K = 205; // pixels per radian (world is 2*PI*K wide, cropped to the frame)
 const D2R = Math.PI / 180;
+const MAX_ROUTES = 4000;
 
 const cx = W / 2;
 const cy = H / 2 + LAT0 * D2R * K;
@@ -61,7 +63,7 @@ const month = read(lastMonth.file);
 const byId = new Map(airports.map((a) => [a.id, a]));
 const flights = new Float64Array(routes.length);
 for (const [routeId, , , p, c, u] of month.records) flights[routeId] += p + c + u;
-const maxFlights = Math.max(...flights);
+const maxFlights = flights.reduce((m, v) => (v > m ? v : m), 0);
 
 const toUnit = (lat, lon) => {
   const c = Math.cos(lat * D2R);
@@ -95,10 +97,17 @@ function arcPixels(a, b, segments = 64) {
   return pts;
 }
 
+const busiest = new Set(
+  routes
+    .map(([id]) => id)
+    .filter((id) => flights[id] > 0)
+    .sort((x, y) => flights[y] - flights[x])
+    .slice(0, MAX_ROUTES),
+);
 const routeOut = [];
 routes.forEach(([id, ia, ib]) => {
   const f = flights[id];
-  if (!f) return;
+  if (!busiest.has(id)) return;
   routeOut.push({ w: Math.log1p(f) / Math.log1p(maxFlights), flights: f, pts: arcPixels(byId.get(ia), byId.get(ib)) });
 });
 
@@ -107,9 +116,13 @@ routes.forEach(([id, ia, ib]) => {
   airportFlights.set(ia, (airportFlights.get(ia) ?? 0) + flights[id]);
   airportFlights.set(ib, (airportFlights.get(ib) ?? 0) + flights[id]);
 });
-const maxAirport = Math.max(...airportFlights.values());
+let maxAirport = 0;
+for (const v of airportFlights.values()) if (v > maxAirport) maxAirport = v;
+// Keep the image legible with thousands of airports: skip those under 0.5% of the busiest.
+const maxAirportFlightsFloor = () => (airports.length > 500 ? maxAirport * 0.005 : 1);
+// Like the app: only airports with real traffic get a visible dot.
 const airportOut = airports
-  .filter((a) => airportFlights.get(a.id))
+  .filter((a) => (airportFlights.get(a.id) ?? 0) >= maxAirportFlightsFloor())
   .map((a) => ({
     x: cx + wrap(a.lon * D2R - LON0 * D2R) * K,
     y: cy - a.lat * D2R * K,

@@ -61,8 +61,9 @@ export class AirportLayer {
   setWeights(weights: Float32Array): void {
     for (let i = 0; i < this.sizes.length; i++) {
       const w = weights[i] ?? 0;
-      // Large enough for the double-ring marker to stay legible on small airports.
-      this.sizes[i] = w > 0 ? 7 + 9 * Math.sqrt(w) : 0;
+      // Size grows steeply with traffic: with thousands of airports, small ones become small dots
+      // and only busy airports are big enough for the double-ring marker (see airportShaders).
+      this.sizes[i] = w > 0 ? 3 + 13 * w * w : 0;
     }
     this.geometry.getAttribute('aSize').needsUpdate = true;
   }

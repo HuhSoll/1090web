@@ -64,6 +64,7 @@ function DemoTag() {
   const kind = useAppStore((s) => s.network?.manifest.kind);
   const stress = useAppStore((s) => s.stressRouteCount);
   if (stress !== null) return <span className="badge warn-badge">{t('stress.badge')}</span>;
+  if (kind === 'observed') return <span className="badge info-badge">{t('observed.badge')}</span>;
   if (kind !== 'demo') return null;
   return <span className="badge warn-badge">{t('demo.badge')}</span>;
 }
@@ -79,6 +80,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Summary({ view }: { view: NetworkView }) {
   const { t, number } = useI18n();
+  const share = view.totalFlights > 0 ? view.callsignFlights / view.totalFlights : 0;
   return (
     <div className="info-body">
       <div className="info-head">
@@ -90,6 +92,9 @@ function Summary({ view }: { view: NetworkView }) {
         <Stat label={t('summary.airports')} value={number(view.visibleAirportCount)} />
         <Stat label={t('summary.flights')} value={number(view.totalFlights)} />
       </div>
+      {share > 0 && (
+        <p className="hint">{t('summary.callsignShare', { share: `${Math.round(share * 100)}%` })}</p>
+      )}
       <p className="hint">{t('summary.hint')}</p>
     </div>
   );
@@ -241,6 +246,18 @@ function RouteDetailView({ network, view, routeId }: { network: StaticNetwork; v
           </>
         )}
       </dl>
+
+      {detail.callsign > 0 && (
+        <>
+          <h3 className="section-title">{t('route.basis')}</h3>
+          <dl className="kv">
+            <dt>{t('route.observed')}</dt>
+            <dd>{number(detail.observed)}</dd>
+            <dt>{t('route.callsign')}</dt>
+            <dd>{number(detail.callsign)}</dd>
+          </dl>
+        </>
+      )}
 
       {detail.carriers.length > 0 && (
         <>

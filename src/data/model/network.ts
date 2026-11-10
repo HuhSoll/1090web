@@ -16,6 +16,7 @@ export interface Route {
 export interface MonthData {
   month: string;
   observedDays: number;
+  daysInMonth?: number;
   records: MonthRecordTuple[];
 }
 

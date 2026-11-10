@@ -9,7 +9,8 @@ const STATE_TEXTURE_WIDTH = 1024;
 
 export function densityOpacity(visibleRoutes: number): number {
   if (visibleRoutes <= 0) return 1;
-  return Math.min(1, Math.max(0.05, Math.sqrt(600 / visibleRoutes)));
+  // Floor of 0.3: real networks concentrate traffic in corridors, so fainter would hide them.
+  return Math.min(1, Math.max(0.3, Math.sqrt(600 / visibleRoutes)));
 }
 
 /**

@@ -13,6 +13,11 @@ export interface NetworkFilters {
   mode: TrafficMode;
   /** Routes with fewer monthly flights (after the filters above) are hidden. */
   minFlights: number;
+  /**
+   * Include flights whose airports come only from the callsign route (basis 1).
+   * false = only flights whose airports were observed in the ADS-B track.
+   */
+  includeCallsign: boolean;
 }
 
 export const DEFAULT_FILTERS: NetworkFilters = {
@@ -20,6 +25,7 @@ export const DEFAULT_FILTERS: NetworkFilters = {
   carrierId: null,
   mode: 'all',
   minFlights: 0,
+  includeCallsign: true,
 };
 
 /**
@@ -35,6 +41,8 @@ export interface NetworkView {
   visibleRouteCount: number;
   visibleAirportCount: number;
   totalFlights: number;
+  /** Part of totalFlights whose airports come only from the callsign route. */
+  callsignFlights: number;
   maxRouteFlights: number;
   /** Max route flights ignoring the threshold (keeps the threshold slider range stable). */
   maxRouteFlightsUnthresholded: number;
@@ -67,15 +75,22 @@ export function computeNetworkView(
     for (let i = 0; i < routeCount; i++) countryMask[i] = countryMatches(network, i, filters.country) ? 1 : 0;
   }
 
-  for (const [routeId, , carrierId, passenger, cargo, unknown] of month.records) {
+  const routeCallsign = new Float32Array(routeCount);
+  for (const r of month.records) {
+    const [routeId, , carrierId, passenger, cargo, unknown] = r;
+    const basis = r[6] ?? 0;
+    if (basis === 1 && !filters.includeCallsign) continue;
     if (filters.carrierId && carrierId !== filters.carrierId) continue;
     if (countryMask && countryMask[routeId] === 0) continue;
-    routeFlights[routeId]! += flightsForMode(filters.mode, passenger, cargo, unknown);
+    const f = flightsForMode(filters.mode, passenger, cargo, unknown);
+    routeFlights[routeId]! += f;
+    if (basis === 1) routeCallsign[routeId]! += f;
   }
 
   const airportFlights = new Float32Array(network.airports.length);
   let visibleRouteCount = 0;
   let totalFlights = 0;
+  let callsignFlights = 0;
   let maxRouteFlights = 0;
   let maxRouteFlightsUnthresholded = 0;
   for (let i = 0; i < routeCount; i++) {
@@ -88,6 +103,7 @@ export function computeNetworkView(
     const route = network.routes[i]!;
     visibleRouteCount++;
     totalFlights += f;
+    callsignFlights += routeCallsign[i]!;
     if (f > maxRouteFlights) maxRouteFlights = f;
     airportFlights[route.a]! += f;
     airportFlights[route.b]! += f;
@@ -107,6 +123,7 @@ export function computeNetworkView(
     visibleRouteCount,
     visibleAirportCount,
     totalFlights,
+    callsignFlights,
     maxRouteFlights,
     maxRouteFlightsUnthresholded,
     maxAirportFlights,
@@ -127,6 +144,10 @@ export interface RouteDetail {
   passenger: number;
   cargo: number;
   unknown: number;
+  /** flights whose airports were observed in the ADS-B track */
+  observed: number;
+  /** flights whose airports come only from the callsign route */
+  callsign: number;
   carriers: CarrierShare[];
 }
 
@@ -140,14 +161,29 @@ export function computeRouteDetail(
   filters: NetworkFilters,
   routeId: number,
 ): RouteDetail {
-  const detail: RouteDetail = { routeId, forward: 0, backward: 0, passenger: 0, cargo: 0, unknown: 0, carriers: [] };
+  const detail: RouteDetail = {
+    routeId,
+    forward: 0,
+    backward: 0,
+    passenger: 0,
+    cargo: 0,
+    unknown: 0,
+    observed: 0,
+    callsign: 0,
+    carriers: [],
+  };
   if (!countryMatches(network, routeId, filters.country)) return detail;
   const byCarrier = new Map<string, number>();
-  for (const [rid, dir, carrierId, passenger, cargo, unknown] of month.records) {
+  for (const r of month.records) {
+    const [rid, dir, carrierId, passenger, cargo, unknown] = r;
     if (rid !== routeId) continue;
+    const basis = r[6] ?? 0;
+    if (basis === 1 && !filters.includeCallsign) continue;
     if (filters.carrierId && carrierId !== filters.carrierId) continue;
     const f = flightsForMode(filters.mode, passenger, cargo, unknown);
     if (f <= 0) continue;
+    if (basis === 1) detail.callsign += f;
+    else detail.observed += f;
     if (dir === 0) detail.forward += f;
     else detail.backward += f;
     detail.passenger += passenger;

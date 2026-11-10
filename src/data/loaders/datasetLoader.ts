@@ -38,7 +38,7 @@ export class DatasetLoader {
     if (!entry) return Promise.reject(new Error(`Month ${month} is not in the manifest`));
     const promise = fetchJson<unknown>(`${this.root}${entry.file}`).then((raw) => {
       const file = validateMonth(raw, network.routes.length);
-      return { month: file.month, observedDays: file.observedDays, records: file.records };
+      return { month: file.month, observedDays: file.observedDays, daysInMonth: file.daysInMonth, records: file.records };
     });
     promise.catch(() => this.monthCache.delete(month));
     this.monthCache.set(month, promise);

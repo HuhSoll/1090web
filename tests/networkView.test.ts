@@ -96,6 +96,42 @@ describe('computeNetworkView', () => {
   });
 });
 
+describe('airport basis (observed vs callsign)', () => {
+  const withBasis: MonthData = {
+    month: '2026-01',
+    observedDays: 31,
+    records: [
+      [0, 0, 'x', 40, 0, 0, 0],
+      [0, 1, 'x', 10, 0, 0, 1],
+      [2, 0, 'y', 0, 5, 0, 1],
+    ],
+  };
+
+  it('includes callsign-based flights by default and reports their share', () => {
+    const v = computeNetworkView(network, withBasis, DEFAULT_FILTERS);
+    expect(Array.from(v.routeFlights)).toEqual([50, 0, 5]);
+    expect(v.callsignFlights).toBe(15);
+  });
+
+  it('can restrict to observed airports only', () => {
+    const v = computeNetworkView(network, withBasis, { ...DEFAULT_FILTERS, includeCallsign: false });
+    expect(Array.from(v.routeFlights)).toEqual([40, 0, 0]);
+    expect(v.callsignFlights).toBe(0);
+  });
+
+  it('splits route detail by basis', () => {
+    const d = computeRouteDetail(network, withBasis, DEFAULT_FILTERS, 0);
+    expect(d.observed).toBe(40);
+    expect(d.callsign).toBe(10);
+  });
+
+  it('treats records without a basis column (demo data) as observed', () => {
+    const d = computeRouteDetail(network, month, DEFAULT_FILTERS, 0);
+    expect(d.callsign).toBe(0);
+    expect(d.observed).toBe(110);
+  });
+});
+
 describe('route helpers', () => {
   it('lists connected routes sorted by flights', () => {
     const v = computeNetworkView(network, month, DEFAULT_FILTERS);

@@ -10,6 +10,7 @@ export function FilterPanel({ view }: { view: NetworkView | null }) {
   const setFilters = useAppStore((s) => s.setFilters);
   const resetFilters = useAppStore((s) => s.resetFilters);
   const disabled = !network;
+  const isObserved = network?.manifest.kind === 'observed';
 
   const countries = useMemo(() => {
     if (!network) return [];
@@ -28,7 +29,8 @@ export function FilterPanel({ view }: { view: NetworkView | null }) {
     filters.country === DEFAULT_FILTERS.country &&
     filters.carrierId === DEFAULT_FILTERS.carrierId &&
     filters.mode === DEFAULT_FILTERS.mode &&
-    filters.minFlights === DEFAULT_FILTERS.minFlights;
+    filters.minFlights === DEFAULT_FILTERS.minFlights &&
+    filters.includeCallsign === DEFAULT_FILTERS.includeCallsign;
 
   const modes: { value: TrafficMode; label: string }[] = [
     { value: 'all', label: t('filters.trafficAll') },
@@ -97,6 +99,30 @@ export function FilterPanel({ view }: { view: NetworkView | null }) {
         </div>
         {filters.mode === 'passenger' && <p className="hint">{t('filters.trafficNote')}</p>}
       </div>
+
+      {isObserved && (
+        <div className="field" role="radiogroup" aria-label={t('filters.basis')}>
+          <span className="field-label">{t('filters.basis')}</span>
+          <div className="segmented">
+            {[
+              { value: true, label: t('filters.basisAll') },
+              { value: false, label: t('filters.basisObserved') },
+            ].map((o) => (
+              <button
+                key={String(o.value)}
+                type="button"
+                role="radio"
+                aria-checked={filters.includeCallsign === o.value}
+                className={filters.includeCallsign === o.value ? 'is-active' : ''}
+                onClick={() => setFilters({ includeCallsign: o.value })}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
+          <p className="hint">{t('filters.basisNote')}</p>
+        </div>
+      )}
 
       <label className="field">
         <span className="field-row">

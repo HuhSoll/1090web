@@ -1,0 +1,29 @@
+ac_type,model,note
+A318,A318,no freighter variant
+A319,A319,no freighter variant
+A19N,A319neo,no freighter variant
+A20N,A320neo,no freighter variant (A320P2F is a ceo conversion)
+A21N,A321neo,no freighter variant in service (A321P2F is a ceo conversion)
+BCS1,A220-100,no freighter variant
+BCS3,A220-300,no freighter variant
+A338,A330-800,no freighter variant
+A339,A330-900,no freighter variant
+A359,A350-900,no freighter variant (A350F is a different type and not in service in 2026)
+A35K,A350-1000,no freighter variant
+A388,A380-800,no freighter variant
+B37M,737 MAX 7,no freighter variant
+B38M,737 MAX 8,no freighter variant
+B39M,737 MAX 9,no freighter variant
+B3XM,737 MAX 10,no freighter variant
+B788,787-8,no freighter variant
+B789,787-9,no freighter variant
+B78X,787-10,no freighter variant
+E170,E170,no freighter variant
+E75L,E175 (long wing),no freighter variant
+E75S,E175 (short wing),no freighter variant
+E290,E190-E2,no freighter variant
+E295,E195-E2,no freighter variant
+CRJ9,CRJ900,no freighter variant
+CRJX,CRJ1000,no freighter variant
+C919,C919,no freighter variant
+SU95,Superjet 100,no freighter variant

@@ -28,7 +28,7 @@ export function Sidebar({ view }: { view: NetworkView | null }) {
             {t('roadmap.title')}
           </h2>
           <ul>
-            {(['roadmap.compare', 'roadmap.incidents', 'roadmap.observed'] as const).map((k) => (
+            {(['roadmap.compare', 'roadmap.incidents', 'roadmap.airlineNames'] as const).map((k) => (
               <li key={k}>
                 <span>{t(k)}</span>
                 <span className="badge muted-badge">{t('roadmap.notAvailable')}</span>

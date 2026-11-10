@@ -4,7 +4,9 @@
 
 空港を選ぶとそこから伸びる路線だけが浮かび上がり、国や航空会社、旅客／貨物、便数で絞り込みながらネットワークの形を眺められます。月ごとのデータを切り替えたり、自動再生して変化を追ったりもできます。
 
-いまは開発の初期段階で、表示しているデータはUIと描画を作るためのサンプルです。路線や便数、航空会社は自動生成したもので、実在の統計ではありません（画面上にもそう表示しています）。実際のフライトデータへの置き換えはこれから進めます。
+データは、ADS-B（航空機が発信する位置情報）の受信記録から作られた 2026年1〜9月の便データを月ごとに集計したものです。公式の時刻表ではなく、受信網が手薄な地域では観測できない便があります。空港を航跡から確認できなかった便は「便名から推定」として区別し、画面で切り替えられます。データの作り方と品質は [docs/pipeline.md](docs/pipeline.md) にまとめています。
+
+UI 開発用のサンプルデータは `?dataset=demo` で表示できます。
 
 ## 動かし方
 
@@ -24,6 +26,8 @@ npm run build      # 本番ビルド
 npm run check      # lint・型チェック・テスト・ビルドをまとめて実行
 npm run data:demo  # サンプルデータを作り直す
 ```
+
+実データの作り直し方は [docs/pipeline.md](docs/pipeline.md) を見てください（Python・DuckDB を使います）。
 
 SNS用のプレビュー画像（`public/og-image.png`）の作り直し（Python・Pillow・numpy が必要）：
 
@@ -54,11 +58,14 @@ public/data/  公開用データ
 
 ## これから
 
-- 実際のフライトデータ（ADS-B観測データ）への置き換え
+- 2026年10〜12月のデータ追加（元データの公開待ち）
+- 航空会社名の表示
 - 月ごとのネットワークの比較
 - 航空当局の公式情報をもとにしたインシデント表示
 
 ## データ・クレジット
 
 - 地図：Natural Earth（[world-atlas](https://github.com/topojson/world-atlas) 経由）
-- 予定しているデータソース：[aircraft-flight-schedules](https://github.com/MrAirspace/aircraft-flight-schedules)、[OurAirports](https://ourairports.com/data/)
+- 便データ：[MrAirspace/aircraft-flight-schedules](https://github.com/MrAirspace/aircraft-flight-schedules)（ODbL-1.0）。元は [ADSBlol](https://github.com/adsblol) の受信データ、[vradarserver/standing-data](https://github.com/vradarserver/standing-data) の便名・路線データ、[adsbdb.com](https://www.adsbdb.com/) の機材データ
+- 空港：[OurAirports](https://ourairports.com/data/)
+- `public/data/observed-2026/` の集計データは上記の派生データベースとして ODbL-1.0 で提供します

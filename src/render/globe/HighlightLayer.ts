@@ -52,7 +52,7 @@ export class HighlightLayer {
   private readonly focus: Tier;
   private flat = false;
   private hidden = false;
-  private copies = false;
+  private copies: boolean | readonly boolean[] = false;
   private lastNotable: readonly HighlightRoute[] = [];
   private lastConnected: readonly HighlightRoute[] = [];
   private lastFocus: { start: Vec3; end: Vec3 } | null = null;
@@ -93,7 +93,7 @@ export class HighlightLayer {
   }
 
   /** Hidden while the map morphs (CPU lines are only valid at the end states). */
-  setHidden(hidden: boolean, copies: boolean): void {
+  setHidden(hidden: boolean, copies: boolean | readonly boolean[]): void {
     this.hidden = hidden;
     this.copies = copies;
     for (const t of [this.notable, this.connected, this.focus]) this.applyVisibility(t);
@@ -177,7 +177,7 @@ export class HighlightLayer {
 
   private applyVisibility(tier: Tier): void {
     const empty = tier.wrapped.main.userData.empty !== false;
-    tier.wrapped.setVisible(!this.hidden && !empty, this.flat && this.copies);
+    tier.wrapped.setVisible(!this.hidden && !empty, this.flat ? this.copies : false);
   }
 
   dispose(): void {

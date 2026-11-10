@@ -10,37 +10,6 @@
 
 データは、ADS-B（航空機が発信する位置情報）の受信記録から作られた 2026年1〜9月の便データを月ごとに集計したものです。公式の時刻表ではなく、受信網が手薄な地域では観測できない便があります。空港を航跡から確認できなかった便は「便名から推定」として区別し、画面で切り替えられます。データの作り方と品質は [docs/pipeline.md](docs/pipeline.md) にまとめています。
 
-UI 開発用のサンプルデータは `?dataset=demo` で表示できます。
-
-## 動かし方
-
-Node.js 20.19 以上が必要です。
-
-```bash
-npm install
-npm run dev
-```
-
-`http://localhost:5173` で開きます。
-
-その他のコマンド：
-
-```bash
-npm run build      # 本番ビルド
-npm run check      # lint・型チェック・テスト・ビルドをまとめて実行
-npm run data:demo  # サンプルデータを作り直す
-```
-
-実データの作り直し方は [docs/pipeline.md](docs/pipeline.md) を見てください（Python・DuckDB を使います）。
-
-SNS用のプレビュー画像（`public/og-image.png`）の作り直し（Python・Pillow・numpy が必要）：
-
-```bash
-npm run og:geometry
-python scripts/og/render-og.py og-geometry.json public/og-image.png
-```
-
-URL に `?stress=50000` を付けると、ランダムな5万路線で描画の重さを試せます。
 
 ## しくみ
 

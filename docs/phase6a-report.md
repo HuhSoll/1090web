@@ -199,7 +199,7 @@ TypeScript 側では、公開データの形式テストを v1・v2 の両方に
 | ID | `observed-2026-v2` |
 | バージョン | 2.0.0 |
 | ルール | `2026.11-r2` |
-| 生成元コミット | `43b41b2`（パイプラインに未コミットの変更なし） |
+| 生成元コミット | `provenance.json` には `43b41b2` と記録（パイプラインに未コミットの変更なし）。公開前に rebase したため、GitHub 上の同じ内容のコミットは `485dd0d`（`pipeline/` のツリーハッシュ `eff4782` が一致） |
 | 期間 | 2026年1〜9月 |
 | 入力 | MrAirspace 2026 Q1〜Q3（SHA-256 は `pipeline/inputs.lock.json`）、OurAirports airports.csv（2026-11-10 取得） |
 | 生成コマンド | `.venv/Scripts/python pipeline/build_dataset.py --dataset observed-2026-v2 --version 2.0.0` |

@@ -1,0 +1,1288 @@
+{
+ "focus_month": "2026-08",
+ "reference": "all",
+ "top_k": 20,
+ "top": {
+  "all": [
+   [
+    "KORD",
+    561
+   ],
+   [
+    "KIAD",
+    497
+   ],
+   [
+    "KTEB",
+    497
+   ],
+   [
+    "KBNA",
+    433
+   ],
+   [
+    "KMDW",
+    405
+   ],
+   [
+    "KDAL",
+    390
+   ],
+   [
+    "EHAM",
+    388
+   ],
+   [
+    "KMIA",
+    376
+   ],
+   [
+    "KDFW",
+    371
+   ],
+   [
+    "EDDF",
+    370
+   ],
+   [
+    "KCLT",
+    369
+   ],
+   [
+    "LSZH",
+    369
+   ],
+   [
+    "KHPN",
+    368
+   ],
+   [
+    "LTFM",
+    364
+   ],
+   [
+    "CYYZ",
+    361
+   ],
+   [
+    "LFMN",
+    360
+   ],
+   [
+    "KBOS",
+    357
+   ],
+   [
+    "KATL",
+    355
+   ],
+   [
+    "KIND",
+    346
+   ],
+   [
+    "KLAX",
+    344
+   ]
+  ],
+  "min4": [
+   [
+    "KORD",
+    349
+   ],
+   [
+    "LTFM",
+    305
+   ],
+   [
+    "EHAM",
+    296
+   ],
+   [
+    "EDDF",
+    292
+   ],
+   [
+    "LFPG",
+    279
+   ],
+   [
+    "KDFW",
+    274
+   ],
+   [
+    "KIAD",
+    269
+   ],
+   [
+    "KATL",
+    256
+   ],
+   [
+    "LEMD",
+    255
+   ],
+   [
+    "LEBL",
+    247
+   ],
+   [
+    "EGSS",
+    244
+   ],
+   [
+    "KDEN",
+    242
+   ],
+   [
+    "LSZH",
+    242
+   ],
+   [
+    "KTEB",
+    235
+   ],
+   [
+    "EDDM",
+    234
+   ],
+   [
+    "LIRF",
+    234
+   ],
+   [
+    "OMDB",
+    234
+   ],
+   [
+    "LIMC",
+    232
+   ],
+   [
+    "EGKK",
+    224
+   ],
+   [
+    "EGLL",
+    220
+   ]
+  ],
+  "min10": [
+   [
+    "KORD",
+    294
+   ],
+   [
+    "LTFM",
+    294
+   ],
+   [
+    "EHAM",
+    266
+   ],
+   [
+    "LFPG",
+    265
+   ],
+   [
+    "EDDF",
+    260
+   ],
+   [
+    "KDFW",
+    247
+   ],
+   [
+    "KATL",
+    236
+   ],
+   [
+    "LEBL",
+    228
+   ],
+   [
+    "KDEN",
+    224
+   ],
+   [
+    "LEMD",
+    222
+   ],
+   [
+    "LIRF",
+    221
+   ],
+   [
+    "OMDB",
+    219
+   ],
+   [
+    "EGSS",
+    216
+   ],
+   [
+    "EGLL",
+    210
+   ],
+   [
+    "EGKK",
+    209
+   ],
+   [
+    "EDDM",
+    207
+   ],
+   [
+    "EIDW",
+    203
+   ],
+   [
+    "ZSPD",
+    203
+   ],
+   [
+    "KJFK",
+    202
+   ],
+   [
+    "EGCC",
+    200
+   ]
+  ],
+  "T1-T3": [
+   [
+    "KORD",
+    511
+   ],
+   [
+    "KTEB",
+    493
+   ],
+   [
+    "KIAD",
+    478
+   ],
+   [
+    "KBNA",
+    426
+   ],
+   [
+    "KMDW",
+    395
+   ],
+   [
+    "KDAL",
+    382
+   ],
+   [
+    "EHAM",
+    366
+   ],
+   [
+    "KHPN",
+    365
+   ],
+   [
+    "LSZH",
+    359
+   ],
+   [
+    "LFMN",
+    357
+   ],
+   [
+    "KCLT",
+    356
+   ],
+   [
+    "KDFW",
+    346
+   ],
+   [
+    "KIND",
+    338
+   ],
+   [
+    "EDDF",
+    337
+   ],
+   [
+    "KBOS",
+    337
+   ],
+   [
+    "KPDK",
+    332
+   ],
+   [
+    "CYYZ",
+    328
+   ],
+   [
+    "KPHL",
+    328
+   ],
+   [
+    "KATL",
+    326
+   ],
+   [
+    "KMIA",
+    324
+   ]
+  ],
+  "T1": [
+   [
+    "KTEB",
+    492
+   ],
+   [
+    "KORD",
+    484
+   ],
+   [
+    "KIAD",
+    458
+   ],
+   [
+    "KBNA",
+    420
+   ],
+   [
+    "KMDW",
+    379
+   ],
+   [
+    "KDAL",
+    374
+   ],
+   [
+    "KHPN",
+    364
+   ],
+   [
+    "KCLT",
+    343
+   ],
+   [
+    "LFMN",
+    340
+   ],
+   [
+    "KPDK",
+    332
+   ],
+   [
+    "KIND",
+    331
+   ],
+   [
+    "EHAM",
+    322
+   ],
+   [
+    "KPHL",
+    318
+   ],
+   [
+    "LSZH",
+    318
+   ],
+   [
+    "KFOK",
+    317
+   ],
+   [
+    "LFPB",
+    315
+   ],
+   [
+    "KBOS",
+    313
+   ],
+   [
+    "KDFW",
+    312
+   ],
+   [
+    "KCHS",
+    308
+   ],
+   [
+    "KATL",
+    307
+   ]
+  ]
+ },
+ "vs_reference": {
+  "min4": {
+   "k": 20,
+   "rows": [
+    {
+     "airport": "KORD",
+     "score_ref": 561,
+     "score_other": 349,
+     "rank_ref": 1,
+     "rank_other": 1,
+     "rank_change": 0,
+     "score_change_pct": -37.79
+    },
+    {
+     "airport": "KIAD",
+     "score_ref": 497,
+     "score_other": 269,
+     "rank_ref": 2,
+     "rank_other": 7,
+     "rank_change": 5,
+     "score_change_pct": -45.88
+    },
+    {
+     "airport": "KTEB",
+     "score_ref": 497,
+     "score_other": 235,
+     "rank_ref": 2,
+     "rank_other": 14,
+     "rank_change": 12,
+     "score_change_pct": -52.72
+    },
+    {
+     "airport": "KBNA",
+     "score_ref": 433,
+     "score_other": 209,
+     "rank_ref": 4,
+     "rank_other": 33,
+     "rank_change": 29,
+     "score_change_pct": -51.73
+    },
+    {
+     "airport": "KMDW",
+     "score_ref": 405,
+     "score_other": 191,
+     "rank_ref": 5,
+     "rank_other": 44,
+     "rank_change": 39,
+     "score_change_pct": -52.84
+    },
+    {
+     "airport": "KDAL",
+     "score_ref": 390,
+     "score_other": 182,
+     "rank_ref": 6,
+     "rank_other": 50,
+     "rank_change": 44,
+     "score_change_pct": -53.33
+    },
+    {
+     "airport": "EHAM",
+     "score_ref": 388,
+     "score_other": 296,
+     "rank_ref": 7,
+     "rank_other": 3,
+     "rank_change": -4,
+     "score_change_pct": -23.71
+    },
+    {
+     "airport": "KMIA",
+     "score_ref": 376,
+     "score_other": 212,
+     "rank_ref": 8,
+     "rank_other": 29,
+     "rank_change": 21,
+     "score_change_pct": -43.62
+    },
+    {
+     "airport": "KDFW",
+     "score_ref": 371,
+     "score_other": 274,
+     "rank_ref": 9,
+     "rank_other": 6,
+     "rank_change": -3,
+     "score_change_pct": -26.15
+    },
+    {
+     "airport": "EDDF",
+     "score_ref": 370,
+     "score_other": 292,
+     "rank_ref": 10,
+     "rank_other": 4,
+     "rank_change": -6,
+     "score_change_pct": -21.08
+    },
+    {
+     "airport": "KCLT",
+     "score_ref": 369,
+     "score_other": 210,
+     "rank_ref": 11,
+     "rank_other": 32,
+     "rank_change": 21,
+     "score_change_pct": -43.09
+    },
+    {
+     "airport": "LSZH",
+     "score_ref": 369,
+     "score_other": 242,
+     "rank_ref": 11,
+     "rank_other": 12,
+     "rank_change": 1,
+     "score_change_pct": -34.42
+    },
+    {
+     "airport": "KHPN",
+     "score_ref": 368,
+     "score_other": 180,
+     "rank_ref": 13,
+     "rank_other": 52,
+     "rank_change": 39,
+     "score_change_pct": -51.09
+    },
+    {
+     "airport": "LTFM",
+     "score_ref": 364,
+     "score_other": 305,
+     "rank_ref": 14,
+     "rank_other": 2,
+     "rank_change": -12,
+     "score_change_pct": -16.21
+    },
+    {
+     "airport": "CYYZ",
+     "score_ref": 361,
+     "score_other": 214,
+     "rank_ref": 15,
+     "rank_other": 27,
+     "rank_change": 12,
+     "score_change_pct": -40.72
+    },
+    {
+     "airport": "LFMN",
+     "score_ref": 360,
+     "score_other": 212,
+     "rank_ref": 16,
+     "rank_other": 29,
+     "rank_change": 13,
+     "score_change_pct": -41.11
+    },
+    {
+     "airport": "KBOS",
+     "score_ref": 357,
+     "score_other": 202,
+     "rank_ref": 17,
+     "rank_other": 38,
+     "rank_change": 21,
+     "score_change_pct": -43.42
+    },
+    {
+     "airport": "KATL",
+     "score_ref": 355,
+     "score_other": 256,
+     "rank_ref": 18,
+     "rank_other": 8,
+     "rank_change": -10,
+     "score_change_pct": -27.89
+    },
+    {
+     "airport": "KIND",
+     "score_ref": 346,
+     "score_other": 164,
+     "rank_ref": 19,
+     "rank_other": 67,
+     "rank_change": 48,
+     "score_change_pct": -52.6
+    },
+    {
+     "airport": "KLAX",
+     "score_ref": 344,
+     "score_other": 219,
+     "rank_ref": 20,
+     "rank_other": 22,
+     "rank_change": 2,
+     "score_change_pct": -36.34
+    }
+   ],
+   "spearman_union_topk": 0.0411,
+   "kendall_tau_b_union_topk": 0.0499,
+   "jaccard_topk": 0.2903,
+   "entered": [
+    "LFPG",
+    "LEMD",
+    "LEBL",
+    "EGSS",
+    "KDEN",
+    "EDDM",
+    "LIRF",
+    "OMDB",
+    "LIMC",
+    "EGKK",
+    "EGLL"
+   ],
+   "left": [
+    "KBNA",
+    "KMDW",
+    "KDAL",
+    "KMIA",
+    "KCLT",
+    "KHPN",
+    "CYYZ",
+    "LFMN",
+    "KBOS",
+    "KIND",
+    "KLAX"
+   ]
+  },
+  "min10": {
+   "k": 20,
+   "rows": [
+    {
+     "airport": "KORD",
+     "score_ref": 561,
+     "score_other": 294,
+     "rank_ref": 1,
+     "rank_other": 1,
+     "rank_change": 0,
+     "score_change_pct": -47.59
+    },
+    {
+     "airport": "KIAD",
+     "score_ref": 497,
+     "score_other": 183,
+     "rank_ref": 2,
+     "rank_other": 27,
+     "rank_change": 25,
+     "score_change_pct": -63.18
+    },
+    {
+     "airport": "KTEB",
+     "score_ref": 497,
+     "score_other": 130,
+     "rank_ref": 2,
+     "rank_other": 80,
+     "rank_change": 78,
+     "score_change_pct": -73.84
+    },
+    {
+     "airport": "KBNA",
+     "score_ref": 433,
+     "score_other": 146,
+     "rank_ref": 4,
+     "rank_other": 61,
+     "rank_change": 57,
+     "score_change_pct": -66.28
+    },
+    {
+     "airport": "KMDW",
+     "score_ref": 405,
+     "score_other": 123,
+     "rank_ref": 5,
+     "rank_other": 88,
+     "rank_change": 83,
+     "score_change_pct": -69.63
+    },
+    {
+     "airport": "KDAL",
+     "score_ref": 390,
+     "score_other": 111,
+     "rank_ref": 6,
+     "rank_other": 98,
+     "rank_change": 92,
+     "score_change_pct": -71.54
+    },
+    {
+     "airport": "EHAM",
+     "score_ref": 388,
+     "score_other": 266,
+     "rank_ref": 7,
+     "rank_other": 3,
+     "rank_change": -4,
+     "score_change_pct": -31.44
+    },
+    {
+     "airport": "KMIA",
+     "score_ref": 376,
+     "score_other": 177,
+     "rank_ref": 8,
+     "rank_other": 30,
+     "rank_change": 22,
+     "score_change_pct": -52.93
+    },
+    {
+     "airport": "KDFW",
+     "score_ref": 371,
+     "score_other": 247,
+     "rank_ref": 9,
+     "rank_other": 6,
+     "rank_change": -3,
+     "score_change_pct": -33.42
+    },
+    {
+     "airport": "EDDF",
+     "score_ref": 370,
+     "score_other": 260,
+     "rank_ref": 10,
+     "rank_other": 5,
+     "rank_change": -5,
+     "score_change_pct": -29.73
+    },
+    {
+     "airport": "KCLT",
+     "score_ref": 369,
+     "score_other": 178,
+     "rank_ref": 11,
+     "rank_other": 29,
+     "rank_change": 18,
+     "score_change_pct": -51.76
+    },
+    {
+     "airport": "LSZH",
+     "score_ref": 369,
+     "score_other": 194,
+     "rank_ref": 11,
+     "rank_other": 23,
+     "rank_change": 12,
+     "score_change_pct": -47.43
+    },
+    {
+     "airport": "KHPN",
+     "score_ref": 368,
+     "score_other": 103,
+     "rank_ref": 13,
+     "rank_other": 116,
+     "rank_change": 103,
+     "score_change_pct": -72.01
+    },
+    {
+     "airport": "LTFM",
+     "score_ref": 364,
+     "score_other": 294,
+     "rank_ref": 14,
+     "rank_other": 1,
+     "rank_change": -13,
+     "score_change_pct": -19.23
+    },
+    {
+     "airport": "CYYZ",
+     "score_ref": 361,
+     "score_other": 172,
+     "rank_ref": 15,
+     "rank_other": 36,
+     "rank_change": 21,
+     "score_change_pct": -52.35
+    },
+    {
+     "airport": "LFMN",
+     "score_ref": 360,
+     "score_other": 151,
+     "rank_ref": 16,
+     "rank_other": 52,
+     "rank_change": 36,
+     "score_change_pct": -58.06
+    },
+    {
+     "airport": "KBOS",
+     "score_ref": 357,
+     "score_other": 153,
+     "rank_ref": 17,
+     "rank_other": 48,
+     "rank_change": 31,
+     "score_change_pct": -57.14
+    },
+    {
+     "airport": "KATL",
+     "score_ref": 355,
+     "score_other": 236,
+     "rank_ref": 18,
+     "rank_other": 7,
+     "rank_change": -11,
+     "score_change_pct": -33.52
+    },
+    {
+     "airport": "KIND",
+     "score_ref": 346,
+     "score_other": 100,
+     "rank_ref": 19,
+     "rank_other": 123,
+     "rank_change": 104,
+     "score_change_pct": -71.1
+    },
+    {
+     "airport": "KLAX",
+     "score_ref": 344,
+     "score_other": 194,
+     "rank_ref": 20,
+     "rank_other": 23,
+     "rank_change": 3,
+     "score_change_pct": -43.6
+    }
+   ],
+   "spearman_union_topk": -0.2355,
+   "kendall_tau_b_union_topk": -0.1289,
+   "jaccard_topk": 0.1765,
+   "entered": [
+    "LFPG",
+    "LEBL",
+    "KDEN",
+    "LEMD",
+    "LIRF",
+    "OMDB",
+    "EGSS",
+    "EGLL",
+    "EGKK",
+    "EDDM",
+    "EIDW",
+    "ZSPD",
+    "KJFK",
+    "EGCC"
+   ],
+   "left": [
+    "KIAD",
+    "KTEB",
+    "KBNA",
+    "KMDW",
+    "KDAL",
+    "KMIA",
+    "KCLT",
+    "LSZH",
+    "KHPN",
+    "CYYZ",
+    "LFMN",
+    "KBOS",
+    "KIND",
+    "KLAX"
+   ]
+  },
+  "T1-T3": {
+   "k": 20,
+   "rows": [
+    {
+     "airport": "KORD",
+     "score_ref": 561,
+     "score_other": 511,
+     "rank_ref": 1,
+     "rank_other": 1,
+     "rank_change": 0,
+     "score_change_pct": -8.91
+    },
+    {
+     "airport": "KIAD",
+     "score_ref": 497,
+     "score_other": 478,
+     "rank_ref": 2,
+     "rank_other": 3,
+     "rank_change": 1,
+     "score_change_pct": -3.82
+    },
+    {
+     "airport": "KTEB",
+     "score_ref": 497,
+     "score_other": 493,
+     "rank_ref": 2,
+     "rank_other": 2,
+     "rank_change": 0,
+     "score_change_pct": -0.8
+    },
+    {
+     "airport": "KBNA",
+     "score_ref": 433,
+     "score_other": 426,
+     "rank_ref": 4,
+     "rank_other": 4,
+     "rank_change": 0,
+     "score_change_pct": -1.62
+    },
+    {
+     "airport": "KMDW",
+     "score_ref": 405,
+     "score_other": 395,
+     "rank_ref": 5,
+     "rank_other": 5,
+     "rank_change": 0,
+     "score_change_pct": -2.47
+    },
+    {
+     "airport": "KDAL",
+     "score_ref": 390,
+     "score_other": 382,
+     "rank_ref": 6,
+     "rank_other": 6,
+     "rank_change": 0,
+     "score_change_pct": -2.05
+    },
+    {
+     "airport": "EHAM",
+     "score_ref": 388,
+     "score_other": 366,
+     "rank_ref": 7,
+     "rank_other": 7,
+     "rank_change": 0,
+     "score_change_pct": -5.67
+    },
+    {
+     "airport": "KMIA",
+     "score_ref": 376,
+     "score_other": 324,
+     "rank_ref": 8,
+     "rank_other": 20,
+     "rank_change": 12,
+     "score_change_pct": -13.83
+    },
+    {
+     "airport": "KDFW",
+     "score_ref": 371,
+     "score_other": 346,
+     "rank_ref": 9,
+     "rank_other": 12,
+     "rank_change": 3,
+     "score_change_pct": -6.74
+    },
+    {
+     "airport": "EDDF",
+     "score_ref": 370,
+     "score_other": 337,
+     "rank_ref": 10,
+     "rank_other": 14,
+     "rank_change": 4,
+     "score_change_pct": -8.92
+    },
+    {
+     "airport": "KCLT",
+     "score_ref": 369,
+     "score_other": 356,
+     "rank_ref": 11,
+     "rank_other": 11,
+     "rank_change": 0,
+     "score_change_pct": -3.52
+    },
+    {
+     "airport": "LSZH",
+     "score_ref": 369,
+     "score_other": 359,
+     "rank_ref": 11,
+     "rank_other": 9,
+     "rank_change": -2,
+     "score_change_pct": -2.71
+    },
+    {
+     "airport": "KHPN",
+     "score_ref": 368,
+     "score_other": 365,
+     "rank_ref": 13,
+     "rank_other": 8,
+     "rank_change": -5,
+     "score_change_pct": -0.82
+    },
+    {
+     "airport": "LTFM",
+     "score_ref": 364,
+     "score_other": 253,
+     "rank_ref": 14,
+     "rank_other": 75,
+     "rank_change": 61,
+     "score_change_pct": -30.49
+    },
+    {
+     "airport": "CYYZ",
+     "score_ref": 361,
+     "score_other": 328,
+     "rank_ref": 15,
+     "rank_other": 17,
+     "rank_change": 2,
+     "score_change_pct": -9.14
+    },
+    {
+     "airport": "LFMN",
+     "score_ref": 360,
+     "score_other": 357,
+     "rank_ref": 16,
+     "rank_other": 10,
+     "rank_change": -6,
+     "score_change_pct": -0.83
+    },
+    {
+     "airport": "KBOS",
+     "score_ref": 357,
+     "score_other": 337,
+     "rank_ref": 17,
+     "rank_other": 14,
+     "rank_change": -3,
+     "score_change_pct": -5.6
+    },
+    {
+     "airport": "KATL",
+     "score_ref": 355,
+     "score_other": 326,
+     "rank_ref": 18,
+     "rank_other": 19,
+     "rank_change": 1,
+     "score_change_pct": -8.17
+    },
+    {
+     "airport": "KIND",
+     "score_ref": 346,
+     "score_other": 338,
+     "rank_ref": 19,
+     "rank_other": 13,
+     "rank_change": -6,
+     "score_change_pct": -2.31
+    },
+    {
+     "airport": "KLAX",
+     "score_ref": 344,
+     "score_other": 305,
+     "rank_ref": 20,
+     "rank_other": 31,
+     "rank_change": 11,
+     "score_change_pct": -11.34
+    }
+   ],
+   "spearman_union_topk": 0.7738,
+   "kendall_tau_b_union_topk": 0.6214,
+   "jaccard_topk": 0.8182,
+   "entered": [
+    "KPDK",
+    "KPHL"
+   ],
+   "left": [
+    "LTFM",
+    "KLAX"
+   ]
+  },
+  "T1": {
+   "k": 20,
+   "rows": [
+    {
+     "airport": "KORD",
+     "score_ref": 561,
+     "score_other": 484,
+     "rank_ref": 1,
+     "rank_other": 2,
+     "rank_change": 1,
+     "score_change_pct": -13.73
+    },
+    {
+     "airport": "KIAD",
+     "score_ref": 497,
+     "score_other": 458,
+     "rank_ref": 2,
+     "rank_other": 3,
+     "rank_change": 1,
+     "score_change_pct": -7.85
+    },
+    {
+     "airport": "KTEB",
+     "score_ref": 497,
+     "score_other": 492,
+     "rank_ref": 2,
+     "rank_other": 1,
+     "rank_change": -1,
+     "score_change_pct": -1.01
+    },
+    {
+     "airport": "KBNA",
+     "score_ref": 433,
+     "score_other": 420,
+     "rank_ref": 4,
+     "rank_other": 4,
+     "rank_change": 0,
+     "score_change_pct": -3.0
+    },
+    {
+     "airport": "KMDW",
+     "score_ref": 405,
+     "score_other": 379,
+     "rank_ref": 5,
+     "rank_other": 5,
+     "rank_change": 0,
+     "score_change_pct": -6.42
+    },
+    {
+     "airport": "KDAL",
+     "score_ref": 390,
+     "score_other": 374,
+     "rank_ref": 6,
+     "rank_other": 6,
+     "rank_change": 0,
+     "score_change_pct": -4.1
+    },
+    {
+     "airport": "EHAM",
+     "score_ref": 388,
+     "score_other": 322,
+     "rank_ref": 7,
+     "rank_other": 12,
+     "rank_change": 5,
+     "score_change_pct": -17.01
+    },
+    {
+     "airport": "KMIA",
+     "score_ref": 376,
+     "score_other": 283,
+     "rank_ref": 8,
+     "rank_other": 29,
+     "rank_change": 21,
+     "score_change_pct": -24.73
+    },
+    {
+     "airport": "KDFW",
+     "score_ref": 371,
+     "score_other": 312,
+     "rank_ref": 9,
+     "rank_other": 18,
+     "rank_change": 9,
+     "score_change_pct": -15.9
+    },
+    {
+     "airport": "EDDF",
+     "score_ref": 370,
+     "score_other": 284,
+     "rank_ref": 10,
+     "rank_other": 27,
+     "rank_change": 17,
+     "score_change_pct": -23.24
+    },
+    {
+     "airport": "KCLT",
+     "score_ref": 369,
+     "score_other": 343,
+     "rank_ref": 11,
+     "rank_other": 8,
+     "rank_change": -3,
+     "score_change_pct": -7.05
+    },
+    {
+     "airport": "LSZH",
+     "score_ref": 369,
+     "score_other": 318,
+     "rank_ref": 11,
+     "rank_other": 13,
+     "rank_change": 2,
+     "score_change_pct": -13.82
+    },
+    {
+     "airport": "KHPN",
+     "score_ref": 368,
+     "score_other": 364,
+     "rank_ref": 13,
+     "rank_other": 7,
+     "rank_change": -6,
+     "score_change_pct": -1.09
+    },
+    {
+     "airport": "LTFM",
+     "score_ref": 364,
+     "score_other": 186,
+     "rank_ref": 14,
+     "rank_other": 123,
+     "rank_change": 109,
+     "score_change_pct": -48.9
+    },
+    {
+     "airport": "CYYZ",
+     "score_ref": 361,
+     "score_other": 301,
+     "rank_ref": 15,
+     "rank_other": 21,
+     "rank_change": 6,
+     "score_change_pct": -16.62
+    },
+    {
+     "airport": "LFMN",
+     "score_ref": 360,
+     "score_other": 340,
+     "rank_ref": 16,
+     "rank_other": 9,
+     "rank_change": -7,
+     "score_change_pct": -5.56
+    },
+    {
+     "airport": "KBOS",
+     "score_ref": 357,
+     "score_other": 313,
+     "rank_ref": 17,
+     "rank_other": 17,
+     "rank_change": 0,
+     "score_change_pct": -12.32
+    },
+    {
+     "airport": "KATL",
+     "score_ref": 355,
+     "score_other": 307,
+     "rank_ref": 18,
+     "rank_other": 20,
+     "rank_change": 2,
+     "score_change_pct": -13.52
+    },
+    {
+     "airport": "KIND",
+     "score_ref": 346,
+     "score_other": 331,
+     "rank_ref": 19,
+     "rank_other": 11,
+     "rank_change": -8,
+     "score_change_pct": -4.34
+    },
+    {
+     "airport": "KLAX",
+     "score_ref": 344,
+     "score_other": 271,
+     "rank_ref": 20,
+     "rank_other": 34,
+     "rank_change": 14,
+     "score_change_pct": -21.22
+    }
+   ],
+   "spearman_union_topk": 0.5473,
+   "kendall_tau_b_union_topk": 0.4094,
+   "jaccard_topk": 0.6,
+   "entered": [
+    "KPDK",
+    "KPHL",
+    "KFOK",
+    "LFPB",
+    "KCHS"
+   ],
+   "left": [
+    "KMIA",
+    "EDDF",
+    "LTFM",
+    "CYYZ",
+    "KLAX"
+   ]
+  }
+ },
+ "pairwise_spearman_union_top20": {
+  "all": {
+   "all": 1.0,
+   "min4": 0.0411,
+   "min10": -0.2355,
+   "T1-T3": 0.7738,
+   "T1": 0.5473
+  },
+  "min4": {
+   "all": 0.0411,
+   "min4": 1.0,
+   "min10": 0.7134,
+   "T1-T3": -0.1139,
+   "T1": -0.2596
+  },
+  "min10": {
+   "all": -0.2355,
+   "min4": 0.7134,
+   "min10": 1.0,
+   "T1-T3": -0.3749,
+   "T1": -0.4857
+  },
+  "T1-T3": {
+   "all": 0.7738,
+   "min4": -0.1139,
+   "min10": -0.3749,
+   "T1-T3": 1.0,
+   "T1": 0.84
+  },
+  "T1": {
+   "all": 0.5473,
+   "min4": -0.2596,
+   "min10": -0.4857,
+   "T1-T3": 0.84,
+   "T1": 1.0
+  }
+ }
+}

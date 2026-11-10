@@ -1,0 +1,78 @@
+{
+ "output": "coverage_gaps.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "raw_flights",
+   "file": "2026_Q1_detailed_github.parquet",
+   "bytes": 840340093,
+   "sha256": "12ec161c7f1739934053d743625bb48e86b3785c3fcb0549b0e08ae93b1199ce",
+   "path": "data/raw/flights/2026_Q1_detailed_github.parquet"
+  },
+  {
+   "role": "raw_flights",
+   "file": "2026_Q2_detailed_github.parquet",
+   "bytes": 911949077,
+   "sha256": "2bef8bc41b9c5fc0708271859362a10d9a703a15ad57863e7e934bf3738226db",
+   "path": "data/raw/flights/2026_Q2_detailed_github.parquet"
+  },
+  {
+   "role": "raw_flights",
+   "file": "2026_Q3_detailed_github.parquet",
+   "bytes": 1026954012,
+   "sha256": "d7cf25ffb128b4ceade6a2b898e6901f829ebf8ac065985fcdaf1787ffa1d1c1",
+   "path": "data/raw/flights/2026_Q3_detailed_github.parquet"
+  }
+ ],
+ "conditions": {
+  "scope": "worldwide"
+ },
+ "thresholds": {
+  "gap_ratio": 0.05,
+  "gap_min_hours": 1
+ },
+ "method": "runs of consecutive hours with flights <= gap_ratio * hourly baseline"
+}

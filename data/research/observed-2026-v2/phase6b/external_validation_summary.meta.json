@@ -1,0 +1,64 @@
+{
+ "output": "external_validation_summary.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "eurostat",
+   "file": "eurostat_avia_paoa.json",
+   "bytes": 3691,
+   "sha256": "8eee22cd2055f69ce2705745e20da76723e5b1e44b5a2d9d3e004f3b267853aa",
+   "path": "eurostat_avia_paoa.json",
+   "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/avia_paoa?format=JSON&lang=EN&freq=M&unit=FLIGHT&tra_meas=CAF_PAS&schedule=TOTAL&tra_cov=TOTAL&sinceTimePeriod=2026-01&rep_airp=DE_EDDF&rep_airp=FR_LFPG&rep_airp=NL_EHAM&rep_airp=ES_LEMD&rep_airp=IT_LIRF",
+   "retrieved": "2026-11-10T16:20:10Z"
+  }
+ ],
+ "conditions": {
+  "eurostat": "avia_paoa, unit FLIGHT, tra_meas CAF_PAS (commercial passenger air flights, arrivals + departures), schedule TOTAL, tra_cov TOTAL",
+  "ours": "departures + arrivals at the airport in the Explore month files (both bases); class = aircraft-variant class, not the purpose of the flight"
+ },
+ "thresholds": {},
+ "method": "Ratios are descriptive. The definitions differ (Eurostat: commercial passenger flights reported by the airport; ours: ADS-B flights with an airline code and an assigned airport, classed by aircraft), so agreement is not accuracy. C1_scaled multiplies by calendar/effective days of the EU daily series (experimental)."
+}

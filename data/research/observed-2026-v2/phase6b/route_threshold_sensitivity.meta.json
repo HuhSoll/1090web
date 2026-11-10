@@ -1,0 +1,75 @@
+{
+ "output": "route_threshold_sensitivity.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  }
+ ],
+ "conditions": {
+  "tiers": [
+   "T1_track",
+   "T2_track_conflict",
+   "T3_track_callsign",
+   "T4_callsign_only"
+  ],
+  "graph": "undirected pair flights summed over both directions; directed_routes applies the same threshold per direction"
+ },
+ "thresholds": {
+  "min_flights_per_month": [
+   1,
+   4,
+   10,
+   30
+  ],
+  "top_k": 20
+ },
+ "method": "Dropping low-frequency routes also drops seasonal and genuinely infrequent routes; it is not noise removal."
+}

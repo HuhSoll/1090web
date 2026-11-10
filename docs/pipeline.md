@@ -29,6 +29,12 @@ cd pipeline && ../.venv/Scripts/python -m pytest -q && cd ..
 .venv/Scripts/python pipeline/compare_datasets.py public/data/observed-2026 public/data/observed-2026-v2     --out docs/audit-data/phase6a-v1-v2-comparison.json
 ```
 
+研究用の信頼性評価（Phase 6B）：観測の欠け、地域別の品質、月次正規化、T1〜T4・低頻度路線・ランキングの感度、Eurostat との比較を `data/research/<id>/phase6b/` に出力します（公開サイトには含めません）。詳しくは [phase6b-report.md](phase6b-report.md)。
+
+```bash
+.venv/Scripts/python pipeline/analysis/reliability.py --dataset observed-2026-v2     --compare-dataset observed-2026 --raw-flights "data/raw/flights/*.parquet" --fetch-eurostat
+```
+
 元データを新しい版に差し替えるときは、`inputs.lock.json` を更新し、新しいデータセット ID とバージョンで生成してください。既存のデータセットは上書きしません。
 
 出力（`<id>` はデータセット ID）：

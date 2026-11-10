@@ -1,0 +1,74 @@
+{
+ "output": "monthly_normalization_comparison.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "coverage_daily",
+   "file": "coverage_daily.csv",
+   "bytes": 79129,
+   "sha256": "f9576ea31ee8a347e0f13318d2f1e5e65b6df1af8d52c0b9b28b67856ef42fd6",
+   "path": "public/data/observed-2026-v2/research/coverage_daily.csv"
+  }
+ ],
+ "conditions": {
+  "quality_reference_region": "WORLD",
+  "regions": [
+   "WORLD",
+   "AF",
+   "AS",
+   "EU",
+   "NA",
+   "OC",
+   "SA"
+  ],
+  "volume": "coverage_daily flights (assigned airport, same-airport included)"
+ },
+ "thresholds": {
+  "good_day_ratio": 0.8,
+  "window_days": 28
+ },
+ "method": "Per-day volume of one month under several definitions.\n\n    A   total flights\n    B   A / calendar days\n    B_obs  A / days with >= 1 flight (the method the Explore UI uses)\n    C1  A / effective days, effective days = sum over days of min(1, quality ratio)\n    C2  mean flights over days whose quality ratio >= threshold\n    The quality ratio comes from a reference series (e.g. WORLD) and is the day's flights divided\n    by its same-weekday baseline. C1 and C2 are experimental: they assume the missing part of a\n    day looked like its neighbours, which is exactly what cannot be observed.\n    "
+}

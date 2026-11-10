@@ -1,0 +1,103 @@
+{
+ "output": "coverage_summary.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  },
+  {
+   "role": "coverage_daily",
+   "file": "coverage_daily.csv",
+   "bytes": 79129,
+   "sha256": "f9576ea31ee8a347e0f13318d2f1e5e65b6df1af8d52c0b9b28b67856ef42fd6",
+   "path": "public/data/observed-2026-v2/research/coverage_daily.csv"
+  },
+  {
+   "role": "airports",
+   "file": "airports.csv",
+   "bytes": 487008,
+   "sha256": "fd6382a1104f28dd59f4788a4d09726de384c1721236fa5092b962ccb821345c",
+   "path": "public/data/observed-2026-v2/research/airports.csv"
+  }
+ ],
+ "conditions": {
+  "scope_types": [
+   "world",
+   "continent",
+   "country"
+  ],
+  "touching": "a flight counts for a scope when its origin or destination lies in it",
+  "daily metrics": "world and continents only (daily counts by country are not in the dataset)"
+ },
+ "thresholds": {
+  "window_days": 28,
+  "low_ratio": 0.8,
+  "high_ratio": 1.25,
+  "extra_low_ratios": [
+   0.5,
+   0.7,
+   0.9
+  ],
+  "gap_ratio": 0.05,
+  "gap_min_hours": 1,
+  "gap_explains_share": 0.5,
+  "global_min_regions": 4,
+  "regions": [
+   "AF",
+   "AS",
+   "EU",
+   "NA",
+   "OC",
+   "SA"
+  ],
+  "persistence_months": 6
+ },
+ "method": "{\"analysis\": {\"anomaly_days\": \"days flagged against the same-weekday baseline; use to exclude or annotate days\", \"gap_hours\": \"worldwide hours with (almost) no flights; attributable to data collection\", \"daily_cv\": \"day-to-day variation of observed volume within a month (stability of the record)\", \"tier_shares\": \"mix of airport evidence (T1-T4) for flights touching the scope\", \"callsign_only_end_share\": \"share of airport ends assigned from the callsign route only (R4): a risk flag\", \"route_persistence_share\": \"share of the scope's routes observed in >= 6 of the months in the data\", \"mom_change_observed\": \"month-on-month change of OBSERVED flights; read together with anomaly days\"}, \"reference_only\": {\"observed_flights\": \"volume in the data; NOT a share of operated flights (no denominator)\", \"track_end_share\": \"share of ends supported by the track (R1/R2); NOT a capture rate\", \"cross_scope_volume_comparison\": \"regions differ in receiver density; volumes are not comparable as traffic\"}}"
+}

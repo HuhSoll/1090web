@@ -1,0 +1,68 @@
+{
+ "output": "ranking_robustness_2026-08.csv",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0",
+  "path": "public/data/observed-2026-v2"
+ },
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "from": "2026-01",
+  "to": "2026-09"
+ },
+ "generatedAt": "2026-11-10T16:19:45Z",
+ "script": {
+  "name": "pipeline/analysis/reliability.py",
+  "version": "6b.1",
+  "git": {
+   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "pipelineDirty": false,
+   "pipelineUntracked": [
+    "pipeline/analysis/__init__.py",
+    "pipeline/analysis/coverage.py",
+    "pipeline/analysis/network.py",
+    "pipeline/analysis/reliability.py",
+    "pipeline/tests/test_coverage_analysis.py",
+    "pipeline/tests/test_network.py",
+    "pipeline/tests/test_reliability.py"
+   ]
+  }
+ },
+ "environment": {
+  "python": "3.10.6",
+  "duckdb": "1.5.6",
+  "platform": "Windows-10-10.0.26300-SP0"
+ },
+ "note": "Observed data only. No value is a share of operated flights.",
+ "inputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  }
+ ],
+ "conditions": {
+  "all": "T1-T4, >= 1 flight",
+  "min4": ">= 4 flights in the month (pair, both directions)",
+  "min10": ">= 10 flights",
+  "T1-T3": "tiers T1-T3",
+  "T1": "tier T1 only",
+  "score": "degree = number of distinct airports connected in the month"
+ },
+ "thresholds": {
+  "top_k": 20
+ },
+ "method": "Ranks: competition ranking (ties share the best rank). Correlations on the union of both top-k sets using full degree values (absent = 0). Spearman = Pearson of average ranks; Kendall tau-b tie-corrected."
+}

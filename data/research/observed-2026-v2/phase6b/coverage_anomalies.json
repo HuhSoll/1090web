@@ -1,0 +1,573 @@
+{
+ "anomalies": [
+  {
+   "day": "2026-01-01",
+   "direction": "low",
+   "scope": "regional",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 75057,
+   "world_baseline": 84537.5,
+   "world_ratio": 0.8879,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 1.062,
+    "AS": 0.9854,
+    "EU": 0.9706,
+    "NA": 0.7878,
+    "OC": 0.7792,
+    "SA": 0.7546
+   }
+  },
+  {
+   "day": "2026-01-23",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "partial_gap_unexplained",
+   "cause_category": "partly data collection (gap hours); the remaining drop has no identifiable cause",
+   "cause_identifiable": false,
+   "world_flights": 52280,
+   "world_baseline": 88146.0,
+   "world_ratio": 0.5931,
+   "gap_hours": 1,
+   "gap_share_of_shortfall": 0.104,
+   "low_regions": [
+    "AS",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.8098,
+    "AS": 0.7969,
+    "EU": 0.8003,
+    "NA": 0.3369,
+    "OC": 0.5193,
+    "SA": 0.4609
+   }
+  },
+  {
+   "day": "2026-01-25",
+   "direction": "low",
+   "scope": "regional",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 67560,
+   "world_baseline": 81775.0,
+   "world_ratio": 0.8262,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "NA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.9785,
+    "AS": 1.0052,
+    "EU": 0.9195,
+    "NA": 0.5766,
+    "OC": 0.991,
+    "SA": 0.8527
+   }
+  },
+  {
+   "day": "2026-01-26",
+   "direction": "low",
+   "scope": "regional",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 73894,
+   "world_baseline": 85489.0,
+   "world_ratio": 0.8644,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "NA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.9856,
+    "AS": 0.9852,
+    "EU": 0.9369,
+    "NA": 0.6923,
+    "OC": 0.9807,
+    "SA": 0.8591
+   }
+  },
+  {
+   "day": "2026-05-04",
+   "direction": "low",
+   "scope": "regional",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 75084,
+   "world_baseline": 89269.0,
+   "world_ratio": 0.8411,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "NA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.8098,
+    "AS": 0.9748,
+    "EU": 0.8449,
+    "NA": 0.7371,
+    "OC": 0.8969,
+    "SA": 0.8698
+   }
+  },
+  {
+   "day": "2026-05-05",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "collection_gap",
+   "cause_category": "data collection (inferred from worldwide gap hours; not confirmed at the source)",
+   "cause_identifiable": true,
+   "world_flights": 5,
+   "world_baseline": 87212.5,
+   "world_ratio": 0.0001,
+   "gap_hours": 24,
+   "gap_share_of_shortfall": 1.0,
+   "low_regions": [
+    "AF",
+    "AS",
+    "EU",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.0005,
+    "AS": 0.0,
+    "EU": 0.0,
+    "NA": 0.0,
+    "OC": 0.0,
+    "SA": 0.0006
+   }
+  },
+  {
+   "day": "2026-05-06",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "collection_gap",
+   "cause_category": "data collection (inferred from worldwide gap hours; not confirmed at the source)",
+   "cause_identifiable": true,
+   "world_flights": 0,
+   "world_baseline": 88505.0,
+   "world_ratio": 0.0,
+   "gap_hours": 24,
+   "gap_share_of_shortfall": 1.0,
+   "low_regions": [
+    "AF",
+    "AS",
+    "EU",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.0,
+    "AS": 0.0,
+    "EU": 0.0,
+    "NA": 0.0,
+    "OC": 0.0,
+    "SA": 0.0
+   }
+  },
+  {
+   "day": "2026-05-07",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "collection_gap",
+   "cause_category": "data collection (inferred from worldwide gap hours; not confirmed at the source)",
+   "cause_identifiable": true,
+   "world_flights": 27868,
+   "world_baseline": 91894.5,
+   "world_ratio": 0.3033,
+   "gap_hours": 18,
+   "gap_share_of_shortfall": 1.101,
+   "low_regions": [
+    "AF",
+    "AS",
+    "EU",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.2689,
+    "AS": 0.1697,
+    "EU": 0.2573,
+    "NA": 0.412,
+    "OC": 0.2998,
+    "SA": 0.3509
+   }
+  },
+  {
+   "day": "2026-06-11",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 57416,
+   "world_baseline": 93140.5,
+   "world_ratio": 0.6164,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "AF",
+    "AS",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.4125,
+    "AS": 0.3715,
+    "EU": 0.8222,
+    "NA": 0.6092,
+    "OC": 0.7544,
+    "SA": 0.5576
+   }
+  },
+  {
+   "day": "2026-08-01",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "unexplained_low",
+   "cause_category": "unknown (collection, holiday, weather, real operations and receiver changes are not separable here)",
+   "cause_identifiable": false,
+   "world_flights": 61688,
+   "world_baseline": 92132.0,
+   "world_ratio": 0.6696,
+   "gap_hours": 0,
+   "gap_share_of_shortfall": null,
+   "low_regions": [
+    "AF",
+    "EU",
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.6614,
+    "AS": 0.8018,
+    "EU": 0.7301,
+    "NA": 0.536,
+    "OC": 0.6922,
+    "SA": 0.5312
+   }
+  },
+  {
+   "day": "2026-08-09",
+   "direction": "low",
+   "scope": "global",
+   "evidence": "partial_gap_unexplained",
+   "cause_category": "partly data collection (gap hours); the remaining drop has no identifiable cause",
+   "cause_identifiable": false,
+   "world_flights": 67936,
+   "world_baseline": 93213.0,
+   "world_ratio": 0.7288,
+   "gap_hours": 1,
+   "gap_share_of_shortfall": 0.208,
+   "low_regions": [
+    "AF",
+    "EU",
+    "NA",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.7533,
+    "AS": 0.81,
+    "EU": 0.6975,
+    "NA": 0.6773,
+    "OC": 0.8628,
+    "SA": 0.7333
+   }
+  },
+  {
+   "day": "2026-08-12",
+   "direction": "low",
+   "scope": "regional",
+   "evidence": "collection_gap",
+   "cause_category": "data collection (inferred from worldwide gap hours; not confirmed at the source)",
+   "cause_identifiable": true,
+   "world_flights": 80508,
+   "world_baseline": 97712.0,
+   "world_ratio": 0.8239,
+   "gap_hours": 3,
+   "gap_share_of_shortfall": 0.748,
+   "low_regions": [
+    "NA",
+    "OC",
+    "SA"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.8998,
+    "AS": 0.9188,
+    "EU": 0.9137,
+    "NA": 0.717,
+    "OC": 0.748,
+    "SA": 0.7141
+   }
+  },
+  {
+   "day": "2026-08-13",
+   "direction": "low",
+   "scope": "global_partial",
+   "evidence": "collection_gap",
+   "cause_category": "data collection (inferred from worldwide gap hours; not confirmed at the source)",
+   "cause_identifiable": true,
+   "world_flights": 78546,
+   "world_baseline": 99913.5,
+   "world_ratio": 0.7861,
+   "gap_hours": 7,
+   "gap_share_of_shortfall": 1.161,
+   "low_regions": [
+    "AS",
+    "OC"
+   ],
+   "high_regions": [],
+   "region_ratios": {
+    "AF": 0.8872,
+    "AS": 0.6499,
+    "EU": 0.8611,
+    "NA": 0.8599,
+    "OC": 0.5437,
+    "SA": 0.8367
+   }
+  }
+ ],
+ "gap_runs": [
+  {
+   "start": "2026-01-23T23:00:00",
+   "end": "2026-01-23T23:00:00",
+   "hours": 1,
+   "flights": 53,
+   "baseline_flights": 4095.0
+  },
+  {
+   "start": "2026-05-05T00:00:00",
+   "end": "2026-05-07T17:00:00",
+   "hours": 66,
+   "flights": 6,
+   "baseline_flights": 271678.0
+  },
+  {
+   "start": "2026-08-09T13:00:00",
+   "end": "2026-08-09T13:00:00",
+   "hours": 1,
+   "flights": 246,
+   "baseline_flights": 5568.0
+  },
+  {
+   "start": "2026-08-12T21:00:00",
+   "end": "2026-08-13T06:00:00",
+   "hours": 10,
+   "flights": 191,
+   "baseline_flights": 39642.5
+  }
+ ],
+ "gap_ratio_sensitivity": {
+  "0.05": [
+   {
+    "start": "2026-01-23T23:00:00",
+    "end": "2026-01-23T23:00:00",
+    "hours": 1,
+    "flights": 53,
+    "baseline_flights": 4095.0
+   },
+   {
+    "start": "2026-05-05T00:00:00",
+    "end": "2026-05-07T17:00:00",
+    "hours": 66,
+    "flights": 6,
+    "baseline_flights": 271678.0
+   },
+   {
+    "start": "2026-08-09T13:00:00",
+    "end": "2026-08-09T13:00:00",
+    "hours": 1,
+    "flights": 246,
+    "baseline_flights": 5568.0
+   },
+   {
+    "start": "2026-08-12T21:00:00",
+    "end": "2026-08-13T06:00:00",
+    "hours": 10,
+    "flights": 191,
+    "baseline_flights": 39642.5
+   }
+  ],
+  "0.1": [
+   {
+    "start": "2026-01-23T23:00:00",
+    "end": "2026-01-23T23:00:00",
+    "hours": 1,
+    "flights": 53,
+    "baseline_flights": 4095.0
+   },
+   {
+    "start": "2026-05-05T00:00:00",
+    "end": "2026-05-07T17:00:00",
+    "hours": 66,
+    "flights": 6,
+    "baseline_flights": 271678.0
+   },
+   {
+    "start": "2026-08-09T13:00:00",
+    "end": "2026-08-09T17:00:00",
+    "hours": 5,
+    "flights": 1731,
+    "baseline_flights": 26950.5
+   },
+   {
+    "start": "2026-08-12T21:00:00",
+    "end": "2026-08-13T06:00:00",
+    "hours": 10,
+    "flights": 191,
+    "baseline_flights": 39642.5
+   }
+  ],
+  "0.3": [
+   {
+    "start": "2026-01-23T22:00:00",
+    "end": "2026-01-23T23:00:00",
+    "hours": 2,
+    "flights": 816,
+    "baseline_flights": 8157.0
+   },
+   {
+    "start": "2026-05-04T12:00:00",
+    "end": "2026-05-04T12:00:00",
+    "hours": 1,
+    "flights": 684,
+    "baseline_flights": 5086.5
+   },
+   {
+    "start": "2026-05-04T18:00:00",
+    "end": "2026-05-04T18:00:00",
+    "hours": 1,
+    "flights": 525,
+    "baseline_flights": 4517.0
+   },
+   {
+    "start": "2026-05-05T00:00:00",
+    "end": "2026-05-07T17:00:00",
+    "hours": 66,
+    "flights": 6,
+    "baseline_flights": 271678.0
+   },
+   {
+    "start": "2026-08-01T16:00:00",
+    "end": "2026-08-02T01:00:00",
+    "hours": 10,
+    "flights": 7667,
+    "baseline_flights": 40338.5
+   },
+   {
+    "start": "2026-08-09T12:00:00",
+    "end": "2026-08-09T17:00:00",
+    "hours": 6,
+    "flights": 3104,
+    "baseline_flights": 32344.0
+   },
+   {
+    "start": "2026-08-12T21:00:00",
+    "end": "2026-08-13T06:00:00",
+    "hours": 10,
+    "flights": 191,
+    "baseline_flights": 39642.5
+   }
+  ]
+ },
+ "burst_hours": [
+  {
+   "hour": "2026-01-24T00:00:00",
+   "flights": 8010,
+   "baseline": 3942.0,
+   "ratio": 2.032
+  },
+  {
+   "hour": "2026-05-07T18:00:00",
+   "flights": 9327,
+   "baseline": 4742.0,
+   "ratio": 1.967
+  },
+  {
+   "hour": "2026-08-09T18:00:00",
+   "flights": 10127,
+   "baseline": 4714.0,
+   "ratio": 2.148
+  }
+ ],
+ "hourly_analysis": "run",
+ "evidence_categories": {
+  "collection_gap": "worldwide gap hours explain >= gap_explains_share of the day's shortfall; attributed to data collection (inferred)",
+  "partial_gap_unexplained": "gap hours explain less than that share; the rest has no identifiable cause",
+  "unexplained_low": "low without gap hours; cause cannot be identified from this data",
+  "unexplained_high": "high; cause cannot be identified (may follow a gap as a backlog)"
+ },
+ "sensitivity_low_days": {
+  "0.5": [
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07"
+  ],
+  "0.7": [
+   "2026-01-23",
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07",
+   "2026-06-11",
+   "2026-08-01"
+  ],
+  "0.9": [
+   "2026-01-01",
+   "2026-01-23",
+   "2026-01-25",
+   "2026-01-26",
+   "2026-05-04",
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07",
+   "2026-06-11",
+   "2026-08-01",
+   "2026-08-09",
+   "2026-08-12",
+   "2026-08-13"
+  ],
+  "0.8": [
+   "2026-01-23",
+   "2026-05-05",
+   "2026-05-06",
+   "2026-05-07",
+   "2026-06-11",
+   "2026-08-01",
+   "2026-08-09",
+   "2026-08-13"
+  ]
+ }
+}

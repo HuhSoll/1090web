@@ -10,7 +10,6 @@ export function Sidebar({ view }: { view: NetworkView | null }) {
     <aside className="sidebar panel" aria-label="Controls">
       <header className="brand">
         <Logo />
-        <p className="tagline">{t('app.tagline')}</p>
       </header>
       <div className="sidebar-scroll">
         <section className="section">

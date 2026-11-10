@@ -7,6 +7,7 @@ import {
   computeRouteDetail,
   connectedRoutes,
   DEFAULT_FILTERS,
+  notableRoutes,
   thresholdStepsFor,
 } from '../src/domain/networkView';
 import { searchAirports } from '../src/domain/search';
@@ -114,6 +115,14 @@ describe('route helpers', () => {
       { carrierId: 'x', flights: 100 },
       { carrierId: 'y', flights: 10 },
     ]);
+  });
+
+  it('picks only the top routes as notable', () => {
+    const v = computeNetworkView(network, month, DEFAULT_FILTERS);
+    // 3 visible routes -> minimum of 3, ordered by flights
+    expect(notableRoutes(v).map((r) => r.routeId)).toEqual([0, 2, 1]);
+    const filtered = computeNetworkView(network, month, { ...DEFAULT_FILTERS, minFlights: 1000 });
+    expect(notableRoutes(filtered)).toEqual([]);
   });
 
   it('threshold steps never exceed the max', () => {

@@ -38,7 +38,7 @@ export interface GlobeCallbacks {
 const CAMERA_DEFAULT_DISTANCE = 3.5;
 const MIN_DISTANCE = 1.32;
 const MAX_DISTANCE = 6;
-const AIRPORT_PICK_RADIUS_PX = 10;
+const AIRPORT_PICK_RADIUS_PX = 12;
 const ROUTE_PICK_RADIUS_PX = 6;
 const CLICK_MAX_MOVE_PX = 5;
 const AUTO_ROTATE_RESUME_MS = 7000;
@@ -188,7 +188,20 @@ export class GlobeRenderer {
       sel.hoveredAirport,
       sel.selectedAirport !== null || sel.focusRoute !== null ? connectedAirports : null,
     );
+    this.highlight.setNotableDimmed(sel.selectedAirport !== null);
     this.autoRotateSuppressed = sel.selectedAirport !== null || sel.focusRoute !== null;
+    this.markDirty();
+  }
+
+  /** Highest-volume routes drawn slightly thicker; also hoverable when nothing is selected. */
+  setNotableRoutes(routes: readonly { routeId: number; weight: number }[]): void {
+    this.highlight.setNotable(
+      routes.map(({ routeId, weight }) => {
+        const a = this.routeEndpoints[routeId * 2]!;
+        const b = this.routeEndpoints[routeId * 2 + 1]!;
+        return { routeId, weight, start: this.unit(a), end: this.unit(b) };
+      }),
+    );
     this.markDirty();
   }
 
@@ -410,10 +423,12 @@ export class GlobeRenderer {
     }
     if (best >= 0) return { kind: 'airport', index: best };
 
-    // 2) Highlighted routes (small set) via screen-space distance to sampled arcs.
+    // 2) Thick-line routes (small sets) via screen-space distance to sampled arcs: the routes of
+    //    the selected airport when there is a selection, otherwise the notable routes.
     let bestRoute = -1;
     let bestRouteD = ROUTE_PICK_RADIUS_PX;
-    for (const [routeId, arc] of this.highlight.arcs) {
+    const candidates = this.highlight.arcs.size > 0 ? this.highlight.arcs : this.highlight.notableArcs;
+    for (const [routeId, arc] of candidates) {
       let prev: { sx: number; sy: number } | null = null;
       for (let i = 0; i < arc.length; i += 3) {
         const x = arc[i]!;

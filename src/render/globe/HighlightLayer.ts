@@ -15,29 +15,41 @@ export interface HighlightRoute {
   weight: number;
 }
 
+interface Palette {
+  low: THREE.Color;
+  high: THREE.Color;
+  /** brightness at weight 0 (scaled up to 1 at weight 1) */
+  floor: number;
+}
+
+const CONNECTED_PALETTE: Palette = { low: new THREE.Color('#1f8fd6'), high: new THREE.Color('#e9fbff'), floor: 0.45 };
+const NOTABLE_PALETTE: Palette = { low: new THREE.Color('#2a9be0'), high: new THREE.Color('#d9f6ff'), floor: 0.35 };
+
 /**
- * Thick, bright lines for the (small) set of routes connected to the selection, plus a focus
- * line for the hovered/selected route. Built on the CPU because the set is tiny compared with
- * the full network; also keeps sampled arcs around for screen-space route picking.
+ * Thick lines for small route subsets, built on the CPU (each set is tiny compared with the
+ * full network). Three tiers, bottom to top:
+ * - notable:   the highest-volume routes of the current view, always slightly thicker
+ * - connected: routes touching the selected airport
+ * - focus:     the hovered / selected route
+ * Sampled arcs are kept for screen-space route picking.
  */
 export class HighlightLayer {
   readonly group = new THREE.Group();
+  private readonly notable: LineSegments2;
   private readonly connected: LineSegments2;
   private readonly focus: LineSegments2;
+  private readonly notableMat: LineMaterial;
   private readonly connectedMat: LineMaterial;
   private readonly focusMat: LineMaterial;
-  /** routeId -> sampled arc points (xyz flattened) for picking */
+  /** routeId -> sampled arc points (xyz flattened), connected tier */
   readonly arcs = new Map<number, Float32Array>();
+  /** routeId -> sampled arc points, notable tier */
+  readonly notableArcs = new Map<number, Float32Array>();
 
   constructor() {
-    this.connectedMat = new LineMaterial({
-      linewidth: 1.6,
-      vertexColors: true,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      worldUnits: false,
-    });
+    const additive = { vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, worldUnits: false };
+    this.notableMat = new LineMaterial({ ...additive, linewidth: 2.2 });
+    this.connectedMat = new LineMaterial({ ...additive, linewidth: 1.8 });
     this.focusMat = new LineMaterial({
       linewidth: 3,
       color: 0xffd27a,
@@ -45,53 +57,32 @@ export class HighlightLayer {
       depthWrite: false,
       worldUnits: false,
     });
+    this.notable = new LineSegments2(new LineSegmentsGeometry(), this.notableMat);
     this.connected = new LineSegments2(new LineSegmentsGeometry(), this.connectedMat);
     this.focus = new LineSegments2(new LineSegmentsGeometry(), this.focusMat);
-    for (const o of [this.connected, this.focus]) {
+    [this.notable, this.connected, this.focus].forEach((o, i) => {
       o.frustumCulled = false;
       o.visible = false;
+      o.renderOrder = 3 + i;
       this.group.add(o);
-    }
-    this.connected.renderOrder = 3;
-    this.focus.renderOrder = 4;
+    });
   }
 
   setResolution(width: number, height: number): void {
-    this.connectedMat.resolution.set(width, height);
-    this.focusMat.resolution.set(width, height);
+    for (const m of [this.notableMat, this.connectedMat, this.focusMat]) m.resolution.set(width, height);
+  }
+
+  setNotable(routes: readonly HighlightRoute[]): void {
+    this.buildTier(this.notable, this.notableArcs, routes, NOTABLE_PALETTE, 0.0003);
+  }
+
+  /** While something is selected the notable tier recedes like the rest of the network. */
+  setNotableDimmed(dimmed: boolean): void {
+    this.notableMat.opacity = dimmed ? 0.12 : 1;
   }
 
   setConnected(routes: readonly HighlightRoute[]): void {
-    this.arcs.clear();
-    if (routes.length === 0) {
-      this.connected.visible = false;
-      return;
-    }
-    const positions = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
-    const colors = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
-    const low = new THREE.Color('#1f8fd6');
-    const high = new THREE.Color('#e9fbff');
-    const c = new THREE.Color();
-    routes.forEach((r, ri) => {
-      const arc = sampleArc(r.start, r.end, HIGHLIGHT_SEGMENTS, ROUTE_BASE_RADIUS + 0.0005);
-      this.arcs.set(r.routeId, arc);
-      c.copy(low).lerp(high, r.weight).multiplyScalar(0.45 + 0.55 * r.weight);
-      for (let s = 0; s < HIGHLIGHT_SEGMENTS; s++) {
-        const o = (ri * HIGHLIGHT_SEGMENTS + s) * 6;
-        positions.set(arc.subarray(s * 3, s * 3 + 6), o);
-        // Brighter in the middle of the arc, softer near the airports.
-        const t = (s + 0.5) / HIGHLIGHT_SEGMENTS;
-        const k = 0.65 + 0.35 * Math.sin(Math.PI * t);
-        colors[o] = c.r * k;
-        colors[o + 1] = c.g * k;
-        colors[o + 2] = c.b * k;
-        colors[o + 3] = c.r * k;
-        colors[o + 4] = c.g * k;
-        colors[o + 5] = c.b * k;
-      }
-    });
-    this.replaceGeometry(this.connected, positions, colors);
-    this.connected.visible = true;
+    this.buildTier(this.connected, this.arcs, routes, CONNECTED_PALETTE, 0.0006);
   }
 
   setFocus(route: { start: Vec3; end: Vec3 } | null): void {
@@ -106,6 +97,42 @@ export class HighlightLayer {
     this.focus.visible = true;
   }
 
+  private buildTier(
+    obj: LineSegments2,
+    arcs: Map<number, Float32Array>,
+    routes: readonly HighlightRoute[],
+    palette: Palette,
+    lift: number,
+  ): void {
+    arcs.clear();
+    if (routes.length === 0) {
+      obj.visible = false;
+      return;
+    }
+    const positions = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
+    const colors = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
+    const c = new THREE.Color();
+    routes.forEach((r, ri) => {
+      const arc = sampleArc(r.start, r.end, HIGHLIGHT_SEGMENTS, ROUTE_BASE_RADIUS + lift);
+      arcs.set(r.routeId, arc);
+      c.copy(palette.low)
+        .lerp(palette.high, r.weight)
+        .multiplyScalar(palette.floor + (1 - palette.floor) * r.weight);
+      for (let s = 0; s < HIGHLIGHT_SEGMENTS; s++) {
+        const o = (ri * HIGHLIGHT_SEGMENTS + s) * 6;
+        positions.set(arc.subarray(s * 3, s * 3 + 6), o);
+        // Brighter in the middle of the arc, softer near the airports.
+        const t = (s + 0.5) / HIGHLIGHT_SEGMENTS;
+        const k = 0.65 + 0.35 * Math.sin(Math.PI * t);
+        colors[o] = colors[o + 3] = c.r * k;
+        colors[o + 1] = colors[o + 4] = c.g * k;
+        colors[o + 2] = colors[o + 5] = c.b * k;
+      }
+    });
+    this.replaceGeometry(obj, positions, colors);
+    obj.visible = true;
+  }
+
   private replaceGeometry(obj: LineSegments2, positions: Float32Array, colors: Float32Array | null): void {
     obj.geometry.dispose();
     const g = new LineSegmentsGeometry();
@@ -115,8 +142,8 @@ export class HighlightLayer {
   }
 
   dispose(): void {
-    this.connected.geometry.dispose();
-    this.focus.geometry.dispose();
+    for (const o of [this.notable, this.connected, this.focus]) o.geometry.dispose();
+    this.notableMat.dispose();
     this.connectedMat.dispose();
     this.focusMat.dispose();
   }

@@ -49,8 +49,9 @@ void main() {
 
   vec3 low = vec3(0.10, 0.42, 0.78);
   vec3 high = vec3(0.62, 0.92, 1.0);
-  vColor = mix(low, high, w);
-  float alpha = 0.05 + 0.33 * w;
+  vColor = mix(low, high, w * w);
+  // Squared weight widens the gap between thin regional routes and trunk routes.
+  float alpha = 0.035 + 0.45 * w * w;
   // When something is selected, everything that is not connected recedes.
   float dim = mix(1.0, mix(0.16, 1.4, connected), uHasSelection);
   // Arcs near the horizon are seen edge-on and pile up; fade them so the limb does not saturate.

@@ -24,8 +24,8 @@ void main() {
   vec3 n = normalize(position);
   vFacing = clamp(dot(n, normalize(uCameraPos - position)) * 3.0, 0.0, 1.0);
   float size = aSize;
-  if (aState >= 2.0) size = max(size, 7.0) + 6.0;
-  else if (aState >= 1.0) size += 1.5;
+  if (aState >= 2.0) size = max(size, 10.0) + 7.0;
+  else if (aState >= 1.0) size += 2.0;
   gl_PointSize = size * uPixelRatio;
 }
 `;

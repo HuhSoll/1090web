@@ -189,3 +189,21 @@ export function thresholdStepsFor(maxRouteFlights: number): number[] {
   const steps = THRESHOLD_STEPS.filter((s) => s <= Math.max(maxRouteFlights, 1));
   return steps.length > 0 ? [...steps] : [0];
 }
+
+export const MAX_NOTABLE_ROUTES = 150;
+
+/**
+ * The few routes worth singling out: the highest-volume visible routes. The count grows with
+ * the square root of the visible network (about 20 of 400 routes, capped at 150), so the
+ * emphasis stays selective at any scale. Ties are broken by route id for stable output.
+ */
+export function notableRoutes(view: NetworkView): { routeId: number; flights: number }[] {
+  if (view.visibleRouteCount === 0) return [];
+  const count = Math.min(MAX_NOTABLE_ROUTES, Math.max(3, Math.ceil(Math.sqrt(view.visibleRouteCount))));
+  const ids: number[] = [];
+  view.routeFlights.forEach((f, i) => {
+    if (f > 0) ids.push(i);
+  });
+  ids.sort((a, b) => view.routeFlights[b]! - view.routeFlights[a]! || a - b);
+  return ids.slice(0, count).map((routeId) => ({ routeId, flights: view.routeFlights[routeId]! }));
+}

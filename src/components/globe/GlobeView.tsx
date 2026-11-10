@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { connectedRoutes, type NetworkView } from '../../domain/networkView';
+import { connectedRoutes, notableRoutes, type NetworkView } from '../../domain/networkView';
 import { GlobeRenderer, WebGLUnavailableError, type PickHit } from '../../render/globe/GlobeRenderer';
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
@@ -107,6 +107,15 @@ export function GlobeView({ view }: Props) {
     const connectedIds = connected ? new Set(connected.map((c) => c.routeId)) : null;
     r.setWeights(rw, aw, connectedIds);
   }, [network, view, connected]);
+
+  // 3b. Notable (highest-volume) routes get slightly thicker lines.
+  useEffect(() => {
+    const r = rendererRef.current;
+    if (!r || !network || !view) return;
+    r.setNotableRoutes(
+      notableRoutes(view).map((n) => ({ routeId: n.routeId, weight: logNorm(n.flights, view.maxRouteFlights) })),
+    );
+  }, [network, view]);
 
   // 4. Selection / hover.
   const hoveredAirport = hover?.kind === 'airport' ? hover.id : null;

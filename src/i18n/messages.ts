@@ -4,7 +4,6 @@
  * Placeholders use {name} syntax.
  */
 export const en = {
-  'app.tagline': "Explore the world's aviation network.",
   'app.loading': 'Loading network…',
   'app.loadingMonth': 'Loading {month}…',
   'app.error.title': 'Could not load the network data',
@@ -104,7 +103,6 @@ export type MessageKey = keyof typeof en;
 export type Messages = Record<MessageKey, string>;
 
 export const ja: Messages = {
-  'app.tagline': '世界の航空ネットワークを探索する。',
   'app.loading': 'ネットワークを読み込み中…',
   'app.loadingMonth': '{month} を読み込み中…',
   'app.error.title': 'ネットワークデータを読み込めませんでした',

@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-11-10T15:51:43Z",
+  "raw_rows": 43083171,
+  "raw_rows_without_airline": 14981253,
+  "flights_in_scope": 26862421,
+  "removed_quarter_overlap_or_bad_time": 1239497,
+  "rules": {
+    "origin": {
+      "R1": 17203355,
+      "R2": 1091646,
+      "R3": 3130221,
+      "R4": 3569550,
+      "R5": 1867649
+    },
+    "destination": {
+      "R1": 17782633,
+      "R2": 1047529,
+      "R3": 2252962,
+      "R4": 4043538,
+      "R5": 1735759
+    }
+  },
+  "tiers": {
+    "T1_track": 12781147,
+    "T2_track_conflict": 1545254,
+    "T3_track_callsign": 3195397,
+    "T4_callsign_only": 6615791,
+    "X_unresolved": 2724832
+  },
+  "tiers_on_map": {
+    "T1_track": 11625624,
+    "T2_track_conflict": 1527228,
+    "T3_track_callsign": 3194437,
+    "T4_callsign_only": 6561326
+  },
+  "basis": {
+    "observed": 17521798,
+    "callsign": 6615791,
+    "unknown": 2724832
+  },
+  "conflict_ends": {
+    "origin": 1527955,
+    "destination": 1603086
+  },
+  "conflict_flights": 1889200,
+  "ambiguous_near_flights": 34580,
+  "same_airport_excluded": 1228974,
+  "flights_on_map": 22908615,
+  "class_on_map": {
+    "cargo": 602097,
+    "passenger": 19609499,
+    "unknown": 2697019
+  },
+  "routes": 153930,
+  "airports": 4644,
+  "airlines": 5585,
+  "alias_codes_merged": 82,
+  "alias_codes_unresolved": 7,
+  "months": [
+    {
+      "month": "2026-01",
+      "file": "months/2026-01.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 179136,
+      "suspectedLowDays": [
+        "2026-01-23"
+      ]
+    },
+    {
+      "month": "2026-02",
+      "file": "months/2026-02.json",
+      "observedDays": 28,
+      "daysInMonth": 28,
+      "recordCount": 175601,
+      "suspectedLowDays": []
+    },
+    {
+      "month": "2026-03",
+      "file": "months/2026-03.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 195373,
+      "suspectedLowDays": []
+    },
+    {
+      "month": "2026-04",
+      "file": "months/2026-04.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 196627,
+      "suspectedLowDays": []
+    },
+    {
+      "month": "2026-05",
+      "file": "months/2026-05.json",
+      "observedDays": 30,
+      "daysInMonth": 31,
+      "recordCount": 200026,
+      "suspectedLowDays": [
+        "2026-05-05",
+        "2026-05-06",
+        "2026-05-07"
+      ]
+    },
+    {
+      "month": "2026-06",
+      "file": "months/2026-06.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 213406,
+      "suspectedLowDays": [
+        "2026-06-11"
+      ]
+    },
+    {
+      "month": "2026-07",
+      "file": "months/2026-07.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 214437,
+      "suspectedLowDays": []
+    },
+    {
+      "month": "2026-08",
+      "file": "months/2026-08.json",
+      "observedDays": 31,
+      "daysInMonth": 31,
+      "recordCount": 220537,
+      "suspectedLowDays": [
+        "2026-08-01",
+        "2026-08-09",
+        "2026-08-13"
+      ]
+    },
+    {
+      "month": "2026-09",
+      "file": "months/2026-09.json",
+      "observedDays": 30,
+      "daysInMonth": 30,
+      "recordCount": 218327,
+      "suspectedLowDays": []
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 このリポジトリのコードとデータは、ライセンスが別々です。コード（`public/data/` 以外）は [MIT License](LICENSE) です。
 
-## `public/data/observed-2026/`（ADS-B 観測データの集計）
+## `public/data/observed-2026-v2/` と `public/data/observed-2026/`（ADS-B 観測データの集計）
 
 [Open Database License (ODbL) v1.0](https://opendatacommons.org/licenses/odbl/1-0/) で提供します。
 
@@ -12,7 +12,7 @@
   - 元データ：[ADSBlol](https://github.com/adsblol)、[vradarserver/standing-data](https://github.com/vradarserver/standing-data)、[adsbdb.com](https://www.adsbdb.com/)
 - 空港の名称・座標：[OurAirports](https://ourairports.com/data/)（利用条件は確認中）
 
-集計方法と品質は [docs/pipeline.md](docs/pipeline.md) にあります。公式の時刻表ではありません。
+`research/` フォルダの集計表（Parquet／CSV）も同じ条件です。集計方法と品質は [docs/pipeline.md](docs/pipeline.md) にあります。公式の時刻表ではありません。
 
 ## `public/data/advisories/`（安全情報）
 

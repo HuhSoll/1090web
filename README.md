@@ -41,7 +41,7 @@ public/data/  公開用データ
 - 便データ：[MrAirspace/aircraft-flight-schedules](https://github.com/MrAirspace/aircraft-flight-schedules)（ODbL-1.0）。元は [ADSBlol](https://github.com/adsblol) の受信データ、[vradarserver/standing-data](https://github.com/vradarserver/standing-data) の便名・路線データ、[adsbdb.com](https://www.adsbdb.com/) の機材データ
 - 空港：[OurAirports](https://ourairports.com/data/)
 - 安全情報：[EASA Conflict Zone Information Bulletins](https://www.easa.europa.eu/en/domains/air-operations/czibs)（© EASA、出典明記で再利用可）
-- `public/data/observed-2026/` の集計データは上記の派生データベースとして ODbL-1.0 で提供します（詳細は [DATA_LICENSE.md](DATA_LICENSE.md)）
+- `public/data/observed-2026-v2/`（既定）と `public/data/observed-2026/`（旧版）の集計データは、上記の派生データベースとして ODbL-1.0 で提供します（詳細は [DATA_LICENSE.md](DATA_LICENSE.md)）
 
 ## ライセンス
 

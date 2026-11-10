@@ -1,0 +1,93 @@
+{
+  "datasetId": "observed-2026-v2",
+  "datasetVersion": "2.0.0",
+  "generatedAt": "2026-11-10T15:51:43Z",
+  "schemaVersions": {
+    "explore": 1,
+    "research": 1
+  },
+  "ruleset": {
+    "version": "2026.11-r2",
+    "nearAirportFt": 3000,
+    "ambiguousKm": 1.0,
+    "candidateDedupe": "by OurAirports record",
+    "excludedAirportTypes": [
+      "heliport",
+      "balloonport",
+      "closed"
+    ],
+    "scope": "flights with an airline code; month of origin time (else destination time) must lie in the file's quarter",
+    "sameAirport": "excluded from the network, counted",
+    "coverage": {
+      "lowRatio": 0.8,
+      "windowDays": 28,
+      "use": "detection only"
+    }
+  },
+  "inputs": [
+    {
+      "role": "flights",
+      "file": "2026_Q1_detailed_github.parquet",
+      "bytes": 840340093,
+      "sha256": "12ec161c7f1739934053d743625bb48e86b3785c3fcb0549b0e08ae93b1199ce",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter1/2026_Q1_detailed_github.parquet",
+      "retrieved": "2026-11-10",
+      "release": "aircraft_flight_schedules_2026_quarter1"
+    },
+    {
+      "role": "flights",
+      "file": "2026_Q2_detailed_github.parquet",
+      "bytes": 911949077,
+      "sha256": "2bef8bc41b9c5fc0708271859362a10d9a703a15ad57863e7e934bf3738226db",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter2/2026_Q2_detailed_github.parquet",
+      "retrieved": "2026-11-10",
+      "release": "aircraft_flight_schedules_2026_quarter2"
+    },
+    {
+      "role": "flights",
+      "file": "2026_Q3_detailed_github.parquet",
+      "bytes": 1026954012,
+      "sha256": "d7cf25ffb128b4ceade6a2b898e6901f829ebf8ac065985fcdaf1787ffa1d1c1",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter3/2026_Q3_detailed_github.parquet",
+      "retrieved": "2026-11-10",
+      "release": "aircraft_flight_schedules_2026_quarter3"
+    },
+    {
+      "role": "airports",
+      "file": "airports.csv",
+      "bytes": 12758651,
+      "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+      "source": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+      "retrieved": "2026-11-10T09:27Z",
+      "release": "OurAirports daily dump (no version tag; snapshot identified by hash)"
+    },
+    {
+      "role": "aircraft_classes",
+      "file": "aircraft_variant_class.csv",
+      "bytes": 118516,
+      "sha256": "d0d4200b94947800d2703436facccc763c58ef5d3d7995ce34eb99068b9f54c4"
+    }
+  ],
+  "months": [
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06",
+    "2026-07",
+    "2026-08",
+    "2026-09"
+  ],
+  "git": {
+    "commit": "43b41b2fe2bec58bf558052e9d54ec26eb0ca374",
+    "pipelineDirty": false,
+    "pipelineUntracked": []
+  },
+  "environment": {
+    "python": "3.10.6",
+    "duckdb": "1.5.6",
+    "platform": "Windows-10-10.0.26300-SP0"
+  },
+  "generator": "pipeline/build_dataset.py"
+}

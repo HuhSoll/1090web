@@ -3,10 +3,11 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { validateAirports, validateManifest, validateMonth, validateRoutes } from '../src/data/loaders/validate';
 
-const root = join(__dirname, '..', 'public', 'data', 'observed-2026');
+for (const id of ['observed-2026', 'observed-2026-v2']) {
+const root = join(__dirname, '..', 'public', 'data', id);
 const read = (p: string): unknown => JSON.parse(readFileSync(join(root, p), 'utf8'));
 
-describe.skipIf(!existsSync(join(root, 'manifest.json')))('observed-2026 dataset', () => {
+describe.skipIf(!existsSync(join(root, 'manifest.json')))(`${id} dataset`, () => {
   const manifest = validateManifest(read('manifest.json'));
   const airports = validateAirports(read('airports.json'));
   const routes = validateRoutes(read('routes.json'), new Set(airports.map((a) => a.id)));
@@ -41,3 +42,4 @@ describe.skipIf(!existsSync(join(root, 'manifest.json')))('observed-2026 dataset
     expect(airports.every((a) => Number.isFinite(a.lat) && Number.isFinite(a.lon))).toBe(true);
   });
 });
+}

@@ -1,0 +1,90 @@
+code,canonical,ourairports_id,ident,icao,iata,name,status,ambiguous
+K3W7,3W7,18750,K3W7,,GCD,Grand Coulee Dam Airport,merged: former/alternate ident of the same OurAirports record,false
+K80F,80F,19094,K80F,,ATE,Antlers Municipal Airport,merged: former/alternate ident of the same OurAirports record,false
+CFG6,CYFI,46534,CFG6,,YFI,Fort Mackay / Firebag,merged: former/alternate ident of the same OurAirports record,false
+KE13,E13,19686,KE13,,CCG,Crane County Airport,merged: former/alternate ident of the same OurAirports record,false
+FAER,FAER,611445,ZA-0374,FAER,,Ekland Ranch Airstrip,unresolved: code matches several OurAirports records; highest-priority record used,true
+FBFT,FBPM,2860,FBFT,FBPM,FRW,Phillip Gaonwe Matante International Airport,merged: former/alternate ident of the same OurAirports record,false
+FVBU,FVJN,3000,FVBU,FVJN,BUQ,Joshua Mqabuko Nkomo International Airport,merged: former/alternate ident of the same OurAirports record,false
+GAKY,GAKD,3068,GAKY,GAKD,KYS,Kayes Dag Dag Airport,merged: former/alternate ident of the same OurAirports record,false
+GMMY,GMMP,3116,GMMY,GMMP,NNA,Kenitra Air Base,merged: former/alternate ident of the same OurAirports record,false
+HEBA,HEAX,3180,HEBA,HEAX,HBE,Alexandria International Airport,merged: former/alternate ident of the same OurAirports record,false
+KDJT,KPBI,3766,KPBI,KDJT,PBI,President Donald J. Trump International Airport,merged (label label_unverified): same OurAirports record; canonical label from reviewed override,false
+KPBI,KPBI,3766,KPBI,KDJT,PBI,President Donald J. Trump International Airport,canonical,false
+KL08,L08,20284,KL08,,BXS,Borrego Valley Airport,merged: former/alternate ident of the same OurAirports record,false
+LELO,LERJ,30083,LELO,LERJ,RJL,Logroño-Agoncillo Airport,merged: former/alternate ident of the same OurAirports record,false
+MGTK,MGMM,4649,MGTK,MGMM,FRS,Mundo Maya International Airport,merged: former/alternate ident of the same OurAirports record,false
+MHSC,MHPR,4664,MHSC,MHPR,XPL,Palmerola International Airport,merged: former/alternate ident of the same OurAirports record,false
+KRCT,MI31,20918,KRCT,,,Nartron Field,merged: former/alternate ident of the same OurAirports record,false
+MPHO,MPPA,30768,MPHO,MPPA,BLB,Panamá Pacífico International Airport,merged: former/alternate ident of the same OurAirports record,false
+KO27,O27,20682,KO27,,ODC,Oakdale Airport,merged: former/alternate ident of the same OurAirports record,false
+KO43,O43,20689,KO43,,EYR,Yerington Municipal Airport,merged: former/alternate ident of the same OurAirports record,false
+OIBH,OIBH,3350,OI20,OIBH,IAQ,Bahregan Airport,unresolved: code matches several OurAirports records; highest-priority record used,true
+OPGD,OPGD,5252,OPGW,OPGD,,Gwadar International Airport (Old),unresolved: code matches several OurAirports records; highest-priority record used,true
+ORSU,ORSJ,5297,ORSU,ORSJ,ISU,Jalal Talabani International Airport,merged: former/alternate ident of the same OurAirports record,false
+KP04,P04,20793,KP04,,BSQ,Bisbee Municipal Airport,merged: former/alternate ident of the same OurAirports record,false
+KP14,P14,20797,KP14,,HBK,Holbrook Municipal Airport,merged: former/alternate ident of the same OurAirports record,false
+KS05,S05,20988,KS05,,BDY,Bandon State Airport,merged: former/alternate ident of the same OurAirports record,false
+SBPN,SDPE,5958,SBPN,,PNB,Porto Nacional Airport,merged: former/alternate ident of the same OurAirports record,false
+SETM,SECA,6083,SETM,SECA,LOH,Ciudad de Catamayo Airport,merged: former/alternate ident of the same OurAirports record,false
+SWNI,SIZ3,37980,SWNI,,,Nova Vida Airport,merged: former/alternate ident of the same OurAirports record,false
+SBBT,SNBA,5873,SBBT,,BAT,Chafei Amsei Airport,merged: former/alternate ident of the same OurAirports record,false
+SNSW,SNI6,397,SNSW,,SFK,Soure Airport,merged: former/alternate ident of the same OurAirports record,false
+SBBZ,SSBZ,5877,SBBZ,,BZC,Umberto Modiano Airport,merged: former/alternate ident of the same OurAirports record,false
+SBCV,SSCV,5892,SBCV,,CRQ,Caravelas Airport,merged: former/alternate ident of the same OurAirports record,false
+SBGU,SSGG,5911,SBGU,SSGG,GPB,Tancredo Thomas de Faria Airport,merged: former/alternate ident of the same OurAirports record,false
+SBCM,SSIM,5887,SBCM,SSIM,CCM,Forquilhinha - Criciúma  Airport,merged: former/alternate ident of the same OurAirports record,false
+SBRR,SSRS,299169,SBRR,SSRS,BRB,Barreirinhas National Airport,merged: former/alternate ident of the same OurAirports record,false
+SVPH,SVPX,40247,SVPH,SVPX,PPH,Paraitepuy Airstrip,merged: former/alternate ident of the same OurAirports record,false
+SBMC,SWIQ,5935,SBMC,,MQH,Minaçu Airport,merged: former/alternate ident of the same OurAirports record,false
+SBLN,SWXQ,5930,SBLN,,LIP,Lins Airport,merged: former/alternate ident of the same OurAirports record,false
+SYGO,SYEC,41513,SYGO,SYEC,OGL,Eugene F. Correia International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTKF,UZFF,31118,UTKF,UZFF,FEG,Fergana International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTFN,UZFN,32038,UTFN,UZFN,NMA,Namangan International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTNN,UZNN,32013,UTNN,UZNN,NCU,Nukus International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTNU,UZNU,26387,UTNU,UZNU,UGC,Urgench International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTSA,UZSA,32561,UTSA,UZSA,NVI,Navoi International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTSB,UZSB,26388,UTSB,UZSB,BHK,Bukhara International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTSL,UZSL,26389,UTSL,UZSL,,Karshi-Khanabad Air Base,merged: former/alternate ident of the same OurAirports record,false
+UTSS,UZSS,26390,UTSS,UZSS,SKD,Samarkand International Airport,merged: former/alternate ident of the same OurAirports record,false
+UTST,UZST,26391,UTST,UZST,TMJ,Termez Airport,merged: former/alternate ident of the same OurAirports record,false
+UTTT,UZTT,26392,UTTT,UZTT,TAS,Tashkent International Airport,merged: former/alternate ident of the same OurAirports record,false
+VA1P,VADU,3296,VA1P,VADU,DIU,Diu Airport,merged: former/alternate ident of the same OurAirports record,false
+VIAL,VEAB,26538,VIAL,VEAB,IXD,Prayagraj Airport,merged: former/alternate ident of the same OurAirports record,false
+VAKJ,VEKO,26450,VAKJ,VEKO,HJR,Khajuraho Airport,merged: former/alternate ident of the same OurAirports record,false
+VARP,VERP,26459,VARP,VERP,RPR,Swami Vivekananda Airport,merged: former/alternate ident of the same OurAirports record,false
+VIST,VEST,26579,VIST,,TNI,Satna Airport,merged: former/alternate ident of the same OurAirports record,false
+VNRK,VNCJ,32236,VNRK,,RUK,Rukum Chaurjahari Airport,merged: former/alternate ident of the same OurAirports record,false
+VABM,VOBM,26437,VABM,VOBM,IXG,Belagavi Airport,merged: former/alternate ident of the same OurAirports record,false
+VAHB,VOHB,26445,VAHB,VOHB,HBX,Hubballi Airport,merged: former/alternate ident of the same OurAirports record,false
+VEVZ,VOVZ,26523,VEVZ,VOVZ,,INS Dega Airport (visakhapatnam international airport),merged: former/alternate ident of the same OurAirports record,false
+WAMA,WAEG,31540,WAMA,WAEG,GLX,Gamarmalamo Airport,merged: former/alternate ident of the same OurAirports record,false
+WAMK,WAEK,31720,WAMK,WAEK,KAZ,Kuabang Airport,unresolved: code matches several OurAirports records; highest-priority record used,true
+WALG,WAGD,26758,WALG,WAGD,TJS,Tanjung Harapan Airport,merged: former/alternate ident of the same OurAirports record,false
+WAOI,WAGI,26777,WAOI,WAGI,PKN,Iskandar Airport,merged: former/alternate ident of the same OurAirports record,false
+WAOS,WAGS,26781,WAOS,WAGS,SMQ,Sampit (H.Asan) Airport,merged: former/alternate ident of the same OurAirports record,false
+WARJ,WAHH,26787,WARJ,WAHH,JOG,Adisutjipto International Airport,merged: former/alternate ident of the same OurAirports record,false
+WARQ,WAHQ,26788,WARQ,WAHQ,SOC,Adisoemarmo International Airport,merged: former/alternate ident of the same OurAirports record,false
+WARS,WAHS,26790,WARS,WAHS,SRG,Jenderal Ahmad Yani Airport,merged: former/alternate ident of the same OurAirports record,false
+WRLF,WAQA,35281,WRLF,WAQA,NNX,Nunukan Airport,merged: former/alternate ident of the same OurAirports record,false
+WALV,WAQB,26765,WALV,WAQB,,Bunyu Airport,merged: former/alternate ident of the same OurAirports record,false
+WRLB,WAQJ,35279,WRLB,WAQJ,LBW,Yuvai Semaring Airport,unresolved: code matches several OurAirports records; highest-priority record used,true
+WRLP,WAQL,35278,WRLP,WAQL,LPU,Long Apung Airport,merged: former/alternate ident of the same OurAirports record,false
+WALR,WAQQ,26762,WALR,WAQQ,TRK,Juwata International Airport / Suharnoko Harbani AFB,merged: former/alternate ident of the same OurAirports record,false
+WIDE,WIBG,26829,WIDE,WIBG,PPR,Tuanku Tambusai Airport,merged: former/alternate ident of the same OurAirports record,false
+WION,WIDO,26846,WION,WIDO,NTX,Ranai Airport,merged: former/alternate ident of the same OurAirports record,false
+WIBT,WIDT,32452,WIBT,,TJB,Raja Haji Abdullah Airport,merged: former/alternate ident of the same OurAirports record,false
+WIPL,WIGG,26853,WIPL,WIGG,BKS,Fatmawati Soekarno Airport,merged: former/alternate ident of the same OurAirports record,false
+WIPI,WIJB,310599,WIPI,WIJB,BUU,Muara Bungo Airport,merged: former/alternate ident of the same OurAirports record,false
+WIPA,WIJJ,26850,WIPA,WIJJ,DJB,Sultan Thaha Airport,merged: former/alternate ident of the same OurAirports record,false
+WIPK,WIKK,26852,WIPK,WIKK,PGK,Depati Amir Airport,merged: former/alternate ident of the same OurAirports record,false
+WITA,WIMT,41471,WITA,,TPK,Teuku Cut Ali Airport,merged: former/alternate ident of the same OurAirports record,false
+WIOD,WIOD,526304,ID-0290,WIOD,SKJ,Singkawang Airport,unresolved: code matches several OurAirports records; highest-priority record used,true
+WIAG,WIPM,41454,WIAG,,,Menggala Airport,merged: former/alternate ident of the same OurAirports record,false
+URRT,XRRT,44865,URRT,,TGK,Taganrog Yuzhny Airport,merged: former/alternate ident of the same OurAirports record,false
+UUBK,XUBK,32241,UUBK,,RYB,Staroselye Airport,merged: former/alternate ident of the same OurAirports record,false
+YJNB,YJUR,27656,YJNB,YJUR,JUR,Jurien Bay Airport,merged: former/alternate ident of the same OurAirports record,false
+YNHS,YNAA,32007,YNHS,,NBH,Nambucca Heads Airport,merged: former/alternate ident of the same OurAirports record,false
+YSNB,YSNK,27140,YSNB,YSNK,SNB,Snake Bay Airport,merged: former/alternate ident of the same OurAirports record,false
+ZUTC,ZPTC,300514,ZUTC,ZPTC,TCZ,Tengchong Tuofeng Airport,merged: former/alternate ident of the same OurAirports record,false
+ZPZT,ZPZT,525773,CN-0421,ZPZT,ZAT,Zhaotong Zhaoyang Airport,unresolved: code matches several OurAirports records; highest-priority record used,true

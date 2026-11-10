@@ -111,6 +111,7 @@ export class GlobeRenderer {
 
   private mode: ViewMode;
   private transition: MorphTransition | null = null;
+  private insets = { top: 0, bottom: 0 };
 
   private airportUnit = new Float32Array(0);
   private airportLatLonRad = new Float32Array(0);
@@ -270,6 +271,16 @@ export class GlobeRenderer {
     this.markDirty();
   }
 
+  /**
+   * Screen space covered by UI at the top/bottom (px). The projection centre is shifted into the
+   * uncovered area, so fly-to targets and the initial view are not hidden behind panels.
+   */
+  setViewInsets(top: number, bottom: number): void {
+    if (top === this.insets.top && bottom === this.insets.bottom) return;
+    this.insets = { top, bottom };
+    this.applyViewOffset();
+  }
+
   setAutoRotate(enabled: boolean): void {
     this.autoRotateEnabled = enabled;
     this.markDirty();
@@ -378,11 +389,15 @@ export class GlobeRenderer {
     this.callbacks.onUserInteraction?.();
   };
 
-  /** Camera height that fits the whole world width on the flat map. */
+  /**
+   * Camera height that fits the whole world width on the flat map, but never so high that empty
+   * space shows above and below the world (narrow/tall screens get a regional view instead).
+   */
   private flatDefaultHeight(): number {
-    const halfFov = (this.camera.fov * DEG2RAD) / 2;
-    const visibleWidthPerHeight = 2 * Math.tan(halfFov) * this.camera.aspect;
-    return THREE.MathUtils.clamp((FLAT_WORLD_WIDTH * 0.95) / visibleWidthPerHeight, 2, FLAT_MAX_HEIGHT);
+    const visibleHeightPerHeight = 2 * Math.tan((this.camera.fov * DEG2RAD) / 2);
+    const fitWidth = (FLAT_WORLD_WIDTH * 0.95) / (visibleHeightPerHeight * this.camera.aspect);
+    const fitHeight = (Math.PI * 0.95) / visibleHeightPerHeight;
+    return THREE.MathUtils.clamp(Math.min(fitWidth, fitHeight), 2, FLAT_MAX_HEIGHT);
   }
 
   /** Centre of the current view as lat/lon in radians. */
@@ -510,9 +525,17 @@ export class GlobeRenderer {
     this.renderer.domElement.style.width = `${this.width}px`;
     this.renderer.domElement.style.height = `${this.height}px`;
     this.camera.aspect = this.width / this.height;
-    this.camera.updateProjectionMatrix();
+    this.applyViewOffset();
     const pr = this.renderer.getPixelRatio();
     this.highlight.setResolution(this.width * pr, this.height * pr);
+    this.markDirty();
+  }
+
+  private applyViewOffset(): void {
+    const shift = Math.round((this.insets.bottom - this.insets.top) / 2);
+    if (shift === 0) this.camera.clearViewOffset();
+    else this.camera.setViewOffset(this.width, this.height, 0, shift, this.width, this.height);
+    this.camera.updateProjectionMatrix();
     this.markDirty();
   }
 

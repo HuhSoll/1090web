@@ -11,9 +11,9 @@ export function TopBar() {
   const setViewMode = useAppStore((s) => s.setViewMode);
   return (
     <div className="topbar">
-      <button type="button" className="pill-btn panel" onClick={() => setSourcesOpen(true)}>
+      <button type="button" className="pill-btn panel" onClick={() => setSourcesOpen(true)} aria-label={t('source.open')}>
         <Icon name="info" size={14} />
-        <span>{t('source.open')}</span>
+        <span className="pill-label">{t('source.open')}</span>
       </button>
       <div className="segmented panel lang" role="radiogroup" aria-label={t('view.label')}>
         {(['flat', 'globe'] as const).map((m) => (

@@ -1,5 +1,5 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 
 /**
@@ -13,9 +13,22 @@ function resolveBase(): string {
   return withLeading.endsWith('/') ? withLeading : `${withLeading}/`;
 }
 
+/**
+ * Social preview tags need absolute URLs. The deploy workflow sets SITE_URL from the repository
+ * owner and name; the fallback is the current public URL.
+ */
+function siteUrlPlugin(): Plugin {
+  const raw = process.env.SITE_URL?.trim() || 'https://huhsoll.github.io/1090web/';
+  const siteUrl = raw.endsWith('/') ? raw : `${raw}/`;
+  return {
+    name: 'site-url',
+    transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', siteUrl),
+  };
+}
+
 export default defineConfig({
   base: resolveBase(),
-  plugins: [react()],
+  plugins: [react(), siteUrlPlugin()],
   build: {
     target: 'es2022',
     sourcemap: true,

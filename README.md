@@ -1,4 +1,4 @@
-# AeroGraph
+# 1090web
 
 世界の航空ネットワークを、地図の上に光の線として描くWebアプリです。平面地図と3Dの地球儀を切り替えて見られます。
 
@@ -23,6 +23,13 @@ npm run dev
 npm run build      # 本番ビルド
 npm run check      # lint・型チェック・テスト・ビルドをまとめて実行
 npm run data:demo  # サンプルデータを作り直す
+```
+
+SNS用のプレビュー画像（`public/og-image.png`）の作り直し（Python・Pillow・numpy が必要）：
+
+```bash
+npm run og:geometry
+python scripts/og/render-og.py og-geometry.json public/og-image.png
 ```
 
 URL に `?stress=50000` を付けると、ランダムな5万路線で描画の重さを試せます。

@@ -269,7 +269,7 @@ const manifest = {
   schemaVersion: 1,
   datasetId: 'demo-2026',
   kind: 'demo',
-  title: 'AeroGraph demo dataset (synthetic)',
+  title: '1090web demo dataset (synthetic)',
   generatedAt: '2026-11-10T00:00:00Z',
   generator: 'scripts/generate-demo-data.mjs',
   seed: SEED,

@@ -1,5 +1,5 @@
 {
-  "name": "aerograph",
+  "name": "1090web",
   "private": true,
   "version": "0.1.0",
   "description": "Explore the world's aviation network on an interactive 3D globe.",
@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "data:demo": "node scripts/generate-demo-data.mjs",
+    "og:geometry": "node scripts/og/export-geometry.mjs og-geometry.json",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "engines": {

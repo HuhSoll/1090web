@@ -1,15 +1,22 @@
 import type { NetworkView } from '../../domain/networkView';
 import { useI18n } from '../../i18n/useI18n';
+import { useAppStore } from '../../state/store';
+import { Icon } from '../common/Icon';
 import { AirportSearch } from '../controls/AirportSearch';
 import { FilterPanel } from '../controls/FilterPanel';
 import { Logo } from '../common/Logo';
 
 export function Sidebar({ view }: { view: NetworkView | null }) {
   const { t } = useI18n();
+  const drawerOpen = useAppStore((s) => s.drawerOpen);
+  const setDrawerOpen = useAppStore((s) => s.setDrawerOpen);
   return (
-    <aside className="sidebar panel" aria-label="Controls">
+    <aside id="sidebar" className={`sidebar panel ${drawerOpen ? 'is-open' : ''}`} aria-label="Controls">
       <header className="brand">
         <Logo />
+        <button type="button" className="icon-btn small drawer-close" aria-label={t('drawer.close')} onClick={() => setDrawerOpen(false)}>
+          <Icon name="close" size={14} />
+        </button>
       </header>
       <div className="sidebar-scroll">
         <section className="section">

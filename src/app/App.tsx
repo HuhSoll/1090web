@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
-import { GlobeView } from '../components/globe/GlobeView';
+import { lazy, Suspense, useEffect } from 'react';
+import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { Icon } from '../components/common/Icon';
+import { Logo } from '../components/common/Logo';
 import { Sidebar } from '../components/layout/Sidebar';
 import { Timeline } from '../components/layout/Timeline';
 import { TopBar } from '../components/layout/TopBar';
@@ -10,6 +12,10 @@ import { useI18n } from '../i18n/useI18n';
 import { useAppStore } from '../state/store';
 import { useDataset, useNetworkView } from './useDataset';
 
+// The map renderer (three.js, d3-geo, topojson) is the bulk of the bundle. Loading it as a
+// separate chunk lets the panels render immediately while WebGL code downloads.
+const GlobeView = lazy(() => import('../components/globe/GlobeView').then((m) => ({ default: m.GlobeView })));
+
 export function App() {
   const { retry } = useDataset();
   const view = useNetworkView();
@@ -18,6 +24,8 @@ export function App() {
   const kind = useAppStore((s) => s.network?.manifest.kind);
   const stress = useAppStore((s) => s.stressRouteCount);
   const basemapError = useAppStore((s) => s.basemapError);
+  const drawerOpen = useAppStore((s) => s.drawerOpen);
+  const setDrawerOpen = useAppStore((s) => s.setDrawerOpen);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -29,6 +37,10 @@ export function App() {
       if (e.key !== 'Escape') return;
       const st = useAppStore.getState();
       if (st.sourcesOpen) return;
+      if (st.drawerOpen) {
+        st.setDrawerOpen(false);
+        return;
+      }
       if (st.selectedRoute !== null) st.selectRoute(null);
       else if (st.selectedAirport !== null) st.selectAirport(null);
     };
@@ -40,7 +52,21 @@ export function App() {
     <div className="app">
       <div className="backdrop" aria-hidden="true" />
       <main className="stage">
-        <GlobeView view={view} />
+        <ErrorBoundary
+          fallback={() => (
+            <div className="globe-fallback" role="alert">
+              <h2>{t('app.mapLoadError')}</h2>
+              {/* React caches a failed lazy import, so a reload is the reliable retry. */}
+              <button type="button" className="primary-btn" onClick={() => window.location.reload()}>
+                {t('app.error.retry')}
+              </button>
+            </div>
+          )}
+        >
+          <Suspense fallback={<div className="globe-fallback"><div className="spinner" aria-hidden="true" /></div>}>
+            <GlobeView view={view} />
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       {(kind === 'demo' || stress !== null) && (
@@ -50,6 +76,21 @@ export function App() {
         </div>
       )}
 
+      {/* Mobile only: compact header that opens the sidebar as a drawer. */}
+      <div className="mobile-bar">
+        <button
+          type="button"
+          className="icon-btn"
+          aria-label={t('drawer.open')}
+          aria-expanded={drawerOpen}
+          aria-controls="sidebar"
+          onClick={() => setDrawerOpen(true)}
+        >
+          <Icon name="menu" />
+        </button>
+        <Logo />
+      </div>
+      {drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={() => setDrawerOpen(false)} />}
       <Sidebar view={view} />
       <InfoPanel view={view} />
       <TopBar />

@@ -12,6 +12,7 @@ const PATHS = {
   info: 'M12 8h.01M11 12h1v5h1M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z',
   back: 'M10 6l-6 6 6 6M4 12h16',
   plane: 'M2 16l20-6-20-6 3 6-3 6zM5 10h7',
+  menu: 'M4 7h16M4 12h16M4 17h10',
 } as const;
 
 export type IconName = keyof typeof PATHS;

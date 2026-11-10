@@ -36,6 +36,10 @@ interface AppState {
   autoRotate: boolean;
   viewMode: ViewMode;
   sourcesOpen: boolean;
+  /** Mobile only: the filter drawer. */
+  drawerOpen: boolean;
+  /** Screen space (px) covered by UI at the top/bottom of the map on small screens. */
+  viewInsets: { top: number; bottom: number };
   basemapError: boolean;
   /** Set when running the renderer stress test (?stress=N). */
   stressRouteCount: number | null;
@@ -56,30 +60,32 @@ interface AppState {
   setAutoRotate: (v: boolean) => void;
   setViewMode: (m: ViewMode) => void;
   setSourcesOpen: (v: boolean) => void;
+  setDrawerOpen: (v: boolean) => void;
+  setViewInsets: (v: { top: number; bottom: number }) => void;
   setBasemapError: (v: boolean) => void;
   setStressRouteCount: (n: number | null) => void;
 }
 
-const LOCALE_KEY = 'aerograph.locale';
-const VIEW_KEY = 'aerograph.view';
+const LOCALE_KEY = '1090web.locale';
+const VIEW_KEY = '1090web.view';
+
+/** Reads a saved preference, falling back to the key used before the rename (AeroGraph). */
+function readPref(key: string): string | null {
+  try {
+    return localStorage.getItem(key) ?? localStorage.getItem(key.replace('1090web.', 'aerograph.'));
+  } catch {
+    return null; // storage unavailable (private mode etc.)
+  }
+}
 
 function initialViewMode(): ViewMode {
-  try {
-    const saved = localStorage.getItem(VIEW_KEY);
-    if (saved === 'flat' || saved === 'globe') return saved;
-  } catch {
-    // storage unavailable
-  }
-  return 'flat';
+  const saved = readPref(VIEW_KEY);
+  return saved === 'globe' ? 'globe' : 'flat';
 }
 
 function initialLocale(): Locale {
-  try {
-    const saved = localStorage.getItem(LOCALE_KEY);
-    if (saved === 'ja' || saved === 'en') return saved;
-  } catch {
-    // storage unavailable (private mode etc.)
-  }
+  const saved = readPref(LOCALE_KEY);
+  if (saved === 'ja' || saved === 'en') return saved;
   if (typeof navigator !== 'undefined' && navigator.language?.toLowerCase().startsWith('ja')) return 'ja';
   return 'en';
 }
@@ -100,6 +106,8 @@ export const useAppStore = create<AppState>((set) => ({
   autoRotate: true,
   viewMode: initialViewMode(),
   sourcesOpen: false,
+  drawerOpen: false,
+  viewInsets: { top: 0, bottom: 0 },
   basemapError: false,
   stressRouteCount: null,
 
@@ -134,6 +142,9 @@ export const useAppStore = create<AppState>((set) => ({
     set({ viewMode });
   },
   setSourcesOpen: (sourcesOpen) => set({ sourcesOpen }),
+  setDrawerOpen: (drawerOpen) => set({ drawerOpen }),
+  setViewInsets: (v) =>
+    set((s) => (s.viewInsets.top === v.top && s.viewInsets.bottom === v.bottom ? s : { viewInsets: v })),
   setBasemapError: (basemapError) => set({ basemapError }),
   setStressRouteCount: (stressRouteCount) => set({ stressRouteCount }),
 }));

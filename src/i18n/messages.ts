@@ -9,8 +9,9 @@ export const en = {
   'app.error.title': 'Could not load the network data',
   'app.error.retry': 'Retry',
   'app.webgl.title': 'WebGL 2 is not available',
-  'app.webgl.body': 'AeroGraph needs a browser with WebGL 2 enabled to draw the globe.',
+  'app.webgl.body': '1090web needs a browser with WebGL 2 enabled to draw the map.',
   'app.basemapError': 'The base map could not be loaded. Routes are still shown.',
+  'app.mapLoadError': 'The map could not be loaded. Check your connection.',
 
   'demo.badge': 'DEMO DATA',
   'demo.banner': 'Synthetic demo dataset — routes, carriers and flight counts are not real statistics.',
@@ -18,6 +19,8 @@ export const en = {
   'stress.banner': 'Renderer stress test with {count} random routes. Not real data.',
 
   'lang.label': 'Language',
+  'drawer.open': 'Search & filters',
+  'drawer.close': 'Close',
 
   'search.label': 'Airport search',
   'search.placeholder': 'IATA / ICAO / city / name',
@@ -48,7 +51,7 @@ export const en = {
   'summary.routes': 'Visible routes',
   'summary.airports': 'Active airports',
   'summary.flights': 'Monthly flights',
-  'summary.hint': 'Click an airport on the globe or search to inspect it.',
+  'summary.hint': 'Click an airport on the map or search to inspect it.',
 
   'airport.title': 'Airport',
   'airport.close': 'Clear selection',
@@ -112,8 +115,9 @@ export const ja: Messages = {
   'app.error.title': 'ネットワークデータを読み込めませんでした',
   'app.error.retry': '再試行',
   'app.webgl.title': 'WebGL 2 が利用できません',
-  'app.webgl.body': '地球儀の描画には WebGL 2 に対応したブラウザが必要です。',
+  'app.webgl.body': '地図の描画には WebGL 2 に対応したブラウザが必要です。',
   'app.basemapError': '地図データを読み込めませんでした。路線は引き続き表示されます。',
+  'app.mapLoadError': '地図を読み込めませんでした。接続を確認してください。',
 
   'demo.badge': 'デモデータ',
   'demo.banner': '合成デモデータです。路線・航空会社・便数は実際の統計ではありません。',
@@ -121,6 +125,8 @@ export const ja: Messages = {
   'stress.banner': 'ランダムな {count} 路線による描画負荷テストです。実データではありません。',
 
   'lang.label': '言語',
+  'drawer.open': '検索とフィルター',
+  'drawer.close': '閉じる',
 
   'search.label': '空港検索',
   'search.placeholder': 'IATA / ICAO / 都市 / 空港名',
@@ -151,7 +157,7 @@ export const ja: Messages = {
   'summary.routes': '表示中の路線',
   'summary.airports': '稼働空港',
   'summary.flights': '月間便数',
-  'summary.hint': '地球儀上の空港をクリックするか、検索して詳細を表示します。',
+  'summary.hint': '地図上の空港をクリックするか、検索して詳細を表示します。',
 
   'airport.title': '空港',
   'airport.close': '選択を解除',

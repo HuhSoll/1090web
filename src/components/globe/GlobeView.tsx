@@ -28,6 +28,7 @@ export function GlobeView({ view }: Props) {
   const hover = useAppStore((s) => s.hover);
   const autoRotate = useAppStore((s) => s.autoRotate);
   const viewMode = useAppStore((s) => s.viewMode);
+  const viewInsets = useAppStore((s) => s.viewInsets);
 
   // 1. Create / dispose the renderer.
   useEffect(() => {
@@ -62,10 +63,10 @@ export function GlobeView({ view }: Props) {
       return;
     }
     rendererRef.current = renderer;
-    if (import.meta.env.DEV) (window as unknown as { __aerograph?: GlobeRenderer }).__aerograph = renderer;
+    if (import.meta.env.DEV) (window as unknown as { __map?: GlobeRenderer }).__map = renderer;
     renderer.loadBasemap().catch((err: unknown) => {
       if (err instanceof DOMException && err.name === 'AbortError') return;
-      console.warn('[AeroGraph] basemap failed to load', err);
+      console.warn('[1090web] basemap failed to load', err);
       useAppStore.getState().setBasemapError(true);
     });
     return () => {
@@ -150,6 +151,10 @@ export function GlobeView({ view }: Props) {
   useEffect(() => {
     rendererRef.current?.setViewMode(viewMode);
   }, [viewMode]);
+
+  useEffect(() => {
+    rendererRef.current?.setViewInsets(viewInsets.top, viewInsets.bottom);
+  }, [viewInsets]);
 
   if (webglError) {
     return (

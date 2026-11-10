@@ -9,7 +9,7 @@ export function Logo() {
         <circle cx="27" cy="13" r="1.8" fill="var(--accent)" />
       </svg>
       <span className="logo-text">
-        Aero<span>Graph</span>
+        1090<span>web</span>
       </span>
     </div>
   );

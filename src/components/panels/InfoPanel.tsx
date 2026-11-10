@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { computeRouteDetail, connectedRoutes, type NetworkView } from '../../domain/networkView';
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
@@ -10,9 +10,11 @@ export function InfoPanel({ view }: { view: NetworkView | null }) {
   const network = useAppStore((s) => s.network);
   const selectedAirport = useAppStore((s) => s.selectedAirport);
   const selectedRoute = useAppStore((s) => s.selectedRoute);
+  const ref = useRef<HTMLElement>(null);
+  useReportViewInsets(ref);
   if (!network || !view) return null;
   return (
-    <aside className="info panel" aria-label="Details" aria-live="polite">
+    <aside ref={ref} className="info panel" aria-label="Details" aria-live="polite">
       {selectedRoute !== null ? (
         <RouteDetailView network={network} view={view} routeId={selectedRoute} />
       ) : selectedAirport !== null ? (
@@ -22,6 +24,39 @@ export function InfoPanel({ view }: { view: NetworkView | null }) {
       )}
     </aside>
   );
+}
+
+const MOBILE_QUERY = '(max-width: 860px)';
+const MOBILE_TOP_INSET = 56;
+
+/**
+ * On small screens this panel is a bottom sheet over the map. Report how much of the screen it
+ * covers so the renderer can keep its view centre (and fly-to targets) in the visible area.
+ */
+function useReportViewInsets(ref: React.RefObject<HTMLElement | null>) {
+  const setViewInsets = useAppStore((s) => s.setViewInsets);
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY);
+    const update = () => {
+      const el = ref.current;
+      if (!mq.matches || !el) {
+        setViewInsets({ top: 0, bottom: 0 });
+        return;
+      }
+      const bottom = Math.max(0, window.innerHeight - el.getBoundingClientRect().top);
+      setViewInsets({ top: MOBILE_TOP_INSET, bottom: Math.round(bottom) });
+    };
+    const ro = new ResizeObserver(update);
+    if (ref.current) ro.observe(ref.current);
+    window.addEventListener('resize', update);
+    mq.addEventListener('change', update);
+    update();
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+      mq.removeEventListener('change', update);
+    };
+  });
 }
 
 function DemoTag() {

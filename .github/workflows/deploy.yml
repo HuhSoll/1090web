@@ -35,6 +35,7 @@ jobs:
         env:
           # Project pages are served from https://<owner>.github.io/<repo>/
           BASE_PATH: /${{ github.event.repository.name }}/
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

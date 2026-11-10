@@ -8,6 +8,7 @@ export function AirportSearch() {
   const { t, countryName } = useI18n();
   const network = useAppStore((s) => s.network);
   const selectAirport = useAppStore((s) => s.selectAirport);
+  const setDrawerOpen = useAppStore((s) => s.setDrawerOpen);
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -19,6 +20,7 @@ export function AirportSearch() {
     const a = results[index];
     if (!a) return;
     selectAirport(a.index);
+    setDrawerOpen(false);
     setQuery('');
     setOpen(false);
   };

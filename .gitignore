@@ -34,3 +34,6 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Intermediate file for the social preview image
+og-geometry.json

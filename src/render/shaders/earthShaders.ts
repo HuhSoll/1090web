@@ -18,7 +18,10 @@ void main() {
   float lon = (uv.x - 0.5) * 2.0 * PI;
   float lat = (uv.y - 0.5) * PI;
   vec3 globe = globePoint(lat, lon, 1.0);
-  vec3 p = morphPoint(globe, flatPoint(lat, lon, 0.0));
+  // SphereGeometry offsets the pole vertices' u by half a segment, which would draw a saw-tooth
+  // edge on the flat map; pinning the pole rows to the next latitude row keeps the edge straight.
+  float flatLat = clamp(lat, -PI / 2.0 + PI / 100.0, PI / 2.0 - PI / 100.0);
+  vec3 p = morphPoint(globe, flatPoint(flatLat, lon, 0.0));
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
   vec3 n = normalize(mix(globe, vec3(0.0, 0.0, 1.0), smoothstep(0.0, 1.0, uMorph)));
   vNormalView = normalize(normalMatrix * n);

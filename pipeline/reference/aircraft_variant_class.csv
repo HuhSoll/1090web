@@ -1,20 +1,20 @@
 ac_type,ac_type_detailed,class,rule,flights_2026_q1_q3
 A21N,-,passenger,type has no freighter variant,827134
 A320,A320 214,passenger,commercial variant without freighter designation,750793
-A20N,A320 251NSL,unknown,type code and variant disagree,749023
+A20N,A320 251NSL,passenger,commercial variant without freighter designation,749023
 B738,737NG 800/W,passenger,boeing: suffix '-',660985
 B38M,-,passenger,type has no freighter variant,649748
 A320,A320 214SL,passenger,commercial variant without freighter designation,637571
 E75L,EMB-175 LR,passenger,commercial variant without freighter designation,635543
 A320,A320 232,passenger,commercial variant without freighter designation,550823
-B38M,737MAX 8,passenger,boeing: suffix '-',545094
+B38M,737MAX 8,passenger,boeing: 737 MAX (no freighter variant),545094
 A20N,-,passenger,type has no freighter variant,471045
 C172,-,unknown,no variant detail,431910
 B738,737NG 8AS/W,passenger,boeing: suffix '-',421991
 P28A,-,unknown,no variant detail,367934
 A321,A321 231SL,passenger,commercial variant without freighter designation,367162
 A321,A321 211SL,passenger,commercial variant without freighter designation,336079
-B38M,737-8,unknown,type code and variant disagree,331190
+B38M,737-8,passenger,boeing: 737 MAX (no freighter variant),331190
 -,-,unknown,no variant detail,303476
 AT76,ATR 72 600,passenger,commercial variant without freighter designation,302724
 CRJ9,CRJ 900 LR NG,passenger,commercial variant without freighter designation,301359
@@ -24,13 +24,13 @@ A320,A320 232SL,passenger,commercial variant without freighter designation,28537
 B789,787 9,passenger,boeing: suffix '-',281584
 A321,A321 231,passenger,commercial variant without freighter designation,272605
 B738,737NG 823/W,passenger,boeing: suffix '-',272281
-A20N,A320-251N,unknown,type code and variant disagree,254466
+A20N,A320-251N,passenger,commercial variant without freighter designation,254466
 B738,-,unknown,no variant detail,245464
-A21N,A321-271NX,unknown,type code and variant disagree,237450
-A20N,A320 271NSL,unknown,type code and variant disagree,229744
-A21N,A321 271NXSL,unknown,type code and variant disagree,191473
+A21N,A321-271NX,passenger,commercial variant without freighter designation,237450
+A20N,A320 271NSL,passenger,commercial variant without freighter designation,229744
+A21N,A321 271NXSL,passenger,commercial variant without freighter designation,191473
 A359,A350 941,passenger,commercial variant without freighter designation,190861
-A21N,A321 251NXSL,unknown,type code and variant disagree,185974
+A21N,A321 251NXSL,passenger,commercial variant without freighter designation,185974
 B788,787 8,passenger,boeing: suffix '-',177255
 E55P,-,unknown,no variant detail,175011
 A319,A319 111,passenger,commercial variant without freighter designation,169849
@@ -40,11 +40,11 @@ BCS3,-,passenger,type has no freighter variant,164592
 A319,A319 112,passenger,commercial variant without freighter designation,161275
 A319,A319 132,passenger,commercial variant without freighter designation,156156
 A333,A330 343E,passenger,commercial variant without freighter designation,154584
-B38M,737-8 MAX,unknown,type code and variant disagree,154506
+B38M,737-8 MAX,passenger,boeing: 737 MAX (no freighter variant),154506
 C208,-,unknown,no variant detail,152572
 PC12,-,unknown,no variant detail,150576
 AT76,-,unknown,no variant detail,145788
-A21N,A321-251NX,unknown,type code and variant disagree,145355
+A21N,A321-251NX,passenger,commercial variant without freighter designation,145355
 B738,737NG 8H4/W,passenger,boeing: suffix '-',138890
 A320,A320 216,passenger,commercial variant without freighter designation,136044
 E145,ERJ-145 LR,passenger,commercial variant without freighter designation,135734
@@ -54,14 +54,14 @@ CRJ7,CRJ 700,passenger,commercial variant without freighter designation,129506
 B738,737NG 86N/W,passenger,boeing: suffix '-',119023
 B738,737NG 824/W,passenger,boeing: suffix '-',117642
 B739,737NG 924ER/W,passenger,boeing: suffix 'ER',106125
-B38M,737MAX 8 200,passenger,boeing: suffix '0',103802
+B38M,737MAX 8 200,passenger,boeing: 737 MAX (no freighter variant),103802
 E190,EMB-190 LR,passenger,commercial variant without freighter designation,101915
 CL35,-,unknown,no variant detail,100463
 B739,737NG 900ER/W,passenger,boeing: suffix 'ER',98836
 BCS3,A220 300,passenger,commercial variant without freighter designation,97980
 C56X,-,unknown,no variant detail,97774
 A321,A321 211,passenger,commercial variant without freighter designation,94821
-B39M,737-9,unknown,type code and variant disagree,94226
+B39M,737-9,passenger,boeing: 737 MAX (no freighter variant),94226
 A319,A319 114,passenger,commercial variant without freighter designation,90938
 E295,-,passenger,type has no freighter variant,88494
 BE20,-,unknown,no variant detail,87325
@@ -70,13 +70,13 @@ E190,EMB-190 AR,passenger,commercial variant without freighter designation,86021
 E75L,-,passenger,type has no freighter variant,85710
 DA40,-,unknown,no variant detail,83509
 B38M,BOEING 737-8200,passenger,commercial variant without freighter designation,81134
-B39M,737MAX 9,passenger,boeing: suffix '-',80948
+B39M,737MAX 9,passenger,boeing: 737 MAX (no freighter variant),80948
 B738,737NG 8JP/W,passenger,boeing: suffix '-',80350
-A21N,A321 253NXSL,unknown,type code and variant disagree,79696
+A21N,A321 253NXSL,passenger,commercial variant without freighter designation,79696
 A320,A320-232,passenger,commercial variant without freighter designation,79072
 PA44,-,unknown,no variant detail,78929
 A319,A319 131,passenger,commercial variant without freighter designation,77723
-B712,717 2BD,passenger,commercial variant without freighter designation,76920
+B712,717 2BD,passenger,boeing: suffix '-',76920
 EC35,-,unknown,no variant detail,76076
 CRJ7,CRJ 700 701,passenger,commercial variant without freighter designation,72187
 B738,737NG 8EH/W,passenger,boeing: suffix '-',72037
@@ -89,7 +89,7 @@ B738,737NG 838/W,passenger,boeing: suffix '-',68986
 B39M,-,passenger,type has no freighter variant,68697
 B738,737NG 8K2/W,passenger,boeing: suffix '-',68460
 DH8D,DHC-8 402,passenger,commercial variant without freighter designation,67717
-A20N,A320-271N,unknown,type code and variant disagree,67217
+A20N,A320-271N,passenger,commercial variant without freighter designation,67217
 B739,737NG 932ER/W,passenger,boeing: suffix 'ER',66304
 E195,EMB-195 LR,passenger,commercial variant without freighter designation,66290
 E170,-,passenger,type has no freighter variant,65111
@@ -120,7 +120,7 @@ B738,737NG 890/W,passenger,boeing: suffix '-',50296
 B737,737NG 7CT/W,passenger,boeing: suffix '-',49942
 B763,767 300F,cargo,boeing: freighter suffix 'F',49658
 E190,EMB-190 STD,passenger,commercial variant without freighter designation,49353
-B78X,787 10,passenger,boeing: suffix '0',48927
+B78X,787 10,passenger,boeing: suffix '-',48927
 A320,A320 212,passenger,commercial variant without freighter designation,48198
 E195,-,unknown,no variant detail,47129
 B738,737NG 8Q8/W,passenger,boeing: suffix '-',46654
@@ -128,7 +128,7 @@ C25B,-,unknown,no variant detail,44924
 B739,737NG 990ER/W,passenger,boeing: suffix 'ER',44500
 CL30,-,unknown,no variant detail,44486
 A359,A350-941,passenger,commercial variant without freighter designation,43109
-A21N,A321 271NSL,unknown,type code and variant disagree,42875
+A21N,A321 271NSL,passenger,commercial variant without freighter designation,42875
 E545,-,unknown,no variant detail,42762
 B738,737NG 81B/W,passenger,boeing: suffix '-',42297
 E75L,EMB-175 STD,passenger,commercial variant without freighter designation,41986
@@ -161,7 +161,7 @@ S92,-,unknown,no variant detail,34815
 C182,-,unknown,no variant detail,34579
 GLEX,-,unknown,no variant detail,33947
 B752,757 24APF,cargo,boeing: freighter suffix 'PF',33549
-A21N,A321 272NSL,unknown,type code and variant disagree,33508
+A21N,A321 272NSL,passenger,commercial variant without freighter designation,33508
 PC24,-,unknown,no variant detail,33204
 E295,EMB-195 E2,passenger,commercial variant without freighter designation,32762
 CRJ9,CRJ 900 ER NG,passenger,commercial variant without freighter designation,32742
@@ -177,8 +177,8 @@ B738,737NG 8U3/W,passenger,boeing: suffix '-',30293
 A306,A300 F4-622R,cargo,freighter designation /^A300 F4-/,30207
 E295,ERJ 190-400,passenger,commercial variant without freighter designation,30031
 C750,-,unknown,no variant detail,29822
-B738,737NG 8CT/W,passenger,boeing: suffix '-',29816
 A139,-,unknown,no variant detail,29816
+B738,737NG 8CT/W,passenger,boeing: suffix '-',29816
 B737,737NG 79P/W,passenger,boeing: suffix '-',29746
 B738,737NG 8KN/W,passenger,boeing: suffix '-',29440
 A35K,A350 1041,passenger,commercial variant without freighter designation,29334
@@ -189,7 +189,7 @@ LJ45,-,unknown,no variant detail,27829
 A333,A330 302,passenger,commercial variant without freighter designation,27699
 B78X,-,passenger,type has no freighter variant,27130
 B738,737NG 8GP/W,passenger,boeing: suffix '-',27023
-B712,717 231,passenger,commercial variant without freighter designation,27021
+B712,717 231,passenger,boeing: suffix '-',27021
 A339,A330 941N,passenger,commercial variant without freighter designation,26863
 AT46,ATR 42 600,passenger,commercial variant without freighter designation,26620
 B738,737NG 85P/W,passenger,boeing: suffix '-',26234
@@ -215,7 +215,7 @@ C25A,-,unknown,no variant detail,21059
 C680,-,unknown,no variant detail,20908
 A332,-,unknown,no variant detail,20874
 GLF6,-,unknown,no variant detail,20826
-B712,717 22A,passenger,commercial variant without freighter designation,20752
+B712,717 22A,passenger,boeing: suffix '-',20752
 A321,A321 212,passenger,commercial variant without freighter designation,20468
 E550,-,unknown,no variant detail,20384
 LJ60,-,unknown,no variant detail,20015
@@ -299,18 +299,18 @@ B738,737NG 8GJ/W,passenger,boeing: suffix '-',12363
 B763,767 322ER/W,passenger,boeing: suffix 'ER',12360
 E290,EMB-190 E2,passenger,commercial variant without freighter designation,12283
 B753,757 351/W,passenger,boeing: suffix '-',12188
-A20N,A320-272N,unknown,type code and variant disagree,12090
+A20N,A320-272N,passenger,commercial variant without freighter designation,12090
 C510,-,unknown,no variant detail,11862
 B737,737NG 7K2/W,passenger,boeing: suffix '-',11773
 B772,777 222ER,passenger,boeing: suffix 'ER',11701
-B39M,737-9 MAX,unknown,type code and variant disagree,11666
+B39M,737-9 MAX,passenger,boeing: 737 MAX (no freighter variant),11666
 B738,737NG 8FH/W,passenger,boeing: suffix '-',11602
 R44,-,unknown,no variant detail,11498
 AT76,ATR 72-212 A,passenger,commercial variant without freighter designation,11495
 A320,A320 211,passenger,commercial variant without freighter designation,11340
 B738,737NG 8AL/W,passenger,boeing: suffix '-',11248
 BE9L,-,unknown,no variant detail,11244
-B712,717 2BL,passenger,commercial variant without freighter designation,11025
+B712,717 2BL,passenger,boeing: suffix '-',11025
 BE58,-,unknown,no variant detail,11016
 LJ35,-,unknown,no variant detail,11004
 B737,737NG 781/W,passenger,boeing: suffix '-',11003
@@ -339,7 +339,7 @@ B752,757 223PCF/W,cargo,boeing: freighter suffix 'PCF',10000
 B738,737NG 86D/W,passenger,boeing: suffix '-',9762
 B738,737NG 85R/W,passenger,boeing: suffix '-',9643
 G115,-,unknown,no variant detail,9576
-A21N,A321 252NXSL,unknown,type code and variant disagree,9522
+A21N,A321 252NXSL,passenger,commercial variant without freighter designation,9522
 B733,-,unknown,no variant detail,9480
 P28R,-,unknown,no variant detail,9413
 A109,-,unknown,no variant detail,9405
@@ -351,17 +351,17 @@ AT45,-,unknown,no variant detail,9218
 AJ27,ARJ21-700,passenger,commercial variant without freighter designation,9141
 B77W,777 333ER,passenger,boeing: suffix 'ER',9134
 B738,737-8GJ,passenger,boeing: suffix '-',9042
-B78X,787-10,passenger,boeing: suffix '0',9034
+B78X,787-10,passenger,boeing: suffix '-',9034
 B77W,777 3B5ER,passenger,boeing: suffix 'ER',8926
 CRJ2,-,unknown,no variant detail,8732
 B77W,-,unknown,no variant detail,8716
 C525,-,unknown,no variant detail,8639
 B738,737-8K5,passenger,boeing: suffix '-',8569
-A21N,A321 253NSL,unknown,type code and variant disagree,8505
+A21N,A321 253NSL,passenger,commercial variant without freighter designation,8505
 A19N,-,passenger,type has no freighter variant,8467
 SF34,-,unknown,no variant detail,8368
 B77W,777 39LER,passenger,boeing: suffix 'ER',8316
-A21N,A321 251NSL,unknown,type code and variant disagree,8207
+A21N,A321 251NSL,passenger,commercial variant without freighter designation,8207
 B773,777 367,passenger,boeing: suffix '-',8144
 B737,-,unknown,no variant detail,8114
 B772,777 281ER,passenger,boeing: suffix 'ER',8101
@@ -383,7 +383,7 @@ B77W,777 35EER,passenger,boeing: suffix 'ER',7349
 GALX,-,unknown,no variant detail,7319
 B738,737-8U3,passenger,boeing: suffix '-',7297
 B735,737 524/W,passenger,boeing: suffix '-',7293
-B38M,737-8 MAX 8,unknown,type code and variant disagree,7229
+B38M,737-8 MAX 8,passenger,boeing: 737 MAX (no freighter variant),7229
 AC50,-,unknown,no variant detail,7190
 B429,-,unknown,no variant detail,7172
 E190,ERJ 190-100 IGW,passenger,commercial variant without freighter designation,7113
@@ -449,9 +449,9 @@ AT46,-,unknown,no variant detail,5379
 B763,767 316ER/W,passenger,boeing: suffix 'ER',5358
 B752,757 26D/W,passenger,boeing: suffix '-',5352
 E120,EMB-120 ER,passenger,commercial variant without freighter designation,5319
-B712,717 23S,passenger,commercial variant without freighter designation,5288
+B712,717 23S,passenger,boeing: suffix '-',5288
 B752,757 236SF,cargo,boeing: freighter suffix 'SF',5252
-A20N,A320 273NSL,unknown,type code and variant disagree,5225
+A20N,A320 273NSL,passenger,commercial variant without freighter designation,5225
 A319,A319-111,passenger,commercial variant without freighter designation,5222
 A306,-,unknown,no variant detail,5218
 P68,-,unknown,no variant detail,5210
@@ -474,7 +474,7 @@ B744,747 4B5ERF,cargo,boeing: freighter suffix 'ERF',4898
 E135,ERJ-135 ER,passenger,commercial variant without freighter designation,4887
 DH8A,-,unknown,no variant detail,4861
 B738,737NG 8BG/W,passenger,boeing: suffix '-',4858
-A20N,A320 272NSL,unknown,type code and variant disagree,4842
+A20N,A320 272NSL,passenger,commercial variant without freighter designation,4842
 BCS1,C Series 100,passenger,commercial variant without freighter designation,4789
 CRJ7,CL-600-2C10,passenger,commercial variant without freighter designation,4750
 B763,767-316,passenger,boeing: suffix '-',4749
@@ -485,7 +485,7 @@ B738,737NG 81M/W,passenger,boeing: suffix '-',4668
 A319,A319 132SL,passenger,commercial variant without freighter designation,4656
 B738,737NG 85F/W,passenger,boeing: suffix '-',4638
 B752,757 231/W,passenger,boeing: suffix '-',4583
-B38M,737-8200,unknown,type code and variant disagree,4569
+B38M,737-8200,passenger,boeing: 737 MAX (no freighter variant),4569
 B738,737NG 8B5/W,passenger,boeing: suffix '-',4564
 PRM1,-,unknown,no variant detail,4551
 TEX2,-,unknown,no variant detail,4541
@@ -493,7 +493,7 @@ B748,747 8KZF,cargo,boeing: freighter suffix 'F',4535
 P180,-,unknown,no variant detail,4531
 B738,737NG 808/W,passenger,boeing: suffix '-',4514
 E35L,Legacy 650,passenger,commercial variant without freighter designation,4504
-A21N,A321 272NXSL,unknown,type code and variant disagree,4464
+A21N,A321 272NXSL,passenger,commercial variant without freighter designation,4464
 SW4,Metro II,passenger,commercial variant without freighter designation,4453
 A339,A330-941,passenger,commercial variant without freighter designation,4426
 SH36,SD3-60 100,passenger,commercial variant without freighter designation,4420
@@ -501,8 +501,8 @@ B788,787-8,passenger,boeing: suffix '-',4408
 B744,747 4B5F,cargo,boeing: freighter suffix 'F',4397
 E190,EMB-195 LR,passenger,commercial variant without freighter designation,4283
 EC20,-,unknown,no variant detail,4255
-P06T,-,unknown,no variant detail,4216
 B77W,777 337ER,passenger,boeing: suffix 'ER',4216
+P06T,-,unknown,no variant detail,4216
 TBM7,-,unknown,no variant detail,4178
 B77L,777 FZN,cargo,boeing: 777F,4172
 FA8X,-,unknown,no variant detail,4170
@@ -522,8 +522,8 @@ B77L,777 F6N,cargo,boeing: 777F,3817
 HDJT,-,unknown,no variant detail,3801
 GA8,-,unknown,no variant detail,3800
 C310,-,unknown,no variant detail,3792
-T206,-,unknown,no variant detail,3790
 B738,737NG 8CX/W,passenger,boeing: suffix '-',3790
+T206,-,unknown,no variant detail,3790
 B737,737NG 71B/W,passenger,boeing: suffix '-',3784
 C150,-,unknown,no variant detail,3767
 B77W,777 32WER,passenger,boeing: suffix 'ER',3760
@@ -542,7 +542,7 @@ B738,737NG 81B,passenger,boeing: suffix '-',3606
 DH8A,DHC-8 106,passenger,commercial variant without freighter designation,3561
 B738,737NG 8LW/W,passenger,boeing: suffix '-',3547
 B789,787-9 Dreamliner,passenger,boeing: suffix 'EAMLINER',3541
-A21N,A320 251NSL,unknown,type code and variant disagree,3540
+A21N,A320 251NSL,unknown,type code and variant disagree: Airbus model A321 vs A320,3540
 B763,767 381ER/W,passenger,boeing: suffix 'ER',3539
 B738,737-8EH,passenger,boeing: suffix '-',3494
 B772,-,unknown,no variant detail,3488
@@ -576,9 +576,9 @@ B77L,777 FB5,cargo,boeing: 777F,3205
 B77W,777 309ER,passenger,boeing: suffix 'ER',3187
 B77W,777 346ER,passenger,boeing: suffix 'ER',3183
 B738,737NG 83Z/W,passenger,boeing: suffix '-',3173
+AT72,-,unknown,no variant detail,3166
 B763,767 323ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',3166
 SH36,SD3-60 300,passenger,commercial variant without freighter designation,3166
-AT72,-,unknown,no variant detail,3166
 E35L,Legacy 650 E,passenger,commercial variant without freighter designation,3151
 B763,767 381ERBCF,cargo,boeing: freighter suffix 'ERBCF',3146
 B733,737 3H4/W,passenger,boeing: suffix '-',3142
@@ -598,24 +598,24 @@ LJ75,-,unknown,no variant detail,2956
 E75S,EMB-175 SD,passenger,commercial variant without freighter designation,2950
 B738,737NG 8GQ/W,passenger,boeing: suffix '-',2941
 C295,-,unknown,no variant detail,2922
-A20N,A320 252NSL,unknown,type code and variant disagree,2911
-B77W,777 3D7ER,passenger,boeing: suffix 'ER',2904
+A20N,A320 252NSL,passenger,commercial variant without freighter designation,2911
 B744,747 44AF,cargo,boeing: freighter suffix 'F',2904
-B738,737NG 82Y/W,passenger,boeing: suffix '-',2894
+B77W,777 3D7ER,passenger,boeing: suffix 'ER',2904
 A333,A330 302E,passenger,commercial variant without freighter designation,2894
+B738,737NG 82Y/W,passenger,boeing: suffix '-',2894
 B738,737NG 8C9/W,passenger,boeing: suffix '-',2887
 C55B,-,unknown,no variant detail,2847
 B77W,777 3M0ER,passenger,boeing: suffix 'ER',2796
 DH8A,DHC-8 103A,passenger,commercial variant without freighter designation,2769
-B39M,737MAX 8,passenger,boeing: suffix '-',2750
+B39M,737MAX 8,unknown,type code and variant disagree: Boeing series 737-9 vs 8,2750
 B738,737NG 8Q3/W,passenger,boeing: suffix '-',2733
 EFOX,-,unknown,no variant detail,2725
 B463,146 300QT,passenger,commercial variant without freighter designation,2685
 DH8C,DHC-8 315Q,passenger,commercial variant without freighter designation,2681
 B77W,777-3FXER,passenger,boeing: suffix 'ER',2660
 B737,737NG 7K5/W,passenger,boeing: suffix '-',2656
-B788,-,passenger,type has no freighter variant,2650
 B737,C-40A,passenger,commercial variant without freighter designation,2650
+B788,-,passenger,type has no freighter variant,2650
 S2T,-,unknown,no variant detail,2648
 B763,767 338ERBDSF/W,cargo,boeing: freighter suffix 'ERBDSF',2646
 A332,A330 223F,cargo,freighter designation /^A3\d0 [0-9A-Z-]*\dR?F$/,2626
@@ -626,10 +626,10 @@ B77W,777 381ER,passenger,boeing: suffix 'ER',2607
 B737,737NG 79L,passenger,boeing: suffix '-',2602
 B737,737NG 790BDSF/W,cargo,boeing: freighter suffix 'BDSF',2598
 B752,757 236PCF,cargo,boeing: freighter suffix 'PCF',2596
-G2CA,-,unknown,no variant detail,2580
 B744,747 4EVERF,cargo,boeing: freighter suffix 'ERF',2580
-B737,737NG 76D/W,passenger,boeing: suffix '-',2576
+G2CA,-,unknown,no variant detail,2580
 AT43,ATR 42 300,passenger,commercial variant without freighter designation,2576
+B737,737NG 76D/W,passenger,boeing: suffix '-',2576
 B77W,777 3DEER,passenger,boeing: suffix 'ER',2564
 B737,737NG 7K9/W,passenger,boeing: suffix '-',2549
 B748,-,unknown,no variant detail,2549
@@ -647,7 +647,7 @@ DH8C,DHC-8 314Q,passenger,commercial variant without freighter designation,2479
 A343,-,unknown,no variant detail,2476
 BCS1,BD-500-1A10,passenger,commercial variant without freighter designation,2470
 A346,A340 642,passenger,commercial variant without freighter designation,2460
-MD11,MD-11 F,cargo,freighter designation /^MD-11 (ER)?F$|^MD-11 F$/,2453
+MD11,MD-11 F,cargo,freighter designation /^MD-11 (ER)?F$/,2453
 A321,A321 213SL,passenger,commercial variant without freighter designation,2429
 B77W,777 3U3ER,passenger,boeing: suffix 'ER',2424
 SH36,SD3-60 200,passenger,commercial variant without freighter designation,2412
@@ -656,22 +656,22 @@ TB20,-,unknown,no variant detail,2397
 A337,-,unknown,no variant detail,2391
 DH8C,DHC-8 311A,passenger,commercial variant without freighter designation,2388
 C162,-,unknown,no variant detail,2364
-B38M,737NG 76N/W,unknown,type code and variant disagree,2359
-B772,777 281,passenger,boeing: suffix '-',2352
+B38M,737NG 76N/W,unknown,type code and variant disagree: Boeing series 737-8 vs 7,2359
 B734,737 484,passenger,boeing: suffix '-',2352
+B772,777 281,passenger,boeing: suffix '-',2352
 B733,737 36Q/W,passenger,boeing: suffix '-',2332
 B752,757 23ASF,cargo,boeing: freighter suffix 'SF',2317
 B737,737NG 78J/W,passenger,boeing: suffix '-',2305
 A321,A321 212SL,passenger,commercial variant without freighter designation,2293
 B738,737NG 883BDSF,cargo,boeing: freighter suffix 'BDSF',2291
 B744,747 46NF,cargo,boeing: freighter suffix 'F',2282
-A21N,A321-253NX,unknown,type code and variant disagree,2281
+A21N,A321-253NX,passenger,commercial variant without freighter designation,2281
 B763,767 381F,cargo,boeing: freighter suffix 'F',2276
 DHC6,-,unknown,no variant detail,2275
-C82S,-,unknown,no variant detail,2268
 B738,737NG 8FN/W,passenger,boeing: suffix '-',2268
+C82S,-,unknown,no variant detail,2268
 D328,Do 328 110,passenger,commercial variant without freighter designation,2243
-B738,737MAX 8,unknown,type code and variant disagree,2231
+B738,737MAX 8,unknown,type code and variant disagree: Boeing NG type vs MAX variant,2231
 B763,767 3P6ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',2221
 CRJX,CL-600-2E25,passenger,commercial variant without freighter designation,2212
 B77W,777 3E9ER,passenger,boeing: suffix 'ER',2210
@@ -703,8 +703,8 @@ B737,737-783,passenger,boeing: suffix '-',2067
 M20P,-,unknown,no variant detail,2056
 B763,767-381,passenger,boeing: suffix '-',2050
 AT75,ATR 72 500F,cargo,freighter designation /^ATR \d\d \d{3}F$/,2042
-CRJ2,CRJ 200SF,cargo,freighter designation /^CRJ \d{3} ?[SP]F$/,2035
 B752,757-223,passenger,boeing: suffix '-',2035
+CRJ2,CRJ 200SF,cargo,freighter designation /^CRJ \d{3} ?[SP]F$/,2035
 B737,737NG 71Q/W,passenger,boeing: suffix '-',2027
 B763,767 375ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',2027
 B763,767 383ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',2023
@@ -713,27 +713,27 @@ B752,757 2Z0PCF,cargo,boeing: freighter suffix 'PCF',2011
 B737,737NG 7FE/W,passenger,boeing: suffix '-',2010
 B77L,777 FHT,cargo,boeing: 777F,1998
 AS32,-,unknown,no variant detail,1970
-A320,A320 251NSL,passenger,commercial variant without freighter designation,1966
+A320,A320 251NSL,unknown,type code and variant disagree: Airbus ceo type vs neo variant,1966
 B734,737 430,passenger,boeing: suffix '-',1962
 C212,-,unknown,no variant detail,1956
 B738,737-82R,passenger,boeing: suffix '-',1953
 B744,747 4HAERF,cargo,boeing: freighter suffix 'ERF',1945
 B744,747 446BCF,cargo,boeing: freighter suffix 'BCF',1939
-B773,-,unknown,no variant detail,1930
 B738,737NG 858/W,passenger,boeing: suffix '-',1930
+B773,-,unknown,no variant detail,1930
 C5M,-,unknown,no variant detail,1901
 B763,767 338ERBCF,cargo,boeing: freighter suffix 'ERBCF',1892
 B738,737NG 81QBCF/W,cargo,boeing: freighter suffix 'BCF',1890
 B737,737NG 73V/W,passenger,boeing: suffix '-',1885
 B739,737NG 91MER/W,passenger,boeing: suffix 'ER',1884
 RJ1H,146 RJ100,passenger,commercial variant without freighter designation,1880
-A21N,A321NX,unknown,type code and variant disagree,1868
+A21N,A321NX,passenger,commercial variant without freighter designation,1868
 C207,-,unknown,no variant detail,1865
 ASTR,-,unknown,no variant detail,1860
 DA62,-,unknown,no variant detail,1858
 A332,A330 243(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,1857
-E135,EMB-135KL,passenger,commercial variant without freighter designation,1855
 B737,737-752,passenger,boeing: suffix '-',1855
+E135,EMB-135KL,passenger,commercial variant without freighter designation,1855
 E135,ERJ-140,passenger,commercial variant without freighter designation,1852
 B744,747 412BCF,cargo,boeing: freighter suffix 'BCF',1850
 B763,767 306ERBCF,cargo,boeing: freighter suffix 'ERBCF',1850
@@ -775,7 +775,7 @@ B735,-,unknown,no variant detail,1634
 B763,767 306ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',1627
 B77L,777 F60,cargo,boeing: 777F,1626
 C82R,-,unknown,no variant detail,1606
-B38M,A321 251NXSL,unknown,type code and variant disagree,1604
+B38M,A321 251NXSL,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,1604
 B737,737NG 7D6C/W,passenger,boeing: suffix 'C',1603
 B773,777 3B5,passenger,boeing: suffix '-',1602
 B738,737NG 804/W,passenger,boeing: suffix '-',1598
@@ -785,11 +785,11 @@ B763,767-3JHF,cargo,boeing: freighter suffix 'F',1586
 B738,737-8AL,passenger,boeing: suffix '-',1569
 B736,737NG 6CT,passenger,boeing: suffix '-',1568
 E120,EMB-120 ER/F,cargo,freighter designation /^EMB-120 (ER/F|RT/F|FC)$/,1557
-B712,717 2CM,passenger,commercial variant without freighter designation,1542
-A320,A320-251N,passenger,commercial variant without freighter designation,1536
+B712,717 2CM,passenger,boeing: suffix '-',1542
+A320,A320-251N,unknown,type code and variant disagree: Airbus ceo type vs neo variant,1536
 BE33,-,unknown,no variant detail,1524
-B738,737-8H6,passenger,boeing: suffix '-',1522
 A346,-,unknown,no variant detail,1522
+B738,737-8H6,passenger,boeing: suffix '-',1522
 C27J,-,unknown,no variant detail,1517
 SF34,340 F,cargo,freighter designation /^340 F$/,1511
 B763,767 319ER/W,passenger,boeing: suffix 'ER',1505
@@ -800,24 +800,24 @@ B739,737NG 94XER/W,passenger,boeing: suffix 'ER',1487
 B752,757-200,passenger,boeing: suffix '-',1486
 DH8B,-,unknown,no variant detail,1482
 B738,737-85R,passenger,boeing: suffix '-',1481
-A20N,A320 216SL,unknown,type code and variant disagree,1478
-A20N,A320 214SL,unknown,type code and variant disagree,1476
+A20N,A320 216SL,unknown,type code and variant disagree: Airbus neo type vs ceo variant,1478
+A20N,A320 214SL,unknown,type code and variant disagree: Airbus neo type vs ceo variant,1476
 DH8C,-,unknown,no variant detail,1470
 B77W,777 3F6ER,passenger,boeing: suffix 'ER',1469
 AT43,ATR 42 320F,cargo,freighter designation /^ATR \d\d \d{3}F$/,1468
-B753,-,unknown,no variant detail,1462
 B737,737NG 700/W,passenger,boeing: suffix '-',1462
+B753,-,unknown,no variant detail,1462
 E120,EMB-120 RT,passenger,commercial variant without freighter designation,1461
-E145,ERJ-145 LU,passenger,commercial variant without freighter designation,1460
 A21N,A220-300,passenger,commercial variant without freighter designation,1460
+E145,ERJ-145 LU,passenger,commercial variant without freighter designation,1460
 A321,A321 231(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,1459
 B734,737 48E,passenger,boeing: suffix '-',1454
 CRJ1,CRJ 100ER,passenger,commercial variant without freighter designation,1444
 B733,737 301SF,cargo,boeing: freighter suffix 'SF',1425
 B763,767-3BG,passenger,boeing: suffix '-',1422
 H47,-,unknown,no variant detail,1421
-B738,737NG 8HX,passenger,boeing: suffix '-',1409
 B733,737 330SF,cargo,boeing: freighter suffix 'SF',1409
+B738,737NG 8HX,passenger,boeing: suffix '-',1409
 PIVI,-,unknown,no variant detail,1400
 C72R,-,unknown,no variant detail,1387
 B738,BOEING 737-800,passenger,commercial variant without freighter designation,1375
@@ -833,38 +833,38 @@ B734,737 4K5SF,cargo,boeing: freighter suffix 'SF',1346
 A119,-,unknown,no variant detail,1343
 B735,737 524,passenger,boeing: suffix '-',1341
 DHC2,-,unknown,no variant detail,1333
-SW4,-,unknown,no variant detail,1329
 B763,767 33PER,passenger,boeing: suffix 'ER',1329
+SW4,-,unknown,no variant detail,1329
 P46T,-,unknown,no variant detail,1325
-B752,757 25FPCF,cargo,boeing: freighter suffix 'PCF',1323
 B752,757 236PCF/W,cargo,boeing: freighter suffix 'PCF',1323
-A320,737NG 8EH/W,unknown,type code and variant disagree,1319
+B752,757 25FPCF,cargo,boeing: freighter suffix 'PCF',1323
+A320,737NG 8EH/W,unknown,type code and variant disagree: type family AIRBUS vs variant family BOEING,1319
 B737,737NG 76J/W,passenger,boeing: suffix '-',1318
 B744,747 4B5BCF,cargo,boeing: freighter suffix 'BCF',1314
 LJ40,-,unknown,no variant detail,1304
 V10,-,unknown,no variant detail,1299
-SU95,-,passenger,type has no freighter variant,1293
 B738,737NG 8Q8BCF,cargo,boeing: freighter suffix 'BCF',1293
-B38M,737-8 200,unknown,type code and variant disagree,1291
-B762,767 232BDSF,cargo,boeing: freighter suffix 'BDSF',1286
+SU95,-,passenger,type has no freighter variant,1293
+B38M,737-8 200,passenger,boeing: 737 MAX (no freighter variant),1291
 A333,A330 343E(F),cargo,freighter designation /\(P2F\)|\(F\)/,1286
+B762,767 232BDSF,cargo,boeing: freighter suffix 'BDSF',1286
 B738,737NG 8LD/W,passenger,boeing: suffix '-',1284
 C425,-,unknown,no variant detail,1277
 HA4T,-,unknown,no variant detail,1276
-B738,787 9,unknown,type code and variant disagree,1272
+B738,787 9,unknown,type code and variant disagree: Boeing 737 vs 787,1272
 B752,757 204SF,cargo,boeing: freighter suffix 'SF',1270
 B737,737NG 7M2/W,passenger,boeing: suffix '-',1268
 B752,757 28APCF/W,cargo,boeing: freighter suffix 'PCF',1268
+A21N,A320 216,unknown,type code and variant disagree: Airbus model A321 vs A320,1259
 B763,767 324ERBCF/W,cargo,boeing: freighter suffix 'ERBCF',1259
-A21N,A320 216,unknown,type code and variant disagree,1259
-A21N,A320 271NSL,unknown,type code and variant disagree,1254
+A21N,A320 271NSL,unknown,type code and variant disagree: Airbus model A321 vs A320,1254
 B739,737NG 9KFER/W,passenger,boeing: suffix 'ER',1253
 TBM9,-,unknown,no variant detail,1243
-DC3T,-,unknown,no variant detail,1242
 A310,A310 308F,cargo,freighter designation /^A3\d0 [0-9A-Z-]*\dR?F$/,1242
 B744,747 428ERF,cargo,boeing: freighter suffix 'ERF',1242
+DC3T,-,unknown,no variant detail,1242
 B762,767 25EBDSF,cargo,boeing: freighter suffix 'BDSF',1238
-A19N,A319 153NSL,unknown,type code and variant disagree,1235
+A19N,A319 153NSL,passenger,commercial variant without freighter designation,1235
 B763,767 3CBER/W,passenger,boeing: suffix 'ER',1234
 BE65,-,unknown,no variant detail,1234
 B738,737-8FE,passenger,boeing: suffix '-',1225
@@ -878,23 +878,23 @@ A319,T207A Turbo Skywagon,passenger,commercial variant without freighter designa
 B734,737 45S,passenger,boeing: suffix '-',1199
 E190,EMB-195 AR,passenger,commercial variant without freighter designation,1198
 NG5,-,unknown,no variant detail,1195
-AT76,EMB-190 AR,passenger,commercial variant without freighter designation,1192
+AT76,EMB-190 AR,unknown,type code and variant disagree: type family ATR vs variant family EMBRAER_JET,1192
 B738,737NG 86X/W,passenger,boeing: suffix '-',1188
 FA6X,-,unknown,no variant detail,1184
 B763,767 328ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',1177
 B763,767 3Z9ER/W,passenger,boeing: suffix 'ER',1176
-B752,757 256PCF/W,cargo,boeing: freighter suffix 'PCF',1174
 B505,-,unknown,no variant detail,1174
+B752,757 256PCF/W,cargo,boeing: freighter suffix 'PCF',1174
 B77W,777 3M2ER,passenger,boeing: suffix 'ER',1173
 RV10,-,unknown,no variant detail,1168
 B789,787-9 DREAMLINER,passenger,boeing: suffix 'EAMLINER',1159
-A320,737 476,unknown,type code and variant disagree,1156
+A320,737 476,unknown,type code and variant disagree: type family AIRBUS vs variant family BOEING,1156
 E190,ERJ 190-100 LR,passenger,commercial variant without freighter designation,1155
 B748,747 89L,passenger,boeing: suffix '-',1149
 CVLT,-,unknown,no variant detail,1148
 B762,767 219ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',1146
-BE76,-,unknown,no variant detail,1139
 B744,747 4H6BCF,cargo,boeing: freighter suffix 'BCF',1139
+BE76,-,unknown,no variant detail,1139
 K100,-,unknown,no variant detail,1130
 B734,737 46QSF,cargo,boeing: freighter suffix 'SF',1129
 AT43,ATR 42 300F,cargo,freighter designation /^ATR \d\d \d{3}F$/,1128
@@ -904,8 +904,8 @@ B737,737NG 74P/W,passenger,boeing: suffix '-',1114
 DH8B,DHC-8 202MPA,passenger,commercial variant without freighter designation,1109
 B763,767 31KERBDSF/W,cargo,boeing: freighter suffix 'ERBDSF',1106
 E295,206B Jet Ranger III,passenger,commercial variant without freighter designation,1104
-B737,737NG 75C/W,passenger,boeing: suffix '-',1103
 A320,R22 Beta II,passenger,commercial variant without freighter designation,1103
+B737,737NG 75C/W,passenger,boeing: suffix '-',1103
 VL3,-,unknown,no variant detail,1102
 HAWK,-,unknown,no variant detail,1098
 EV97,-,unknown,no variant detail,1095
@@ -913,12 +913,12 @@ LJ31,-,unknown,no variant detail,1087
 RV6,-,unknown,no variant detail,1087
 PA32,-,unknown,no variant detail,1085
 B735,737 522,passenger,boeing: suffix '-',1082
-E121,-,unknown,no variant detail,1081
-A320,King Air B350,passenger,commercial variant without freighter designation,1081
 A320,Global Express,passenger,commercial variant without freighter designation,1081
+A320,King Air B350,passenger,commercial variant without freighter designation,1081
+E121,-,unknown,no variant detail,1081
 SF34,SAAB 340B,passenger,commercial variant without freighter designation,1081
 B763,767 304ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',1074
-A321,A321 251NXSL,passenger,commercial variant without freighter designation,1066
+A321,A321 251NXSL,unknown,type code and variant disagree: Airbus ceo type vs neo variant,1066
 B744,747 45EF,cargo,boeing: freighter suffix 'F',1066
 B738,737NG 8Z0/W,passenger,boeing: suffix '-',1062
 B737,737NG 76Q/W,passenger,boeing: suffix '-',1057
@@ -927,17 +927,17 @@ B77L,777 FZB,cargo,boeing: 777F,1049
 B772,777 240ER,passenger,boeing: suffix 'ER',1045
 E195,R44 Raven II,passenger,commercial variant without freighter designation,1044
 B734,737 4B7,passenger,boeing: suffix '-',1043
-CTLN,-,unknown,no variant detail,1041
 AT75,ATR 72 600F,cargo,freighter designation /^ATR \d\d \d{3}F$/,1041
+CTLN,-,unknown,no variant detail,1041
 B744,747 4HQERF,cargo,boeing: freighter suffix 'ERF',1038
-BE35,-,unknown,no variant detail,1035
 B763,767 38EF,cargo,boeing: freighter suffix 'F',1035
+BE35,-,unknown,no variant detail,1035
 B734,737 406C,passenger,boeing: suffix 'C',1030
 B763,767 3JHF/W,cargo,boeing: freighter suffix 'F',1028
 H500,-,unknown,no variant detail,1021
 B763,767 319ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',1019
 B734,737 43QSF,cargo,boeing: freighter suffix 'SF',1016
-A20N,A320-252N,unknown,type code and variant disagree,1015
+A20N,A320-252N,passenger,commercial variant without freighter designation,1015
 T204,-,unknown,no variant detail,1009
 C340,-,unknown,no variant detail,1006
 B744,747 45EBDSF,cargo,boeing: freighter suffix 'BDSF',1003
@@ -963,36 +963,36 @@ A306,A300 B4-605R,passenger,commercial variant without freighter designation,959
 B77W,777-36NER,passenger,boeing: suffix 'ER',957
 EC25,-,unknown,no variant detail,953
 B733,737 3Q8SF,cargo,boeing: freighter suffix 'SF',947
-B763,767 36NERBCF,cargo,boeing: freighter suffix 'ERBCF',944
 A332,Voyager KC.3,passenger,commercial variant without freighter designation,944
+B763,767 36NERBCF,cargo,boeing: freighter suffix 'ERBCF',944
 ULAC,-,unknown,no variant detail,944
-A20N,A321 253NXSL,unknown,type code and variant disagree,943
-B739,737-8 MAX,passenger,boeing: suffix 'X',943
+A20N,A321 253NXSL,unknown,type code and variant disagree: Airbus model A320 vs A321,943
+B739,737-8 MAX,unknown,type code and variant disagree: Boeing series 737-9 vs 8,943
 C82T,-,unknown,no variant detail,943
 E35L,EMB-135BJ,passenger,commercial variant without freighter designation,938
-B38M,A321 271NXSL,unknown,type code and variant disagree,935
+B38M,A321 271NXSL,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,935
 B77W,777 3FGER,passenger,boeing: suffix 'ER',932
 B734,737 436,passenger,boeing: suffix '-',928
 B752,757 2Q8SF,cargo,boeing: freighter suffix 'SF',928
 B737,737NG 7ME/W,passenger,boeing: suffix '-',925
 A319,A319-114,passenger,commercial variant without freighter designation,924
 B752,757 2B7PCF/W,cargo,boeing: freighter suffix 'PCF',922
-PAT4,-,unknown,no variant detail,913
-E195,Squirrel AS.350 B,passenger,commercial variant without freighter designation,913
 B744,747 4KZFSCD,cargo,boeing: freighter suffix 'FSCD',913
+E195,Squirrel AS.350 B,passenger,commercial variant without freighter designation,913
+PAT4,-,unknown,no variant detail,913
 C177,-,unknown,no variant detail,912
 B744,747 481BDSF,cargo,boeing: freighter suffix 'BDSF',910
 SLG4,-,unknown,no variant detail,910
 E190,208 B,passenger,commercial variant without freighter designation,905
+A21N,737NG 809/W,unknown,type code and variant disagree: type family AIRBUS vs variant family BOEING,903
 TWEN,-,unknown,no variant detail,903
-A21N,737NG 809/W,unknown,type code and variant disagree,903
 B737,737-76N,passenger,boeing: suffix '-',902
 B737,737NG 7C9/W,passenger,boeing: suffix '-',896
 B738,737NG 86QSF/W,cargo,boeing: freighter suffix 'SF',894
 B744,747 467F,cargo,boeing: freighter suffix 'F',890
 PC9,-,unknown,no variant detail,884
-B763,767 35EERBCF,cargo,boeing: freighter suffix 'ERBCF',882
 A306,A300 B4-605RF,cargo,freighter designation /^A3\d0 [0-9A-Z-]*\dR?F$/,882
+B763,767 35EERBCF,cargo,boeing: freighter suffix 'ERBCF',882
 B744,747 481BCF,cargo,boeing: freighter suffix 'BCF',881
 B738,737NG 86JBDSF/W,cargo,boeing: freighter suffix 'BDSF',865
 P750,-,unknown,no variant detail,865
@@ -1006,41 +1006,41 @@ B752,757 231SF,cargo,boeing: freighter suffix 'SF',846
 B738,737-8JP,passenger,boeing: suffix '-',841
 B762,767 281BDSF,cargo,boeing: freighter suffix 'BDSF',840
 NAVI,-,unknown,no variant detail,838
-C180,-,unknown,no variant detail,835
 B738,737NG 8Q8SF/W,cargo,boeing: freighter suffix 'SF',835
+C180,-,unknown,no variant detail,835
 B735,737 55D/W,passenger,boeing: suffix '-',832
 E135,-,unknown,no variant detail,826
-A21N,A320-271N,unknown,type code and variant disagree,825
+A21N,A320-271N,unknown,type code and variant disagree: Airbus model A321 vs A320,825
 B763,B767-300,passenger,commercial variant without freighter designation,825
 IL76,IL-76 TD,cargo,freighter designation /^IL-76 /,824
-B38M,737NG 7CT/W,unknown,type code and variant disagree,818
+B38M,737NG 7CT/W,unknown,type code and variant disagree: Boeing series 737-8 vs 7,818
 E190,Squirrel AS.350 B,passenger,commercial variant without freighter designation,814
 B738,B737-800,passenger,commercial variant without freighter designation,813
-B38M,737NG 8CT/W,unknown,type code and variant disagree,812
+B38M,737NG 8CT/W,unknown,type code and variant disagree: Boeing MAX type vs NG variant,812
 B733,407,passenger,commercial variant without freighter designation,812
 DH8A,DHC-8 101,passenger,commercial variant without freighter designation,811
 E190,BK.117 C-1,passenger,commercial variant without freighter designation,804
-H269,-,unknown,no variant detail,802
 B738,737NG 804,passenger,boeing: suffix '-',802
+H269,-,unknown,no variant detail,802
 E170,EMB-170 SL,passenger,commercial variant without freighter designation,801
-E295,Citation Excel,passenger,commercial variant without freighter designation,797
 B772,777 2U8ER,passenger,boeing: suffix 'ER',797
+E295,Citation Excel,passenger,commercial variant without freighter designation,797
 F50,-,unknown,no variant detail,795
 B737,737NG 7LY/W,passenger,boeing: suffix '-',792
 AT76,ATR72-212A,passenger,commercial variant without freighter designation,788
 GLID,-,unknown,no variant detail,788
 B752,757-2G5,passenger,boeing: suffix '-',780
 PA46,-,unknown,no variant detail,779
+A19N,A319 115SL,unknown,type code and variant disagree: Airbus neo type vs ceo variant,776
 B744,747 40BERF,cargo,boeing: freighter suffix 'ERF',776
-A19N,A319 115SL,unknown,type code and variant disagree,776
 E190,Lineage 1000,passenger,commercial variant without freighter designation,774
 AT43,ATR 42 320,passenger,commercial variant without freighter designation,773
 PC6T,-,unknown,no variant detail,768
 B733,737 33V/W,passenger,boeing: suffix '-',765
-B38M,737NG 6CT,unknown,type code and variant disagree,761
-B738,737NG 8CXSF/W,cargo,boeing: freighter suffix 'SF',759
-B738,737NG 85P,passenger,boeing: suffix '-',759
+B38M,737NG 6CT,unknown,type code and variant disagree: Boeing series 737-8 vs 6,761
 AT75,72-212 A 500 VERSION,passenger,commercial variant without freighter designation,759
+B738,737NG 85P,passenger,boeing: suffix '-',759
+B738,737NG 8CXSF/W,cargo,boeing: freighter suffix 'SF',759
 K35R,-,unknown,no variant detail,758
 SD4,-,unknown,no variant detail,755
 B763,767 306ER,passenger,boeing: suffix 'ER',754
@@ -1052,7 +1052,7 @@ BCS3,SNJ-5 Texan,passenger,commercial variant without freighter designation,744
 E190,R44 Raven II,passenger,commercial variant without freighter designation,743
 A319,ACJ319 133X,passenger,commercial variant without freighter designation,742
 DH8B,DHC-8 201,passenger,commercial variant without freighter designation,742
-DH8D,A320-232,unknown,type code and variant disagree,741
+DH8D,A320-232,unknown,type code and variant disagree: type family DHC8 vs variant family AIRBUS,741
 NH90,-,unknown,no variant detail,741
 B738,737-8HX,passenger,boeing: suffix '-',740
 B752,757 256/W,passenger,boeing: suffix '-',735
@@ -1065,25 +1065,25 @@ B738,737NG 8GU/W,passenger,boeing: suffix '-',721
 CRER,-,unknown,no variant detail,719
 B752,757 21B,passenger,boeing: suffix '-',713
 P28T,-,unknown,no variant detail,712
-BLCF,-,unknown,no variant detail,709
 B752,757 204PCF,cargo,boeing: freighter suffix 'PCF',709
+BLCF,-,unknown,no variant detail,709
 B752,757 204PCF/W,cargo,boeing: freighter suffix 'PCF',706
-A321,A321 211(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,700
 A319,A319-132,passenger,commercial variant without freighter designation,700
+A321,A321 211(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,700
 B788,787-8 Dreamliner,passenger,boeing: suffix 'EAMLINER',698
 EPIC,-,unknown,no variant detail,695
 M28,-,unknown,no variant detail,693
 JS32,Jetstream 32-17,passenger,commercial variant without freighter designation,688
-CH7A,-,unknown,no variant detail,686
 A310,A310 304,passenger,commercial variant without freighter designation,686
+CH7A,-,unknown,no variant detail,686
 B738,737NG 81Q/W,passenger,boeing: suffix '-',682
 MD82,DC-9 82,passenger,commercial variant without freighter designation,682
 DH8C,DHC-8 315 MPA,passenger,commercial variant without freighter designation,673
 PA24,-,unknown,no variant detail,673
 B744,747 4FTF,cargo,boeing: freighter suffix 'F',672
-B744,747-409F,cargo,boeing: freighter suffix 'F',668
+A20N,A321 252NXSL,unknown,type code and variant disagree: Airbus model A320 vs A321,668
 B733,737 33V,passenger,boeing: suffix '-',668
-A20N,A321 252NXSL,unknown,type code and variant disagree,668
+B744,747-409F,cargo,boeing: freighter suffix 'F',668
 F100,-,unknown,no variant detail,664
 FA10,-,unknown,no variant detail,658
 B772,777 21HER,passenger,boeing: suffix 'ER',657
@@ -1092,36 +1092,36 @@ B738,737NG 8GS/W,passenger,boeing: suffix '-',650
 B763,767 3Q8ER,passenger,boeing: suffix 'ER',649
 RV8,-,unknown,no variant detail,649
 AT72,ATR 72 600,passenger,commercial variant without freighter designation,645
-PA27,-,unknown,no variant detail,644
-B738,737NG 85FSF/W,cargo,boeing: freighter suffix 'SF',644
 B738,737-8LD,passenger,boeing: suffix '-',644
+B738,737NG 85FSF/W,cargo,boeing: freighter suffix 'SF',644
+PA27,-,unknown,no variant detail,644
+A306,A300 F4-622F,cargo,freighter designation /^A300 F4-/,640
 B763,767 304ERBCF/W,cargo,boeing: freighter suffix 'ERBCF',640
 C42,-,unknown,no variant detail,640
-A306,A300 F4-622F,cargo,freighter designation /^A300 F4-/,640
 CT4,-,unknown,no variant detail,639
 B763,767 341ER,passenger,boeing: suffix 'ER',626
 E145,ERJ-145 LI,passenger,commercial variant without freighter designation,624
 B752,757 230SF,cargo,boeing: freighter suffix 'SF',622
-E170,EMB-190 AR,passenger,commercial variant without freighter designation,617
 B738,737NG 85F,passenger,boeing: suffix '-',617
-B732,737 2S2C,passenger,boeing: suffix 'C',615
+E170,EMB-190 AR,passenger,commercial variant without freighter designation,617
 AN12,An-12 BP,passenger,commercial variant without freighter designation,615
+B732,737 2S2C,passenger,boeing: suffix 'C',615
 B734,737 4C9SF,cargo,boeing: freighter suffix 'SF',614
 B752,757 23APF,cargo,boeing: freighter suffix 'PF',611
-A21N,A320-253NX,unknown,type code and variant disagree,608
+A21N,A320-253NX,unknown,type code and variant disagree: Airbus model A321 vs A320,608
 B762,767-204,passenger,boeing: suffix '-',602
 MD88,DC-9 88SF,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,600
 B744,747 428 BCF,cargo,boeing: freighter suffix 'BCF',599
 B744,747 41BF,cargo,boeing: freighter suffix 'F',598
 B77L,777 FEZ,cargo,boeing: 777F,596
-A21N,A321-271N,unknown,type code and variant disagree,595
+A21N,A321-271N,passenger,commercial variant without freighter designation,595
 B763,767 37DERBDSF,cargo,boeing: freighter suffix 'ERBDSF',595
 B752,757 21BPCF,cargo,boeing: freighter suffix 'PCF',594
 T210,-,unknown,no variant detail,591
 AN26,An-26 B,unknown,utility aircraft,590
 A332,Voyager KC.2,passenger,commercial variant without freighter designation,589
+B738,737NG 79P/W,unknown,type code and variant disagree: Boeing series 737-8 vs 7,589
 B738,BOEING 737-8K5,passenger,commercial variant without freighter designation,589
-B738,737NG 79P/W,passenger,boeing: suffix '-',589
 JS32,Jetstream 32-01EP,passenger,commercial variant without freighter designation,586
 B734,737 4S3,passenger,boeing: suffix '-',585
 AA5,-,unknown,no variant detail,584
@@ -1129,19 +1129,19 @@ B763,767 32LER/W,passenger,boeing: suffix 'ER',582
 RV14,-,unknown,no variant detail,582
 B763,767 31BERBCF/W,cargo,boeing: freighter suffix 'ERBCF',581
 B732,737 275C,passenger,boeing: suffix 'C',580
+B738,737NG 8KF/W,passenger,boeing: suffix '-',580
 B752,757 232SF,cargo,boeing: freighter suffix 'SF',580
 B762,767 224ER,passenger,boeing: suffix 'ER',580
-B738,737NG 8KF/W,passenger,boeing: suffix '-',580
 B738,737NG 82K/W,passenger,boeing: suffix '-',578
 P28B,-,unknown,no variant detail,578
 B763,767 3KYER/W,passenger,boeing: suffix 'ER',577
-B763,767-346,passenger,boeing: suffix '-',576
 B752,757 27APCF,cargo,boeing: freighter suffix 'PCF',576
+B763,767-346,passenger,boeing: suffix '-',576
 B733,737 3Y0,passenger,boeing: suffix '-',575
 TRIS,-,unknown,no variant detail,571
-UH1,-,unknown,no variant detail,570
-B744,747 446FSCD,cargo,boeing: freighter suffix 'FSCD',570
 B733,737 3L9,passenger,boeing: suffix '-',570
+B744,747 446FSCD,cargo,boeing: freighter suffix 'FSCD',570
+UH1,-,unknown,no variant detail,570
 C414,-,unknown,no variant detail,569
 B744,747 48EFSCD,cargo,boeing: freighter suffix 'FSCD',567
 BE9T,-,unknown,no variant detail,567
@@ -1151,17 +1151,17 @@ B733,737 301BDSF,cargo,boeing: freighter suffix 'BDSF',565
 B733,737 36NSF/W,cargo,boeing: freighter suffix 'SF',561
 DHC7,-,unknown,no variant detail,561
 A320,ACJ320 214X,passenger,commercial variant without freighter designation,560
-RV12,-,unknown,no variant detail,559
-B77W,777-333ER,passenger,boeing: suffix 'ER',559
 B738,737NG 883BDSF/W,cargo,boeing: freighter suffix 'BDSF',559
+B77W,777-333ER,passenger,boeing: suffix 'ER',559
+RV12,-,unknown,no variant detail,559
 B763,767 34GER/W,passenger,boeing: suffix 'ER',555
 B733,737 3U3/W,passenger,boeing: suffix '-',554
-B789,A319 112,unknown,type code and variant disagree,552
+B789,A319 112,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,552
 B752,757 2G5ERSF,cargo,boeing: freighter suffix 'ERSF',549
 B734,737 4Q3SF,cargo,boeing: freighter suffix 'SF',547
 B748,747 8B5,passenger,boeing: suffix '-',546
-B763,F50,unknown,type code and variant disagree,546
 B752,757 2T7SF,cargo,boeing: freighter suffix 'SF',546
+B763,F50,unknown,type code and variant disagree: type family BOEING vs variant family FOKKER,546
 B763,767 336ER,passenger,boeing: suffix 'ER',543
 E190,A.109 K2,passenger,commercial variant without freighter designation,540
 B734,737 448SF,cargo,boeing: freighter suffix 'SF',539
@@ -1174,46 +1174,46 @@ E300,-,unknown,no variant detail,527
 B748,747 8I,passenger,boeing: suffix 'I',526
 DH8C,DHC-8 311B,passenger,commercial variant without freighter designation,523
 B733,737 36N,passenger,boeing: suffix '-',520
-B734,737 4S3SF,cargo,boeing: freighter suffix 'SF',519
 A21N,206B Jet Ranger II,passenger,commercial variant without freighter designation,519
+B734,737 4S3SF,cargo,boeing: freighter suffix 'SF',519
 B734,737 4B7SF,cargo,boeing: freighter suffix 'SF',518
 AT72,ATR 72 212F,cargo,freighter designation /^ATR \d\d \d{3}F$/,516
-AT45,ATR 42 600,passenger,commercial variant without freighter designation,515
-B763,767 383ER,passenger,boeing: suffix 'ER',515
-B744,747 419BDSF,cargo,boeing: freighter suffix 'BDSF',515
 A332,KC-30M,passenger,commercial variant without freighter designation,515
-B732,737 229C,passenger,boeing: suffix 'C',514
-B773,777 3ALER,passenger,boeing: suffix 'ER',514
+AT45,ATR 42 600,passenger,commercial variant without freighter designation,515
+B744,747 419BDSF,cargo,boeing: freighter suffix 'BDSF',515
+B763,767 383ER,passenger,boeing: suffix 'ER',515
 A332,Cabri G2,passenger,commercial variant without freighter designation,514
+B732,737 229C,passenger,boeing: suffix 'C',514
 B763,767 323ERDBSF/W,cargo,boeing: freighter suffix 'ERDBSF',514
+B773,777 3ALER,passenger,boeing: suffix 'ER',514
 AC6L,-,unknown,no variant detail,512
 DH3T,DHC-3 Otter (Turbo),passenger,commercial variant without freighter designation,511
-B763,767 31KERBCF/W,cargo,boeing: freighter suffix 'ERBCF',510
 AT75,ATR 72-212 A,passenger,commercial variant without freighter designation,510
+B763,767 31KERBCF/W,cargo,boeing: freighter suffix 'ERBCF',510
 B763,767 375ER,passenger,boeing: suffix 'ER',505
 B737,Squirrel AS.350 B2,passenger,commercial variant without freighter designation,504
 B738,B 737-800,passenger,commercial variant without freighter designation,504
-A320,A320 271NSL,passenger,commercial variant without freighter designation,503
+A320,A320 271NSL,unknown,type code and variant disagree: Airbus ceo type vs neo variant,503
 CRJ2,CRJ 100SE,passenger,commercial variant without freighter designation,502
-BR23,-,unknown,no variant detail,501
 B733,737 31BSF,cargo,boeing: freighter suffix 'SF',501
+BR23,-,unknown,no variant detail,501
 GLAS,-,unknown,no variant detail,501
 M4,-,unknown,no variant detail,501
 B762,KC-767A,passenger,commercial variant without freighter designation,500
 B738,737NG 8ZM/W,passenger,boeing: suffix '-',499
-B77L,777 22KLR,passenger,boeing: suffix 'LR',498
 B738,737NG 8DC/W,passenger,boeing: suffix '-',498
+B77L,777 22KLR,passenger,boeing: suffix 'LR',498
 B789,407 GXi,passenger,commercial variant without freighter designation,497
 B738,737NG 808,passenger,boeing: suffix '-',494
 E190,EMB-190 VC-2,passenger,commercial variant without freighter designation,492
 B763,767 39HERBCF/W,cargo,boeing: freighter suffix 'ERBCF',491
-CRJ1,-,unknown,no variant detail,489
-C919,C919,passenger,commercial variant without freighter designation,489
 AS65,-,unknown,no variant detail,489
-B78X,787-10 Dreamliner,passenger,boeing: suffix 'REAMLINER',488
+C919,C919,passenger,commercial variant without freighter designation,489
+CRJ1,-,unknown,no variant detail,489
+B78X,787-10 Dreamliner,passenger,boeing: suffix 'EAMLINER',488
 B763,767 33AER,passenger,boeing: suffix 'ER',483
-B789,BOEING 787-9,passenger,commercial variant without freighter designation,479
 B763,767 333ERBDSF/W,cargo,boeing: freighter suffix 'ERBDSF',479
+B789,BOEING 787-9,passenger,commercial variant without freighter designation,479
 IL76,-,unknown,no variant detail,477
 ASTO,-,unknown,no variant detail,474
 B734,737 4H6SF,cargo,boeing: freighter suffix 'SF',471
@@ -1226,40 +1226,40 @@ B773,777 312,passenger,boeing: suffix '-',465
 A35K,G280,passenger,commercial variant without freighter designation,464
 B764,767-432ER,passenger,boeing: suffix 'ER',464
 B738,737NG 85PF/W,cargo,boeing: freighter suffix 'F',463
+B734,737 408SF,cargo,boeing: freighter suffix 'SF',460
 B738,737NG 8Q8F/W,cargo,boeing: freighter suffix 'F',460
 B789,GIII,passenger,commercial variant without freighter designation,460
 S108,-,unknown,no variant detail,460
-B734,737 408SF,cargo,boeing: freighter suffix 'SF',460
 A320,ACJ320 214SL,passenger,commercial variant without freighter designation,459
-B789,787 10,passenger,boeing: suffix '0',458
 B744,747 4F6BDSF,cargo,boeing: freighter suffix 'BDSF',458
+B789,787 10,unknown,type code and variant disagree: Boeing series 787-9 vs 10,458
 B462,146 200QT,passenger,commercial variant without freighter designation,457
-B738,737NG 8V3BCF/W,cargo,boeing: freighter suffix 'BCF',456
 B461,146 200,passenger,commercial variant without freighter designation,456
 B734,737 4Y0,passenger,boeing: suffix '-',456
+B738,737NG 8V3BCF/W,cargo,boeing: freighter suffix 'BCF',456
 TUCA,-,unknown,no variant detail,456
-SW4,C-26D Metro,passenger,commercial variant without freighter designation,454
 B733,737 36RSF,cargo,boeing: freighter suffix 'SF',454
-R200,-,unknown,no variant detail,451
+SW4,C-26D Metro,passenger,commercial variant without freighter designation,454
 A321,A321-231,passenger,commercial variant without freighter designation,451
 B734,737 4B6SF,cargo,boeing: freighter suffix 'SF',451
-A20N,A320-232,unknown,type code and variant disagree,450
+R200,-,unknown,no variant detail,451
+A20N,A320-232,unknown,type code and variant disagree: Airbus neo type vs ceo variant,450
 B735,737 548,passenger,boeing: suffix '-',450
-B763,767 39HERBDSF,cargo,boeing: freighter suffix 'ERBDSF',449
 B738,737NG 86NSF/W,cargo,boeing: freighter suffix 'SF',449
-E170,EMB-175 LR,passenger,commercial variant without freighter designation,447
+B763,767 39HERBDSF,cargo,boeing: freighter suffix 'ERBDSF',449
 B744,747 428FSCD,cargo,boeing: freighter suffix 'FSCD',447
+E170,EMB-175 LR,passenger,commercial variant without freighter designation,447
 B733,737 36NQC,passenger,boeing: suffix 'QC',442
 B733,737 31L,passenger,boeing: suffix '-',440
 B77L,777 240LR,passenger,boeing: suffix 'LR',440
-B738,A320 214,unknown,type code and variant disagree,439
-P8,-,unknown,no variant detail,437
+B738,A320 214,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,439
 B789,G450,passenger,commercial variant without freighter designation,437
+P8,-,unknown,no variant detail,437
+B733,737 3M8SF,cargo,boeing: freighter suffix 'SF',436
 B752,757 2Y0C,passenger,boeing: suffix 'C',436
 MD88,DC-9 88,passenger,commercial variant without freighter designation,436
-B733,737 3M8SF,cargo,boeing: freighter suffix 'SF',436
-TOBA,-,unknown,no variant detail,435
 B737,C-40B,passenger,commercial variant without freighter designation,435
+TOBA,-,unknown,no variant detail,435
 B748,747-87UF,cargo,boeing: freighter suffix 'F',434
 CRJ1,CRJ 100LR,passenger,commercial variant without freighter designation,434
 B735,737 505,passenger,boeing: suffix '-',432
@@ -1271,36 +1271,36 @@ B734,737 49RSF,cargo,boeing: freighter suffix 'SF',427
 B744,747 481F,cargo,boeing: freighter suffix 'F',426
 DHC6,DHC-6 Twin Otter 400,passenger,commercial variant without freighter designation,425
 B762,767 204ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',424
-H64,-,unknown,no variant detail,423
 B732,737 2B6C,passenger,boeing: suffix 'C',423
 B734,737 42CSF,cargo,boeing: freighter suffix 'SF',423
+H64,-,unknown,no variant detail,423
 A320,ACJ320 214,passenger,commercial variant without freighter designation,422
 E190,ERJ 190 Lineage 1000,passenger,commercial variant without freighter designation,422
-SH36,C-23C,passenger,commercial variant without freighter designation,421
 LXR,-,unknown,no variant detail,421
+SH36,C-23C,passenger,commercial variant without freighter designation,421
 L39,-,unknown,no variant detail,420
-IMPU,-,unknown,no variant detail,418
-E35L,Citation S/II,passenger,commercial variant without freighter designation,418
 C77R,-,unknown,no variant detail,418
+E35L,Citation S/II,passenger,commercial variant without freighter designation,418
+IMPU,-,unknown,no variant detail,418
 B763,767 375ERBCF,cargo,boeing: freighter suffix 'ERBCF',416
 C185,-,unknown,no variant detail,416
 B738,737NG 8D6BCF/W,cargo,boeing: freighter suffix 'BCF',415
 B763,767 32LF,cargo,boeing: freighter suffix 'F',412
 B763,767 375ER/W,passenger,boeing: suffix 'ER',412
 B744,747 4J6,passenger,boeing: suffix '-',411
-B744,747 443,passenger,boeing: suffix '-',408
-B763,767 341ERBCF,cargo,boeing: freighter suffix 'ERBCF',408
 ATLA,-,unknown,no variant detail,408
+B744,747 443,passenger,boeing: suffix '-',408
 B763,767 32LF/W,cargo,boeing: freighter suffix 'F',408
+B763,767 341ERBCF,cargo,boeing: freighter suffix 'ERBCF',408
 A21N,EC120B Colibri,passenger,commercial variant without freighter designation,407
 AURA,-,unknown,no variant detail,406
 E390,-,unknown,no variant detail,405
 RJ1H,DHC-8 402,passenger,commercial variant without freighter designation,405
 B752,Jetstream 32-12,passenger,commercial variant without freighter designation,403
 B732,737 248C,passenger,boeing: suffix 'C',402
-P28U,-,unknown,no variant detail,402
 B734,737 446,passenger,boeing: suffix '-',402
 B738,737-86D,passenger,boeing: suffix '-',402
+P28U,-,unknown,no variant detail,402
 B744,747 4D7BCF,cargo,boeing: freighter suffix 'BCF',401
 SH36,C-23B+,passenger,commercial variant without freighter designation,400
 C337,-,unknown,no variant detail,399
@@ -1310,29 +1310,29 @@ B738,737-85H,passenger,boeing: suffix '-',396
 PA18,-,unknown,no variant detail,394
 B733,737 33AQC,passenger,boeing: suffix 'QC',393
 B738,737NG 8K2SF/W,cargo,boeing: freighter suffix 'SF',392
-E120,EMB-120 FC,cargo,freighter designation /^EMB-120 (ER/F|RT/F|FC)$/,391
-E110,-,unknown,no variant detail,391
 B752,757 230PCF/W,cargo,boeing: freighter suffix 'PCF',391
+E110,-,unknown,no variant detail,391
+E120,EMB-120 FC,cargo,freighter designation /^EMB-120 (ER/F|RT/F|FC)$/,391
 B763,767 38EERBDSF,cargo,boeing: freighter suffix 'ERBDSF',390
 B733,737 39KSF,cargo,boeing: freighter suffix 'SF',389
 B763,767 333ER,passenger,boeing: suffix 'ER',389
 E120,-,unknown,no variant detail,386
-EA50,-,unknown,no variant detail,385
 DC10,DC-10 30ER,passenger,commercial variant without freighter designation,385
+EA50,-,unknown,no variant detail,385
 B752,757 2K2/W,passenger,boeing: suffix '-',384
 SH36,-,unknown,no variant detail,384
 A319,A319 115LR,passenger,commercial variant without freighter designation,382
-BE95,-,unknown,no variant detail,381
-B77W,777 3Q8ER,passenger,boeing: suffix 'ER',381
 B734,737 401,passenger,boeing: suffix '-',381
+B77W,777 3Q8ER,passenger,boeing: suffix 'ER',381
+BE95,-,unknown,no variant detail,381
 B733,737-36N,passenger,boeing: suffix '-',380
 DC93,DC-9 33RC,passenger,commercial variant without freighter designation,378
 DC93,DC-9 32F,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,377
 D228,Do 228 212 NG,passenger,commercial variant without freighter designation,376
 RV9,-,unknown,no variant detail,375
 B763,767 328ERBCF,cargo,boeing: freighter suffix 'ERBCF',374
+A320,A321 211,unknown,type code and variant disagree: Airbus model A320 vs A321,372
 B722,727 2S2F,cargo,boeing: freighter suffix 'F',372
-A320,A321 211,passenger,commercial variant without freighter designation,372
 B773,777 337ER,passenger,boeing: suffix 'ER',372
 B763,767 3Y0ER,passenger,boeing: suffix 'ER',371
 SURN,-,unknown,no variant detail,370
@@ -1342,24 +1342,24 @@ B763,767 36DERBCF,cargo,boeing: freighter suffix 'ERBCF',366
 A318,ACJ318 112 Elite,passenger,commercial variant without freighter designation,364
 B734,737 406SF,cargo,boeing: freighter suffix 'SF',364
 B738,BOEING 737-84P,passenger,commercial variant without freighter designation,360
-B77W,777 340ER,passenger,boeing: suffix 'ER',359
 B737,737NG 760/W,passenger,boeing: suffix '-',359
 B744,747-4HAF,cargo,boeing: freighter suffix 'F',359
+B77W,777 340ER,passenger,boeing: suffix 'ER',359
 B732,737 2R8C,passenger,boeing: suffix 'C',358
 E35L,ERJ-135 LR,passenger,commercial variant without freighter designation,358
-E120,EMB-120 RT/F,cargo,freighter designation /^EMB-120 (ER/F|RT/F|FC)$/,355
-B779,777 9,passenger,boeing: suffix '-',355
 B763,767 38AERBCF,cargo,boeing: freighter suffix 'ERBCF',355
-B752,757 256F,cargo,boeing: freighter suffix 'F',353
+B779,777 9,passenger,boeing: suffix '-',355
+E120,EMB-120 RT/F,cargo,freighter designation /^EMB-120 (ER/F|RT/F|FC)$/,355
 B744,747-400F,cargo,boeing: freighter suffix 'F',353
+B752,757 256F,cargo,boeing: freighter suffix 'F',353
 F260,-,unknown,no variant detail,352
 B773,777 31BER,passenger,boeing: suffix 'ER',351
 GA4C,-,unknown,no variant detail,350
-SU95,Superjet 100 95 B-100,passenger,commercial variant without freighter designation,349
 E170,EMB-170 SR,passenger,commercial variant without freighter designation,349
 FK9,-,unknown,no variant detail,349
-D328,Do 328 100,passenger,commercial variant without freighter designation,348
+SU95,Superjet 100 95 B-100,passenger,commercial variant without freighter designation,349
 B772,777 212ER,passenger,boeing: suffix 'ER',348
+D328,Do 328 100,passenger,commercial variant without freighter designation,348
 B744,747 412BDSF,cargo,boeing: freighter suffix 'BDSF',347
 AC68,-,unknown,no variant detail,346
 AT75,ATR 72-212 A 500 VERSION,passenger,commercial variant without freighter designation,346
@@ -1374,9 +1374,9 @@ B734,737 46M,passenger,boeing: suffix '-',336
 DH8C,DHC-8 315,passenger,commercial variant without freighter designation,335
 DC6,-,unknown,no variant detail,334
 AP32,-,unknown,no variant detail,333
-TBM8,-,unknown,no variant detail,330
-DHC6,DHC-6 Twin Otter 100,passenger,commercial variant without freighter designation,330
 B763,767 36NER,passenger,boeing: suffix 'ER',330
+DHC6,DHC-6 Twin Otter 100,passenger,commercial variant without freighter designation,330
+TBM8,-,unknown,no variant detail,330
 B763,767 3S1ER,passenger,boeing: suffix 'ER',329
 B762,767 241ERBDSF,cargo,boeing: freighter suffix 'ERBDSF',328
 SW4,SA227-AC,passenger,commercial variant without freighter designation,327
@@ -1394,101 +1394,101 @@ T204,Tu-204 100S,passenger,commercial variant without freighter designation,315
 DHC6,DHC-6 Twin Otter 310,passenger,commercial variant without freighter designation,312
 B733,737 33ASF,cargo,boeing: freighter suffix 'SF',310
 B733,737 3J6SF,cargo,boeing: freighter suffix 'SF',307
-B3XM,737MAX 10,passenger,boeing: suffix '0',305
+B3XM,737MAX 10,passenger,boeing: 737 MAX (no freighter variant),305
 P28S,-,unknown,no variant detail,304
-CVLP,-,unknown,no variant detail,303
 B738,BOEING 737-86N,passenger,commercial variant without freighter designation,303
-SW3,-,unknown,no variant detail,302
+CVLP,-,unknown,no variant detail,303
 B752,757 27BSF,cargo,boeing: freighter suffix 'SF',302
 RF6,-,unknown,no variant detail,302
+SW3,-,unknown,no variant detail,302
 B733,737 3W0,passenger,boeing: suffix '-',301
-SHRK,-,unknown,no variant detail,300
 B732,737 2Q2C,passenger,boeing: suffix 'C',300
+SHRK,-,unknown,no variant detail,300
 A388,-,passenger,type has no freighter variant,298
-CH7B,-,unknown,no variant detail,297
 B763,767 36DBCF,cargo,boeing: freighter suffix 'BCF',297
+CH7B,-,unknown,no variant detail,297
 DRON,-,unknown,no variant detail,297
 B733,737 3Y0SF,cargo,boeing: freighter suffix 'SF',296
-Q9,-,unknown,no variant detail,296
 B738,737NG 8ZS/W,passenger,boeing: suffix '-',296
-L410,L-410 UVP-E4,passenger,commercial variant without freighter designation,295
+Q9,-,unknown,no variant detail,296
 B733,737-3Y0,passenger,boeing: suffix '-',295
-B742,-,unknown,no variant detail,294
+L410,L-410 UVP-E4,passenger,commercial variant without freighter designation,295
 B737,737NG 77W/W BBJ,unknown,business / VIP variant,294
+B742,-,unknown,no variant detail,294
 B722,727 223F,cargo,boeing: freighter suffix 'F',293
 GLST,-,unknown,no variant detail,292
 ALO3,-,unknown,no variant detail,291
-DC93,-,unknown,no variant detail,289
 B752,757 2K2C,passenger,boeing: suffix 'C',289
+DC93,-,unknown,no variant detail,289
 A310,A310 325,passenger,commercial variant without freighter designation,286
 BALL,-,unknown,no variant detail,286
-A321,A320 214,passenger,commercial variant without freighter designation,284
+A321,A320 214,unknown,type code and variant disagree: Airbus model A321 vs A320,284
 B732,PA-23-250,passenger,commercial variant without freighter designation,284
 B744,747 446F,cargo,boeing: freighter suffix 'F',283
-B733,737 3U8,passenger,boeing: suffix '-',282
 B733,737 33VSF,cargo,boeing: freighter suffix 'SF',282
+B733,737 3U8,passenger,boeing: suffix '-',282
 B752,757 21KPCF,cargo,boeing: freighter suffix 'PCF',280
-A320,777 3M0ER,unknown,type code and variant disagree,279
-AT72,ATR 72 201F,cargo,freighter designation /^ATR \d\d \d{3}F$/,278
-A19N,A319-153N,unknown,type code and variant disagree,278
+A320,777 3M0ER,unknown,type code and variant disagree: type family AIRBUS vs variant family BOEING,279
+A19N,A319-153N,passenger,commercial variant without freighter designation,278
 A346,A340-642,passenger,commercial variant without freighter designation,278
-B734,737-4Q8,passenger,boeing: suffix '-',277
+AT72,ATR 72 201F,cargo,freighter designation /^ATR \d\d \d{3}F$/,278
 B732,737 219C,passenger,boeing: suffix 'C',277
+B734,737-4Q8,passenger,boeing: suffix '-',277
 B77W,777 39MER,passenger,boeing: suffix 'ER',277
-F16,-,unknown,no variant detail,275
 BN2T,-,unknown,no variant detail,275
+F16,-,unknown,no variant detail,275
 B763,767 324ER,passenger,boeing: suffix 'ER',274
 HUSK,-,unknown,no variant detail,274
-B763,767 323ER,passenger,boeing: suffix 'ER',273
 B738,737NG 8MC/W,passenger,boeing: suffix '-',273
+B763,767 323ER,passenger,boeing: suffix 'ER',273
 A338,-,passenger,type has no freighter variant,270
-B763,767 3CBER,passenger,boeing: suffix 'ER',270
 B735,737 53S,passenger,boeing: suffix '-',270
+B763,767 3CBER,passenger,boeing: suffix 'ER',270
 B733,737 3T0SF,cargo,boeing: freighter suffix 'SF',269
 B733,737-301,passenger,boeing: suffix '-',264
 AN12,-,unknown,no variant detail,263
 JS31,Jetstream 31-02,passenger,commercial variant without freighter designation,262
 T204,Tu-214,passenger,commercial variant without freighter designation,259
 B738,737NG 8MA/W,passenger,boeing: suffix '-',258
+A319,ACJ319 115CJ/SL,passenger,commercial variant without freighter designation,257
 B732,737 2K2C,passenger,boeing: suffix 'C',257
 B734,737 484SF,cargo,boeing: freighter suffix 'SF',257
 B744,Citation CJ1,passenger,commercial variant without freighter designation,257
-A319,ACJ319 115CJ/SL,passenger,commercial variant without freighter designation,257
 E135,EMB-135LR,passenger,commercial variant without freighter designation,257
-P210,-,unknown,no variant detail,256
 DHC3,-,unknown,no variant detail,256
-BE18,-,unknown,no variant detail,254
+P210,-,unknown,no variant detail,256
 B735,737 5L9/W,passenger,boeing: suffix '-',254
-PA23,-,unknown,no variant detail,252
+BE18,-,unknown,no variant detail,254
 B763,767 324ER/W,passenger,boeing: suffix 'ER',252
+PA23,-,unknown,no variant detail,252
 B737,737NG 732/W,passenger,boeing: suffix '-',251
 SW4,SA226-TC,passenger,commercial variant without freighter designation,251
 B762,KC-46A Pegasus,passenger,commercial variant without freighter designation,250
 B733,737 36ESF,cargo,boeing: freighter suffix 'SF',248
-B738,A320 214SL,unknown,type code and variant disagree,247
+B738,A320 214SL,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,247
 DC91,DC-9 15RCF,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,247
 B752,757 21BSF,cargo,boeing: freighter suffix 'SF',243
-B752,757 2Y0SF,cargo,boeing: freighter suffix 'SF',242
 B732,737 2L9,passenger,boeing: suffix '-',242
+B752,757 2Y0SF,cargo,boeing: freighter suffix 'SF',242
 AN12,An-12 BK,passenger,commercial variant without freighter designation,241
+DHC3,DHC-3 Otter U-1A,passenger,commercial variant without freighter designation,240
 GA8C,-,unknown,no variant detail,240
 M7,-,unknown,no variant detail,240
-DHC3,DHC-3 Otter U-1A,passenger,commercial variant without freighter designation,240
-XL2,-,unknown,no variant detail,238
 B737,737NG 7BC/W BBJ,unknown,business / VIP variant,238
-MD82,DC-9 83SF,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,237
+XL2,-,unknown,no variant detail,238
 B38M,Super Puma AS.332 L2,passenger,commercial variant without freighter designation,237
 JAB4,-,unknown,no variant detail,237
+MD82,DC-9 83SF,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,237
 PTS2,-,unknown,no variant detail,234
 RV-1,-,unknown,no variant detail,233
-RV4,-,unknown,no variant detail,232
 B733,737 3S3,passenger,boeing: suffix '-',232
+RV4,-,unknown,no variant detail,232
 B18T,-,unknown,no variant detail,231
 B734,737-400,passenger,boeing: suffix '-',230
-B738,737NG 700/W,passenger,boeing: suffix '-',229
-B39M,737-8 MAX,unknown,type code and variant disagree,229
-B763,767 343ERBCF,cargo,boeing: freighter suffix 'ERBCF',229
+B39M,737-8 MAX,unknown,type code and variant disagree: Boeing series 737-9 vs 8,229
+B738,737NG 700/W,unknown,type code and variant disagree: Boeing series 737-8 vs 7,229
 B742,747 281BF,cargo,boeing: freighter suffix 'BF',229
+B763,767 343ERBCF,cargo,boeing: freighter suffix 'ERBCF',229
 A21N,Global 5500,passenger,commercial variant without freighter designation,228
 B734,737 4U3,passenger,boeing: suffix '-',226
 C421,-,unknown,no variant detail,226
@@ -1496,19 +1496,19 @@ B752,C-32A,passenger,commercial variant without freighter designation,225
 TOUR,-,unknown,no variant detail,225
 T204,Tu-204 300A,passenger,commercial variant without freighter designation,224
 B752,757 2G5PCF,cargo,boeing: freighter suffix 'PCF',223
-A332,777 3M0ER,unknown,type code and variant disagree,222
-L188,-,unknown,no variant detail,220
-C170,-,unknown,no variant detail,220
+A332,777 3M0ER,unknown,type code and variant disagree: type family AIRBUS vs variant family BOEING,222
 B737,737NG 7AX,passenger,boeing: suffix '-',220
+C170,-,unknown,no variant detail,220
+L188,-,unknown,no variant detail,220
 B734,737-46J,passenger,boeing: suffix '-',219
 PC7,-,unknown,no variant detail,219
+B789,777 268ER,unknown,type code and variant disagree: Boeing 787 vs 777,217
 EUFI,-,unknown,no variant detail,217
-B789,777 268ER,unknown,type code and variant disagree,217
 L410,L-410 UVP-E20,passenger,commercial variant without freighter designation,217
 B763,767 31AER,passenger,boeing: suffix 'ER',216
-W3,-,unknown,no variant detail,214
 B58T,-,unknown,no variant detail,214
 DC87,-,unknown,no variant detail,214
+W3,-,unknown,no variant detail,214
 A310,CC-150 304/MRTT,passenger,commercial variant without freighter designation,213
 B47G,-,unknown,no variant detail,213
 A149,-,unknown,no variant detail,212
@@ -1517,13 +1517,13 @@ T6,-,unknown,no variant detail,210
 A332,A330 203MRTT,passenger,commercial variant without freighter designation,208
 B733,737 3B7SF,cargo,boeing: freighter suffix 'SF',208
 COL4,-,unknown,no variant detail,207
-A20N,A320 251NCJSL,unknown,type code and variant disagree,206
+A20N,A320 251NCJSL,passenger,commercial variant without freighter designation,206
 COY2,-,unknown,no variant detail,206
 E145,ERJ-145EP,passenger,commercial variant without freighter designation,206
-L410,L-410 UVP,passenger,commercial variant without freighter designation,205
 E190,Lineage 1000 E,passenger,commercial variant without freighter designation,205
-GLF3,-,unknown,no variant detail,204
+L410,L-410 UVP,passenger,commercial variant without freighter designation,205
 A319,ACJ319 VC-1A,passenger,commercial variant without freighter designation,204
+GLF3,-,unknown,no variant detail,204
 B735,737 528,passenger,boeing: suffix '-',201
 B763,767 38EER,passenger,boeing: suffix 'ER',200
 B734,737 4H6,passenger,boeing: suffix '-',199
@@ -1531,16 +1531,16 @@ A320,A320-211,passenger,commercial variant without freighter designation,198
 ST10,-,unknown,no variant detail,198
 AT3T,-,unknown,no variant detail,197
 A3ST,-,unknown,no variant detail,195
-E145,ERJ-145 MP,passenger,commercial variant without freighter designation,193
-B744,747-433,passenger,boeing: suffix '-',193
 B739,737NG 93YER/W,passenger,boeing: suffix 'ER',193
+B744,747-433,passenger,boeing: suffix '-',193
+E145,ERJ-145 MP,passenger,commercial variant without freighter designation,193
 B763,767 32LER,passenger,boeing: suffix 'ER',192
 B772,777 232ER,passenger,boeing: suffix 'ER',192
+A660,-,unknown,no variant detail,191
+B703,707 3K1C,passenger,commercial variant without freighter designation,191
+DA50,-,unknown,no variant detail,191
 JS32,-,unknown,no variant detail,191
 LNC2,-,unknown,no variant detail,191
-A660,-,unknown,no variant detail,191
-DA50,-,unknown,no variant detail,191
-B703,707 3K1C,passenger,commercial variant without freighter designation,191
 MCR1,-,unknown,no variant detail,189
 ERCO,-,unknown,no variant detail,187
 B737,737-732,passenger,boeing: suffix '-',186
@@ -1549,53 +1549,53 @@ MI8,-,unknown,no variant detail,185
 A124,An-124 100M-150,passenger,commercial variant without freighter designation,183
 B733,737 3Q8,passenger,boeing: suffix '-',182
 DIMO,-,unknown,no variant detail,182
-ST75,-,unknown,no variant detail,180
 B733,737 3Y5SF,cargo,boeing: freighter suffix 'SF',180
 PA22,-,unknown,no variant detail,180
+ST75,-,unknown,no variant detail,180
 MD11,-,unknown,no variant detail,179
 G120,-,unknown,no variant detail,177
+AP22,-,unknown,no variant detail,175
 B733,737 375SF,cargo,boeing: freighter suffix 'SF',175
 B763,767 332ER,passenger,boeing: suffix 'ER',175
 BCS1,ACJ TwoTwenty,unknown,business / VIP variant,175
-AP22,-,unknown,no variant detail,175
 B734,737 45D,passenger,boeing: suffix '-',173
 MIMU,-,unknown,no variant detail,173
-YK52,-,unknown,no variant detail,171
 IL76,IL-76 TD-90VD,cargo,freighter designation /^IL-76 /,171
 T34P,-,unknown,no variant detail,171
+YK52,-,unknown,no variant detail,171
 A319,ACJ319 115,passenger,commercial variant without freighter designation,170
-B737,737NG 7EE/W,passenger,boeing: suffix '-',168
 ALTO,-,unknown,no variant detail,168
+B737,737NG 7EE/W,passenger,boeing: suffix '-',168
+AN30,An-30,passenger,commercial variant without freighter designation,167
 DH82,-,unknown,no variant detail,167
 E135,Legacy 600 VC-99B,passenger,commercial variant without freighter designation,167
-AN30,An-30,passenger,commercial variant without freighter designation,167
-B735,A320 214,unknown,type code and variant disagree,166
 B733,737 35NSF,cargo,boeing: freighter suffix 'SF',166
+B735,A320 214,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,166
 B738,737NG 8EHF/W,cargo,boeing: freighter suffix 'F',165
 B763,767 33AERBDSF/W,cargo,boeing: freighter suffix 'ERBDSF',164
 B763,767 3Y0ER/W,passenger,boeing: suffix 'ER',163
 B733,737 3L9/W,passenger,boeing: suffix '-',162
-DC91,DC-9 15F,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,161
-B752,757 29JPCF/W,cargo,boeing: freighter suffix 'PCF',161
-FDCT,-,unknown,no variant detail,161
 B722,727 264F,cargo,boeing: freighter suffix 'F',161
-RJ1H,-,unknown,no variant detail,160
-PAY4,-,unknown,no variant detail,160
+B752,757 29JPCF/W,cargo,boeing: freighter suffix 'PCF',161
+DC91,DC-9 15F,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,161
+FDCT,-,unknown,no variant detail,161
 B733,737 319,passenger,boeing: suffix '-',160
-RJ1H,RJ100,passenger,commercial variant without freighter designation,158
+PAY4,-,unknown,no variant detail,160
+RJ1H,-,unknown,no variant detail,160
 R135,-,unknown,no variant detail,158
+RJ1H,RJ100,passenger,commercial variant without freighter designation,158
 CRUZ,-,unknown,no variant detail,157
 DHC1,-,unknown,no variant detail,156
 GA7,-,unknown,no variant detail,156
 AT76,P-72A,passenger,commercial variant without freighter designation,155
-T38,-,unknown,no variant detail,155
 G200,-,unknown,no variant detail,155
+T38,-,unknown,no variant detail,155
 F8L,-,unknown,no variant detail,154
 AC95,-,unknown,no variant detail,153
 B738,737NG 8B5F/W,cargo,boeing: freighter suffix 'F',153
-CJ6,-,unknown,no variant detail,151
-B737,737NG 7FG/W BBJ,unknown,business / VIP variant,151
 B734,737 429SF,cargo,boeing: freighter suffix 'SF',151
+B737,737NG 7FG/W BBJ,unknown,business / VIP variant,151
+CJ6,-,unknown,no variant detail,151
 WT9,-,unknown,no variant detail,151
 DC10,DC-10 30,passenger,commercial variant without freighter designation,149
 RJ70,146 RJ70,passenger,commercial variant without freighter designation,148
@@ -1607,23 +1607,23 @@ E190,EMB-170 ST,passenger,commercial variant without freighter designation,145
 B703,707 368C,passenger,commercial variant without freighter designation,144
 LEG2,-,unknown,no variant detail,144
 EVOT,-,unknown,no variant detail,143
+B732,737 205,passenger,boeing: suffix '-',142
+B733,737 3U3SF,cargo,boeing: freighter suffix 'SF',142
+B737,737NG 76QC/W,passenger,boeing: suffix 'C',142
 B737,737NG 77Z/W BBJ,unknown,business / VIP variant,142
 CRJ1,CRJ 200ER,passenger,commercial variant without freighter designation,142
-B732,737 205,passenger,boeing: suffix '-',142
-B737,737NG 76QC/W,passenger,boeing: suffix 'C',142
-B733,737 3U3SF,cargo,boeing: freighter suffix 'SF',142
 B752,757 2G5SF,cargo,boeing: freighter suffix 'SF',141
 B752,757 23N/W,passenger,boeing: suffix '-',140
-D228,Do 228 202,passenger,commercial variant without freighter designation,139
-C303,-,unknown,no variant detail,139
 AN28,M-28 BTDII Bryza,passenger,commercial variant without freighter designation,139
+C303,-,unknown,no variant detail,139
+D228,Do 228 202,passenger,commercial variant without freighter designation,139
 B734,737 4D7SF,cargo,boeing: freighter suffix 'SF',137
-SW3,Merlin IVC,passenger,commercial variant without freighter designation,136
 KT1,-,unknown,no variant detail,136
-B737,737NG 7KK/W BBJ,unknown,business / VIP variant,134
+SW3,Merlin IVC,passenger,commercial variant without freighter designation,136
 A306,A300 C4-605R,passenger,commercial variant without freighter designation,134
-P337,-,unknown,no variant detail,133
+B737,737NG 7KK/W BBJ,unknown,business / VIP variant,134
 HURI,-,unknown,no variant detail,133
+P337,-,unknown,no variant detail,133
 AT5T,-,unknown,no variant detail,131
 CC11,-,unknown,no variant detail,131
 B733,737 332,passenger,boeing: suffix '-',129
@@ -1633,10 +1633,10 @@ B735,737 548/W,passenger,boeing: suffix '-',127
 DH8B,DHC-8-202,passenger,commercial variant without freighter designation,126
 A148,-,unknown,no variant detail,125
 A346,A340 642X,passenger,commercial variant without freighter designation,124
-PRIM,-,unknown,no variant detail,124
 H2,-,unknown,no variant detail,124
-M339,-,unknown,no variant detail,122
+PRIM,-,unknown,no variant detail,124
 B752,757 2G5C,passenger,boeing: suffix 'C',122
+M339,-,unknown,no variant detail,122
 KC2,-,unknown,no variant detail,121
 EXPL,-,unknown,no variant detail,120
 B752,757 2Q8PCF/W,cargo,boeing: freighter suffix 'PCF',119
@@ -1644,15 +1644,15 @@ B742,747 243F,cargo,boeing: freighter suffix 'F',117
 D328,Do 328 120,passenger,commercial variant without freighter designation,116
 TB21,-,unknown,no variant detail,114
 B737,737NG 783,passenger,boeing: suffix '-',113
-SAVG,-,unknown,no variant detail,112
 C205,-,unknown,no variant detail,112
+SAVG,-,unknown,no variant detail,112
 AN32,-,unknown,no variant detail,111
-P32T,-,unknown,no variant detail,111
 EH10,-,unknown,no variant detail,111
+P32T,-,unknown,no variant detail,111
 M20T,-,unknown,no variant detail,110
-MRF1,-,unknown,no variant detail,108
-CL2P,-,unknown,no variant detail,108
 A345,A340 542,passenger,commercial variant without freighter designation,108
+CL2P,-,unknown,no variant detail,108
+MRF1,-,unknown,no variant detail,108
 B735,737 55D,passenger,boeing: suffix '-',107
 DHC6,ATR 42 300F,cargo,freighter designation /^ATR \d\d \d{3}F$/,107
 TL30,-,unknown,no variant detail,105
@@ -1660,142 +1660,142 @@ MX2,-,unknown,no variant detail,104
 PTMS,-,unknown,no variant detail,104
 GLSP,-,unknown,no variant detail,103
 B29,-,unknown,no variant detail,102
+B77L,777 29MLR,passenger,boeing: suffix 'LR',102
 C140,-,unknown,no variant detail,102
 C195,-,unknown,no variant detail,102
-B77L,777 29MLR,passenger,boeing: suffix 'LR',102
 D228,Do 228 201,passenger,commercial variant without freighter designation,101
 IL62,IL-62 MGr,passenger,commercial variant without freighter designation,100
 TAIL,-,unknown,no variant detail,100
 B772,777 2ANER,passenger,boeing: suffix 'ER',99
 GB1,-,unknown,no variant detail,99
-PTS1,-,unknown,no variant detail,98
 PAY1,-,unknown,no variant detail,98
+PTS1,-,unknown,no variant detail,98
 A318,-,passenger,type has no freighter variant,97
-B737,737NG 7K2C/W,passenger,boeing: suffix 'C',96
-MD83,MD-83,passenger,commercial variant without freighter designation,96
-B737,737NG 7BK/W,passenger,boeing: suffix '-',96
 B737,737NG 7AJ/W BBJ,unknown,business / VIP variant,96
+B737,737NG 7BK/W,passenger,boeing: suffix '-',96
+B737,737NG 7K2C/W,passenger,boeing: suffix 'C',96
 D228,Do 228 203,passenger,commercial variant without freighter designation,96
-SS2T,-,unknown,no variant detail,94
+MD83,MD-83,passenger,commercial variant without freighter designation,96
 H25C,-,unknown,no variant detail,94
+SS2T,-,unknown,no variant detail,94
 P51,-,unknown,no variant detail,92
 PA36,-,unknown,no variant detail,91
 SW4,269 C-1,passenger,commercial variant without freighter designation,91
 Z42,-,unknown,no variant detail,90
-B737,737NG 7BX,passenger,boeing: suffix '-',88
 AT75,ATR 72 600,passenger,commercial variant without freighter designation,88
-DH2T,DHC-2 Beaver (Turbo),passenger,commercial variant without freighter designation,87
-BE60,-,unknown,no variant detail,87
+B737,737NG 7BX,passenger,boeing: suffix '-',88
 B734,737 45DF,cargo,boeing: freighter suffix 'F',87
-IL96,IL-96 300,passenger,commercial variant without freighter designation,86
+BE60,-,unknown,no variant detail,87
+DH2T,DHC-2 Beaver (Turbo),passenger,commercial variant without freighter designation,87
 B744,747 481,passenger,boeing: suffix '-',86
 DC10,DC-10 40I,passenger,commercial variant without freighter designation,86
+IL96,IL-96 300,passenger,commercial variant without freighter designation,86
 LGEZ,-,unknown,no variant detail,85
 B744,747 446,passenger,boeing: suffix '-',84
 DH2T,DHC-2 Beaver U-6A (Turbo),passenger,commercial variant without freighter designation,84
-LA4,-,unknown,no variant detail,83
-EXNG,-,unknown,no variant detail,83
 B738,737NG 8K5BCF/W,cargo,boeing: freighter suffix 'BCF',83
-B737,737NG 7HZ/W BBJ,unknown,business / VIP variant,82
-CRJ9,PA-42,passenger,commercial variant without freighter designation,82
-B752,757 2Q8PCF,cargo,boeing: freighter suffix 'PCF',82
-FK14,-,unknown,no variant detail,82
+EXNG,-,unknown,no variant detail,83
+LA4,-,unknown,no variant detail,83
 B735,737 5C9,passenger,boeing: suffix '-',82
+B737,737NG 7HZ/W BBJ,unknown,business / VIP variant,82
+B752,757 2Q8PCF,cargo,boeing: freighter suffix 'PCF',82
+CRJ9,PA-42,passenger,commercial variant without freighter designation,82
+FK14,-,unknown,no variant detail,82
 BRAV,-,unknown,no variant detail,79
-G3,-,unknown,no variant detail,79
 DC10,-,unknown,no variant detail,79
+G3,-,unknown,no variant detail,79
 AJET,-,unknown,no variant detail,78
 B744,747 4H6SF,cargo,boeing: freighter suffix 'SF',78
 AT72,ATR 72 201,passenger,commercial variant without freighter designation,77
-B738,A320 232,unknown,type code and variant disagree,77
-E3CF,-,unknown,no variant detail,76
+B738,A320 232,unknown,type code and variant disagree: type family BOEING vs variant family AIRBUS,77
 B737,737NG 7E0 BBJ,unknown,business / VIP variant,76
-L200,-,unknown,no variant detail,76
 B739,737NG 97Y BBJ3,passenger,boeing: suffix 'BBJ3',76
+E3CF,-,unknown,no variant detail,76
+L200,-,unknown,no variant detail,76
 SS2P,-,unknown,no variant detail,75
 M600,-,unknown,no variant detail,74
 B738,737NG 8E0 BBJ2,passenger,boeing: suffix 'BBJ2',73
 E500,-,unknown,no variant detail,73
 FM25,-,unknown,no variant detail,73
 Z43,-,unknown,no variant detail,73
-L159,-,unknown,no variant detail,71
-B738,737NG 8KN/W BBJ2,passenger,boeing: suffix 'BBJ2',71
 B735,737 505/W,passenger,boeing: suffix '-',71
-B763,767 35DER,passenger,boeing: suffix 'ER',69
+B738,737NG 8KN/W BBJ2,passenger,boeing: suffix 'BBJ2',71
+L159,-,unknown,no variant detail,71
 B737,737NG 7ZX/W BBJ,unknown,business / VIP variant,69
-TEXA,-,unknown,no variant detail,68
+B763,767 35DER,passenger,boeing: suffix 'ER',69
 AS21,-,unknown,no variant detail,68
 B738,737NG 8AJ BBJ2,passenger,boeing: suffix 'BBJ2',68
+TEXA,-,unknown,no variant detail,68
+A343,A340 312X,passenger,commercial variant without freighter designation,67
+B737,737NG 8Z6/W BBJ2,unknown,type code and variant disagree: Boeing series 737-7 vs 8,67
+EAGL,-,unknown,no variant detail,67
+GX,-,unknown,no variant detail,67
+T204,Tu-204 300,passenger,commercial variant without freighter designation,67
 T204,Tu-204 300K,passenger,commercial variant without freighter designation,67
 Y18T,-,unknown,no variant detail,67
-EAGL,-,unknown,no variant detail,67
-A343,A340 312X,passenger,commercial variant without freighter designation,67
-T204,Tu-204 300,passenger,commercial variant without freighter designation,67
-GX,-,unknown,no variant detail,67
-B737,737NG 8Z6/W BBJ2,passenger,boeing: suffix 'BBJ2',67
-A342,-,unknown,no variant detail,66
-DR40,-,unknown,no variant detail,66
-B737,737NG 7B5 BBJ,unknown,business / VIP variant,66
 A332,A330-202,passenger,commercial variant without freighter designation,66
+A342,-,unknown,no variant detail,66
+B737,737NG 7B5 BBJ,unknown,business / VIP variant,66
+DR40,-,unknown,no variant detail,66
 B744,747 433 SCD,passenger,boeing: suffix 'SCD',65
-A318,A318 112,passenger,commercial variant without freighter designation,64
-PISI,-,unknown,no variant detail,64
-B738,737NG 8KB/W BBJ,unknown,business / VIP variant,64
-PUMA,-,unknown,no variant detail,64
 A210,-,unknown,no variant detail,64
+A318,A318 112,passenger,commercial variant without freighter designation,64
+B738,737NG 8KB/W BBJ,unknown,business / VIP variant,64
+PISI,-,unknown,no variant detail,64
+PUMA,-,unknown,no variant detail,64
+B735,737 529,passenger,boeing: suffix '-',63
 B788,787 8 BBJ,unknown,business / VIP variant,63
+G70,-,unknown,no variant detail,63
 L410,L-410 UVP-E6,passenger,commercial variant without freighter designation,63
 STCH,-,unknown,no variant detail,63
-G70,-,unknown,no variant detail,63
-B735,737 529,passenger,boeing: suffix '-',63
-TRF1,-,unknown,no variant detail,62
 A345,A340 541,passenger,commercial variant without freighter designation,62
 B752,757 28A,passenger,boeing: suffix '-',62
 B762,767 2DXER,passenger,boeing: suffix 'ER',62
+TRF1,-,unknown,no variant detail,62
 B739,737NG 9FG/W BBJ,unknown,business / VIP variant,61
 O1,-,unknown,no variant detail,61
-B733,737 341,passenger,boeing: suffix '-',60
 B462,146 200QC,passenger,commercial variant without freighter designation,60
-LYNX,-,unknown,no variant detail,60
+B733,737 341,passenger,boeing: suffix '-',60
 B744,747 433BDSF,cargo,boeing: freighter suffix 'BDSF',60
 BW6T,-,unknown,no variant detail,60
-DC3S,-,unknown,no variant detail,59
-PA12,-,unknown,no variant detail,59
-GC1,-,unknown,no variant detail,59
-SC7,-,unknown,no variant detail,59
+LYNX,-,unknown,no variant detail,60
 B735,737 5L9,passenger,boeing: suffix '-',59
+DC3S,-,unknown,no variant detail,59
+GC1,-,unknown,no variant detail,59
+PA12,-,unknown,no variant detail,59
+SC7,-,unknown,no variant detail,59
 JPRO,-,unknown,no variant detail,58
 B738,737NG 8CTBCF/W,cargo,boeing: freighter suffix 'BCF',57
 BE80,-,unknown,no variant detail,57
 MUS2,-,unknown,no variant detail,57
-B744,747 4F6,passenger,boeing: suffix '-',56
 B733,737 33A,passenger,boeing: suffix '-',56
+B744,747 4F6,passenger,boeing: suffix '-',56
 T204,Tu-214 SR,passenger,commercial variant without freighter designation,56
 SSTL,-,unknown,no variant detail,55
 A320,ACJ320 232XSL,passenger,commercial variant without freighter designation,54
-DR10,-,unknown,no variant detail,54
 B734,737 4Z6,passenger,boeing: suffix '-',54
+DR10,-,unknown,no variant detail,54
 RANG,-,unknown,no variant detail,53
 S2P,-,unknown,no variant detail,53
-RJ85,-,unknown,no variant detail,52
 E737,-,unknown,no variant detail,52
-SW3,Merlin IIIC,passenger,commercial variant without freighter designation,52
 E75L,EMB-170 STD,passenger,commercial variant without freighter designation,52
-F5,-,unknown,no variant detail,51
+RJ85,-,unknown,no variant detail,52
+SW3,Merlin IIIC,passenger,commercial variant without freighter designation,52
+ACRO,-,unknown,no variant detail,51
 B47T,-,unknown,no variant detail,51
 B748,747 8KB BBJ,unknown,business / VIP variant,51
-ACRO,-,unknown,no variant detail,51
+F5,-,unknown,no variant detail,51
 SH33,SD3-30 100,passenger,commercial variant without freighter designation,51
 A332,A330 243MRTT,passenger,commercial variant without freighter designation,50
 B773,777 35RER,passenger,boeing: suffix 'ER',50
-T28,-,unknown,no variant detail,50
-MM24,-,unknown,no variant detail,50
 BCS1,A220-100(ACJ),unknown,business / VIP variant,50
+MM24,-,unknown,no variant detail,50
+T28,-,unknown,no variant detail,50
 B737,737-7H4,passenger,boeing: suffix '-',49
 M5,-,unknown,no variant detail,49
-TL20,-,unknown,no variant detail,48
-MD87,-,unknown,no variant detail,48
 EXEC,-,unknown,no variant detail,48
+MD87,-,unknown,no variant detail,48
+TL20,-,unknown,no variant detail,48
 B735,737 5H6,passenger,boeing: suffix '-',47
 B748,747 8Z5 BBJ,unknown,business / VIP variant,47
 B77L,777 200LR,passenger,boeing: suffix 'LR',47
@@ -1804,48 +1804,48 @@ CA25,-,unknown,no variant detail,47
 BL17,-,unknown,no variant detail,46
 F50,F50 F,cargo,freighter designation /^F50 F$/,45
 FFLO,-,unknown,no variant detail,45
-YK55,-,unknown,no variant detail,44
-H53S,-,unknown,no variant detail,44
 B764,767 4FSER,passenger,boeing: suffix 'ER',44
-SUBA,-,unknown,no variant detail,43
-L410,L-410 UVP-E,passenger,commercial variant without freighter designation,43
+H53S,-,unknown,no variant detail,44
+YK55,-,unknown,no variant detail,44
 L410,L-410 E20D,passenger,commercial variant without freighter designation,43
+L410,L-410 UVP-E,passenger,commercial variant without freighter designation,43
 MA5,-,unknown,no variant detail,43
-MD11,MD-11 ERF,cargo,freighter designation /^MD-11 (ER)?F$|^MD-11 F$/,42
+SUBA,-,unknown,no variant detail,43
 BR61,-,unknown,no variant detail,42
+MD11,MD-11 ERF,cargo,freighter designation /^MD-11 (ER)?F$/,42
 B748,747 8H0 BBJ,unknown,business / VIP variant,41
 PINO,-,unknown,no variant detail,41
-V22,-,unknown,no variant detail,40
+AT45,ATR 42 500MP,passenger,commercial variant without freighter designation,40
 B38M,737MAX 8 BBJ,unknown,business / VIP variant,40
 B732,737 247,passenger,boeing: suffix '-',40
 SF25,-,unknown,no variant detail,40
-AT45,ATR 42 500MP,passenger,commercial variant without freighter designation,40
-SW3,Merlin IIIA,passenger,commercial variant without freighter designation,39
-B737,737NG 79L BBJ,unknown,business / VIP variant,39
+V22,-,unknown,no variant detail,40
 A332,A330 243 ACJ,unknown,business / VIP variant,39
-EVOP,-,unknown,no variant detail,39
+B737,737NG 79L BBJ,unknown,business / VIP variant,39
 B738,737NG 8EX BBJ2,passenger,boeing: suffix 'BBJ2',39
 CH75,-,unknown,no variant detail,39
+EVOP,-,unknown,no variant detail,39
+SW3,Merlin IIIA,passenger,commercial variant without freighter designation,39
 B737,737NG 7ZH/W BBJ,unknown,business / VIP variant,38
 B738,737NG 8EC BBJ2,passenger,boeing: suffix 'BBJ2',38
 B738,737NG 8Z6/W,passenger,boeing: suffix '-',38
 AFOX,-,unknown,no variant detail,37
-MA60,-,unknown,no variant detail,37
-CRJ9,Challenger 350,passenger,commercial variant without freighter designation,37
-B77W,777 3U8ER,passenger,boeing: suffix 'ER',37
 B744,747 4P8,passenger,boeing: suffix '-',37
+B77W,777 3U8ER,passenger,boeing: suffix 'ER',37
+CRJ9,Challenger 350,passenger,commercial variant without freighter designation,37
 FBA2,-,unknown,no variant detail,37
-RALL,-,unknown,no variant detail,36
-COL3,-,unknown,no variant detail,36
+MA60,-,unknown,no variant detail,37
 B737,737NG 74Q/W BBJ,unknown,business / VIP variant,36
+COL3,-,unknown,no variant detail,36
 PIAT,-,unknown,no variant detail,36
+RALL,-,unknown,no variant detail,36
 D6SL,-,unknown,no variant detail,35
 TARR,-,unknown,no variant detail,35
-DC10,DC-10 KDC-10,passenger,commercial variant without freighter designation,34
-MD82,-,unknown,no variant detail,34
 AN26,An-26,unknown,utility aircraft,34
 B735,737 53C,passenger,boeing: suffix '-',34
+DC10,DC-10 KDC-10,passenger,commercial variant without freighter designation,34
 HUNT,-,unknown,no variant detail,34
+MD82,-,unknown,no variant detail,34
 B742,747 21AC SCD,passenger,boeing: suffix 'CSCD',33
 CH60,-,unknown,no variant detail,33
 G44,-,unknown,no variant detail,33
@@ -1853,338 +1853,338 @@ L4,-,unknown,no variant detail,33
 A319,ACJ319 133LR,passenger,commercial variant without freighter designation,32
 ACAM,-,unknown,no variant detail,32
 B772,777-232,passenger,boeing: suffix '-',32
-SLH4,-,unknown,no variant detail,32
 BT36,-,unknown,no variant detail,32
 DH8A,CC-142,passenger,commercial variant without freighter designation,32
+SLH4,-,unknown,no variant detail,32
 B772,777 268ER,passenger,boeing: suffix 'ER',31
-MD83,-,unknown,no variant detail,30
 CRJ2,CL850,passenger,commercial variant without freighter designation,30
+MD83,-,unknown,no variant detail,30
 VTRA,-,unknown,no variant detail,30
-B752,757 256,passenger,boeing: suffix '-',29
-AN26,AN-26,passenger,commercial variant without freighter designation,29
-B752,757 225,passenger,boeing: suffix '-',29
-RS21,-,unknown,no variant detail,29
-E135,Legacy 650,passenger,commercial variant without freighter designation,29
-B735,737 5Y0,passenger,boeing: suffix '-',29
 A342,A340 213,passenger,commercial variant without freighter designation,29
-B738,737NG 8U3/W BBJ,unknown,business / VIP variant,28
+AN26,AN-26,passenger,commercial variant without freighter designation,29
+B735,737 5Y0,passenger,boeing: suffix '-',29
+B752,757 225,passenger,boeing: suffix '-',29
+B752,757 256,passenger,boeing: suffix '-',29
+E135,Legacy 650,passenger,commercial variant without freighter designation,29
+RS21,-,unknown,no variant detail,29
+A342,A340 212,passenger,commercial variant without freighter designation,28
 AA1,-,unknown,no variant detail,28
 B734,737 448,passenger,boeing: suffix '-',28
-T204,Tu-214 VPU,passenger,commercial variant without freighter designation,28
-A342,A340 212,passenger,commercial variant without freighter designation,28
-B737,737NG 9BQ BBJ3,passenger,boeing: suffix 'BBJ3',28
+B737,737NG 9BQ BBJ3,unknown,type code and variant disagree: Boeing series 737-7 vs 9,28
+B738,737NG 8U3/W BBJ,unknown,business / VIP variant,28
 FA24,-,unknown,no variant detail,28
+T204,Tu-214 VPU,passenger,commercial variant without freighter designation,28
+B743,747 329F,cargo,boeing: freighter suffix 'F',27
 IL62,IL-62 M,passenger,commercial variant without freighter designation,27
 LNCE,-,unknown,no variant detail,27
 PTSS,-,unknown,no variant detail,27
-WHK2,-,unknown,no variant detail,27
 SVNH,-,unknown,no variant detail,27
-B743,747 329F,cargo,boeing: freighter suffix 'F',27
-BE4W,-,unknown,no variant detail,26
-SB39,-,unknown,no variant detail,26
-RBEL,-,unknown,no variant detail,26
+WHK2,-,unknown,no variant detail,27
 B74S,747 SPB5,unknown,boeing: unparsed token,26
+BE4W,-,unknown,no variant detail,26
+RBEL,-,unknown,no variant detail,26
+SB39,-,unknown,no variant detail,26
+AT43,-,unknown,no variant detail,25
 B762,767 24QER,passenger,boeing: suffix 'ER',25
 E35L,Diamond Star DA40D,passenger,commercial variant without freighter designation,25
-AT43,-,unknown,no variant detail,25
-C188,-,unknown,no variant detail,24
-PIPA,-,unknown,no variant detail,24
 A306,A300 B4-603,passenger,commercial variant without freighter designation,24
 A30B,-,unknown,no variant detail,24
 C175,-,unknown,no variant detail,24
-FAET,-,unknown,no variant detail,23
+C188,-,unknown,no variant detail,24
+PIPA,-,unknown,no variant detail,24
+ACAR,-,unknown,no variant detail,23
+B742,747 281F,cargo,boeing: freighter suffix 'F',23
+B762,767 204ER,passenger,boeing: suffix 'ER',23
 E2,-,unknown,no variant detail,23
+FAET,-,unknown,no variant detail,23
+MD52,-,unknown,no variant detail,23
 RJ85,RJ85,passenger,commercial variant without freighter designation,23
 UF10,-,unknown,no variant detail,23
-B762,767 204ER,passenger,boeing: suffix 'ER',23
-B742,747 281F,cargo,boeing: freighter suffix 'F',23
-MD52,-,unknown,no variant detail,23
-ACAR,-,unknown,no variant detail,23
-STOR,-,unknown,no variant detail,22
-M18,-,unknown,no variant detail,22
-GAZL,-,unknown,no variant detail,22
 C190,-,unknown,no variant detail,22
+GAZL,-,unknown,no variant detail,22
+M18,-,unknown,no variant detail,22
 MP02,-,unknown,no variant detail,22
+STOR,-,unknown,no variant detail,22
 T154,Tu-154 M,passenger,commercial variant without freighter designation,22
+B739,737 4H6SF,unknown,type code and variant disagree: Boeing series 737-9 vs 4,21
 CD2,-,unknown,no variant detail,21
-JUN1,-,unknown,no variant detail,21
-SEAW,-,unknown,no variant detail,21
-B739,737 4H6SF,cargo,boeing: freighter suffix 'SF',21
-ZEPH,-,unknown,no variant detail,21
 EAGX,-,unknown,no variant detail,21
 JABI,-,unknown,no variant detail,21
-BD4,-,unknown,no variant detail,20
+JUN1,-,unknown,no variant detail,21
+SEAW,-,unknown,no variant detail,21
+ZEPH,-,unknown,no variant detail,21
+A320,ACJ320 232X,passenger,commercial variant without freighter designation,20
+A346,A340ACJ 642X,passenger,commercial variant without freighter designation,20
 B733,737 319SF,cargo,boeing: freighter suffix 'SF',20
 B738,737NG 8FB/W,passenger,boeing: suffix '-',20
-A320,ACJ320 232X,passenger,commercial variant without freighter designation,20
-T18,-,unknown,no variant detail,20
-A346,A340ACJ 642X,passenger,commercial variant without freighter designation,20
+BD4,-,unknown,no variant detail,20
 DFLY,-,unknown,no variant detail,20
-EN28,-,unknown,no variant detail,19
+T18,-,unknown,no variant detail,20
 A342,A340 211,passenger,commercial variant without freighter designation,19
+B732,737 2Q8,passenger,boeing: suffix '-',19
+EN28,-,unknown,no variant detail,19
 EUPA,-,unknown,no variant detail,19
 P3,-,unknown,no variant detail,19
-B732,737 2Q8,passenger,boeing: suffix '-',19
 B733,737 33R,passenger,boeing: suffix '-',18
 BUSH,-,unknown,no variant detail,18
-L410,L-410 UVP-E20G,passenger,commercial variant without freighter designation,18
 EDGE,-,unknown,no variant detail,18
+L410,L-410 UVP-E20G,passenger,commercial variant without freighter designation,18
 SBR1,-,unknown,no variant detail,18
-PAY3,-,unknown,no variant detail,17
-B744,747 4B5,passenger,boeing: suffix '-',17
-T34T,-,unknown,no variant detail,17
-CRJ7,Challenger 870,passenger,commercial variant without freighter designation,17
 A321,ACJ321 211SL,passenger,commercial variant without freighter designation,17
-L8,-,unknown,no variant detail,16
+B744,747 4B5,passenger,boeing: suffix '-',17
+CRJ7,Challenger 870,passenger,commercial variant without freighter designation,17
+PAY3,-,unknown,no variant detail,17
+T34T,-,unknown,no variant detail,17
+A332,A330 202MRTT,passenger,commercial variant without freighter designation,16
+B703,707 366C,passenger,commercial variant without freighter designation,16
+B74S,747 SPJ6,unknown,boeing: unparsed token,16
 JS41,Jetstream 41 -01,passenger,commercial variant without freighter designation,16
 L12,-,unknown,no variant detail,16
-A332,A330 202MRTT,passenger,commercial variant without freighter designation,16
-B74S,747 SPJ6,unknown,boeing: unparsed token,16
-B703,707 366C,passenger,commercial variant without freighter designation,16
-TIGR,-,unknown,no variant detail,16
+L8,-,unknown,no variant detail,16
 LN27,-,unknown,no variant detail,16
-MF17,-,unknown,no variant detail,15
-PAY2,-,unknown,no variant detail,15
-B734,737 42R,passenger,boeing: suffix '-',15
-M22,-,unknown,no variant detail,15
-B744,747 428,passenger,boeing: suffix '-',15
+TIGR,-,unknown,no variant detail,16
+ALIG,-,unknown,no variant detail,15
 AT44,-,unknown,no variant detail,15
 B733,737 36Q,passenger,boeing: suffix '-',15
-PUP,-,unknown,no variant detail,15
-ALIG,-,unknown,no variant detail,15
+B734,737 42R,passenger,boeing: suffix '-',15
+B744,747 428,passenger,boeing: suffix '-',15
 COZY,-,unknown,no variant detail,15
-MAVR,-,unknown,no variant detail,15
-TRAL,-,unknown,no variant detail,15
 E314,-,unknown,no variant detail,15
+M22,-,unknown,no variant detail,15
+MAVR,-,unknown,no variant detail,15
+MF17,-,unknown,no variant detail,15
+PAY2,-,unknown,no variant detail,15
+PUP,-,unknown,no variant detail,15
 SREY,-,unknown,no variant detail,15
-T204,Tu-204 100V,passenger,commercial variant without freighter designation,14
-S10S,-,unknown,no variant detail,14
+TRAL,-,unknown,no variant detail,15
+AN72,-,unknown,no variant detail,14
+BE50,-,unknown,no variant detail,14
+FOX,-,unknown,no variant detail,14
+GLF2,-,unknown,no variant detail,14
 JAB2,-,unknown,no variant detail,14
 P40,-,unknown,no variant detail,14
 RF10,-,unknown,no variant detail,14
+S10S,-,unknown,no variant detail,14
+T204,Tu-204 100V,passenger,commercial variant without freighter designation,14
 U15,-,unknown,no variant detail,14
 YK42,Yak-42 D,passenger,commercial variant without freighter designation,14
-FOX,-,unknown,no variant detail,14
-GLF2,-,unknown,no variant detail,14
-AN72,-,unknown,no variant detail,14
-BE50,-,unknown,no variant detail,14
-E135,Legacy 600,passenger,commercial variant without freighter designation,13
+B37M,737MAX 7,passenger,boeing: 737 MAX (no freighter variant),13
+B38M,737-9 MAX,unknown,type code and variant disagree: Boeing series 737-8 vs 9,13
 B737,737NG 7HI BBJ,unknown,business / VIP variant,13
-B37M,737MAX 7,passenger,boeing: suffix '-',13
-B38M,737-9 MAX,unknown,type code and variant disagree,13
+E135,Legacy 600,passenger,commercial variant without freighter designation,13
+G21,-,unknown,no variant detail,13
 GYRO,-,unknown,no variant detail,13
 LNP4,-,unknown,no variant detail,13
-G21,-,unknown,no variant detail,13
-T33,-,unknown,no variant detail,12
-S450,-,unknown,no variant detail,12
+B744,747 468,passenger,boeing: suffix '-',12
 B752,757 23A,passenger,boeing: suffix '-',12
 M345,-,unknown,no variant detail,12
-B744,747 468,passenger,boeing: suffix '-',12
-E145,ERJ-145 C-99A,passenger,commercial variant without freighter designation,11
-B737,737NG 700/W BBJ,unknown,business / VIP variant,11
-RV3,-,unknown,no variant detail,11
-NIMB,-,unknown,no variant detail,11
+S450,-,unknown,no variant detail,12
+T33,-,unknown,no variant detail,12
 B703,707 3L6C,passenger,commercial variant without freighter designation,11
-WACF,-,unknown,no variant detail,11
 B733,737 329,passenger,boeing: suffix '-',11
+B737,737NG 700/W BBJ,unknown,business / VIP variant,11
+E145,ERJ-145 C-99A,passenger,commercial variant without freighter designation,11
+NIMB,-,unknown,no variant detail,11
+RV3,-,unknown,no variant detail,11
+WACF,-,unknown,no variant detail,11
+AVTR,-,unknown,no variant detail,10
 B733,737 306SF,cargo,boeing: freighter suffix 'SF',10
+BTB2,-,unknown,no variant detail,10
+CH65,-,unknown,no variant detail,10
+CP10,-,unknown,no variant detail,10
 CRJ9,Global 6500,passenger,commercial variant without freighter designation,10
 DC10,DC-10 30F,cargo,freighter designation /^DC-10 \d\dF$/,10
-L410,L-410 UVP-E3,passenger,commercial variant without freighter designation,10
-AVTR,-,unknown,no variant detail,10
-CH65,-,unknown,no variant detail,10
 KP5,-,unknown,no variant detail,10
+L410,L-410 UVP-E3,passenger,commercial variant without freighter designation,10
 OSCR,-,unknown,no variant detail,10
-BTB2,-,unknown,no variant detail,10
-CP10,-,unknown,no variant detail,10
+B712,-,unknown,no variant detail,9
+B752,757 223/W,passenger,boeing: suffix '-',9
 B763,767 338ER,passenger,boeing: suffix 'ER',9
-RC3,-,unknown,no variant detail,9
-SF34,340 AEW,passenger,commercial variant without freighter designation,9
+BEAR,-,unknown,no variant detail,9
 DHC6,412 EPX,passenger,commercial variant without freighter designation,9
-LK17,-,unknown,no variant detail,9
+DO27,-,unknown,no variant detail,9
 HROC,-,unknown,no variant detail,9
 IL76,IL-76 MF,cargo,freighter designation /^IL-76 /,9
-UF13,-,unknown,no variant detail,9
-B712,-,unknown,no variant detail,9
-DO27,-,unknown,no variant detail,9
+LK17,-,unknown,no variant detail,9
 PETR,-,unknown,no variant detail,9
-BEAR,-,unknown,no variant detail,9
-B752,757 223/W,passenger,boeing: suffix '-',9
-RV9A,-,unknown,no variant detail,8
-SASP,-,unknown,no variant detail,8
-VTUR,-,unknown,no variant detail,8
-FA62,-,unknown,no variant detail,8
-B763,767 32KER,passenger,boeing: suffix 'ER',8
-B752,757 200,passenger,boeing: suffix '-',8
-IR23,-,unknown,no variant detail,8
+RC3,-,unknown,no variant detail,9
+SF34,340 AEW,passenger,commercial variant without freighter designation,9
+UF13,-,unknown,no variant detail,9
+A333,A330 343X(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,8
 B733,737 3B3QC,passenger,boeing: suffix 'QC',8
 B734,737 45RBDSF,cargo,boeing: freighter suffix 'BDSF',8
+B752,757 200,passenger,boeing: suffix '-',8
+B763,767 32KER,passenger,boeing: suffix 'ER',8
+CH2T,-,unknown,no variant detail,8
+CORS,-,unknown,no variant detail,8
+CRJ9,Global 5500,passenger,commercial variant without freighter designation,8
+DG1T,-,unknown,no variant detail,8
+FA62,-,unknown,no variant detail,8
+IR23,-,unknown,no variant detail,8
 MOR2,-,unknown,no variant detail,8
 PL2,-,unknown,no variant detail,8
-DG1T,-,unknown,no variant detail,8
-CRJ9,Global 5500,passenger,commercial variant without freighter designation,8
-CORS,-,unknown,no variant detail,8
+RV9A,-,unknown,no variant detail,8
+SASP,-,unknown,no variant detail,8
 TWR,-,unknown,no variant detail,8
-CH2T,-,unknown,no variant detail,8
-A333,A330 343X(P2F),cargo,freighter designation /\(P2F\)|\(F\)/,8
-G202,-,unknown,no variant detail,7
-CC19,-,unknown,no variant detail,7
-B733,737 3U8SF,cargo,boeing: freighter suffix 'SF',7
-E3TF,-,unknown,no variant detail,7
-KA27,-,unknown,no variant detail,7
-MIR2,-,unknown,no variant detail,7
-PA11,-,unknown,no variant detail,7
-BIPL,-,unknown,no variant detail,7
-B36T,-,unknown,no variant detail,7
+VTUR,-,unknown,no variant detail,8
 A32P,-,unknown,no variant detail,7
-M346,-,unknown,no variant detail,7
 AS31,-,unknown,no variant detail,7
+B36T,-,unknown,no variant detail,7
+B733,737 3U8SF,cargo,boeing: freighter suffix 'SF',7
+BIPL,-,unknown,no variant detail,7
+CC19,-,unknown,no variant detail,7
+E3TF,-,unknown,no variant detail,7
+G202,-,unknown,no variant detail,7
+KA27,-,unknown,no variant detail,7
+M346,-,unknown,no variant detail,7
+MIR2,-,unknown,no variant detail,7
 MXS,-,unknown,no variant detail,7
-B737,737NG 7ZF/W BBJ,unknown,business / VIP variant,6
-B763,767 33PERBCF,cargo,boeing: freighter suffix 'ERBCF',6
-VENT,-,unknown,no variant detail,6
-CH64,-,unknown,no variant detail,6
-MD60,-,unknown,no variant detail,6
-B733,737 33ASF/W,cargo,boeing: freighter suffix 'SF',6
-AN72,An-74 TK-300D,passenger,commercial variant without freighter designation,6
+PA11,-,unknown,no variant detail,7
 A342,A340 213X,passenger,commercial variant without freighter designation,6
+AN72,An-74 TK-300D,passenger,commercial variant without freighter designation,6
+B733,737 33ASF/W,cargo,boeing: freighter suffix 'SF',6
+B737,737NG 7ZF/W BBJ,unknown,business / VIP variant,6
+B738,737 4B7,unknown,type code and variant disagree: Boeing series 737-8 vs 4,6
+B763,767 33PERBCF,cargo,boeing: freighter suffix 'ERBCF',6
 BCS3,A220-100,passenger,commercial variant without freighter designation,6
-SH09,-,unknown,no variant detail,6
+CH64,-,unknown,no variant detail,6
 GOLF,-,unknown,no variant detail,6
-B738,737 4B7,passenger,boeing: suffix '-',6
-J2,-,unknown,no variant detail,5
-PROC,-,unknown,no variant detail,5
-XA42,-,unknown,no variant detail,5
-GA10,-,unknown,no variant detail,5
-T204,Tu-214 R,passenger,commercial variant without freighter designation,5
-P68T,-,unknown,no variant detail,5
+MD60,-,unknown,no variant detail,6
+SH09,-,unknown,no variant detail,6
+VENT,-,unknown,no variant detail,6
+A223,-,unknown,no variant detail,5
+ARCP,-,unknown,no variant detail,5
+AT76,ATR 42 300,passenger,commercial variant without freighter designation,5
+AUJ4,-,unknown,no variant detail,5
+B462,146 CC.3,passenger,commercial variant without freighter designation,5
+B738,737NG 8EV/W BBJ2,passenger,boeing: suffix 'BBJ2',5
 D140,-,unknown,no variant detail,5
 DC93,DC-9 33CF,cargo,freighter designation /^DC-9 \d\d[A-Z]*C?F$/,5
-AUJ4,-,unknown,no variant detail,5
-B738,737NG 8EV/W BBJ2,passenger,boeing: suffix 'BBJ2',5
-B462,146 CC.3,passenger,commercial variant without freighter designation,5
-ARCP,-,unknown,no variant detail,5
-RFAL,-,unknown,no variant detail,5
 F70,F70 ER,passenger,commercial variant without freighter designation,5
-A223,-,unknown,no variant detail,5
-AT76,ATR 42 300,passenger,commercial variant without freighter designation,5
+GA10,-,unknown,no variant detail,5
 GLIM,-,unknown,no variant detail,5
+J2,-,unknown,no variant detail,5
 M700,-,unknown,no variant detail,5
-F15,-,unknown,no variant detail,4
-E145,ERJ-145EU,passenger,commercial variant without freighter designation,4
-S211,-,unknown,no variant detail,4
-S1,-,unknown,no variant detail,4
-B738,737NG 8HXSF/W,cargo,boeing: freighter suffix 'SF',4
-E35L,Legacy 600 VC-99B,passenger,commercial variant without freighter designation,4
-YK54,-,unknown,no variant detail,4
-B752,757-225,passenger,boeing: suffix '-',4
+P68T,-,unknown,no variant detail,5
+PROC,-,unknown,no variant detail,5
+RFAL,-,unknown,no variant detail,5
+T204,Tu-214 R,passenger,commercial variant without freighter designation,5
+XA42,-,unknown,no variant detail,5
 A332,A330 941N,passenger,commercial variant without freighter designation,4
-G250,-,unknown,no variant detail,4
-H140,-,unknown,no variant detail,4
+B738,737NG 8HXSF/W,cargo,boeing: freighter suffix 'SF',4
+B752,757-225,passenger,boeing: suffix '-',4
 BOLT,-,unknown,no variant detail,4
 DUOD,-,unknown,no variant detail,4
+E145,ERJ-145EU,passenger,commercial variant without freighter designation,4
+E35L,Legacy 600 VC-99B,passenger,commercial variant without freighter designation,4
+F15,-,unknown,no variant detail,4
+G250,-,unknown,no variant detail,4
+H140,-,unknown,no variant detail,4
+S1,-,unknown,no variant detail,4
+S211,-,unknown,no variant detail,4
 SX30,-,unknown,no variant detail,4
-DG80,-,unknown,no variant detail,3
-MITE,-,unknown,no variant detail,3
-CTAH,-,unknown,no variant detail,3
+YK54,-,unknown,no variant detail,4
+A178,-,unknown,no variant detail,3
+A306,A300 B4-622R,passenger,commercial variant without freighter designation,3
+ACSR,-,unknown,no variant detail,3
 ALH,-,unknown,no variant detail,3
-G109,-,unknown,no variant detail,3
+B712,717 2K9,passenger,boeing: suffix '-',3
+B733,737 33VQC,passenger,boeing: suffix 'QC',3
 B763,767 360ERBDSF/W,cargo,boeing: freighter suffix 'ERBDSF',3
+B789,747 409F,unknown,type code and variant disagree: Boeing 787 vs 747,3
 C120,-,unknown,no variant detail,3
 CONI,-,unknown,no variant detail,3
-B733,737 33VQC,passenger,boeing: suffix 'QC',3
-TUCR,-,unknown,no variant detail,3
+CTAH,-,unknown,no variant detail,3
 DAKH,-,unknown,no variant detail,3
-ACSR,-,unknown,no variant detail,3
-YK50,-,unknown,no variant detail,3
-HR20,-,unknown,no variant detail,3
+DG80,-,unknown,no variant detail,3
+E135,ERJ-135 VC-99C,passenger,commercial variant without freighter designation,3
 E145,ERJ-145 VC-99A,passenger,commercial variant without freighter designation,3
-PA25,-,unknown,no variant detail,3
-B789,747 409F,unknown,type code and variant disagree,3
-B712,717 2K9,passenger,commercial variant without freighter designation,3
-UH1Y,-,unknown,no variant detail,3
+G109,-,unknown,no variant detail,3
+HR20,-,unknown,no variant detail,3
 IL76,IL-76 MD,cargo,freighter designation /^IL-76 /,3
+MITE,-,unknown,no variant detail,3
+PA25,-,unknown,no variant detail,3
 RLU1,-,unknown,no variant detail,3
 SA02,-,unknown,no variant detail,3
-A178,-,unknown,no variant detail,3
-T204,Tu-214 PU,passenger,commercial variant without freighter designation,3
 SIDE,-,unknown,no variant detail,3
-A306,A300 B4-622R,passenger,commercial variant without freighter designation,3
-E135,ERJ-135 VC-99C,passenger,commercial variant without freighter designation,3
-P8 ?,-,unknown,no variant detail,2
-B214,-,unknown,no variant detail,2
+T204,Tu-214 PU,passenger,commercial variant without freighter designation,3
+TUCR,-,unknown,no variant detail,3
+UH1Y,-,unknown,no variant detail,3
+YK50,-,unknown,no variant detail,3
 A124,An-124,passenger,commercial variant without freighter designation,2
-B77L,777-2DZLR,passenger,boeing: suffix 'LR',2
 A33P,-,unknown,no variant detail,2
+AN32,An-32 P,passenger,commercial variant without freighter designation,2
+AS29,-,unknown,no variant detail,2
+B214,-,unknown,no variant detail,2
+B734,737 4B6,passenger,boeing: suffix '-',2
+B735,737 59D,passenger,boeing: suffix '-',2
+B737,500B,passenger,commercial variant without freighter designation,2
 B738,737-809,passenger,boeing: suffix '-',2
-FLSS,-,unknown,no variant detail,2
-VTOR,-,unknown,no variant detail,2
-KP2,-,unknown,no variant detail,2
+B77L,777-2DZLR,passenger,boeing: suffix 'LR',2
 BR60,-,unknown,no variant detail,2
-PITE,-,unknown,no variant detail,2
-T204,Tu-204,passenger,commercial variant without freighter designation,2
+C500,-,unknown,no variant detail,2
+CAMP,-,unknown,no variant detail,2
+CB1,-,unknown,no variant detail,2
+CL41,-,unknown,no variant detail,2
+D228,Do 228 200,passenger,commercial variant without freighter designation,2
+DV1,-,unknown,no variant detail,2
+E145,ERJ-145 MR,passenger,commercial variant without freighter designation,2
+ELA7,-,unknown,no variant detail,2
 F27,-,unknown,no variant detail,2
-T204,Tu-214 PU-SBUS,passenger,commercial variant without freighter designation,2
+FLSS,-,unknown,no variant detail,2
+G73T,-,unknown,no variant detail,2
+IL76,IL-76 T,cargo,freighter designation /^IL-76 /,2
+KP2,-,unknown,no variant detail,2
 M10,-,unknown,no variant detail,2
 MR35,-,unknown,no variant detail,2
-G73T,-,unknown,no variant detail,2
-DV1,-,unknown,no variant detail,2
-SA30,-,unknown,no variant detail,2
-B734,737 4B6,passenger,boeing: suffix '-',2
-ELA7,-,unknown,no variant detail,2
-D228,Do 228 200,passenger,commercial variant without freighter designation,2
-TAMP,-,unknown,no variant detail,2
-CAMP,-,unknown,no variant detail,2
-WIRR,-,unknown,no variant detail,2
-B735,737 59D,passenger,boeing: suffix '-',2
-E145,ERJ-145 MR,passenger,commercial variant without freighter designation,2
-ZA6,-,unknown,no variant detail,2
-TFUN,-,unknown,no variant detail,2
-CB1,-,unknown,no variant detail,2
-IL76,IL-76 T,cargo,freighter designation /^IL-76 /,2
-AS29,-,unknown,no variant detail,2
-VO10,-,unknown,no variant detail,2
-B737,500B,passenger,commercial variant without freighter designation,2
-C500,-,unknown,no variant detail,2
-AN32,An-32 P,passenger,commercial variant without freighter designation,2
-SUCO,-,unknown,no variant detail,2
+P8 ?,-,unknown,no variant detail,2
+PITE,-,unknown,no variant detail,2
 PK20,-,unknown,no variant detail,2
-STRK,-,unknown,no variant detail,2
-CL41,-,unknown,no variant detail,2
+SA30,-,unknown,no variant detail,2
 SS2,-,unknown,no variant detail,2
-ESCP,-,unknown,no variant detail,1
+STRK,-,unknown,no variant detail,2
+SUCO,-,unknown,no variant detail,2
+T204,Tu-204,passenger,commercial variant without freighter designation,2
+T204,Tu-214 PU-SBUS,passenger,commercial variant without freighter designation,2
+TAMP,-,unknown,no variant detail,2
+TFUN,-,unknown,no variant detail,2
+VO10,-,unknown,no variant detail,2
+VTOR,-,unknown,no variant detail,2
+WIRR,-,unknown,no variant detail,2
+ZA6,-,unknown,no variant detail,2
+A319,ACJ319 115XSL,passenger,commercial variant without freighter designation,1
 A319,Learjet 35 A,passenger,commercial variant without freighter designation,1
-SERV,-,unknown,no variant detail,1
-B762,767 2J6ER,passenger,boeing: suffix 'ER',1
-HIGH,-,unknown,no variant detail,1
-B762,T-38A Talon,passenger,commercial variant without freighter designation,1
-B742,VC-25A,passenger,commercial variant without freighter designation,1
-JS32,Jetstream Series 3200,passenger,commercial variant without freighter designation,1
-MCR4,-,unknown,no variant detail,1
-JS32,Jetstream 32-06,passenger,commercial variant without freighter designation,1
-B733,737 3K2,passenger,boeing: suffix '-',1
-SF27,-,unknown,no variant detail,1
-B748,747 8ZV BBJ,unknown,business / VIP variant,1
-MA60,MA600,passenger,commercial variant without freighter designation,1
-NNJA,-,unknown,no variant detail,1
-T51,-,unknown,no variant detail,1
-B763,767-35D,passenger,boeing: suffix '-',1
-CULP,-,unknown,no variant detail,1
+AN26,-,unknown,no variant detail,1
 B430,-,unknown,no variant detail,1
-DC10,KC-10A Extender,passenger,commercial variant without freighter designation,1
+B732,737 230F,cargo,boeing: freighter suffix 'F',1
+B733,737 3K2,passenger,boeing: suffix '-',1
+B737,737NG 7HF/W BBJ,unknown,business / VIP variant,1
 B738,737-800A,passenger,boeing: suffix 'A',1
-S61,-,unknown,no variant detail,1
-Y12,-,unknown,no variant detail,1
+B742,VC-25A,passenger,commercial variant without freighter designation,1
+B748,747 8ZV BBJ,unknown,business / VIP variant,1
+B762,767 2J6ER,passenger,boeing: suffix 'ER',1
+B762,T-38A Talon,passenger,commercial variant without freighter designation,1
+B763,767-35D,passenger,boeing: suffix '-',1
 C135,-,unknown,no variant detail,1
-SPIT,-,unknown,no variant detail,1
-VEZE,-,unknown,no variant detail,1
+CULP,-,unknown,no variant detail,1
+DC10,KC-10A Extender,passenger,commercial variant without freighter designation,1
+E145,ERJ-145MP,passenger,commercial variant without freighter designation,1
+E190,ERJ 190-100 LR EMBRAER 190,passenger,commercial variant without freighter designation,1
+ESCP,-,unknown,no variant detail,1
+HIGH,-,unknown,no variant detail,1
+HURK,-,unknown,no variant detail,1
+JS32,Jetstream 32-06,passenger,commercial variant without freighter designation,1
+JS32,Jetstream Series 3200,passenger,commercial variant without freighter designation,1
+MA60,MA600,passenger,commercial variant without freighter designation,1
+MCR4,-,unknown,no variant detail,1
+NNJA,-,unknown,no variant detail,1
 PNR3,-,unknown,no variant detail,1
 RODS,-,unknown,no variant detail,1
-E190,ERJ 190-100 LR EMBRAER 190,passenger,commercial variant without freighter designation,1
-A319,ACJ319 115XSL,passenger,commercial variant without freighter designation,1
-B737,737NG 7HF/W BBJ,unknown,business / VIP variant,1
+S61,-,unknown,no variant detail,1
+SERV,-,unknown,no variant detail,1
+SF27,-,unknown,no variant detail,1
+SPIT,-,unknown,no variant detail,1
+T51,-,unknown,no variant detail,1
+VEZE,-,unknown,no variant detail,1
 XAIR,-,unknown,no variant detail,1
-AN26,-,unknown,no variant detail,1
-E145,ERJ-145MP,passenger,commercial variant without freighter designation,1
-B732,737 230F,cargo,boeing: freighter suffix 'F',1
-HURK,-,unknown,no variant detail,1
+Y12,-,unknown,no variant detail,1

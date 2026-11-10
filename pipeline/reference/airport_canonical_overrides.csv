@@ -1,0 +1,2 @@
+ourairports_id,canonical,iata,status,reason
+3766,KPBI,PBI,label_unverified,"OurAirports record 3766 lists ICAO KDJT / IATA DJT (renamed 'President Donald J. Trump International Airport'). Not verified against an official ICAO/IATA source; the flight data's own lookup uses KPBI (74,066 times vs 102 for KDJT). Codes are merged (same record, same coordinates) but the established label KPBI/PBI is kept until verified."

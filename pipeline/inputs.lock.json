@@ -1,0 +1,37 @@
+{
+  "description": "Expected raw inputs for pipeline/build_dataset.py. The build refuses to run when a file's size or SHA-256 differs (use --no-lock only for development). Update this file deliberately when a new release is adopted, and bump the dataset version.",
+  "inputs": [
+    {
+      "file": "2026_Q1_detailed_github.parquet",
+      "bytes": 840340093,
+      "sha256": "12ec161c7f1739934053d743625bb48e86b3785c3fcb0549b0e08ae93b1199ce",
+      "release": "aircraft_flight_schedules_2026_quarter1",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter1/2026_Q1_detailed_github.parquet",
+      "retrieved": "2026-11-10"
+    },
+    {
+      "file": "2026_Q2_detailed_github.parquet",
+      "bytes": 911949077,
+      "sha256": "2bef8bc41b9c5fc0708271859362a10d9a703a15ad57863e7e934bf3738226db",
+      "release": "aircraft_flight_schedules_2026_quarter2",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter2/2026_Q2_detailed_github.parquet",
+      "retrieved": "2026-11-10"
+    },
+    {
+      "file": "2026_Q3_detailed_github.parquet",
+      "bytes": 1026954012,
+      "sha256": "d7cf25ffb128b4ceade6a2b898e6901f829ebf8ac065985fcdaf1787ffa1d1c1",
+      "release": "aircraft_flight_schedules_2026_quarter3",
+      "source": "https://github.com/MrAirspace/aircraft-flight-schedules/releases/download/aircraft_flight_schedules_2026_quarter3/2026_Q3_detailed_github.parquet",
+      "retrieved": "2026-11-10"
+    },
+    {
+      "file": "airports.csv",
+      "bytes": 12758651,
+      "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+      "release": "OurAirports daily dump (no version tag; snapshot identified by hash)",
+      "source": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+      "retrieved": "2026-11-10T09:27Z"
+    }
+  ]
+}

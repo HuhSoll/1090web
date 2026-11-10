@@ -15,11 +15,16 @@ in float aState;
 
 uniform float uPixelRatio;
 uniform float uRadius;
+/** Grows points as the user zooms in (1 at the whole-world view). */
+uniform float uSizeScale;
 
 out float vState;
 out float vVisible;
 out float vFacing;
 out float vSize;
+
+// The sprite is larger than the visible light so the glow can fade to zero before the edge.
+const float GLOW_FOOTPRINT = 2.4;
 
 void main() {
   vState = aState;
@@ -32,11 +37,11 @@ void main() {
   vec3 worldP = (modelMatrix * vec4(p, 1.0)).xyz;
   float facing = clamp(dot(normalize(globe), normalize(cameraPosition - worldP)) * 3.0, 0.0, 1.0);
   vFacing = mix(facing, 1.0, uMorph);
-  float size = aSize;
-  if (aState >= 2.0) size = max(size, 11.0) + 4.0;
-  else if (aState >= 1.0) size += 1.5;
-  gl_PointSize = size * uPixelRatio;
+  float size = aSize * uSizeScale;
+  if (aState >= 2.0) size = max(size, 9.0) + 3.0;
+  else if (aState >= 1.0) size += 1.0;
   vSize = size;
+  gl_PointSize = size * GLOW_FOOTPRINT * uPixelRatio;
 }
 `;
 
@@ -54,31 +59,27 @@ out vec4 outColor;
 
 void main() {
   if (vVisible < 0.5 || vFacing <= 0.0) discard;
-  vec2 c = gl_PointCoord - 0.5;
-  float r = length(c) * 2.0;
-  if (r > 1.0) discard;
-  float aa = fwidth(r) * 1.2;
-
-  // Plain filled dots (no rings: dense clusters of rings are hard to look at).
-  float dot_ = 1.0 - smoothstep(1.0 - aa * 1.5, 1.0, r);
+  // r = 1 at the edge of the *visible* light (the sprite is GLOW_FOOTPRINT times larger).
+  float r = length(gl_PointCoord - 0.5) * 2.0 * 2.4;
+  // Soft light instead of a disc: no hard outline, so dense areas read as a glow rather than
+  // as a field of holes. A small bright core keeps the exact position readable.
+  float glow = exp(-r * r * 1.6);
+  float core = exp(-r * r * 9.0);
+  float light = glow * 0.55 + core * 0.75;
+  if (light < 0.01) discard;
 
   vec3 color;
-  float alpha;
+  float strength;
   if (vState >= 2.0) {
-    // Selected (2) / hovered (3): amber dot with a thin dark edge so it stands out.
-    float edge = smoothstep(0.72, 0.8, r);
-    color = mix(vec3(1.0, 0.80, 0.42), vec3(0.02, 0.04, 0.08), edge * 0.8);
-    alpha = dot_;
+    color = vec3(1.0, 0.80, 0.42); // selected / hovered: amber
+    strength = 1.3;
   } else if (vState >= 1.0) {
-    color = vec3(0.88, 0.98, 1.0);
-    alpha = dot_;
+    color = vec3(0.88, 0.98, 1.0); // connected to the selection
+    strength = 1.0;
   } else {
     color = vec3(0.62, 0.89, 1.0);
-    // Smaller (quieter) airports are slightly fainter, but still clearly visible; everything
-    // recedes while something is selected.
-    float quiet = mix(0.75, 1.0, clamp((vSize - 4.5) / 10.0, 0.0, 1.0));
-    alpha = dot_ * quiet * mix(1.0, 0.35, uHasSelection);
+    strength = mix(1.0, 0.3, uHasSelection);
   }
-  outColor = vec4(color, alpha * vFacing);
+  outColor = vec4(color * light * strength * vFacing, 1.0);
 }
 `;

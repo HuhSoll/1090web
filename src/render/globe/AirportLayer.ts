@@ -12,13 +12,21 @@ export const AirportState = {
   Hovered: 3,
 } as const;
 
-/** All airports as one Points draw call; size and state are per-vertex attributes. */
+/**
+ * All airports as one Points draw call; size and state are per-vertex attributes.
+ * Points are soft additive lights. Two things keep dense regions calm:
+ * - a declutter mask (computed by the renderer per zoom level) hides small airports that would
+ *   overlap a busier one on screen;
+ * - uSizeScale grows the points as the user zooms in.
+ */
 export class AirportLayer {
   readonly object: THREE.Points;
   readonly wrapped: Wrapped<THREE.Points>;
   private readonly geometry = new THREE.BufferGeometry();
   private readonly material: THREE.ShaderMaterial;
   private sizes = new Float32Array(0);
+  private baseSizes = new Float32Array(0);
+  private mask: Uint8Array = new Uint8Array(0);
   private states = new Float32Array(0);
   /** Unit-sphere positions (xyz) for CPU picking. */
   positions: Float32Array = new Float32Array(0);
@@ -33,10 +41,12 @@ export class AirportLayer {
         uRadius: { value: AIRPORT_RADIUS },
         uPixelRatio: { value: 1 },
         uHasSelection: { value: 0 },
+        uSizeScale: { value: 1 },
       },
       transparent: true,
       depthWrite: false,
       depthTest: true,
+      blending: THREE.AdditiveBlending,
     });
     this.object = new THREE.Points(this.geometry, this.material);
     this.object.frustumCulled = false;
@@ -49,6 +59,8 @@ export class AirportLayer {
     const n = unitPositions.length / 3;
     this.positions = unitPositions;
     this.sizes = new Float32Array(n);
+    this.baseSizes = new Float32Array(n);
+    this.mask = new Uint8Array(n).fill(1);
     this.states = new Float32Array(n);
     // `position` is only used for the draw count; the shader positions points from aLatLon.
     this.geometry.setAttribute('position', new THREE.BufferAttribute(unitPositions, 3));
@@ -59,17 +71,38 @@ export class AirportLayer {
 
   /** @param weights normalised 0..1; 0 hides the airport */
   setWeights(weights: Float32Array): void {
-    for (let i = 0; i < this.sizes.length; i++) {
+    for (let i = 0; i < this.baseSizes.length; i++) {
       const w = weights[i] ?? 0;
-      // Size grows steeply with traffic so that, with thousands of airports, hubs stand out and
-      // small airports stay small.
-      this.sizes[i] = w > 0 ? 4.5 + 10 * w * w : 0;
+      // Visible light size in px at the whole-world view; hubs larger, small airports small.
+      this.baseSizes[i] = w > 0 ? 3 + 6 * w * w : 0;
     }
+    this.applySizes();
+  }
+
+  /** 1 = draw, 0 = hidden by decluttering at the current zoom level. */
+  setMask(mask: Uint8Array): void {
+    this.mask = mask;
+    this.applySizes();
+  }
+
+  private applySizes(): void {
+    for (let i = 0; i < this.sizes.length; i++) this.sizes[i] = this.mask[i] ? this.baseSizes[i]! : 0;
     this.geometry.getAttribute('aSize').needsUpdate = true;
   }
 
-  isVisible(index: number): boolean {
+  /** Has traffic under the current filters (independent of decluttering). */
+  hasTraffic(index: number): boolean {
+    return (this.baseSizes[index] ?? 0) > 0;
+  }
+
+  /** Drawn right now (has traffic and survived decluttering). */
+  isDrawn(index: number): boolean {
     return (this.sizes[index] ?? 0) > 0;
+  }
+
+  /** Light size at the world view, used to rank airports when decluttering. */
+  baseSize(index: number): number {
+    return this.baseSizes[index] ?? 0;
   }
 
   setStates(selected: number | null, hovered: number | null, connected: ReadonlySet<number> | null): void {
@@ -81,8 +114,9 @@ export class AirportLayer {
     this.geometry.getAttribute('aState').needsUpdate = true;
   }
 
-  update(pixelRatio: number): void {
+  update(pixelRatio: number, sizeScale: number): void {
     this.material.uniforms.uPixelRatio!.value = pixelRatio;
+    this.material.uniforms.uSizeScale!.value = sizeScale;
   }
 
   dispose(): void {

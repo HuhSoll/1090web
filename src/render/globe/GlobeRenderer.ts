@@ -58,6 +58,9 @@ const ROUTE_PICK_RADIUS_PX = 6;
 const CLICK_MAX_MOVE_PX = 5;
 const AUTO_ROTATE_RESUME_MS = 7000;
 const FLAT_AIRPORT_Z = 0.008;
+/** Minimum on-screen distance between airport lights; closer, less busy airports are hidden. */
+const DECLUTTER_MIN_PX = 13;
+const DECLUTTER_INTERVAL_MS = 120;
 
 export class WebGLUnavailableError extends Error {
   constructor() {
@@ -120,6 +123,13 @@ export class GlobeRenderer {
   private airportLatLonRad = new Float32Array(0);
   private routeEndpoints: Uint32Array = new Uint32Array(0);
   private airportVisible = new Uint8Array(0);
+  /** Airport indices, busiest first: the order in which decluttering keeps airports. */
+  private airportOrder = new Int32Array(0);
+  /** Airports that must stay visible (selected, hovered, connected to the selection). */
+  private pinnedAirports = new Set<number>();
+  private declutterPending = true;
+  private lastDeclutter = 0;
+  private lastDeclutterKey = '';
 
   private pointer: { x: number; y: number; clientX: number; clientY: number } | null = null;
   private pointerDirty = false;
@@ -241,6 +251,10 @@ export class GlobeRenderer {
     this.routes.updateState(routeWeights, connectedRouteIds, changeKinds);
     this.airports.setWeights(airportWeights);
     for (let i = 0; i < this.airportVisible.length; i++) this.airportVisible[i] = (airportWeights[i] ?? 0) > 0 ? 1 : 0;
+    const order = Array.from({ length: airportWeights.length }, (_, i) => i).filter((i) => (airportWeights[i] ?? 0) > 0);
+    order.sort((a, b) => airportWeights[b]! - airportWeights[a]!);
+    this.airportOrder = Int32Array.from(order);
+    this.declutterPending = true;
     this.markDirty();
   }
 
@@ -266,6 +280,10 @@ export class GlobeRenderer {
       sel.hoveredAirport,
       sel.selectedAirport !== null || sel.focusRoute !== null ? connectedAirports : null,
     );
+    this.pinnedAirports = new Set(connectedAirports);
+    if (sel.selectedAirport !== null) this.pinnedAirports.add(sel.selectedAirport);
+    if (sel.hoveredAirport !== null) this.pinnedAirports.add(sel.hoveredAirport);
+    this.declutterPending = true;
     this.highlight.setNotableDimmed(sel.selectedAirport !== null);
     this.autoRotateSuppressed = sel.selectedAirport !== null || sel.focusRoute !== null;
     this.markDirty();
@@ -558,6 +576,85 @@ export class GlobeRenderer {
     this.markDirty();
   }
 
+  private viewKey(): string {
+    const c = this.camera.position;
+    const t = this.controls.target;
+    return [c.x, c.y, c.z, t.x, t.y, this.width, this.height].map((v) => v.toFixed(3)).join(',');
+  }
+
+  /**
+   * How much to enlarge airport lights for the current zoom (1 at the whole-world view).
+   * Grows slowly (power 0.35) so close-up views get larger points without giant blobs.
+   */
+  private zoomSizeScale(): number {
+    const ratio =
+      this.mode === 'flat'
+        ? this.flatDefaultHeight() / Math.max(1e-3, this.camera.position.z - this.controls.target.z)
+        : (GLOBE_DEFAULT_DISTANCE - 1) / Math.max(1e-3, this.camera.position.length() - 1);
+    return THREE.MathUtils.clamp(ratio ** 0.35, 1, 2.4);
+  }
+
+  /**
+   * Screen-space decluttering: walk airports busiest first and keep one only if no kept airport
+   * lies within DECLUTTER_MIN_PX on screen. Zooming in spreads airports apart, so more of them
+   * appear. Pinned airports (selection) are always kept. Off-screen airports are kept (they cost
+   * nothing and are ready when panned into view).
+   */
+  private declutterAirports(): void {
+    const n = this.airportVisible.length;
+    if (n === 0) return;
+    const mask = new Uint8Array(n);
+    const cell = DECLUTTER_MIN_PX;
+    const grid = new Map<number, number[]>();
+    const flat = this.mode === 'flat';
+    const cam = this.camera.position;
+    const tx = this.controls.target.x;
+    const minSq = DECLUTTER_MIN_PX * DECLUTTER_MIN_PX;
+    const place = (i: number, force: boolean): void => {
+      let p: { sx: number; sy: number } | null;
+      if (flat) {
+        const lat = this.airportLatLonRad[i * 2]!;
+        const lon = this.airportLatLonRad[i * 2 + 1]!;
+        const x = lon + FLAT_WORLD_WIDTH * Math.round((tx - lon) / FLAT_WORLD_WIDTH);
+        p = this.project(x, lat, FLAT_AIRPORT_Z);
+      } else {
+        const x = this.airportUnit[i * 3]!;
+        const y = this.airportUnit[i * 3 + 1]!;
+        const z = this.airportUnit[i * 3 + 2]!;
+        if (x * cam.x + y * cam.y + z * cam.z <= 1.0) {
+          mask[i] = 1; // behind the horizon: invisible anyway, takes no space
+          return;
+        }
+        p = this.project(x, y, z);
+      }
+      if (!p || p.sx < -50 || p.sy < -50 || p.sx > this.width + 50 || p.sy > this.height + 50) {
+        mask[i] = 1;
+        return;
+      }
+      const cx = Math.floor(p.sx / cell);
+      const cy = Math.floor(p.sy / cell);
+      if (!force) {
+        for (let dx = -1; dx <= 1; dx++) {
+          for (let dy = -1; dy <= 1; dy++) {
+            const pts = grid.get((cx + dx) * 100003 + (cy + dy));
+            if (!pts) continue;
+            for (let k = 0; k < pts.length; k += 2) {
+              if ((pts[k]! - p.sx) ** 2 + (pts[k + 1]! - p.sy) ** 2 < minSq) return;
+            }
+          }
+        }
+      }
+      mask[i] = 1;
+      const key = cx * 100003 + cy;
+      const list = grid.get(key);
+      if (list) list.push(p.sx, p.sy);
+      else grid.set(key, [p.sx, p.sy]);
+    };
+    for (const i of this.pinnedAirports) if (this.airportVisible[i]) place(i, true);
+    for (const i of this.airportOrder) if (!mask[i]) place(i, false);
+    this.airports.setMask(mask);
+  }
+
   /** Which of the side copies (COPY_OFFSETS) overlap the current flat-map view. */
   private visibleCopies(): boolean[] {
     const t = this.controls.target;
@@ -603,6 +700,18 @@ export class GlobeRenderer {
       this.updateHover();
     }
 
+    // Re-run airport decluttering when the view changed (throttled while moving; it always runs
+    // once more after the camera stops because the key keeps differing until then).
+    const key = this.viewKey();
+    if (key !== this.lastDeclutterKey) this.declutterPending = true;
+    if (this.declutterPending && !this.transition && now - this.lastDeclutter > DECLUTTER_INTERVAL_MS) {
+      this.declutterAirports();
+      this.lastDeclutter = now;
+      this.lastDeclutterKey = key;
+      this.declutterPending = false;
+      this.dirty = true;
+    }
+
     if (!this.dirty) return;
     this.dirty = false;
     const copies = this.mode === 'flat' && !this.transition ? this.visibleCopies() : false;
@@ -610,7 +719,7 @@ export class GlobeRenderer {
     this.routes.wrapped.setVisible(true, copies);
     this.airports.wrapped.setVisible(true, copies);
     this.highlight.setHidden(this.transition !== null, copies);
-    this.airports.update(this.renderer.getPixelRatio());
+    this.airports.update(this.renderer.getPixelRatio(), this.zoomSizeScale());
     this.renderer.render(this.scene, this.camera);
   };
 
@@ -695,7 +804,7 @@ export class GlobeRenderer {
     let best = -1;
     let bestD = AIRPORT_PICK_RADIUS_PX * AIRPORT_PICK_RADIUS_PX;
     for (let i = 0; i < this.airportVisible.length; i++) {
-      if (!this.airportVisible[i]) continue;
+      if (!this.airports.isDrawn(i)) continue;
       for (const off of offsets) {
         let p: { sx: number; sy: number } | null;
         if (flat) {

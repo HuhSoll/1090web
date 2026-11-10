@@ -36,6 +36,9 @@ precision highp float;
 uniform sampler2D uLandMask;
 uniform float uHasMask;
 uniform float uMorph;
+uniform sampler2D uAdvisoryMask;
+uniform float uHasAdvisory;
+uniform vec3 uAdvisory;
 uniform vec3 uOcean;
 uniform vec3 uLand;
 uniform vec3 uRim;
@@ -49,6 +52,13 @@ out vec4 outColor;
 void main() {
   float land = uHasMask > 0.5 ? texture(uLandMask, vUv).r : 0.0;
   vec3 color = mix(uOcean, uLand, land);
+  if (uHasAdvisory > 0.5) {
+    // Advisory overlay: amber tint plus a fine diagonal hatch in screen space, so it reads as
+    // "caution" without competing with the route colours.
+    float adv = texture(uAdvisoryMask, vUv).r;
+    float hatch = step(0.62, fract((gl_FragCoord.x + gl_FragCoord.y) / 9.0));
+    color = mix(color, uAdvisory * 0.45, adv * 0.35) + uAdvisory * hatch * adv * 0.16;
+  }
   float facing = clamp(dot(vNormalView, vViewDir), 0.0, 1.0);
   // Globe only: very soft shading towards the limb + a thin cool rim.
   float globe = 1.0 - uMorph;

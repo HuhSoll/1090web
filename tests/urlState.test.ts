@@ -25,6 +25,7 @@ const state: SerializableState = {
   selectedAirport: null,
   filters: DEFAULT_FILTERS,
   viewMode: 'flat',
+  advisoriesEnabled: false,
 };
 
 describe('URL state', () => {
@@ -42,16 +43,18 @@ describe('URL state', () => {
         selectedAirport: 0,
         filters: { ...DEFAULT_FILTERS, country: 'JP', carrierId: 'JAL', mode: 'passenger', includeCallsign: false, minFlights: 30 },
         viewMode: 'globe',
+        advisoriesEnabled: true,
       },
       network,
       '?dataset=demo',
     );
-    expect(search).toBe('?dataset=demo&month=2026-02&compare=2026-01&airport=RJTT&country=JP&airline=JAL&traffic=passenger&airports=observed&min=30&view=globe');
+    expect(search).toBe('?dataset=demo&month=2026-02&compare=2026-01&airport=RJTT&country=JP&airline=JAL&traffic=passenger&airports=observed&min=30&view=globe&advisories=1');
     expect(parseUrlState(search, network)).toEqual({
       monthIndex: 1,
       compareBaseIndex: 0,
       airport: 0,
       filters: { country: 'JP', carrierId: 'JAL', mode: 'passenger', includeCallsign: false, minFlights: 30 },
+      advisories: true,
     });
   });
 

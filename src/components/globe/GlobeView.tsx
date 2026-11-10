@@ -5,6 +5,8 @@ import { GlobeRenderer, WebGLUnavailableError, type PickHit } from '../../render
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
 import { GlobeControls } from './GlobeControls';
+import { useActiveAdvisories } from '../../app/useAdvisories';
+import { advisoryCountryCodes } from '../../domain/advisories';
 
 interface Props {
   view: NetworkView | null;
@@ -143,6 +145,12 @@ export function GlobeView({ view: monthView, comparison }: Props) {
       focusRoute: listHoverRoute ?? hoveredRoute ?? selectedRoute,
     });
   }, [view, connected, selectedAirport, hoveredAirport, hoveredRoute, listHoverRoute, selectedRoute]);
+
+  // Safety-advisory overlay: tint countries with an advisory in effect this month.
+  const activeAdvisories = useActiveAdvisories();
+  useEffect(() => {
+    rendererRef.current?.setAdvisoryCountries(advisoryCountryCodes(activeAdvisories));
+  }, [activeAdvisories]);
 
   // 5. Fly to newly selected airport.
   useEffect(() => {

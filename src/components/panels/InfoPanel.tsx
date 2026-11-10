@@ -7,6 +7,8 @@ import { Icon } from '../common/Icon';
 import type { StaticNetwork } from '../../data/model/network';
 import type { Comparison } from '../../domain/comparison';
 import { CompareAirport, CompareRoute, CompareSummary } from './ComparePanels';
+import { useActiveAdvisories } from '../../app/useAdvisories';
+import { advisoriesForCountry } from '../../domain/advisories';
 
 export function InfoPanel({ view, comparison }: { view: NetworkView | null; comparison: Comparison | null }) {
   const network = useAppStore((s) => s.network);
@@ -184,6 +186,7 @@ function AirportDetail({
   const setListHoverRoute = useAppStore((s) => s.setListHoverRoute);
   const airport = network.airports[airportIndex];
   const routes = useMemo(() => connectedRoutes(network, view, airportIndex), [network, view, airportIndex]);
+  const advisories = useActiveAdvisories();
   if (!airport) return null;
   const flights = view.airportFlights[airportIndex] ?? 0;
   const maxFlights = routes[0]?.flights ?? 1;
@@ -205,6 +208,9 @@ function AirportDetail({
         {airport.city} · {countryName(airport.country)}
         {airport.icao && airport.iata ? ` · ${airport.icao}` : ''}
       </p>
+      {advisoriesForCountry(advisories, airport.country).length > 0 && (
+        <p className="hint advisory-notice">{t('advisory.airportNotice', { country: countryName(airport.country) })}</p>
+      )}
       {comparison && <CompareAirport network={network} comparison={comparison} airportIndex={airportIndex} />}
       {!comparison && (
       <div className="stats">

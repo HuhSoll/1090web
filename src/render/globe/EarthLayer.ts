@@ -32,6 +32,7 @@ const RIM = '#2a6f9e';
 const GRATICULE = '#3b6a8f';
 const BORDERS = '#4a7398';
 const COAST = '#6a9cc6';
+const ADVISORY = '#e0963c';
 
 /**
  * Dark, minimal Earth that can morph between a globe and a flat (equirectangular) map:
@@ -46,6 +47,10 @@ export class EarthLayer {
   private readonly wrapped: Wrapped<THREE.Mesh | THREE.LineSegments>[] = [];
   private readonly disposables: { dispose(): void }[] = [];
   private readonly morph: MorphUniform;
+  private topo: WorldTopology | null = null;
+  private advisoryCanvas: HTMLCanvasElement | null = null;
+  private advisoryTexture: THREE.CanvasTexture | null = null;
+  private pendingAdvisoryIds: readonly string[] = [];
 
   constructor(morph: MorphUniform) {
     this.morph = morph;
@@ -62,6 +67,9 @@ export class EarthLayer {
         uOcean: { value: screenColor(OCEAN) },
         uLand: { value: screenColor(LAND) },
         uRim: { value: screenColor(RIM) },
+        uAdvisoryMask: { value: null },
+        uHasAdvisory: { value: 0 },
+        uAdvisory: { value: screenColor(ADVISORY) },
       },
     });
     const earth = new THREE.Mesh(sphere, this.earthMaterial);
@@ -106,6 +114,7 @@ export class EarthLayer {
     const res = await fetch(countriesUrl, { signal });
     if (!res.ok) throw new Error(`Basemap HTTP ${res.status}`);
     const topo = (await res.json()) as WorldTopology;
+    this.topo = topo;
 
     const land = feature(topo, topo.objects.land);
     const width = Math.min(4096, maxTextureSize);
@@ -140,6 +149,56 @@ export class EarthLayer {
     const coast = mesh(topo, topo.objects.land) as MultiLineString;
     this.addLines(borders, 1.0006, 0.0008, BORDERS, 0.3);
     this.addLines(coast, 1.0006, 0.0008, COAST, 0.45);
+    this.setAdvisoryCountries(this.pendingAdvisoryIds);
+  }
+
+  /**
+   * Tints whole countries (ISO numeric ids, as in world-atlas) for the advisory overlay.
+   * Rasterised into a small equirectangular mask that the earth shader samples, so it works on
+   * both the globe and the flat map. Cheap enough to redraw on every month change.
+   */
+  setAdvisoryCountries(ids: readonly string[]): void {
+    this.pendingAdvisoryIds = ids;
+    const uniforms = this.earthMaterial.uniforms;
+    if (!this.topo) return;
+    if (ids.length === 0) {
+      uniforms.uHasAdvisory!.value = 0;
+      return;
+    }
+    if (!this.advisoryCanvas) {
+      this.advisoryCanvas = document.createElement('canvas');
+      this.advisoryCanvas.width = 2048;
+      this.advisoryCanvas.height = 1024;
+    }
+    const canvas = this.advisoryCanvas;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const projection = geoEquirectangular()
+      .scale(canvas.width / (2 * Math.PI))
+      .translate([canvas.width / 2, canvas.height / 2])
+      .precision(0.1);
+    const path = geoPath(projection, ctx);
+    const wanted = new Set(ids);
+    const countries = feature(this.topo, this.topo.objects.countries);
+    ctx.fillStyle = '#fff';
+    for (const f of countries.features) {
+      if (f.id === undefined || !wanted.has(String(f.id))) continue;
+      ctx.beginPath();
+      path(f);
+      ctx.fill();
+    }
+    if (!this.advisoryTexture) {
+      this.advisoryTexture = new THREE.CanvasTexture(canvas);
+      this.advisoryTexture.colorSpace = THREE.NoColorSpace;
+      this.advisoryTexture.generateMipmaps = false;
+      this.advisoryTexture.minFilter = THREE.LinearFilter;
+      this.disposables.push(this.advisoryTexture);
+      uniforms.uAdvisoryMask!.value = this.advisoryTexture;
+    }
+    this.advisoryTexture.needsUpdate = true;
+    uniforms.uHasAdvisory!.value = 1;
   }
 
   /** Lines store (lat, lon) in radians; the shader projects them for globe or flat map. */

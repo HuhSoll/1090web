@@ -13,6 +13,7 @@ import { useI18n } from '../i18n/useI18n';
 import { useAppStore } from '../state/store';
 import { useComparison, useDataset, useNetworkView } from './useDataset';
 import { useUrlState } from './urlState';
+import { useAdvisoryLoader } from './useAdvisories';
 
 // The map renderer (three.js, d3-geo, topojson) is the bulk of the bundle. Loading it as a
 // separate chunk lets the panels render immediately while WebGL code downloads.
@@ -21,6 +22,7 @@ const GlobeView = lazy(() => import('../components/globe/GlobeView').then((m) =>
 export function App() {
   const { retry } = useDataset();
   useUrlState();
+  useAdvisoryLoader();
   const view = useNetworkView();
   const comparison = useComparison();
   const { t, number, locale } = useI18n();

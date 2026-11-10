@@ -291,6 +291,12 @@ export class GlobeRenderer {
     this.applyViewOffset();
   }
 
+  /** Countries (ISO numeric ids) to tint for the advisory overlay; empty clears it. */
+  setAdvisoryCountries(ids: readonly string[]): void {
+    this.earth.setAdvisoryCountries(ids);
+    this.markDirty();
+  }
+
   setAutoRotate(enabled: boolean): void {
     this.autoRotateEnabled = enabled;
     this.markDirty();

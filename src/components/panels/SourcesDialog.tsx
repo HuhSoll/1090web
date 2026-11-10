@@ -9,6 +9,7 @@ import type { MessageKey } from '../../i18n/messages';
 const SOURCE_DESC: Record<string, MessageKey> = {
   mrairspace: 'source.desc.mrairspace',
   ourairports: 'source.desc.ourairports',
+  'easa-czib': 'source.desc.easa-czib',
   'this-dataset': 'source.desc.this-dataset',
 };
 
@@ -18,6 +19,7 @@ export function SourcesDialog() {
   const open = useAppStore((s) => s.sourcesOpen);
   const setOpen = useAppStore((s) => s.setSourcesOpen);
   const network = useAppStore((s) => s.network);
+  const advisorySource = useAppStore((s) => s.advisories?.source);
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -66,6 +68,19 @@ export function SourcesDialog() {
                 </p>
               </li>
             ))}
+            {advisorySource && (
+              <li>
+                <strong>
+                  <a href={advisorySource.url} target="_blank" rel="noreferrer">
+                    {advisorySource.name}
+                  </a>
+                </strong>
+                <p className="muted small">{t('source.desc.easa-czib')}</p>
+                <p className="muted tiny">
+                  {t('source.license')}: {advisorySource.license}
+                </p>
+              </li>
+            )}
           </ul>
           {manifest.quality && <QualitySummary quality={manifest.quality} />}
         </>

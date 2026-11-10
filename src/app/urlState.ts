@@ -16,6 +16,7 @@ export interface UrlState {
   compareBaseIndex?: number | null;
   airport?: number | null;
   filters?: Partial<NetworkFilters>;
+  advisories?: boolean;
 }
 
 const PASSTHROUGH = ['dataset', 'stress'] as const;
@@ -47,6 +48,7 @@ export function parseUrlState(search: string, network: StaticNetwork): UrlState 
   const min = Number(p.get('min'));
   if (Number.isFinite(min) && min > 0 && min <= 100000) filters.minFlights = Math.round(min);
   if (Object.keys(filters).length > 0) out.filters = filters;
+  if (p.get('advisories') === '1') out.advisories = true;
   return out;
 }
 
@@ -57,6 +59,7 @@ export interface SerializableState {
   selectedAirport: number | null;
   filters: NetworkFilters;
   viewMode: 'flat' | 'globe';
+  advisoriesEnabled: boolean;
 }
 
 export function serializeUrlState(state: SerializableState, network: StaticNetwork, currentSearch: string): string {
@@ -84,6 +87,7 @@ export function serializeUrlState(state: SerializableState, network: StaticNetwo
   if (f.includeCallsign !== DEFAULT_FILTERS.includeCallsign) p.set('airports', 'observed');
   if (f.minFlights > 0) p.set('min', String(f.minFlights));
   if (state.viewMode === 'globe') p.set('view', 'globe');
+  if (state.advisoriesEnabled) p.set('advisories', '1');
   const s = p.toString();
   return s ? `?${s}` : '';
 }
@@ -105,6 +109,7 @@ export function useUrlState(): void {
       st.setCompareBaseIndex(u.compareBaseIndex);
     }
     if (u.airport !== undefined && u.airport !== null) st.selectAirport(u.airport);
+    if (u.advisories) st.setAdvisoriesEnabled(true);
   }, [network]);
 
   useEffect(

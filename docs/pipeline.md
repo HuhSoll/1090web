@@ -67,3 +67,16 @@ python -m venv .venv
 
 - 便データは **ODbL-1.0**。公開している集計データは派生データベースにあたるため、同じ ODbL-1.0 で提供し、出典を明記しています（アプリの「データと出典」）。
 - OurAirports の利用条件は、サイトの証明書エラーのため原文を未確認です。
+
+## 安全情報（EASA の紛争地域情報）
+
+```bash
+.venv/Scripts/python pipeline/build_advisories.py --fetch   # EASA から最新を取得して public/data/advisories/ を更新
+```
+
+- 出典：[EASA Conflict Zone Information Bulletins](https://www.easa.europa.eu/en/domains/air-operations/czibs)（JSON エクスポート）。EASA の著作権表示により、出典を明記すれば再利用できます。
+- 種類は「安全警告」です。空域閉鎖・気象警報・欠航とは区別し、路線データには一切影響させません。
+- 各情報の有効期間は「発行日〜有効期限」。取り下げ済みのものは取り下げ日が公開されていないため、最終更新日を終了日とし「推定」と表示します。
+- 地図は国単位でしか塗れないため、一部の空域（FIR・州）や広域が対象のものは「国全体で表示」と明記しています。バーレーンなど小さな国は地図データにないため、一覧には出ますが塗られません。
+- 空域制限（FAA など）は HTML のみの提供、気象警報（aviationweather.gov）は過去30日分しか取得できず観測期間と合わないため、現時点では扱っていません。
+

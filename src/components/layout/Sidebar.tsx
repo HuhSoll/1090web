@@ -4,6 +4,7 @@ import { useAppStore } from '../../state/store';
 import { Icon } from '../common/Icon';
 import { AirportSearch } from '../controls/AirportSearch';
 import { FilterPanel } from '../controls/FilterPanel';
+import { AdvisoryPanel } from '../panels/AdvisoryPanel';
 import { Logo } from '../common/Logo';
 
 export function Sidebar({ view }: { view: NetworkView | null }) {
@@ -23,12 +24,13 @@ export function Sidebar({ view }: { view: NetworkView | null }) {
           <AirportSearch />
         </section>
         <FilterPanel view={view} />
+        <AdvisoryPanel />
         <section className="section roadmap" aria-labelledby="roadmap-title">
           <h2 id="roadmap-title" className="section-title">
             {t('roadmap.title')}
           </h2>
           <ul>
-            {(['roadmap.incidents', 'roadmap.airlineNames'] as const).map((k) => (
+            {(['roadmap.airlineNames'] as const).map((k) => (
               <li key={k}>
                 <span>{t(k)}</span>
                 <span className="badge muted-badge">{t('roadmap.notAvailable')}</span>

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { MonthData, StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import type { Locale } from '../i18n/messages';
+import type { AdvisoryFile } from '../data/model/advisory';
 
 export type ViewMode = 'flat' | 'globe';
 
@@ -41,6 +42,10 @@ interface AppState {
   autoRotate: boolean;
   viewMode: ViewMode;
   sourcesOpen: boolean;
+  /** Safety-advisory overlay (off by default; data loaded on first use). */
+  advisoriesEnabled: boolean;
+  advisories: AdvisoryFile | null;
+  advisoriesStatus: 'idle' | 'loading' | 'ready' | 'error';
   /** Mobile only: the filter drawer. */
   drawerOpen: boolean;
   /** Screen space (px) covered by UI at the top/bottom of the map on small screens. */
@@ -68,6 +73,8 @@ interface AppState {
   setAutoRotate: (v: boolean) => void;
   setViewMode: (m: ViewMode) => void;
   setSourcesOpen: (v: boolean) => void;
+  setAdvisoriesEnabled: (v: boolean) => void;
+  setAdvisories: (f: AdvisoryFile | null, status: AppState['advisoriesStatus']) => void;
   setDrawerOpen: (v: boolean) => void;
   setViewInsets: (v: { top: number; bottom: number }) => void;
   setBasemapError: (v: boolean) => void;
@@ -122,6 +129,9 @@ export const useAppStore = create<AppState>((set) => ({
   autoRotate: true,
   viewMode: initialViewMode(),
   sourcesOpen: false,
+  advisoriesEnabled: false,
+  advisories: null,
+  advisoriesStatus: 'idle',
   drawerOpen: false,
   viewInsets: { top: 0, bottom: 0 },
   basemapError: false,
@@ -166,6 +176,8 @@ export const useAppStore = create<AppState>((set) => ({
     set({ viewMode });
   },
   setSourcesOpen: (sourcesOpen) => set({ sourcesOpen }),
+  setAdvisoriesEnabled: (advisoriesEnabled) => set({ advisoriesEnabled }),
+  setAdvisories: (advisories, advisoriesStatus) => set({ advisories, advisoriesStatus }),
   setDrawerOpen: (drawerOpen) => set({ drawerOpen }),
   setViewInsets: (v) =>
     set((s) => (s.viewInsets.top === v.top && s.viewInsets.bottom === v.bottom ? s : { viewInsets: v })),

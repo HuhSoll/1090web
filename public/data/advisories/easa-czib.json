@@ -1,0 +1,729 @@
+{
+ "schemaVersion": 1,
+ "source": {
+  "id": "easa-czib",
+  "name": "EASA Conflict Zone Information Bulletins",
+  "url": "https://www.easa.europa.eu/en/domains/air-operations/czibs",
+  "license": "© European Union Aviation Safety Agency. Reproduction authorised provided the source is acknowledged.",
+  "retrievedAt": "2026-11-10T13:05:28Z"
+ },
+ "items": [
+  {
+   "id": "easa-144230",
+   "kind": "safety-warning",
+   "title": "Airspace of Saudi Arabia",
+   "status": "active",
+   "issued": "2026-09-30",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "SA",
+     "isoNumeric": "682",
+     "name": "Saudi Arabia"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-143944",
+   "kind": "safety-warning",
+   "title": "Airspace of Jordan",
+   "status": "active",
+   "issued": "2026-07-22",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "JO",
+     "isoNumeric": "400",
+     "name": "Jordan"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-143899",
+   "kind": "safety-warning",
+   "title": "Airspace of the Persian Gulf and Gulf of Oman",
+   "status": "active",
+   "issued": "2026-07-14",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "BH",
+     "isoNumeric": "048",
+     "name": "Bahrain"
+    },
+    {
+     "iso2": "KW",
+     "isoNumeric": "414",
+     "name": "Kuwait"
+    },
+    {
+     "iso2": "QA",
+     "isoNumeric": "634",
+     "name": "Qatar"
+    },
+    {
+     "iso2": "OM",
+     "isoNumeric": "512",
+     "name": "Oman"
+    },
+    {
+     "iso2": "AE",
+     "isoNumeric": "784",
+     "name": "United Arab Emirates"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-143863",
+   "kind": "safety-warning",
+   "title": "Airspace of Lebanon",
+   "status": "active",
+   "issued": "2026-07-08",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "LB",
+     "isoNumeric": "422",
+     "name": "Lebanon"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-143862",
+   "kind": "safety-warning",
+   "title": "Airspace of Iraq",
+   "status": "active",
+   "issued": "2026-07-08",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IQ",
+     "isoNumeric": "368",
+     "name": "Iraq"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-143861",
+   "kind": "safety-warning",
+   "title": "Airspace of Iran",
+   "status": "active",
+   "issued": "2026-07-08",
+   "end": "2026-11-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-143294",
+   "kind": "safety-warning",
+   "title": "Airspace of the Middle East and Persian Gulf",
+   "status": "withdrawn",
+   "issued": "2026-02-28",
+   "end": "2026-07-08",
+   "endIsApproximate": false,
+   "validUntilNote": "08/07/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "BH",
+     "isoNumeric": "048",
+     "name": "Bahrain"
+    },
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    },
+    {
+     "iso2": "IQ",
+     "isoNumeric": "368",
+     "name": "Iraq"
+    },
+    {
+     "iso2": "IL",
+     "isoNumeric": "376",
+     "name": "Israel"
+    },
+    {
+     "iso2": "JO",
+     "isoNumeric": "400",
+     "name": "Jordan"
+    },
+    {
+     "iso2": "KW",
+     "isoNumeric": "414",
+     "name": "Kuwait"
+    },
+    {
+     "iso2": "LB",
+     "isoNumeric": "422",
+     "name": "Lebanon"
+    },
+    {
+     "iso2": "OM",
+     "isoNumeric": "512",
+     "name": "Oman"
+    },
+    {
+     "iso2": "QA",
+     "isoNumeric": "634",
+     "name": "Qatar"
+    },
+    {
+     "iso2": "AE",
+     "isoNumeric": "784",
+     "name": "United Arab Emirates"
+    },
+    {
+     "iso2": "SA",
+     "isoNumeric": "682",
+     "name": "Saudi Arabia"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-143048",
+   "kind": "safety-warning",
+   "title": "Iran and neighbouring airspace",
+   "status": "withdrawn",
+   "issued": "2026-01-16",
+   "end": "2026-03-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/03/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-142977",
+   "kind": "safety-warning",
+   "title": "Venezuela and neighbouring airspace",
+   "status": "withdrawn",
+   "issued": "2026-01-03",
+   "end": "2026-02-16",
+   "endIsApproximate": false,
+   "validUntilNote": "16/02/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "VE",
+     "isoNumeric": "862",
+     "name": "Venezuela"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-142201",
+   "kind": "safety-warning",
+   "title": "Airspace of Iran",
+   "status": "withdrawn",
+   "issued": "2025-07-07",
+   "end": "2025-07-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/07/2025, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-142082",
+   "kind": "safety-warning",
+   "title": "Airspace of the Middle East (Iran, Iraq, Israel, Jordan and Lebanon)",
+   "status": "withdrawn",
+   "issued": "2025-06-13",
+   "end": "2025-07-07",
+   "endIsApproximate": false,
+   "validUntilNote": "07/07/2025, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    },
+    {
+     "iso2": "IQ",
+     "isoNumeric": "368",
+     "name": "Iraq"
+    },
+    {
+     "iso2": "IL",
+     "isoNumeric": "376",
+     "name": "Israel"
+    },
+    {
+     "iso2": "JO",
+     "isoNumeric": "400",
+     "name": "Jordan"
+    },
+    {
+     "iso2": "LB",
+     "isoNumeric": "422",
+     "name": "Lebanon"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-141480",
+   "kind": "safety-warning",
+   "title": "Airspace of the Russian Federation",
+   "status": "active",
+   "issued": "2025-01-09",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "RU",
+     "isoNumeric": "643",
+     "name": "Russia"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-140425",
+   "kind": "safety-warning",
+   "title": "Airspace of Israel",
+   "status": "withdrawn",
+   "issued": "2024-11-29",
+   "end": "2025-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2025, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IL",
+     "isoNumeric": "376",
+     "name": "Israel"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-140484",
+   "kind": "safety-warning",
+   "title": "Airspace of Iran",
+   "status": "withdrawn",
+   "issued": "2024-11-29",
+   "end": "2025-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2025, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-140424",
+   "kind": "safety-warning",
+   "title": "Airspace of Lebanon",
+   "status": "withdrawn",
+   "issued": "2024-09-28",
+   "end": "2026-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/04/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "LB",
+     "isoNumeric": "422",
+     "name": "Lebanon"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20597",
+   "kind": "safety-warning",
+   "title": "Airspace of South Sudan",
+   "status": "withdrawn",
+   "issued": "2024-07-31",
+   "end": "2025-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "SS",
+     "isoNumeric": "728",
+     "name": "South Sudan"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-138625",
+   "kind": "safety-warning",
+   "title": "Israel and neighbouring airspace",
+   "status": "withdrawn",
+   "issued": "2023-12-06",
+   "end": "2024-04-04",
+   "endIsApproximate": true,
+   "validUntilNote": "30/04/2024, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IL",
+     "isoNumeric": "376",
+     "name": "Israel"
+    },
+    {
+     "iso2": "JO",
+     "isoNumeric": "400",
+     "name": "Jordan"
+    },
+    {
+     "iso2": "SA",
+     "isoNumeric": "682",
+     "name": "Saudi Arabia"
+    },
+    {
+     "iso2": "EG",
+     "isoNumeric": "818",
+     "name": "Egypt"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-20578",
+   "kind": "safety-warning",
+   "title": "Airspace of Egypt, North Sinai Governorate",
+   "status": "withdrawn",
+   "issued": "2023-10-31",
+   "end": "2023-12-31",
+   "endIsApproximate": false,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "EG",
+     "isoNumeric": "818",
+     "name": "Egypt"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-137874",
+   "kind": "safety-warning",
+   "title": "Airspace of Sudan",
+   "status": "active",
+   "issued": "2023-04-26",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2027 - unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "SD",
+     "isoNumeric": "729",
+     "name": "Sudan"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-137114",
+   "kind": "safety-warning",
+   "title": "Airspace of Ethiopia – Tigray Region",
+   "status": "withdrawn",
+   "issued": "2022-09-30",
+   "end": "2023-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "Until 30/04/2023, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "ET",
+     "isoNumeric": "231",
+     "name": "Ethiopia"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-44846",
+   "kind": "safety-warning",
+   "title": "Airspace of Saudi Arabia – Jeddah Flight Information Region",
+   "status": "withdrawn",
+   "issued": "2022-04-29",
+   "end": "2022-10-31",
+   "endIsApproximate": false,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "SA",
+     "isoNumeric": "682",
+     "name": "Saudi Arabia"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-136057",
+   "kind": "safety-warning",
+   "title": "Airspace of Ukraine",
+   "status": "active",
+   "issued": "2022-02-24",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "Until 31/01/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "UA",
+     "isoNumeric": "804",
+     "name": "Ukraine"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-108293",
+   "kind": "safety-warning",
+   "title": "Airspace of Iran",
+   "status": "withdrawn",
+   "issued": "2021-10-30",
+   "end": "2021-10-30",
+   "endIsApproximate": true,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "IR",
+     "isoNumeric": "364",
+     "name": "Iran"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-65355",
+   "kind": "safety-warning",
+   "title": "Airspace of Kenya",
+   "status": "withdrawn",
+   "issued": "2018-09-03",
+   "end": "2025-02-21",
+   "endIsApproximate": true,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "KE",
+     "isoNumeric": "404",
+     "name": "Kenya"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-22434",
+   "kind": "safety-warning",
+   "title": "Airspace of North Korea – Pyongyang Flight Information Region",
+   "status": "withdrawn",
+   "issued": "2018-04-25",
+   "end": "2025-02-21",
+   "endIsApproximate": true,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "KP",
+     "isoNumeric": "408",
+     "name": "Democratic People's Republic of Korea"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-20587",
+   "kind": "safety-warning",
+   "title": "Airspace of Pakistan – Baluchistan and Khyber Pakhtunkhwa provinces",
+   "status": "active",
+   "issued": "2018-01-10",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "PK",
+     "isoNumeric": "586",
+     "name": "Pakistan"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-20574",
+   "kind": "safety-warning",
+   "title": "Airspace of Afghanistan",
+   "status": "active",
+   "issued": "2017-10-17",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "AF",
+     "isoNumeric": "004",
+     "name": "Afghanistan"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20602",
+   "kind": "safety-warning",
+   "title": "Airspace of Yemen – Sana’a Flight Information Region",
+   "status": "active",
+   "issued": "2017-08-31",
+   "end": "2027-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/04/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "YE",
+     "isoNumeric": "887",
+     "name": "Yemen"
+    }
+   ],
+   "partialArea": true
+  },
+  {
+   "id": "easa-20599",
+   "kind": "safety-warning",
+   "title": "Airspace of Syria",
+   "status": "active",
+   "issued": "2017-03-31",
+   "end": "2026-11-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/11/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "SY",
+     "isoNumeric": "760",
+     "name": "Syria"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20589",
+   "kind": "safety-warning",
+   "title": "Airspace of Somalia",
+   "status": "active",
+   "issued": "2017-03-31",
+   "end": "2027-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/04/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "SO",
+     "isoNumeric": "706",
+     "name": "Somalia"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20585",
+   "kind": "safety-warning",
+   "title": "Airspace of Mali",
+   "status": "active",
+   "issued": "2017-03-31",
+   "end": "2027-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/04/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "ML",
+     "isoNumeric": "466",
+     "name": "Mali"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20582",
+   "kind": "safety-warning",
+   "title": "Airspace of Libya",
+   "status": "active",
+   "issued": "2017-03-31",
+   "end": "2027-01-31",
+   "endIsApproximate": false,
+   "validUntilNote": "31/01/2027, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "LY",
+     "isoNumeric": "434",
+     "name": "Libya"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20581",
+   "kind": "safety-warning",
+   "title": "Airspace of Iraq",
+   "status": "withdrawn",
+   "issued": "2017-03-31",
+   "end": "2026-04-30",
+   "endIsApproximate": false,
+   "validUntilNote": "30/04/2026, unless reviewed earlier.",
+   "countries": [
+    {
+     "iso2": "IQ",
+     "isoNumeric": "368",
+     "name": "Iraq"
+    }
+   ],
+   "partialArea": false
+  },
+  {
+   "id": "easa-20600",
+   "kind": "safety-warning",
+   "title": "Airspace of Eastern Ukraine",
+   "status": "withdrawn",
+   "issued": "2016-02-19",
+   "end": "2024-02-01",
+   "endIsApproximate": true,
+   "validUntilNote": "",
+   "countries": [
+    {
+     "iso2": "UA",
+     "isoNumeric": "804",
+     "name": "Ukraine"
+    }
+   ],
+   "partialArea": false
+  }
+ ]
+}

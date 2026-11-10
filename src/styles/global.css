@@ -539,6 +539,59 @@ input[type='range'] {
   text-align: left;
 }
 
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle-row input {
+  accent-color: var(--accent-warm);
+  width: 15px;
+  height: 15px;
+}
+
+.advisory-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.advisory-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(224, 150, 60, 0.6);
+}
+
+.advisory-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.advisory-title {
+  font-size: 12px;
+}
+
+.advisory-badge {
+  background: rgba(224, 150, 60, 0.14);
+  color: #e0963c;
+  border: 1px solid rgba(224, 150, 60, 0.35);
+  flex: none;
+}
+
+.hint.advisory-notice {
+  color: #e0963c;
+}
+
 .rank-list {
   list-style: none;
   margin: 0;

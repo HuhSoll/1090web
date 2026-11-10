@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "datasetId": "demo-2026",
+  "kind": "demo",
+  "title": "AeroGraph demo dataset (synthetic)",
+  "generatedAt": "2026-11-10T00:00:00Z",
+  "generator": "scripts/generate-demo-data.mjs",
+  "seed": 20260101,
+  "months": [
+    {
+      "month": "2026-01",
+      "file": "months/2026-01.json",
+      "observedDays": 31,
+      "recordCount": 1088
+    },
+    {
+      "month": "2026-02",
+      "file": "months/2026-02.json",
+      "observedDays": 28,
+      "recordCount": 1104
+    },
+    {
+      "month": "2026-03",
+      "file": "months/2026-03.json",
+      "observedDays": 31,
+      "recordCount": 1106
+    },
+    {
+      "month": "2026-04",
+      "file": "months/2026-04.json",
+      "observedDays": 30,
+      "recordCount": 1098
+    },
+    {
+      "month": "2026-05",
+      "file": "months/2026-05.json",
+      "observedDays": 31,
+      "recordCount": 1082
+    },
+    {
+      "month": "2026-06",
+      "file": "months/2026-06.json",
+      "observedDays": 30,
+      "recordCount": 1072
+    },
+    {
+      "month": "2026-07",
+      "file": "months/2026-07.json",
+      "observedDays": 31,
+      "recordCount": 1070
+    },
+    {
+      "month": "2026-08",
+      "file": "months/2026-08.json",
+      "observedDays": 31,
+      "recordCount": 1062
+    },
+    {
+      "month": "2026-09",
+      "file": "months/2026-09.json",
+      "observedDays": 30,
+      "recordCount": 1060
+    },
+    {
+      "month": "2026-10",
+      "file": "months/2026-10.json",
+      "observedDays": 31,
+      "recordCount": 1078
+    }
+  ],
+  "carriers": [
+    {
+      "id": "demo-aurora",
+      "name": "Demo Aurora Air",
+      "operatorType": "passenger"
+    },
+    {
+      "id": "demo-meridian",
+      "name": "Demo Meridian Airways",
+      "operatorType": "passenger"
+    },
+    {
+      "id": "demo-polaris",
+      "name": "Demo Polaris Airlines",
+      "operatorType": "passenger"
+    },
+    {
+      "id": "demo-monsoon",
+      "name": "Demo Monsoon Air",
+      "operatorType": "passenger"
+    },
+    {
+      "id": "demo-zephyr",
+      "name": "Demo Zephyr Connect",
+      "operatorType": "passenger"
+    },
+    {
+      "id": "demo-freight",
+      "name": "Demo Freight Lines",
+      "operatorType": "cargo"
+    }
+  ],
+  "sources": [
+    {
+      "id": "demo-synthetic",
+      "name": "Synthetic demo values",
+      "description": "Routes, carriers and flight counts are randomly generated for UI development. They are not observations.",
+      "license": "n/a"
+    },
+    {
+      "id": "airport-reference",
+      "name": "Hand-entered airport reference points",
+      "description": "Approximate airport coordinates entered for the demo. Will be replaced by OurAirports data in Phase 2.",
+      "license": "n/a"
+    }
+  ],
+  "disclaimer": "DEMO DATA: all flight counts, routes and carriers are synthetic and must not be read as real aviation statistics."
+}

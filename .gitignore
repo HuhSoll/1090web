@@ -37,3 +37,6 @@ Thumbs.db
 
 # Intermediate file for the social preview image
 og-geometry.json
+
+# Local assistant instructions (not part of the project)
+CLAUDE.md

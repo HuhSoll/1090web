@@ -1,5 +1,5 @@
 /**
- * Official advisories shown as an overlay. The kinds are kept distinct on purpose (CLAUDE.md §7):
+ * Official advisories shown as an overlay. The kinds are kept distinct on purpose:
  * a safety warning is not an airspace closure, a weather warning or a cancellation, and none of
  * them is used to remove routes from the observed network.
  */

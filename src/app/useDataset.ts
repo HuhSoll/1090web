@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DatasetLoader } from '../data/loaders/datasetLoader';
 import { buildStressNetwork } from '../data/demo/stressNetwork';
+import { computeComparison, type Comparison } from '../domain/comparison';
 import { computeNetworkView, type NetworkView } from '../domain/networkView';
 import { useAppStore } from '../state/store';
 import { PLAYBACK_INTERVAL_MS, resolveDatasetId } from './config';
@@ -23,6 +24,8 @@ export function useDataset(): { retry: () => void } {
   const month = useAppStore((s) => s.month);
   const monthLoading = useAppStore((s) => s.monthLoading);
   const stressRouteCount = useAppStore((s) => s.stressRouteCount);
+  const compareEnabled = useAppStore((s) => s.compareEnabled);
+  const compareBaseIndex = useAppStore((s) => s.compareBaseIndex);
 
   const loadStatic = useCallback(() => {
     const st = useAppStore.getState();
@@ -84,6 +87,31 @@ export function useDataset(): { retry: () => void } {
     };
   }, [network, monthIndex, stressRouteCount, monthReloadKey]);
 
+  // Comparison base month (loaded only while comparing; cached by the loader).
+  useEffect(() => {
+    const st = useAppStore.getState();
+    if (!compareEnabled || !network || stressRouteCount !== null) {
+      if (st.baseMonth) st.setBaseMonth(null);
+      return;
+    }
+    const entry = network.manifest.months[compareBaseIndex];
+    const loader = loaderRef.current;
+    if (!entry || !loader) return;
+    let cancelled = false;
+    loader
+      .loadMonth(entry.month)
+      .then((m) => {
+        if (!cancelled) useAppStore.getState().setBaseMonth(m);
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        useAppStore.getState().setStatus({ state: 'error', message: err instanceof Error ? err.message : String(err) });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [network, compareEnabled, compareBaseIndex, stressRouteCount, monthReloadKey]);
+
   // Playback: advance after the current month has been displayed for a while.
   useEffect(() => {
     if (!playing || !network || monthLoading || !month) return;
@@ -109,6 +137,19 @@ export function useDataset(): { retry: () => void } {
   }, [status, loadStatic]);
 
   return { retry };
+}
+
+/** Comparison between the base month and the current month, or null when not comparing. */
+export function useComparison(): Comparison | null {
+  const network = useAppStore((s) => s.network);
+  const month = useAppStore((s) => s.month);
+  const baseMonth = useAppStore((s) => s.baseMonth);
+  const enabled = useAppStore((s) => s.compareEnabled);
+  const filters = useAppStore((s) => s.filters);
+  return useMemo(
+    () => (enabled && network && month && baseMonth ? computeComparison(network, baseMonth, month, filters) : null),
+    [enabled, network, month, baseMonth, filters],
+  );
 }
 
 export function useNetworkView(): NetworkView | null {

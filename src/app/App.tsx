@@ -6,11 +6,13 @@ import { Sidebar } from '../components/layout/Sidebar';
 import { Timeline } from '../components/layout/Timeline';
 import { TopBar } from '../components/layout/TopBar';
 import { InfoPanel } from '../components/panels/InfoPanel';
+import { CompareLegend } from '../components/panels/ComparePanels';
 import { SourcesDialog } from '../components/panels/SourcesDialog';
 import { Tooltip } from '../components/common/Tooltip';
 import { useI18n } from '../i18n/useI18n';
 import { useAppStore } from '../state/store';
-import { useDataset, useNetworkView } from './useDataset';
+import { useComparison, useDataset, useNetworkView } from './useDataset';
+import { useUrlState } from './urlState';
 
 // The map renderer (three.js, d3-geo, topojson) is the bulk of the bundle. Loading it as a
 // separate chunk lets the panels render immediately while WebGL code downloads.
@@ -18,7 +20,9 @@ const GlobeView = lazy(() => import('../components/globe/GlobeView').then((m) =>
 
 export function App() {
   const { retry } = useDataset();
+  useUrlState();
   const view = useNetworkView();
+  const comparison = useComparison();
   const { t, number, locale } = useI18n();
   const status = useAppStore((s) => s.status);
   const kind = useAppStore((s) => s.network?.manifest.kind);
@@ -64,7 +68,7 @@ export function App() {
           )}
         >
           <Suspense fallback={<div className="globe-fallback"><div className="spinner" aria-hidden="true" /></div>}>
-            <GlobeView view={view} />
+            <GlobeView view={view} comparison={comparison} />
           </Suspense>
         </ErrorBoundary>
       </main>
@@ -98,7 +102,8 @@ export function App() {
       </div>
       {drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={() => setDrawerOpen(false)} />}
       <Sidebar view={view} />
-      <InfoPanel view={view} />
+      <InfoPanel view={view} comparison={comparison} />
+      {comparison && <CompareLegend comparison={comparison} />}
       <TopBar />
       <Timeline />
       <Tooltip view={view} />

@@ -226,8 +226,17 @@ export class GlobeRenderer {
   }
 
   /** Per-route and per-airport weights (0..1, 0 = hidden). Cheap: only textures/attributes update. */
-  setWeights(routeWeights: Float32Array, airportWeights: Float32Array, connectedRouteIds: ReadonlySet<number> | null): void {
-    this.routes.updateState(routeWeights, connectedRouteIds);
+  /**
+   * @param changeKinds per-route change category in compare mode (domain/comparison ChangeKind);
+   *                    null for the normal view
+   */
+  setWeights(
+    routeWeights: Float32Array,
+    airportWeights: Float32Array,
+    connectedRouteIds: ReadonlySet<number> | null,
+    changeKinds: Uint8Array | null = null,
+  ): void {
+    this.routes.updateState(routeWeights, connectedRouteIds, changeKinds);
     this.airports.setWeights(airportWeights);
     for (let i = 0; i < this.airportVisible.length; i++) this.airportVisible[i] = (airportWeights[i] ?? 0) > 0 ? 1 : 0;
     this.markDirty();

@@ -12,6 +12,10 @@ export function Timeline() {
   const setPlaying = useAppStore((s) => s.setPlaying);
   const setMonthIndex = useAppStore((s) => s.setMonthIndex);
   const stress = useAppStore((s) => s.stressRouteCount);
+  const compareEnabled = useAppStore((s) => s.compareEnabled);
+  const compareBaseIndex = useAppStore((s) => s.compareBaseIndex);
+  const setCompareEnabled = useAppStore((s) => s.setCompareEnabled);
+  const setCompareBaseIndex = useAppStore((s) => s.setCompareBaseIndex);
 
   if (!network) return null;
   const months = network.manifest.months;
@@ -72,11 +76,37 @@ export function Timeline() {
         />
         <div className="timeline-ticks" aria-hidden="true">
           {months.map((m, i) => (
-            <span key={m.month} className={i === monthIndex ? 'is-active' : ''}>
+            <span
+              key={m.month}
+              className={i === monthIndex ? 'is-active' : compareEnabled && i === compareBaseIndex ? 'is-base' : ''}
+            >
               {monthLabel(m.month, 'short')}
             </span>
           ))}
         </div>
+      </div>
+      <div className="timeline-compare">
+        <button
+          type="button"
+          className={`pill-btn ${compareEnabled ? 'is-active' : ''}`}
+          disabled={disabled}
+          aria-pressed={compareEnabled}
+          onClick={() => setCompareEnabled(!compareEnabled)}
+        >
+          {t('compare.toggle')}
+        </button>
+        {compareEnabled && (
+          <label className="compare-base">
+            <span className="muted small">{t('compare.base')}</span>
+            <select value={compareBaseIndex} onChange={(e) => setCompareBaseIndex(Number(e.target.value))}>
+              {months.map((m, i) => (
+                <option key={m.month} value={i}>
+                  {monthLabel(m.month)}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
     </div>
   );

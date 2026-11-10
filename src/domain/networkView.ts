@@ -47,6 +47,8 @@ export interface NetworkView {
   /** Max route flights ignoring the threshold (keeps the threshold slider range stable). */
   maxRouteFlightsUnthresholded: number;
   maxAirportFlights: number;
+  /** Flights per airline code under the filters (before the route threshold). */
+  carrierFlights: Map<string, number>;
 }
 
 export function countryMatches(network: StaticNetwork, routeId: number, country: string | null): boolean {
@@ -76,6 +78,7 @@ export function computeNetworkView(
   }
 
   const routeCallsign = new Float32Array(routeCount);
+  const carrierFlights = new Map<string, number>();
   for (const r of month.records) {
     const [routeId, , carrierId, passenger, cargo, unknown] = r;
     const basis = r[6] ?? 0;
@@ -85,6 +88,7 @@ export function computeNetworkView(
     const f = flightsForMode(filters.mode, passenger, cargo, unknown);
     routeFlights[routeId]! += f;
     if (basis === 1) routeCallsign[routeId]! += f;
+    if (f > 0) carrierFlights.set(carrierId, (carrierFlights.get(carrierId) ?? 0) + f);
   }
 
   const airportFlights = new Float32Array(network.airports.length);
@@ -127,6 +131,32 @@ export function computeNetworkView(
     maxRouteFlights,
     maxRouteFlightsUnthresholded,
     maxAirportFlights,
+    carrierFlights,
+  };
+}
+
+export interface Rankings {
+  airports: { index: number; flights: number }[];
+  routes: { routeId: number; flights: number }[];
+  carriers: { carrierId: string; flights: number }[];
+}
+
+/** Top-N airports, routes and airline codes of a view. */
+export function computeRankings(view: NetworkView, n = 5): Rankings {
+  const top = <T>(items: T[], value: (t: T) => number) => items.sort((a, b) => value(b) - value(a)).slice(0, n);
+  const airports: Rankings['airports'] = [];
+  view.airportFlights.forEach((flights, index) => {
+    if (flights > 0) airports.push({ index, flights });
+  });
+  const routes: Rankings['routes'] = [];
+  view.routeFlights.forEach((flights, routeId) => {
+    if (flights > 0) routes.push({ routeId, flights });
+  });
+  const carriers = [...view.carrierFlights].map(([carrierId, flights]) => ({ carrierId, flights }));
+  return {
+    airports: top(airports, (a) => a.flights),
+    routes: top(routes, (r) => r.flights),
+    carriers: top(carriers, (c) => c.flights),
   };
 }
 

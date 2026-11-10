@@ -54,6 +54,7 @@ export class RouteLayer {
         uHasSelection: { value: 0 },
         uBaseRadius: { value: ROUTE_BASE_RADIUS },
         uOpacity: { value: 1 },
+        uCompare: { value: 0 },
       },
       transparent: true,
       depthWrite: false,
@@ -102,7 +103,7 @@ export class RouteLayer {
    * @param weights normalised 0..1 per route; values <= 0 hide the route
    * @param connected optional set of route ids to keep bright while a selection is active
    */
-  updateState(weights: Float32Array, connected: ReadonlySet<number> | null): void {
+  updateState(weights: Float32Array, connected: ReadonlySet<number> | null, kinds: Uint8Array | null = null): void {
     const data = this.stateData;
     const n = Math.min(this.routeCount, weights.length);
     let visible = 0;
@@ -111,9 +112,11 @@ export class RouteLayer {
       const o = i * 4;
       data[o] = w > 0 ? 1 + Math.round(Math.min(1, w) * 254) : 0;
       data[o + 1] = connected?.has(i) ? 255 : 0;
+      data[o + 2] = kinds ? kinds[i]! : 0;
       if (w > 0) visible++;
     }
     this.material.uniforms.uHasSelection!.value = connected ? 1 : 0;
+    this.material.uniforms.uCompare!.value = kinds ? 1 : 0;
     // Additive blending saturates as line count grows; scale overall opacity so that density
     // (not raw count) drives brightness. ~1 for hundreds of routes, ~0.1 for 50k.
     this.material.uniforms.uOpacity!.value = densityOpacity(visible);

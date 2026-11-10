@@ -27,6 +27,11 @@ interface AppState {
   monthIndex: number;
   monthLoading: boolean;
   playing: boolean;
+  /** Month comparison: the current month (monthIndex) is compared against compareBaseIndex. */
+  compareEnabled: boolean;
+  compareBaseIndex: number;
+  /** Month data for compareBaseIndex (loaded only while comparing). */
+  baseMonth: MonthData | null;
   filters: NetworkFilters;
   selectedAirport: number | null;
   selectedRoute: number | null;
@@ -51,6 +56,9 @@ interface AppState {
   setMonthIndex: (i: number) => void;
   setMonthLoading: (v: boolean) => void;
   setPlaying: (p: boolean) => void;
+  setCompareEnabled: (v: boolean) => void;
+  setCompareBaseIndex: (i: number) => void;
+  setBaseMonth: (m: MonthData | null) => void;
   setFilters: (f: Partial<NetworkFilters>) => void;
   resetFilters: () => void;
   selectAirport: (i: number | null) => void;
@@ -79,6 +87,11 @@ function readPref(key: string): string | null {
 }
 
 function initialViewMode(): ViewMode {
+  // A shared link (?view=globe) wins over the saved preference.
+  if (typeof window !== 'undefined') {
+    const fromUrl = new URLSearchParams(window.location.search).get('view');
+    if (fromUrl === 'globe' || fromUrl === 'flat') return fromUrl;
+  }
   const saved = readPref(VIEW_KEY);
   return saved === 'globe' ? 'globe' : 'flat';
 }
@@ -98,6 +111,9 @@ export const useAppStore = create<AppState>((set) => ({
   monthIndex: 0,
   monthLoading: false,
   playing: false,
+  compareEnabled: false,
+  compareBaseIndex: 0,
+  baseMonth: null,
   filters: DEFAULT_FILTERS,
   selectedAirport: null,
   selectedRoute: null,
@@ -126,6 +142,14 @@ export const useAppStore = create<AppState>((set) => ({
   setMonthIndex: (monthIndex) => set({ monthIndex }),
   setMonthLoading: (monthLoading) => set({ monthLoading }),
   setPlaying: (playing) => set({ playing }),
+  setCompareEnabled: (compareEnabled) =>
+    set((s) => ({
+      compareEnabled,
+      // Turning comparison on starts from the previous month.
+      compareBaseIndex: compareEnabled ? Math.max(0, s.monthIndex - 1) : s.compareBaseIndex,
+    })),
+  setCompareBaseIndex: (compareBaseIndex) => set({ compareBaseIndex }),
+  setBaseMonth: (baseMonth) => set({ baseMonth }),
   setFilters: (f) => set((s) => ({ filters: { ...s.filters, ...f } })),
   resetFilters: () => set({ filters: DEFAULT_FILTERS }),
   selectAirport: (selectedAirport) => set({ selectedAirport, selectedRoute: null, listHoverRoute: null }),

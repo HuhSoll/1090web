@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { computeRouteDetail, connectedRoutes, type NetworkView } from '../../domain/networkView';
+import { computeRankings, computeRouteDetail, connectedRoutes, type NetworkView } from '../../domain/networkView';
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
 import { greatCircleKm } from '../../utils/geo';
 import { Icon } from '../common/Icon';
 import type { StaticNetwork } from '../../data/model/network';
+import type { Comparison } from '../../domain/comparison';
+import { CompareAirport, CompareRoute, CompareSummary } from './ComparePanels';
 
-export function InfoPanel({ view }: { view: NetworkView | null }) {
+export function InfoPanel({ view, comparison }: { view: NetworkView | null; comparison: Comparison | null }) {
   const network = useAppStore((s) => s.network);
   const selectedAirport = useAppStore((s) => s.selectedAirport);
   const selectedRoute = useAppStore((s) => s.selectedRoute);
@@ -16,11 +18,13 @@ export function InfoPanel({ view }: { view: NetworkView | null }) {
   return (
     <aside ref={ref} className="info panel" aria-label="Details" aria-live="polite">
       {selectedRoute !== null ? (
-        <RouteDetailView network={network} view={view} routeId={selectedRoute} />
+        <RouteDetailView network={network} view={view} routeId={selectedRoute} comparison={comparison} />
       ) : selectedAirport !== null ? (
-        <AirportDetail network={network} view={view} airportIndex={selectedAirport} />
+        <AirportDetail network={network} view={view} airportIndex={selectedAirport} comparison={comparison} />
+      ) : comparison ? (
+        <CompareSummary network={network} comparison={comparison} />
       ) : (
-        <Summary view={view} />
+        <Summary network={network} view={view} />
       )}
     </aside>
   );
@@ -78,8 +82,18 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Summary({ view }: { view: NetworkView }) {
+function Summary({ network, view }: { network: StaticNetwork; view: NetworkView }) {
   const { t, number } = useI18n();
+  const rankings = useMemo(() => computeRankings(view, 5), [view]);
+  const selectAirport = useAppStore((s) => s.selectAirport);
+  const selectRoute = useAppStore((s) => s.selectRoute);
+  const setListHoverRoute = useAppStore((s) => s.setListHoverRoute);
+  const setFilters = useAppStore((s) => s.setFilters);
+  const carrierFilter = useAppStore((s) => s.filters.carrierId);
+  const code = (i: number) => {
+    const a = network.airports[i]!;
+    return a.iata ?? a.id;
+  };
   const share = view.totalFlights > 0 ? view.callsignFlights / view.totalFlights : 0;
   return (
     <div className="info-body">
@@ -96,11 +110,74 @@ function Summary({ view }: { view: NetworkView }) {
         <p className="hint">{t('summary.callsignShare', { share: `${Math.round(share * 100)}%` })}</p>
       )}
       <p className="hint">{t('summary.hint')}</p>
+
+      <h3 className="section-title">{t('rank.airports')}</h3>
+      <ol className="rank-list">
+        {rankings.airports.map((a) => (
+          <li key={a.index}>
+            <button type="button" onClick={() => selectAirport(a.index)}>
+              <span className="code">{code(a.index)}</span>
+              <span className="route-name">{network.airports[a.index]!.city || network.airports[a.index]!.name}</span>
+              <span className="route-value">{number(a.flights)}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+
+      <h3 className="section-title">{t('rank.routes')}</h3>
+      <ol className="rank-list" onMouseLeave={() => setListHoverRoute(null)}>
+        {rankings.routes.map((r) => {
+          const route = network.routes[r.routeId]!;
+          return (
+            <li key={r.routeId}>
+              <button
+                type="button"
+                onMouseEnter={() => setListHoverRoute(r.routeId)}
+                onClick={() => {
+                  setListHoverRoute(null);
+                  selectRoute(r.routeId);
+                }}
+              >
+                <span className="code">{code(route.a)}</span>
+                <span className="code">{code(route.b)}</span>
+                <span className="route-value">{number(r.flights)}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+
+      {!carrierFilter && rankings.carriers.length > 1 && (
+        <>
+          <h3 className="section-title">{t('rank.carriers')}</h3>
+          <ol className="rank-list">
+            {rankings.carriers.map((c) => (
+              <li key={c.carrierId}>
+                <button type="button" onClick={() => setFilters({ carrierId: c.carrierId })}>
+                  <span className="code">{c.carrierId}</span>
+                  <span className="route-name" />
+                  <span className="route-value">{number(c.flights)}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
     </div>
   );
 }
 
-function AirportDetail({ network, view, airportIndex }: { network: StaticNetwork; view: NetworkView; airportIndex: number }) {
+function AirportDetail({
+  network,
+  view,
+  airportIndex,
+  comparison,
+}: {
+  network: StaticNetwork;
+  view: NetworkView;
+  airportIndex: number;
+  comparison: Comparison | null;
+}) {
   const { t, number, countryName } = useI18n();
   const selectAirport = useAppStore((s) => s.selectAirport);
   const selectRoute = useAppStore((s) => s.selectRoute);
@@ -128,16 +205,19 @@ function AirportDetail({ network, view, airportIndex }: { network: StaticNetwork
         {airport.city} · {countryName(airport.country)}
         {airport.icao && airport.iata ? ` · ${airport.icao}` : ''}
       </p>
+      {comparison && <CompareAirport network={network} comparison={comparison} airportIndex={airportIndex} />}
+      {!comparison && (
       <div className="stats">
         <Stat label={t('airport.flights')} value={number(flights)} />
         <Stat label={t('airport.routes')} value={number(routes.length)} />
       </div>
+      )}
       <p className="muted small">
         {t('airport.coords')}: {airport.lat.toFixed(3)}, {airport.lon.toFixed(3)}
       </p>
 
-      <h3 className="section-title">{t('airport.routeList')}</h3>
-      {routes.length === 0 ? (
+      {!comparison && <h3 className="section-title">{t('airport.routeList')}</h3>}
+      {comparison ? null : routes.length === 0 ? (
         <p className="hint">{flights > 0 ? t('airport.noRoutes') : t('airport.hidden')}</p>
       ) : (
         <ul className="route-list" onMouseLeave={() => setListHoverRoute(null)}>
@@ -172,7 +252,17 @@ function AirportDetail({ network, view, airportIndex }: { network: StaticNetwork
   );
 }
 
-function RouteDetailView({ network, view, routeId }: { network: StaticNetwork; view: NetworkView; routeId: number }) {
+function RouteDetailView({
+  network,
+  view,
+  routeId,
+  comparison,
+}: {
+  network: StaticNetwork;
+  view: NetworkView;
+  routeId: number;
+  comparison: Comparison | null;
+}) {
   const { t, number } = useI18n();
   const month = useAppStore((s) => s.month);
   const filters = useAppStore((s) => s.filters);
@@ -215,7 +305,8 @@ function RouteDetailView({ network, view, routeId }: { network: StaticNetwork; v
       <p className="muted">
         {a.city} – {b.city}
       </p>
-      {!visible && <p className="hint warn">{t('route.hidden')}</p>}
+      {comparison && <CompareRoute comparison={comparison} routeId={routeId} />}
+      {!visible && !comparison && <p className="hint warn">{t('route.hidden')}</p>}
       <div className="stats">
         <Stat label={t('route.flights')} value={number(total)} />
         <Stat label={t('route.distance')} value={t('unit.km', { value: number(km) })} />

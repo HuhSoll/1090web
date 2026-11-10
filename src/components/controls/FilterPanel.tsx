@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { DEFAULT_FILTERS, thresholdStepsFor, type NetworkView, type TrafficMode } from '../../domain/networkView';
 import { useAppStore } from '../../state/store';
+import { AirlinePicker } from './AirlinePicker';
 import { useI18n } from '../../i18n/useI18n';
 
 export function FilterPanel({ view }: { view: NetworkView | null }) {
@@ -64,21 +65,7 @@ export function FilterPanel({ view }: { view: NetworkView | null }) {
         </select>
       </label>
 
-      <label className="field">
-        <span className="field-label">{t('filters.carrier')}</span>
-        <select
-          value={filters.carrierId ?? ''}
-          disabled={disabled}
-          onChange={(e) => setFilters({ carrierId: e.target.value || null })}
-        >
-          <option value="">{t('filters.carrierAll')}</option>
-          {network?.carriers.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <AirlinePicker />
 
       <div className="field" role="radiogroup" aria-label={t('filters.traffic')}>
         <span className="field-label">{t('filters.traffic')}</span>

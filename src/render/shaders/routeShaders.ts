@@ -25,6 +25,7 @@ uniform sampler2D uState;
 uniform int uStateWidth;
 uniform float uHasSelection;
 uniform float uBaseRadius;
+uniform float uCompare;
 
 out float vAlpha;
 out vec3 vColor;
@@ -42,6 +43,8 @@ void main() {
   }
   float w = clamp((encoded * 255.0 - 1.0) / 254.0, 0.0, 1.0);
   float connected = s.g;
+  // Change category in compare mode (see domain/comparison.ts ChangeKind).
+  int kind = int(s.b * 255.0 + 0.5);
 
   float t = position.x;
   float d = clamp(dot(aStart, aEnd), -1.0, 1.0);
@@ -64,6 +67,14 @@ void main() {
   vColor = mix(low, high, w * w);
   // Squared weight widens the gap between thin regional routes and trunk routes.
   float alpha = 0.035 + 0.45 * w * w;
+  if (uCompare > 0.5) {
+    // Diverging, colour-blind-safe: blue = more flights, orange = fewer, grey = unchanged.
+    if (kind == 2) { vColor = vec3(0.30, 0.70, 1.00); alpha *= 1.6; }        // up
+    else if (kind == 3) { vColor = vec3(1.00, 0.58, 0.25); alpha *= 1.6; }   // down
+    else if (kind == 4) { vColor = vec3(0.55, 0.88, 1.00); alpha = max(alpha * 2.2, 0.12); } // new
+    else if (kind == 5) { vColor = vec3(1.00, 0.42, 0.20); alpha = max(alpha * 2.2, 0.12); } // gone
+    else { vColor = vec3(0.45, 0.52, 0.62); alpha *= 0.45; }                // stable
+  }
   // When something is selected, everything that is not connected recedes.
   float dim = mix(1.0, mix(0.16, 1.4, connected), uHasSelection);
   // On the globe, arcs near the horizon are seen edge-on and pile up; fade them.

@@ -8,6 +8,7 @@ import {
   connectedRoutes,
   DEFAULT_FILTERS,
   notableRoutes,
+  computeRankings,
   thresholdStepsFor,
 } from '../src/domain/networkView';
 import { searchAirports } from '../src/domain/search';
@@ -164,6 +165,19 @@ describe('route helpers', () => {
   it('threshold steps never exceed the max', () => {
     expect(thresholdStepsFor(120)).toEqual([0, 5, 10, 20, 30, 50, 75, 100]);
     expect(thresholdStepsFor(0)).toEqual([0]);
+  });
+});
+
+describe('computeRankings', () => {
+  it('ranks airports, routes and airline codes by flights', () => {
+    const v = computeNetworkView(network, month, DEFAULT_FILTERS);
+    const r = computeRankings(v, 2);
+    expect(r.airports.map((a) => a.index)).toEqual([1, 0]);
+    expect(r.routes.map((x) => x.routeId)).toEqual([0, 2]);
+    expect(r.carriers).toEqual([
+      { carrierId: 'x', flights: 106 },
+      { carrierId: 'y', flights: 40 },
+    ]);
   });
 });
 

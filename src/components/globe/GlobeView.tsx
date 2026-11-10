@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { comparisonAsView, type Comparison } from '../../domain/comparison';
 import { connectedRoutes, notableRoutes, type NetworkView } from '../../domain/networkView';
 import { GlobeRenderer, WebGLUnavailableError, type PickHit } from '../../render/globe/GlobeRenderer';
 import { useAppStore } from '../../state/store';
@@ -7,6 +8,8 @@ import { GlobeControls } from './GlobeControls';
 
 interface Props {
   view: NetworkView | null;
+  /** When comparing months, routes are weighted by the larger month and coloured by change. */
+  comparison: Comparison | null;
 }
 
 const logNorm = (v: number, max: number) => (v > 0 && max > 0 ? Math.log1p(v) / Math.log1p(max) : 0);
@@ -15,7 +18,8 @@ const logNorm = (v: number, max: number) => (v > 0 && max > 0 ? Math.log1p(v) / 
  * React bridge for the imperative GlobeRenderer. React owns state; the renderer only receives
  * typed arrays and selection descriptors, and reports picks back through callbacks.
  */
-export function GlobeView({ view }: Props) {
+export function GlobeView({ view: monthView, comparison }: Props) {
+  const view = useMemo(() => (comparison ? comparisonAsView(comparison) : monthView), [comparison, monthView]);
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<GlobeRenderer | null>(null);
   const [webglError, setWebglError] = useState<string | null>(null);
@@ -107,17 +111,20 @@ export function GlobeView({ view }: Props) {
     const aw = new Float32Array(view.airportFlights.length);
     for (let i = 0; i < aw.length; i++) aw[i] = logNorm(view.airportFlights[i]!, view.maxAirportFlights);
     const connectedIds = connected ? new Set(connected.map((c) => c.routeId)) : null;
-    r.setWeights(rw, aw, connectedIds);
-  }, [network, view, connected]);
+    r.setWeights(rw, aw, connectedIds, comparison ? comparison.kind : null);
+  }, [network, view, connected, comparison]);
 
   // 3b. Notable (highest-volume) routes get slightly thicker lines.
   useEffect(() => {
     const r = rendererRef.current;
     if (!r || !network || !view) return;
+    // In compare mode colour carries the meaning; thick white lines would compete with it.
     r.setNotableRoutes(
-      notableRoutes(view).map((n) => ({ routeId: n.routeId, weight: logNorm(n.flights, view.maxRouteFlights) })),
+      comparison
+        ? []
+        : notableRoutes(view).map((n) => ({ routeId: n.routeId, weight: logNorm(n.flights, view.maxRouteFlights) })),
     );
-  }, [network, view]);
+  }, [network, view, comparison]);
 
   // 4. Selection / hover.
   const hoveredAirport = hover?.kind === 'airport' ? hover.id : null;

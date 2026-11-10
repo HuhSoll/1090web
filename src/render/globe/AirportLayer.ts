@@ -61,7 +61,8 @@ export class AirportLayer {
   setWeights(weights: Float32Array): void {
     for (let i = 0; i < this.sizes.length; i++) {
       const w = weights[i] ?? 0;
-      this.sizes[i] = w > 0 ? 3.6 + 7.5 * Math.sqrt(w) : 0;
+      // Large enough for the double-ring marker to stay legible on small airports.
+      this.sizes[i] = w > 0 ? 7 + 9 * Math.sqrt(w) : 0;
     }
     this.geometry.getAttribute('aSize').needsUpdate = true;
   }

@@ -20,6 +20,20 @@ export type MorphUniform = { value: number };
 const DEG2RAD = Math.PI / 180;
 
 /**
+ * Colour for our raw ShaderMaterials. THREE.Color converts sRGB hex to linear by default, but
+ * these shaders write the value straight to the screen, so the hex would render much darker
+ * than picked. Storing it "as linear" keeps the on-screen colour equal to the hex.
+ */
+const screenColor = (hex: string) => new THREE.Color().setStyle(hex, THREE.LinearSRGBColorSpace);
+
+const OCEAN = '#050a14';
+const LAND = '#1c3049';
+const RIM = '#2a6f9e';
+const GRATICULE = '#3b6a8f';
+const BORDERS = '#4a7398';
+const COAST = '#6a9cc6';
+
+/**
  * Dark, minimal Earth that can morph between a globe and a flat (equirectangular) map:
  * a surface shaded from a land mask (rasterised once from Natural Earth via world-atlas),
  * vector borders/coastlines, a faint graticule and a globe-only atmosphere rim.
@@ -45,9 +59,9 @@ export class EarthLayer {
         uMorph: morph,
         uLandMask: { value: null },
         uHasMask: { value: 0 },
-        uOcean: { value: new THREE.Color('#050b16') },
-        uLand: { value: new THREE.Color('#16293f') },
-        uRim: { value: new THREE.Color('#2a6f9e') },
+        uOcean: { value: screenColor(OCEAN) },
+        uLand: { value: screenColor(LAND) },
+        uRim: { value: screenColor(RIM) },
       },
     });
     const earth = new THREE.Mesh(sphere, this.earthMaterial);
@@ -62,7 +76,7 @@ export class EarthLayer {
       vertexShader: ATMOSPHERE_VERTEX,
       fragmentShader: ATMOSPHERE_FRAGMENT,
       uniforms: {
-        uColor: { value: new THREE.Color('#3d8fd1') },
+        uColor: { value: screenColor('#3d8fd1') },
         uFalloff: { value: 0.42 },
         uIntensity: { value: 0.32 },
       },
@@ -74,7 +88,7 @@ export class EarthLayer {
     this.atmosphere = new THREE.Mesh(atmosphereGeom, this.atmosphereMaterial);
     this.group.add(this.atmosphere);
 
-    this.addLines(geoGraticule10() as MultiLineString, 1.0004, 0.0004, '#3b6a8f', 0.07);
+    this.addLines(geoGraticule10() as MultiLineString, 1.0004, 0.0004, GRATICULE, 0.06);
 
     this.disposables.push(sphere, this.earthMaterial, atmosphereGeom, this.atmosphereMaterial);
   }
@@ -124,8 +138,8 @@ export class EarthLayer {
 
     const borders = mesh(topo, topo.objects.countries, (a, b) => a !== b) as MultiLineString;
     const coast = mesh(topo, topo.objects.land) as MultiLineString;
-    this.addLines(borders, 1.0006, 0.0008, '#4f7fa6', 0.28);
-    this.addLines(coast, 1.0006, 0.0008, '#5d93bf', 0.42);
+    this.addLines(borders, 1.0006, 0.0008, BORDERS, 0.3);
+    this.addLines(coast, 1.0006, 0.0008, COAST, 0.45);
   }
 
   /** Lines store (lat, lon) in radians; the shader projects them for globe or flat map. */
@@ -158,7 +172,7 @@ export class EarthLayer {
         uMorph: this.morph,
         uRadius: { value: radius },
         uFlatZ: { value: flatZ },
-        uColor: { value: new THREE.Color(color) },
+        uColor: { value: screenColor(color) },
         uOpacity: { value: opacity },
       },
       transparent: true,

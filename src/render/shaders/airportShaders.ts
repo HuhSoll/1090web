@@ -32,7 +32,7 @@ void main() {
   float facing = clamp(dot(normalize(globe), normalize(cameraPosition - worldP)) * 3.0, 0.0, 1.0);
   vFacing = mix(facing, 1.0, uMorph);
   float size = aSize;
-  if (aState >= 2.0) size = max(size, 10.0) + 7.0;
+  if (aState >= 2.0) size = max(size, 14.0) + 6.0;
   else if (aState >= 1.0) size += 2.0;
   gl_PointSize = size * uPixelRatio;
 }
@@ -49,26 +49,41 @@ in float vFacing;
 
 out vec4 outColor;
 
+// Anti-aliased band between radii a and b (r is 0 at the centre, 1 at the sprite edge).
+float band(float r, float a, float b, float aa) {
+  return smoothstep(a - aa, a, r) * (1.0 - smoothstep(b, b + aa, r));
+}
+
 void main() {
   if (vVisible < 0.5 || vFacing <= 0.0) discard;
   vec2 c = gl_PointCoord - 0.5;
   float r = length(c) * 2.0;
   if (r > 1.0) discard;
+  float aa = fwidth(r) * 1.2;
+
+  // Marker = bright core + thin outer ring, on a dark halo so it reads over routes and land.
+  float core = 1.0 - smoothstep(0.30 - aa, 0.30, r);
+  float ring = band(r, 0.58, 0.74, aa);
+  float halo = 1.0 - smoothstep(0.86, 1.0, r);
 
   vec3 color;
-  float alpha;
+  float strength;
   if (vState >= 2.0) {
-    // Selected (2) / hovered (3): amber core with a thin ring.
-    float core = smoothstep(0.42, 0.30, r);
-    float ring = smoothstep(0.62, 0.72, r) * smoothstep(1.0, 0.86, r);
+    // Selected (2) / hovered (3): amber.
     color = vec3(1.0, 0.80, 0.42);
-    alpha = max(core, ring * 0.9);
+    strength = 1.0;
+  } else if (vState >= 1.0) {
+    // Connected to the selection.
+    color = vec3(0.88, 0.98, 1.0);
+    strength = 1.0;
   } else {
-    float soft = smoothstep(1.0, 0.35, r);
-    color = vState >= 1.0 ? vec3(0.85, 0.97, 1.0) : vec3(0.55, 0.85, 1.0);
-    float base = vState >= 1.0 ? 1.0 : mix(0.75, 0.25, uHasSelection);
-    alpha = soft * base;
+    color = vec3(0.62, 0.89, 1.0);
+    strength = mix(1.0, 0.35, uHasSelection);
   }
-  outColor = vec4(color, alpha * vFacing);
+
+  float mark = max(core, ring * 0.9);
+  vec3 rgb = mix(vec3(0.01, 0.03, 0.07), color, mark);
+  float alpha = max(mark, halo * 0.55) * strength * vFacing;
+  outColor = vec4(rgb, alpha);
 }
 `;

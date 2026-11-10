@@ -49,6 +49,8 @@ const FLAT_MAX_HEIGHT = 7.5;
 /** Flat-map camera height per unit of globe altitude (keeps the zoom level similar across modes). */
 const FLAT_PER_GLOBE_ALTITUDE = 1.9;
 const FLAT_MAX_LAT = 1.25;
+const GLOBE_ZOOM_SPEED = 0.7;
+const FLAT_ZOOM_SPEED = 2.4;
 const MORPH_DURATION_MS = 1300;
 const AIRPORT_PICK_RADIUS_PX = 12;
 const ROUTE_PICK_RADIUS_PX = 6;
@@ -155,7 +157,6 @@ export class GlobeRenderer {
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
-    this.controls.zoomSpeed = 0.7;
     this.controls.autoRotateSpeed = 0.35;
     this.autoRotateEnabled = !this.reducedMotion;
     this.controls.addEventListener('change', this.markDirty);
@@ -419,6 +420,8 @@ export class GlobeRenderer {
     c.enablePan = flat;
     c.screenSpacePanning = true;
     c.zoomToCursor = flat;
+    // A flat map spans a much larger zoom range than the globe; a slow wheel feels sluggish.
+    c.zoomSpeed = flat ? FLAT_ZOOM_SPEED : GLOBE_ZOOM_SPEED;
     c.minDistance = flat ? FLAT_MIN_HEIGHT : GLOBE_MIN_DISTANCE;
     c.maxDistance = flat ? FLAT_MAX_HEIGHT : GLOBE_MAX_DISTANCE;
     c.mouseButtons = { LEFT: flat ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };

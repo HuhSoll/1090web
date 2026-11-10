@@ -19,7 +19,9 @@ function resolveBase(): string {
  */
 function siteUrlPlugin(): Plugin {
   const raw = process.env.SITE_URL?.trim() || 'https://huhsoll.github.io/1090web/';
-  const siteUrl = raw.endsWith('/') ? raw : `${raw}/`;
+  // URL() lowercases the host (the workflow passes the owner name with its original casing).
+  const href = new URL(raw).href;
+  const siteUrl = href.endsWith('/') ? href : `${href}/`;
   return {
     name: 'site-url',
     transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', siteUrl),

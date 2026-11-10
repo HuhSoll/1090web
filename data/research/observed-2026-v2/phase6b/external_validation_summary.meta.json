@@ -20,22 +20,14 @@
   "from": "2026-01",
   "to": "2026-09"
  },
- "generatedAt": "2026-11-10T16:19:45Z",
+ "generatedAt": "2026-11-10T16:23:43Z",
  "script": {
   "name": "pipeline/analysis/reliability.py",
   "version": "6b.1",
   "git": {
-   "commit": "79bcbb01604cf7884f2a9ddc8b5661a3b8af04c1",
+   "commit": "281dcf35bf826e565b744cbef1381f6222c30b73",
    "pipelineDirty": false,
-   "pipelineUntracked": [
-    "pipeline/analysis/__init__.py",
-    "pipeline/analysis/coverage.py",
-    "pipeline/analysis/network.py",
-    "pipeline/analysis/reliability.py",
-    "pipeline/tests/test_coverage_analysis.py",
-    "pipeline/tests/test_network.py",
-    "pipeline/tests/test_reliability.py"
-   ]
+   "pipelineUntracked": []
   }
  },
  "environment": {
@@ -52,7 +44,7 @@
    "sha256": "8eee22cd2055f69ce2705745e20da76723e5b1e44b5a2d9d3e004f3b267853aa",
    "path": "eurostat_avia_paoa.json",
    "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/avia_paoa?format=JSON&lang=EN&freq=M&unit=FLIGHT&tra_meas=CAF_PAS&schedule=TOTAL&tra_cov=TOTAL&sinceTimePeriod=2026-01&rep_airp=DE_EDDF&rep_airp=FR_LFPG&rep_airp=NL_EHAM&rep_airp=ES_LEMD&rep_airp=IT_LIRF",
-   "retrieved": "2026-11-10T16:20:10Z"
+   "retrieved": "2026-11-10T16:24:07Z"
   }
  ],
  "conditions": {

@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { arcAltitude, centralAngle, greatCircleKm, latLonToVec3, sampleArc, vec3ToLatLon } from '../src/utils/geo';
+import {
+  arcAltitude,
+  centralAngle,
+  greatCircleKm,
+  latLonToVec3,
+  sampleArc,
+  sampleArcFlat,
+  vec3ToLatLon,
+  wrapAngle,
+} from '../src/utils/geo';
 
 describe('latLonToVec3', () => {
   it('maps cardinal points to the expected axes', () => {
@@ -64,5 +73,37 @@ describe('sampleArc', () => {
     expect(radiusAt(near, 4)).toBeGreaterThan(radiusAt(near, 1));
     expect(radiusAt(far, 4)).toBeGreaterThan(radiusAt(near, 4));
     expect(arcAltitude(Math.PI, 0.5)).toBeLessThan(0.15);
+  });
+});
+
+describe('flat map projection', () => {
+  const D = Math.PI / 180;
+
+  it('wraps angles into [-PI, PI)', () => {
+    expect(wrapAngle(0)).toBeCloseTo(0);
+    expect(wrapAngle(Math.PI * 1.5)).toBeCloseTo(-Math.PI / 2);
+    expect(wrapAngle(-Math.PI * 1.5)).toBeCloseTo(Math.PI / 2);
+    expect(wrapAngle(Math.PI * 4 + 0.1)).toBeCloseTo(0.1);
+  });
+
+  it('maps endpoints to (lon, lat) in radians', () => {
+    const arc = sampleArcFlat(latLonToVec3(35.55, 139.78), latLonToVec3(51.47, -0.45), 20);
+    expect(arc[0]).toBeCloseTo(139.78 * D, 4);
+    expect(arc[1]).toBeCloseTo(35.55 * D, 4);
+    expect(arc[60]).toBeCloseTo(-0.45 * D, 4);
+    expect(arc[61]).toBeCloseTo(51.47 * D, 4);
+  });
+
+  it('follows the great circle poleward', () => {
+    // Tokyo–London bends north of both endpoints on an equirectangular map.
+    const arc = sampleArcFlat(latLonToVec3(35.55, 139.78), latLonToVec3(51.47, -0.45), 20);
+    expect(arc[10 * 3 + 1]!).toBeGreaterThan(60 * D);
+  });
+
+  it('crosses the antimeridian as one continuous line', () => {
+    // Tokyo -> Los Angeles: longitude keeps increasing past +PI instead of jumping to -PI.
+    const arc = sampleArcFlat(latLonToVec3(35.55, 139.78), latLonToVec3(33.94, -118.41), 32);
+    for (let i = 1; i <= 32; i++) expect(arc[i * 3]!).toBeGreaterThan(arc[(i - 1) * 3]!);
+    expect(arc[32 * 3]!).toBeCloseTo((360 - 118.41) * D, 4);
   });
 });

@@ -82,6 +82,10 @@ export const en = {
   'timeline.observedDays': '{days} observed days',
   'timeline.disabled': 'Single snapshot',
 
+  'view.label': 'Map style',
+  'view.flat': 'Map',
+  'view.globe': 'Globe',
+
   'globe.autoRotate': 'Auto-rotate',
   'globe.zoomIn': 'Zoom in',
   'globe.zoomOut': 'Zoom out',
@@ -180,6 +184,10 @@ export const ja: Messages = {
   'timeline.next': '次の月',
   'timeline.observedDays': '観測日数 {days} 日',
   'timeline.disabled': '単一スナップショット',
+
+  'view.label': '表示形式',
+  'view.flat': '地図',
+  'view.globe': '地球儀',
 
   'globe.autoRotate': '自動回転',
   'globe.zoomIn': 'ズームイン',

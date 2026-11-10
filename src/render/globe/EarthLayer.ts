@@ -4,33 +4,45 @@ import { feature, mesh } from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
 import type { MultiLineString } from 'geojson';
 import countriesUrl from 'world-atlas/countries-110m.json?url';
-import { latLonToVec3 } from '../../utils/geo';
 import {
   ATMOSPHERE_FRAGMENT,
   ATMOSPHERE_VERTEX,
   EARTH_FRAGMENT,
   EARTH_VERTEX,
+  GEO_LINE_FRAGMENT,
+  GEO_LINE_VERTEX,
 } from '../shaders/earthShaders';
+import { Wrapped } from './wrapCopies';
 
 type WorldTopology = Topology<{ countries: GeometryCollection; land: GeometryCollection }>;
+export type MorphUniform = { value: number };
+
+const DEG2RAD = Math.PI / 180;
 
 /**
- * Dark, minimal Earth: a sphere shaded from a land mask texture (rasterised once from Natural
- * Earth via world-atlas), vector borders/coastlines as thin line segments, a faint graticule and
- * a subtle atmosphere rim.
+ * Dark, minimal Earth that can morph between a globe and a flat (equirectangular) map:
+ * a surface shaded from a land mask (rasterised once from Natural Earth via world-atlas),
+ * vector borders/coastlines, a faint graticule and a globe-only atmosphere rim.
  */
 export class EarthLayer {
   readonly group = new THREE.Group();
   private readonly earthMaterial: THREE.ShaderMaterial;
+  private readonly atmosphere: THREE.Mesh;
+  private readonly atmosphereMaterial: THREE.ShaderMaterial;
+  private readonly wrapped: Wrapped<THREE.Mesh | THREE.LineSegments>[] = [];
   private readonly disposables: { dispose(): void }[] = [];
+  private readonly morph: MorphUniform;
 
-  constructor() {
-    const sphere = new THREE.SphereGeometry(1, 128, 96);
+  constructor(morph: MorphUniform) {
+    this.morph = morph;
+    const sphere = new THREE.SphereGeometry(1, 160, 100);
     this.earthMaterial = new THREE.ShaderMaterial({
       glslVersion: THREE.GLSL3,
       vertexShader: EARTH_VERTEX,
       fragmentShader: EARTH_FRAGMENT,
+      side: THREE.DoubleSide,
       uniforms: {
+        uMorph: morph,
         uLandMask: { value: null },
         uHasMask: { value: 0 },
         uOcean: { value: new THREE.Color('#050b16') },
@@ -39,14 +51,13 @@ export class EarthLayer {
       },
     });
     const earth = new THREE.Mesh(sphere, this.earthMaterial);
-    // SphereGeometry's u=0 seam sits at our lon -90 (see utils/geo.ts convention); rotate so that
-    // equirectangular texture longitude matches latLonToVec3().
-    earth.rotation.y = -Math.PI / 2;
+    // Vertex positions are computed in the shader; the bounding volume is meaningless.
+    earth.frustumCulled = false;
     earth.renderOrder = 0;
-    this.group.add(earth);
+    this.wrapped.push(new Wrapped<THREE.Mesh | THREE.LineSegments>(earth).addTo(this.group));
 
     const atmosphereGeom = new THREE.SphereGeometry(1.09, 96, 64);
-    const atmosphereMat = new THREE.ShaderMaterial({
+    this.atmosphereMaterial = new THREE.ShaderMaterial({
       glslVersion: THREE.GLSL3,
       vertexShader: ATMOSPHERE_VERTEX,
       fragmentShader: ATMOSPHERE_FRAGMENT,
@@ -60,16 +71,23 @@ export class EarthLayer {
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });
-    const atmosphere = new THREE.Mesh(atmosphereGeom, atmosphereMat);
-    this.group.add(atmosphere);
+    this.atmosphere = new THREE.Mesh(atmosphereGeom, this.atmosphereMaterial);
+    this.group.add(this.atmosphere);
 
-    const graticule = this.buildLines(geoGraticule10() as MultiLineString, 1.0004, '#3b6a8f', 0.07);
-    this.group.add(graticule);
+    this.addLines(geoGraticule10() as MultiLineString, 1.0004, 0.0004, '#3b6a8f', 0.07);
 
-    this.disposables.push(sphere, this.earthMaterial, atmosphereGeom, atmosphereMat);
+    this.disposables.push(sphere, this.earthMaterial, atmosphereGeom, this.atmosphereMaterial);
   }
 
-  /** Loads the basemap (land mask + borders). Resolves even if it fails; the caller decides how to report. */
+  /** Called every frame with the current morph and whether the flat copies should be drawn. */
+  update(copies: boolean): void {
+    const m = this.morph.value;
+    this.atmosphere.visible = m < 0.99;
+    this.atmosphereMaterial.uniforms.uIntensity!.value = 0.32 * (1 - m) * (1 - m);
+    for (const w of this.wrapped) w.setVisible(true, copies);
+  }
+
+  /** Loads the basemap (land mask + borders). Rejects on failure; the caller decides how to report. */
   async loadBasemap(maxTextureSize: number, signal?: AbortSignal): Promise<void> {
     const res = await fetch(countriesUrl, { signal });
     if (!res.ok) throw new Error(`Basemap HTTP ${res.status}`);
@@ -106,11 +124,12 @@ export class EarthLayer {
 
     const borders = mesh(topo, topo.objects.countries, (a, b) => a !== b) as MultiLineString;
     const coast = mesh(topo, topo.objects.land) as MultiLineString;
-    this.group.add(this.buildLines(borders, 1.0006, '#4f7fa6', 0.28));
-    this.group.add(this.buildLines(coast, 1.0006, '#5d93bf', 0.42));
+    this.addLines(borders, 1.0006, 0.0008, '#4f7fa6', 0.28);
+    this.addLines(coast, 1.0006, 0.0008, '#5d93bf', 0.42);
   }
 
-  private buildLines(geom: MultiLineString, radius: number, color: string, opacity: number): THREE.LineSegments {
+  /** Lines store (lat, lon) in radians; the shader projects them for globe or flat map. */
+  private addLines(geom: MultiLineString, radius: number, flatZ: number, color: string, opacity: number): void {
     const positions: number[] = [];
     const MAX_STEP_DEG = 1.5;
     for (const line of geom.coordinates) {
@@ -124,23 +143,32 @@ export class EarthLayer {
         dLon /= steps;
         const dLat = (lat2 - lat1) / steps;
         for (let s = 0; s < steps; s++) {
-          positions.push(...latLonToVec3(lat1 + dLat * s, lon1 + dLon * s, radius));
-          positions.push(...latLonToVec3(lat1 + dLat * (s + 1), lon1 + dLon * (s + 1), radius));
+          positions.push((lat1 + dLat * s) * DEG2RAD, (lon1 + dLon * s) * DEG2RAD, 0);
+          positions.push((lat1 + dLat * (s + 1)) * DEG2RAD, (lon1 + dLon * (s + 1)) * DEG2RAD, 0);
         }
       }
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const material = new THREE.LineBasicMaterial({
-      color,
+    const material = new THREE.ShaderMaterial({
+      glslVersion: THREE.GLSL3,
+      vertexShader: GEO_LINE_VERTEX,
+      fragmentShader: GEO_LINE_FRAGMENT,
+      uniforms: {
+        uMorph: this.morph,
+        uRadius: { value: radius },
+        uFlatZ: { value: flatZ },
+        uColor: { value: new THREE.Color(color) },
+        uOpacity: { value: opacity },
+      },
       transparent: true,
-      opacity,
       depthWrite: false,
     });
     this.disposables.push(geometry, material);
     const lines = new THREE.LineSegments(geometry, material);
+    lines.frustumCulled = false;
     lines.renderOrder = 1;
-    return lines;
+    this.wrapped.push(new Wrapped<THREE.Mesh | THREE.LineSegments>(lines).addTo(this.group));
   }
 
   dispose(): void {

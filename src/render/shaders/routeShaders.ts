@@ -1,16 +1,22 @@
+import { PROJECTION_GLSL } from './projection';
+
 /**
  * Base route layer shaders (WebGL2 / GLSL 3).
  *
  * Every route is ONE instance of a shared line-strip template. The template only stores the
- * arc parameter t; the vertex shader builds the raised great-circle arc from the per-instance
- * endpoints. Per-route state (weight / highlight) lives in a small RGBA texture indexed by
- * gl_InstanceID, so filters, month changes and selection never touch vertex buffers.
+ * arc parameter t; the vertex shader builds the route from the per-instance endpoints, both
+ * as a raised great-circle arc on the globe and as the projected great circle on the flat map,
+ * and blends them with uMorph. Per-route state (weight / highlight) lives in a small RGBA
+ * texture indexed by gl_InstanceID, so filters, month changes and selection never touch
+ * vertex buffers.
  *
- * Arc altitude must match `arcAltitude()` in src/utils/geo.ts.
+ * Arc shapes must match `arcAltitude()` / `sampleArcFlat()` in src/utils/geo.ts.
  */
 export const ROUTE_VERTEX = /* glsl */ `
 precision highp float;
 precision highp int;
+
+${PROJECTION_GLSL}
 
 in vec3 aStart;
 in vec3 aEnd;
@@ -22,8 +28,6 @@ uniform float uBaseRadius;
 
 out float vAlpha;
 out vec3 vColor;
-
-const float PI = 3.141592653589793;
 
 void main() {
   int id = gl_InstanceID;
@@ -43,8 +47,16 @@ void main() {
   float d = clamp(dot(aStart, aEnd), -1.0, 1.0);
   float ang = acos(d);
   float sn = sin(ang);
-  vec3 p = sn < 1e-5 ? mix(aStart, aEnd, t) : (sin((1.0 - t) * ang) * aStart + sin(t * ang) * aEnd) / sn;
-  p = normalize(p) * (uBaseRadius + sin(PI * t) * (0.012 + 0.11 * (ang / PI)));
+  vec3 dir = normalize(sn < 1e-5 ? mix(aStart, aEnd, t) : (sin((1.0 - t) * ang) * aStart + sin(t * ang) * aEnd) / sn);
+
+  vec3 globe = dir * (uBaseRadius + sin(PI * t) * (0.012 + 0.11 * (ang / PI)));
+
+  float lonA = atan(aStart.x, aStart.z);
+  float lon = lonA + wrapAngle(atan(dir.x, dir.z) - lonA);
+  float lat = asin(clamp(dir.y, -1.0, 1.0));
+  vec3 flatP = flatPoint(lat, lon, 0.002 + 0.004 * sin(PI * t));
+
+  vec3 p = morphPoint(globe, flatP);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 
   vec3 low = vec3(0.10, 0.42, 0.78);
@@ -54,9 +66,10 @@ void main() {
   float alpha = 0.035 + 0.45 * w * w;
   // When something is selected, everything that is not connected recedes.
   float dim = mix(1.0, mix(0.16, 1.4, connected), uHasSelection);
-  // Arcs near the horizon are seen edge-on and pile up; fade them so the limb does not saturate.
-  float facing = dot(normalize(p), normalize(cameraPosition - p));
-  float limb = mix(0.3, 1.0, smoothstep(0.0, 0.45, facing));
+  // On the globe, arcs near the horizon are seen edge-on and pile up; fade them.
+  vec3 worldP = (modelMatrix * vec4(p, 1.0)).xyz;
+  float facing = dot(normalize(globe), normalize(cameraPosition - worldP));
+  float limb = mix(mix(0.3, 1.0, smoothstep(0.0, 0.45, facing)), 1.0, uMorph);
   vAlpha = alpha * dim * limb;
 }
 `;

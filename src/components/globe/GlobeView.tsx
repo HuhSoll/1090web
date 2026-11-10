@@ -27,6 +27,7 @@ export function GlobeView({ view }: Props) {
   const listHoverRoute = useAppStore((s) => s.listHoverRoute);
   const hover = useAppStore((s) => s.hover);
   const autoRotate = useAppStore((s) => s.autoRotate);
+  const viewMode = useAppStore((s) => s.viewMode);
 
   // 1. Create / dispose the renderer.
   useEffect(() => {
@@ -54,7 +55,7 @@ export function GlobeView({ view }: Props) {
             st.selectRoute(hit.routeId);
           }
         },
-      });
+      }, useAppStore.getState().viewMode);
     } catch (err) {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time capability check
       setWebglError(err instanceof WebGLUnavailableError ? 'webgl' : String(err));
@@ -145,6 +146,10 @@ export function GlobeView({ view }: Props) {
   useEffect(() => {
     rendererRef.current?.setAutoRotate(autoRotate);
   }, [autoRotate]);
+
+  useEffect(() => {
+    rendererRef.current?.setViewMode(viewMode);
+  }, [viewMode]);
 
   if (webglError) {
     return (

@@ -1,15 +1,20 @@
+import { PROJECTION_GLSL } from './projection';
+
 /**
  * Airport point sprites. State: 0 = normal, 1 = connected to selection, 2 = selected, 3 = hovered.
+ * Positions come from aLatLon (radians) so the same buffer works on the globe and the flat map.
  */
 export const AIRPORT_VERTEX = /* glsl */ `
 precision highp float;
 
+${PROJECTION_GLSL}
+
+in vec2 aLatLon;
 in float aSize;
 in float aState;
 
 uniform float uPixelRatio;
-uniform float uHasSelection;
-uniform vec3 uCameraPos;
+uniform float uRadius;
 
 out float vState;
 out float vVisible;
@@ -18,11 +23,14 @@ out float vFacing;
 void main() {
   vState = aState;
   vVisible = aSize > 0.0 ? 1.0 : 0.0;
-  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  vec3 globe = globePoint(aLatLon.x, aLatLon.y, uRadius);
+  vec3 p = morphPoint(globe, flatPoint(aLatLon.x, aLatLon.y, 0.008));
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
   gl_Position = projectionMatrix * mv;
-  // Fade points as they approach the limb so they do not pile up on the horizon.
-  vec3 n = normalize(position);
-  vFacing = clamp(dot(n, normalize(uCameraPos - position)) * 3.0, 0.0, 1.0);
+  // On the globe, fade points as they approach the limb so they do not pile up on the horizon.
+  vec3 worldP = (modelMatrix * vec4(p, 1.0)).xyz;
+  float facing = clamp(dot(normalize(globe), normalize(cameraPosition - worldP)) * 3.0, 0.0, 1.0);
+  vFacing = mix(facing, 1.0, uMorph);
   float size = aSize;
   if (aState >= 2.0) size = max(size, 10.0) + 7.0;
   else if (aState >= 1.0) size += 2.0;

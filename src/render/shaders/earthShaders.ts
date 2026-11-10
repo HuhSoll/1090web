@@ -1,5 +1,13 @@
+import { PROJECTION_GLSL } from './projection';
+
+/**
+ * Earth surface. Positions are derived from the sphere's UVs (equirectangular), so the same
+ * mesh unrolls into the flat map; the land mask texture uses the same mapping.
+ */
 export const EARTH_VERTEX = /* glsl */ `
 precision highp float;
+
+${PROJECTION_GLSL}
 
 out vec2 vUv;
 out vec3 vNormalView;
@@ -7,8 +15,13 @@ out vec3 vViewDir;
 
 void main() {
   vUv = uv;
-  vec4 mv = modelViewMatrix * vec4(position, 1.0);
-  vNormalView = normalize(normalMatrix * normal);
+  float lon = (uv.x - 0.5) * 2.0 * PI;
+  float lat = (uv.y - 0.5) * PI;
+  vec3 globe = globePoint(lat, lon, 1.0);
+  vec3 p = morphPoint(globe, flatPoint(lat, lon, 0.0));
+  vec4 mv = modelViewMatrix * vec4(p, 1.0);
+  vec3 n = normalize(mix(globe, vec3(0.0, 0.0, 1.0), smoothstep(0.0, 1.0, uMorph)));
+  vNormalView = normalize(normalMatrix * n);
   vViewDir = normalize(-mv.xyz);
   gl_Position = projectionMatrix * mv;
 }
@@ -19,6 +32,7 @@ precision highp float;
 
 uniform sampler2D uLandMask;
 uniform float uHasMask;
+uniform float uMorph;
 uniform vec3 uOcean;
 uniform vec3 uLand;
 uniform vec3 uRim;
@@ -33,11 +47,41 @@ void main() {
   float land = uHasMask > 0.5 ? texture(uLandMask, vUv).r : 0.0;
   vec3 color = mix(uOcean, uLand, land);
   float facing = clamp(dot(vNormalView, vViewDir), 0.0, 1.0);
-  // Very soft shading towards the limb + a thin cool rim.
-  color *= mix(0.55, 1.0, pow(facing, 0.6));
-  float rim = pow(1.0 - facing, 3.0);
-  color += uRim * rim * 0.55;
+  // Globe only: very soft shading towards the limb + a thin cool rim.
+  float globe = 1.0 - uMorph;
+  color *= mix(1.0, mix(0.55, 1.0, pow(facing, 0.6)), globe);
+  color += uRim * pow(1.0 - facing, 3.0) * 0.55 * globe;
   outColor = vec4(color, 1.0);
+}
+`;
+
+/** Borders, coastlines and graticule: position.xy carries (lat, lon) in radians. */
+export const GEO_LINE_VERTEX = /* glsl */ `
+precision highp float;
+
+${PROJECTION_GLSL}
+
+uniform float uRadius;
+uniform float uFlatZ;
+
+void main() {
+  float lat = position.x;
+  float lon = position.y;
+  vec3 p = morphPoint(globePoint(lat, lon, uRadius), flatPoint(lat, lon, uFlatZ));
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+}
+`;
+
+export const GEO_LINE_FRAGMENT = /* glsl */ `
+precision highp float;
+
+uniform vec3 uColor;
+uniform float uOpacity;
+
+out vec4 outColor;
+
+void main() {
+  outColor = vec4(uColor, uOpacity);
 }
 `;
 

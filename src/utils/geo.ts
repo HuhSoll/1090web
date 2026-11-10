@@ -78,3 +78,51 @@ export function sampleArc(a: Vec3, b: Vec3, segments: number, baseRadius = 1): F
   }
   return out;
 }
+
+// ---- Flat map (equirectangular) -------------------------------------------------------
+//
+// The flat map lives in the z = 0 plane in radians: x = longitude, y = latitude, so the world
+// spans x in [-PI, PI] and y in [-PI/2, PI/2]. The map is drawn three times (x offsets of
+// -2PI, 0, +2PI) so that routes crossing the antimeridian and horizontal panning stay seamless.
+
+export const FLAT_WORLD_WIDTH = Math.PI * 2;
+
+/** Wraps an angle in radians into [-PI, PI). */
+export function wrapAngle(a: number): number {
+  const t = (a + Math.PI) % (2 * Math.PI);
+  return (t < 0 ? t + 2 * Math.PI : t) - Math.PI;
+}
+
+/** Lift of a flat route above the map plane (keeps arcs above borders without z-fighting). */
+export function flatLift(t: number): number {
+  return 0.002 + 0.004 * Math.sin(Math.PI * t);
+}
+
+/**
+ * Samples the great circle between two unit vectors and projects it onto the flat map.
+ * Longitude is unwrapped relative to the start point so a route crossing the antimeridian is
+ * drawn as one continuous line that runs past the map edge (covered by the neighbour copy).
+ * MUST stay in sync with the GLSL implementation in render/shaders/projection.ts.
+ */
+export function sampleArcFlat(a: Vec3, b: Vec3, segments: number, offsetX = 0): Float32Array {
+  const dot = Math.min(1, Math.max(-1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
+  const angle = Math.acos(dot);
+  const sinA = Math.sin(angle);
+  const lonA = Math.atan2(a[0], a[2]);
+  const out = new Float32Array((segments + 1) * 3);
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const wa = sinA < 1e-6 ? 1 - t : Math.sin((1 - t) * angle) / sinA;
+    const wb = sinA < 1e-6 ? t : Math.sin(t * angle) / sinA;
+    const x = wa * a[0] + wb * b[0];
+    const y = wa * a[1] + wb * b[1];
+    const z = wa * a[2] + wb * b[2];
+    const len = Math.hypot(x, y, z) || 1;
+    const lat = Math.asin(Math.max(-1, Math.min(1, y / len)));
+    const lon = lonA + wrapAngle(Math.atan2(x, z) - lonA);
+    out[i * 3] = lon + offsetX;
+    out[i * 3 + 1] = lat;
+    out[i * 3 + 2] = flatLift(t);
+  }
+  return out;
+}

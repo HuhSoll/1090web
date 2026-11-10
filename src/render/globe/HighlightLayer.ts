@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { sampleArc, type Vec3 } from '../../utils/geo';
+import { sampleArc, sampleArcFlat, type Vec3 } from '../../utils/geo';
 import { ROUTE_BASE_RADIUS } from './RouteLayer';
+import { Wrapped } from './wrapCopies';
 
 const HIGHLIGHT_SEGMENTS = 48;
 
@@ -25,55 +26,82 @@ interface Palette {
 const CONNECTED_PALETTE: Palette = { low: new THREE.Color('#1f8fd6'), high: new THREE.Color('#e9fbff'), floor: 0.45 };
 const NOTABLE_PALETTE: Palette = { low: new THREE.Color('#2a9be0'), high: new THREE.Color('#d9f6ff'), floor: 0.35 };
 
+interface Tier {
+  wrapped: Wrapped<LineSegments2>;
+  arcs: Map<number, Float32Array>;
+  /** extra radius on the globe / extra z on the flat map, so tiers stack without z-fighting */
+  lift: number;
+}
+
 /**
  * Thick lines for small route subsets, built on the CPU (each set is tiny compared with the
  * full network). Three tiers, bottom to top:
  * - notable:   the highest-volume routes of the current view, always slightly thicker
  * - connected: routes touching the selected airport
  * - focus:     the hovered / selected route
- * Sampled arcs are kept for screen-space route picking.
+ * Lines are built for the current mode (globe or flat map). Inputs are remembered so the
+ * tiers can be rebuilt after a mode switch. Sampled arcs are kept for route picking.
  */
 export class HighlightLayer {
   readonly group = new THREE.Group();
-  private readonly notable: LineSegments2;
-  private readonly connected: LineSegments2;
-  private readonly focus: LineSegments2;
   private readonly notableMat: LineMaterial;
   private readonly connectedMat: LineMaterial;
   private readonly focusMat: LineMaterial;
-  /** routeId -> sampled arc points (xyz flattened), connected tier */
-  readonly arcs = new Map<number, Float32Array>();
-  /** routeId -> sampled arc points, notable tier */
-  readonly notableArcs = new Map<number, Float32Array>();
+  private readonly notable: Tier;
+  private readonly connected: Tier;
+  private readonly focus: Tier;
+  private flat = false;
+  private hidden = false;
+  private copies = false;
+  private lastNotable: readonly HighlightRoute[] = [];
+  private lastConnected: readonly HighlightRoute[] = [];
+  private lastFocus: { start: Vec3; end: Vec3 } | null = null;
 
   constructor() {
     const additive = { vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, worldUnits: false };
     this.notableMat = new LineMaterial({ ...additive, linewidth: 2.2 });
     this.connectedMat = new LineMaterial({ ...additive, linewidth: 1.8 });
-    this.focusMat = new LineMaterial({
-      linewidth: 3,
-      color: 0xffd27a,
-      transparent: true,
-      depthWrite: false,
-      worldUnits: false,
-    });
-    this.notable = new LineSegments2(new LineSegmentsGeometry(), this.notableMat);
-    this.connected = new LineSegments2(new LineSegmentsGeometry(), this.connectedMat);
-    this.focus = new LineSegments2(new LineSegmentsGeometry(), this.focusMat);
-    [this.notable, this.connected, this.focus].forEach((o, i) => {
-      o.frustumCulled = false;
-      o.visible = false;
-      o.renderOrder = 3 + i;
-      this.group.add(o);
-    });
+    this.focusMat = new LineMaterial({ linewidth: 3, color: 0xffd27a, transparent: true, depthWrite: false, worldUnits: false });
+    const tier = (mat: LineMaterial, order: number, lift: number): Tier => {
+      const obj = new LineSegments2(new LineSegmentsGeometry(), mat);
+      obj.frustumCulled = false;
+      obj.visible = false;
+      obj.renderOrder = order;
+      return { wrapped: new Wrapped(obj).addTo(this.group), arcs: new Map(), lift };
+    };
+    this.notable = tier(this.notableMat, 3, 0.0003);
+    this.connected = tier(this.connectedMat, 4, 0.0006);
+    this.focus = tier(this.focusMat, 5, 0.001);
+  }
+
+  /** Picking candidates: the connected tier when it has routes, otherwise the notable tier. */
+  get pickArcs(): ReadonlyMap<number, Float32Array> {
+    return this.connected.arcs.size > 0 ? this.connected.arcs : this.notable.arcs;
   }
 
   setResolution(width: number, height: number): void {
     for (const m of [this.notableMat, this.connectedMat, this.focusMat]) m.resolution.set(width, height);
   }
 
+  /** Switches the line geometry between globe and flat map and rebuilds every tier. */
+  setFlat(flat: boolean): void {
+    if (flat === this.flat) return;
+    this.flat = flat;
+    this.setNotable(this.lastNotable);
+    this.setConnected(this.lastConnected);
+    this.setFocus(this.lastFocus);
+  }
+
+  /** Hidden while the map morphs (CPU lines are only valid at the end states). */
+  setHidden(hidden: boolean, copies: boolean): void {
+    this.hidden = hidden;
+    this.copies = copies;
+    for (const t of [this.notable, this.connected, this.focus]) this.applyVisibility(t);
+  }
+
   setNotable(routes: readonly HighlightRoute[]): void {
-    this.buildTier(this.notable, this.notableArcs, routes, NOTABLE_PALETTE, 0.0003);
+    this.lastNotable = routes;
+    this.buildTier(this.notable, routes, NOTABLE_PALETTE);
   }
 
   /** While something is selected the notable tier recedes like the rest of the network. */
@@ -82,39 +110,42 @@ export class HighlightLayer {
   }
 
   setConnected(routes: readonly HighlightRoute[]): void {
-    this.buildTier(this.connected, this.arcs, routes, CONNECTED_PALETTE, 0.0006);
+    this.lastConnected = routes;
+    this.buildTier(this.connected, routes, CONNECTED_PALETTE);
   }
 
   setFocus(route: { start: Vec3; end: Vec3 } | null): void {
+    this.lastFocus = route;
+    this.focus.arcs.clear();
     if (!route) {
-      this.focus.visible = false;
+      this.setTierGeometry(this.focus, null, null);
       return;
     }
-    const arc = sampleArc(route.start, route.end, HIGHLIGHT_SEGMENTS, ROUTE_BASE_RADIUS + 0.001);
+    const arc = this.sample(route.start, route.end, this.focus.lift);
     const positions = new Float32Array(HIGHLIGHT_SEGMENTS * 6);
     for (let s = 0; s < HIGHLIGHT_SEGMENTS; s++) positions.set(arc.subarray(s * 3, s * 3 + 6), s * 6);
-    this.replaceGeometry(this.focus, positions, null);
-    this.focus.visible = true;
+    this.setTierGeometry(this.focus, positions, null);
   }
 
-  private buildTier(
-    obj: LineSegments2,
-    arcs: Map<number, Float32Array>,
-    routes: readonly HighlightRoute[],
-    palette: Palette,
-    lift: number,
-  ): void {
-    arcs.clear();
+  private sample(start: Vec3, end: Vec3, lift: number): Float32Array {
+    if (!this.flat) return sampleArc(start, end, HIGHLIGHT_SEGMENTS, ROUTE_BASE_RADIUS + lift);
+    const arc = sampleArcFlat(start, end, HIGHLIGHT_SEGMENTS);
+    for (let i = 2; i < arc.length; i += 3) arc[i]! += 0.004 + lift * 4;
+    return arc;
+  }
+
+  private buildTier(tier: Tier, routes: readonly HighlightRoute[], palette: Palette): void {
+    tier.arcs.clear();
     if (routes.length === 0) {
-      obj.visible = false;
+      this.setTierGeometry(tier, null, null);
       return;
     }
     const positions = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
     const colors = new Float32Array(routes.length * HIGHLIGHT_SEGMENTS * 6);
     const c = new THREE.Color();
     routes.forEach((r, ri) => {
-      const arc = sampleArc(r.start, r.end, HIGHLIGHT_SEGMENTS, ROUTE_BASE_RADIUS + lift);
-      arcs.set(r.routeId, arc);
+      const arc = this.sample(r.start, r.end, tier.lift);
+      tier.arcs.set(r.routeId, arc);
       c.copy(palette.low)
         .lerp(palette.high, r.weight)
         .multiplyScalar(palette.floor + (1 - palette.floor) * r.weight);
@@ -129,20 +160,28 @@ export class HighlightLayer {
         colors[o + 2] = colors[o + 5] = c.b * k;
       }
     });
-    this.replaceGeometry(obj, positions, colors);
-    obj.visible = true;
+    this.setTierGeometry(tier, positions, colors);
   }
 
-  private replaceGeometry(obj: LineSegments2, positions: Float32Array, colors: Float32Array | null): void {
-    obj.geometry.dispose();
+  private setTierGeometry(tier: Tier, positions: Float32Array | null, colors: Float32Array | null): void {
+    tier.wrapped.main.geometry.dispose();
     const g = new LineSegmentsGeometry();
-    g.setPositions(positions);
-    if (colors) g.setColors(colors);
-    obj.geometry = g;
+    if (positions) {
+      g.setPositions(positions);
+      if (colors) g.setColors(colors);
+    }
+    tier.wrapped.setGeometry(g);
+    tier.wrapped.main.userData.empty = !positions;
+    this.applyVisibility(tier);
+  }
+
+  private applyVisibility(tier: Tier): void {
+    const empty = tier.wrapped.main.userData.empty !== false;
+    tier.wrapped.setVisible(!this.hidden && !empty, this.flat && this.copies);
   }
 
   dispose(): void {
-    for (const o of [this.notable, this.connected, this.focus]) o.geometry.dispose();
+    for (const t of [this.notable, this.connected, this.focus]) t.wrapped.main.geometry.dispose();
     this.notableMat.dispose();
     this.connectedMat.dispose();
     this.focusMat.dispose();

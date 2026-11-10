@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { ROUTE_FRAGMENT, ROUTE_VERTEX } from '../shaders/routeShaders';
+import type { MorphUniform } from './EarthLayer';
+import { Wrapped } from './wrapCopies';
 
 export const ARC_SEGMENTS = 32;
 export const ROUTE_BASE_RADIUS = 1.0015;
@@ -19,13 +21,14 @@ export function densityOpacity(visibleRoutes: number): number {
  */
 export class RouteLayer {
   readonly object: THREE.LineSegments;
+  readonly wrapped: Wrapped<THREE.LineSegments>;
   private readonly geometry: THREE.InstancedBufferGeometry;
   private readonly material: THREE.ShaderMaterial;
   private stateTexture: THREE.DataTexture;
   private stateData: Uint8Array;
   private routeCount = 0;
 
-  constructor() {
+  constructor(morph: MorphUniform) {
     this.geometry = new THREE.InstancedBufferGeometry();
     // Template: ARC_SEGMENTS line segments; position.x carries t in [0, 1].
     const template = new Float32Array(ARC_SEGMENTS * 2 * 3);
@@ -44,6 +47,7 @@ export class RouteLayer {
       vertexShader: ROUTE_VERTEX,
       fragmentShader: ROUTE_FRAGMENT,
       uniforms: {
+        uMorph: morph,
         uState: { value: this.stateTexture },
         uStateWidth: { value: STATE_TEXTURE_WIDTH },
         uHasSelection: { value: 0 },
@@ -60,6 +64,7 @@ export class RouteLayer {
     // Bounding volume is the whole globe + max arc altitude; disable culling recomputation.
     this.object.frustumCulled = false;
     this.object.renderOrder = 2;
+    this.wrapped = new Wrapped(this.object);
   }
 
   private createStateTexture(rows: number): THREE.DataTexture {

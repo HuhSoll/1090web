@@ -8,6 +8,7 @@ export function GlobeControls({ rendererRef }: { rendererRef: RefObject<GlobeRen
   const { t } = useI18n();
   const autoRotate = useAppStore((s) => s.autoRotate);
   const setAutoRotate = useAppStore((s) => s.setAutoRotate);
+  const viewMode = useAppStore((s) => s.viewMode);
   return (
     <div className="globe-controls panel" role="toolbar" aria-label="Globe">
       <button type="button" className="icon-btn" onClick={() => rendererRef.current?.zoomBy(0.8)} title={t('globe.zoomIn')} aria-label={t('globe.zoomIn')}>
@@ -19,6 +20,7 @@ export function GlobeControls({ rendererRef }: { rendererRef: RefObject<GlobeRen
       <button type="button" className="icon-btn" onClick={() => rendererRef.current?.resetView()} title={t('globe.reset')} aria-label={t('globe.reset')}>
         <Icon name="reset" />
       </button>
+      {viewMode === 'globe' && (
       <button
         type="button"
         className={`icon-btn ${autoRotate ? 'is-active' : ''}`}
@@ -29,6 +31,7 @@ export function GlobeControls({ rendererRef }: { rendererRef: RefObject<GlobeRen
       >
         <Icon name="rotate" />
       </button>
+      )}
     </div>
   );
 }

@@ -1,15 +1,20 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { latLonToVec3, type Vec3 } from '../../utils/geo';
+import { FLAT_WORLD_WIDTH, latLonToVec3, vec3ToLatLon, wrapAngle, type Vec3 } from '../../utils/geo';
 import { AirportLayer } from './AirportLayer';
-import { EarthLayer } from './EarthLayer';
+import { EarthLayer, type MorphUniform } from './EarthLayer';
 import { HighlightLayer } from './HighlightLayer';
 import { RouteLayer } from './RouteLayer';
+import { COPY_OFFSETS } from './wrapCopies';
 
 /**
- * Imperative WebGL renderer for the globe. It knows nothing about React, datasets or filters:
- * inputs are typed arrays indexed by airport / route id, outputs are pick events.
+ * Imperative WebGL renderer for the network map. It can show the network on a 3D globe or on a
+ * flat (equirectangular) map and morphs between the two. It knows nothing about React,
+ * datasets or filters: inputs are typed arrays indexed by airport / route id, outputs are pick
+ * events.
  */
+
+export type ViewMode = 'globe' | 'flat';
 
 export interface GlobeNetworkInput {
   /** [lat0, lon0, lat1, lon1, ...] in degrees */
@@ -35,13 +40,21 @@ export interface GlobeCallbacks {
   onUserInteraction?: () => void;
 }
 
-const CAMERA_DEFAULT_DISTANCE = 3.5;
-const MIN_DISTANCE = 1.32;
-const MAX_DISTANCE = 6;
+const DEG2RAD = Math.PI / 180;
+const GLOBE_DEFAULT_DISTANCE = 3.5;
+const GLOBE_MIN_DISTANCE = 1.32;
+const GLOBE_MAX_DISTANCE = 6;
+const FLAT_MIN_HEIGHT = 0.3;
+const FLAT_MAX_HEIGHT = 7.5;
+/** Flat-map camera height per unit of globe altitude (keeps the zoom level similar across modes). */
+const FLAT_PER_GLOBE_ALTITUDE = 1.9;
+const FLAT_MAX_LAT = 1.25;
+const MORPH_DURATION_MS = 1300;
 const AIRPORT_PICK_RADIUS_PX = 12;
 const ROUTE_PICK_RADIUS_PX = 6;
 const CLICK_MAX_MOVE_PX = 5;
 const AUTO_ROTATE_RESUME_MS = 7000;
+const FLAT_AIRPORT_Z = 0.008;
 
 export class WebGLUnavailableError extends Error {
   constructor() {
@@ -50,18 +63,45 @@ export class WebGLUnavailableError extends Error {
   }
 }
 
+interface CameraTween {
+  kind: 'orbit' | 'linear';
+  fromPos: THREE.Vector3;
+  toPos: THREE.Vector3;
+  fromTarget: THREE.Vector3;
+  toTarget: THREE.Vector3;
+  start: number;
+  duration: number;
+}
+
+interface MorphTransition {
+  from: number;
+  to: number;
+  start: number;
+  duration: number;
+  /** centre of the view in radians, kept fixed under the camera during the morph */
+  lat: number;
+  lon: number;
+  globeAltitude: number;
+  flatHeight: number;
+}
+
+const smooth = (x: number) => x * x * (3 - 2 * x);
+const ease = (k: number) => (k < 0.5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2);
+
 export class GlobeRenderer {
   private readonly container: HTMLElement;
   private readonly renderer: THREE.WebGLRenderer;
   private readonly scene = new THREE.Scene();
   private readonly camera: THREE.PerspectiveCamera;
   private readonly controls: OrbitControls;
-  private readonly earth = new EarthLayer();
-  private readonly routes = new RouteLayer();
+  private readonly morph: MorphUniform = { value: 0 };
+  private readonly earth: EarthLayer;
+  private readonly routes: RouteLayer;
   private readonly highlight = new HighlightLayer();
-  private readonly airports = new AirportLayer();
+  private readonly airports: AirportLayer;
   private readonly resizeObserver: ResizeObserver;
   private readonly callbacks: GlobeCallbacks;
+  private readonly reducedMotion: boolean;
 
   private frame = 0;
   private dirty = true;
@@ -69,7 +109,11 @@ export class GlobeRenderer {
   private width = 1;
   private height = 1;
 
+  private mode: ViewMode;
+  private transition: MorphTransition | null = null;
+
   private airportUnit = new Float32Array(0);
+  private airportLatLonRad = new Float32Array(0);
   private routeEndpoints: Uint32Array = new Uint32Array(0);
   private airportVisible = new Uint8Array(0);
 
@@ -81,14 +125,16 @@ export class GlobeRenderer {
   private autoRotateEnabled = true;
   private autoRotateSuppressed = false;
   private lastInteraction = 0;
-  private tween: { from: THREE.Vector3; to: THREE.Vector3; start: number; duration: number } | null = null;
+  private tween: CameraTween | null = null;
 
   private readonly tmpV = new THREE.Vector3();
   private readonly abortBasemap = new AbortController();
 
-  constructor(container: HTMLElement, callbacks: GlobeCallbacks = {}) {
+  constructor(container: HTMLElement, callbacks: GlobeCallbacks = {}, initialMode: ViewMode = 'globe') {
     this.container = container;
     this.callbacks = callbacks;
+    this.mode = initialMode;
+    this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl2', { antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -97,27 +143,26 @@ export class GlobeRenderer {
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     canvas.className = 'globe-canvas';
-    canvas.setAttribute('aria-label', 'Interactive 3D globe');
+    canvas.setAttribute('aria-label', 'Interactive map of flight routes');
     container.appendChild(canvas);
 
-    this.camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
-    // Start looking at East Asia / Pacific.
-    this.camera.position.set(...latLonToVec3(28, 150, CAMERA_DEFAULT_DISTANCE));
+    this.earth = new EarthLayer(this.morph);
+    this.routes = new RouteLayer(this.morph);
+    this.airports = new AirportLayer(this.morph);
 
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
     this.controls = new OrbitControls(this.camera, canvas);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
-    this.controls.enablePan = false;
-    this.controls.minDistance = MIN_DISTANCE;
-    this.controls.maxDistance = MAX_DISTANCE;
     this.controls.zoomSpeed = 0.7;
-    this.controls.autoRotate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.autoRotateEnabled = this.controls.autoRotate;
     this.controls.autoRotateSpeed = 0.35;
+    this.autoRotateEnabled = !this.reducedMotion;
     this.controls.addEventListener('change', this.markDirty);
     this.controls.addEventListener('start', this.onControlsStart);
 
-    this.scene.add(this.earth.group, this.routes.object, this.highlight.group, this.airports.object);
+    for (const o of this.routes.wrapped.all) this.scene.add(o);
+    this.scene.add(this.earth.group, this.highlight.group);
+    for (const o of this.airports.wrapped.all) this.scene.add(o);
 
     canvas.addEventListener('pointermove', this.onPointerMove);
     canvas.addEventListener('pointerdown', this.onPointerDown);
@@ -128,10 +173,25 @@ export class GlobeRenderer {
     this.resizeObserver.observe(container);
     this.resize();
 
+    // Initial view: East Asia / Pacific on the globe, the whole world on the flat map.
+    if (initialMode === 'flat') {
+      this.morph.value = 1;
+      this.highlight.setFlat(true);
+      this.controls.target.set(15 * DEG2RAD, 20 * DEG2RAD, 0);
+      this.camera.position.set(15 * DEG2RAD, 20 * DEG2RAD, this.flatDefaultHeight());
+    } else {
+      this.camera.position.set(...latLonToVec3(28, 150, GLOBE_DEFAULT_DISTANCE));
+    }
+    this.configureControls();
+
     this.frame = requestAnimationFrame(this.loop);
   }
 
-  /** Loads the basemap; rejects if it fails (the globe keeps working without it). */
+  get viewMode(): ViewMode {
+    return this.mode;
+  }
+
+  /** Loads the basemap; rejects if it fails (the map keeps working without it). */
   loadBasemap(): Promise<void> {
     const maxTex = this.renderer.capabilities.maxTextureSize;
     return this.earth.loadBasemap(maxTex, this.abortBasemap.signal).then(this.markDirty);
@@ -140,8 +200,13 @@ export class GlobeRenderer {
   setNetwork(input: GlobeNetworkInput): void {
     const nAirports = input.airportLatLon.length / 2;
     this.airportUnit = new Float32Array(nAirports * 3);
+    this.airportLatLonRad = new Float32Array(nAirports * 2);
     for (let i = 0; i < nAirports; i++) {
-      this.airportUnit.set(latLonToVec3(input.airportLatLon[i * 2]!, input.airportLatLon[i * 2 + 1]!), i * 3);
+      const lat = input.airportLatLon[i * 2]!;
+      const lon = input.airportLatLon[i * 2 + 1]!;
+      this.airportUnit.set(latLonToVec3(lat, lon), i * 3);
+      this.airportLatLonRad[i * 2] = lat * DEG2RAD;
+      this.airportLatLonRad[i * 2 + 1] = lon * DEG2RAD;
     }
     this.routeEndpoints = input.routeEndpoints;
     const nRoutes = input.routeEndpoints.length / 2;
@@ -153,7 +218,7 @@ export class GlobeRenderer {
       endpoints.set(this.airportUnit.subarray(b * 3, b * 3 + 3), r * 6 + 3);
     }
     this.routes.setRoutes(endpoints);
-    this.airports.setAirports(this.airportUnit);
+    this.airports.setAirports(this.airportUnit, this.airportLatLonRad);
     this.airportVisible = new Uint8Array(nAirports);
     this.markDirty();
   }
@@ -210,31 +275,72 @@ export class GlobeRenderer {
     this.markDirty();
   }
 
-  /** Smoothly rotates the camera to look at a lat/lon, keeping (or tightening) the zoom level. */
-  flyTo(lat: number, lon: number, distance?: number): void {
-    const current = this.camera.position.length();
-    const target = distance ?? Math.min(current, 2.6);
-    const to = new THREE.Vector3(...latLonToVec3(lat, lon, target));
-    this.tween = { from: this.camera.position.clone(), to, start: performance.now(), duration: 1100 };
+  /** Morphs between the globe and the flat map, keeping the current view centre in place. */
+  setViewMode(mode: ViewMode): void {
+    const target = mode === 'flat' ? 1 : 0;
+    if (this.transition ? this.transition.to === target : this.mode === mode) return;
+
+    const center = this.transition ? { lat: this.transition.lat, lon: this.transition.lon } : this.viewCenter();
+    const globeAltitude = this.transition
+      ? this.transition.globeAltitude
+      : this.mode === 'globe'
+        ? this.camera.position.length() - 1
+        : (this.camera.position.z - this.controls.target.z) / FLAT_PER_GLOBE_ALTITUDE;
+    const flatHeight = THREE.MathUtils.clamp(globeAltitude * FLAT_PER_GLOBE_ALTITUDE, FLAT_MIN_HEIGHT, FLAT_MAX_HEIGHT);
+
+    this.tween = null;
+    this.controls.enabled = false;
+    this.highlight.setHidden(true, false);
+    this.transition = {
+      from: this.morph.value,
+      to: target,
+      start: performance.now(),
+      duration: this.reducedMotion ? 1 : MORPH_DURATION_MS * Math.abs(target - this.morph.value),
+      lat: center.lat,
+      lon: center.lon,
+      globeAltitude: THREE.MathUtils.clamp(globeAltitude, GLOBE_MIN_DISTANCE - 1, GLOBE_MAX_DISTANCE - 1),
+      flatHeight,
+    };
     this.markDirty();
   }
 
+  /** Smoothly moves the view to a lat/lon (degrees), keeping (or tightening) the zoom level. */
+  flyTo(lat: number, lon: number): void {
+    if (this.transition) return;
+    if (this.mode === 'globe') {
+      const current = this.camera.position.length();
+      const to = new THREE.Vector3(...latLonToVec3(lat, lon, Math.min(current, 2.6)));
+      this.startTween('orbit', to, new THREE.Vector3(), 1100);
+    } else {
+      const t = this.controls.target;
+      const latR = THREE.MathUtils.clamp(lat * DEG2RAD, -FLAT_MAX_LAT, FLAT_MAX_LAT);
+      // Choose the copy of the longitude closest to where we are now.
+      const lonR = lon * DEG2RAD + FLAT_WORLD_WIDTH * Math.round((t.x - lon * DEG2RAD) / FLAT_WORLD_WIDTH);
+      const h = Math.min(this.camera.position.z - t.z, 3.2);
+      this.startTween('linear', new THREE.Vector3(lonR, latR, h), new THREE.Vector3(lonR, latR, 0), 1000);
+    }
+  }
+
   zoomBy(factor: number): void {
-    const d = THREE.MathUtils.clamp(this.camera.position.length() * factor, MIN_DISTANCE, MAX_DISTANCE);
-    this.camera.position.setLength(d);
+    if (this.transition) return;
+    const t = this.controls.target;
+    const offset = this.camera.position.clone().sub(t);
+    const [min, max] = this.mode === 'globe' ? [GLOBE_MIN_DISTANCE, GLOBE_MAX_DISTANCE] : [FLAT_MIN_HEIGHT, FLAT_MAX_HEIGHT];
+    offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, min, max));
+    this.camera.position.copy(t).add(offset);
     this.lastInteraction = performance.now();
     this.markDirty();
   }
 
   resetView(): void {
-    const dir = this.camera.position.clone().normalize();
-    this.tween = {
-      from: this.camera.position.clone(),
-      to: dir.multiplyScalar(CAMERA_DEFAULT_DISTANCE),
-      start: performance.now(),
-      duration: 800,
-    };
-    this.markDirty();
+    if (this.transition) return;
+    if (this.mode === 'globe') {
+      const dir = this.camera.position.clone().normalize();
+      this.startTween('orbit', dir.multiplyScalar(GLOBE_DEFAULT_DISTANCE), new THREE.Vector3(), 800);
+    } else {
+      const x = this.controls.target.x;
+      this.startTween('linear', new THREE.Vector3(x, 0.3, this.flatDefaultHeight()), new THREE.Vector3(x, 0.3, 0), 800);
+    }
   }
 
   dispose(): void {
@@ -272,6 +378,130 @@ export class GlobeRenderer {
     this.callbacks.onUserInteraction?.();
   };
 
+  /** Camera height that fits the whole world width on the flat map. */
+  private flatDefaultHeight(): number {
+    const halfFov = (this.camera.fov * DEG2RAD) / 2;
+    const visibleWidthPerHeight = 2 * Math.tan(halfFov) * this.camera.aspect;
+    return THREE.MathUtils.clamp((FLAT_WORLD_WIDTH * 0.95) / visibleWidthPerHeight, 2, FLAT_MAX_HEIGHT);
+  }
+
+  /** Centre of the current view as lat/lon in radians. */
+  private viewCenter(): { lat: number; lon: number } {
+    if (this.mode === 'globe') {
+      const p = this.camera.position;
+      const { lat, lon } = vec3ToLatLon([p.x, p.y, p.z]);
+      return { lat: lat * DEG2RAD, lon: lon * DEG2RAD };
+    }
+    const t = this.controls.target;
+    return { lat: THREE.MathUtils.clamp(t.y, -FLAT_MAX_LAT, FLAT_MAX_LAT), lon: wrapAngle(t.x) };
+  }
+
+  private configureControls(): void {
+    const c = this.controls;
+    const flat = this.mode === 'flat';
+    c.enabled = true;
+    c.enableRotate = !flat;
+    c.enablePan = flat;
+    c.screenSpacePanning = true;
+    c.zoomToCursor = flat;
+    c.minDistance = flat ? FLAT_MIN_HEIGHT : GLOBE_MIN_DISTANCE;
+    c.maxDistance = flat ? FLAT_MAX_HEIGHT : GLOBE_MAX_DISTANCE;
+    c.mouseButtons = { LEFT: flat ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };
+    c.touches = { ONE: flat ? THREE.TOUCH.PAN : THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+    if (!flat) c.target.set(0, 0, 0);
+    c.update();
+  }
+
+  private startTween(kind: CameraTween['kind'], toPos: THREE.Vector3, toTarget: THREE.Vector3, duration: number): void {
+    this.tween = {
+      kind,
+      fromPos: this.camera.position.clone(),
+      toPos,
+      fromTarget: this.controls.target.clone(),
+      toTarget,
+      start: performance.now(),
+      duration: this.reducedMotion ? 1 : duration,
+    };
+    this.markDirty();
+  }
+
+  private stepTween(now: number): void {
+    const tw = this.tween;
+    if (!tw) return;
+    const k = Math.min(1, (now - tw.start) / tw.duration);
+    const e = ease(k);
+    if (tw.kind === 'orbit') {
+      // Spherical interpolation of the view direction around the globe.
+      const len = THREE.MathUtils.lerp(tw.fromPos.length(), tw.toPos.length(), e);
+      const dir = tw.fromPos.clone().normalize();
+      const toDir = tw.toPos.clone().normalize();
+      const angle = dir.angleTo(toDir);
+      if (angle > 1e-5) {
+        const axis = new THREE.Vector3().crossVectors(dir, toDir);
+        if (axis.lengthSq() < 1e-10) axis.set(0, 1, 0);
+        dir.applyAxisAngle(axis.normalize(), angle * e);
+      }
+      this.camera.position.copy(dir.multiplyScalar(len));
+    } else {
+      this.camera.position.lerpVectors(tw.fromPos, tw.toPos, e);
+      this.controls.target.lerpVectors(tw.fromTarget, tw.toTarget, e);
+    }
+    if (k >= 1) this.tween = null;
+    this.dirty = true;
+  }
+
+  private stepTransition(now: number): void {
+    const tr = this.transition;
+    if (!tr) return;
+    const k = Math.min(1, (now - tr.start) / Math.max(1, tr.duration));
+    const m = THREE.MathUtils.lerp(tr.from, tr.to, ease(k));
+    this.morph.value = m;
+
+    // Keep the view centre under the camera while the surface unrolls: the camera rides along
+    // the centre point's (morphing) normal at an interpolated height.
+    const s = smooth(m);
+    const globeP = new THREE.Vector3(...latLonToVec3(tr.lat / DEG2RAD, tr.lon / DEG2RAD));
+    const flatP = new THREE.Vector3(tr.lon, tr.lat, 0);
+    const surface = globeP.clone().lerp(flatP, s);
+    const normal = slerpUnit(globeP, new THREE.Vector3(0, 0, 1), s);
+    const h = THREE.MathUtils.lerp(tr.globeAltitude, tr.flatHeight, s);
+    this.camera.position.copy(surface).addScaledVector(normal, h);
+    this.controls.target.copy(surface);
+    this.camera.lookAt(surface);
+    this.dirty = true;
+
+    if (k >= 1) {
+      this.transition = null;
+      this.mode = tr.to === 1 ? 'flat' : 'globe';
+      this.morph.value = tr.to;
+      this.highlight.setFlat(this.mode === 'flat');
+      this.configureControls();
+      this.highlight.setHidden(false, this.mode === 'flat');
+    }
+  }
+
+  /** Flat map: keep latitude in range and wrap longitude so panning is endless. */
+  private constrainFlat(): void {
+    const t = this.controls.target;
+    const cam = this.camera.position;
+    const dy = THREE.MathUtils.clamp(t.y, -FLAT_MAX_LAT, FLAT_MAX_LAT) - t.y;
+    let dx = 0;
+    if (t.x > Math.PI) dx = -FLAT_WORLD_WIDTH;
+    else if (t.x < -Math.PI) dx = FLAT_WORLD_WIDTH;
+    if (dx !== 0 || dy !== 0) {
+      t.x += dx;
+      t.y += dy;
+      cam.x += dx;
+      cam.y += dy;
+      if (this.tween) {
+        this.tween.toPos.x += dx;
+        this.tween.toTarget.x += dx;
+        this.tween.fromPos.x += dx;
+        this.tween.fromTarget.x += dx;
+      }
+    }
+  }
+
   private resize(): void {
     const rect = this.container.getBoundingClientRect();
     this.width = Math.max(1, Math.floor(rect.width));
@@ -290,35 +520,24 @@ export class GlobeRenderer {
     if (this.disposed) return;
     this.frame = requestAnimationFrame(this.loop);
 
-    if (this.tween) {
-      const { from, to, start, duration } = this.tween;
-      const k = Math.min(1, (now - start) / duration);
-      const e = k < 0.5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2;
-      const len = THREE.MathUtils.lerp(from.length(), to.length(), e);
-      // Spherical interpolation of the view direction.
-      const dir = from.clone().normalize();
-      const toDir = to.clone().normalize();
-      const angle = dir.angleTo(toDir);
-      if (angle > 1e-5) {
-        const axis = new THREE.Vector3().crossVectors(dir, toDir).normalize();
-        if (axis.lengthSq() < 1e-8) axis.set(0, 1, 0);
-        dir.applyAxisAngle(axis, angle * e);
+    if (this.transition) {
+      this.stepTransition(now);
+    } else {
+      this.stepTween(now);
+      const globe = this.mode === 'globe';
+      const idle = now - this.lastInteraction > AUTO_ROTATE_RESUME_MS;
+      this.controls.autoRotate = globe && this.autoRotateEnabled && !this.autoRotateSuppressed && idle && !this.tween;
+      if (globe) {
+        // Slower rotation when zoomed in so the surface does not fly past the cursor.
+        const dist = this.camera.position.length();
+        this.controls.rotateSpeed = THREE.MathUtils.clamp((dist - 1) * 0.42, 0.06, 1);
       }
-      this.camera.position.copy(dir.multiplyScalar(len));
-      if (k >= 1) this.tween = null;
-      this.dirty = true;
+      this.controls.update();
+      if (!globe) this.constrainFlat();
     }
-
-    const idle = now - this.lastInteraction > AUTO_ROTATE_RESUME_MS;
-    this.controls.autoRotate = this.autoRotateEnabled && !this.autoRotateSuppressed && idle && !this.tween;
-    // Slower rotation when zoomed in so the surface does not fly past the cursor.
-    const dist = this.camera.position.length();
-    this.controls.rotateSpeed = THREE.MathUtils.clamp((dist - 1) * 0.42, 0.06, 1);
-    this.controls.update();
 
     // The scene moved under a stationary cursor: re-pick so hover/tooltip stay truthful.
     if (this.dirty && this.pointer) this.pointerDirty = true;
-
     if (this.pointerDirty) {
       this.pointerDirty = false;
       this.updateHover();
@@ -326,7 +545,11 @@ export class GlobeRenderer {
 
     if (!this.dirty) return;
     this.dirty = false;
-    this.airports.update(this.renderer.getPixelRatio(), this.camera.position);
+    const copies = this.mode === 'flat' && !this.transition;
+    this.earth.update(copies);
+    this.routes.wrapped.setVisible(true, copies);
+    this.airports.wrapped.setVisible(true, copies);
+    this.airports.update(this.renderer.getPixelRatio());
     this.renderer.render(this.scene, this.camera);
   };
 
@@ -386,7 +609,7 @@ export class GlobeRenderer {
     return { sx: (this.tmpV.x * 0.5 + 0.5) * this.width, sy: (-this.tmpV.y * 0.5 + 0.5) * this.height };
   }
 
-  /** True when the segment from the camera to p is not blocked by the unit sphere. */
+  /** True when the segment from the camera to p is not blocked by the unit sphere (globe only). */
   private isUnoccluded(x: number, y: number, z: number): boolean {
     const c = this.camera.position;
     const dx = x - c.x;
@@ -402,23 +625,33 @@ export class GlobeRenderer {
   }
 
   pick(px: number, py: number): PickHit | null {
+    if (this.transition) return null;
+    const flat = this.mode === 'flat';
+    const offsets = flat ? [0, ...COPY_OFFSETS] : [0];
     const cam = this.camera.position;
-    // 1) Airports (front hemisphere only).
+
+    // 1) Airports.
     let best = -1;
     let bestD = AIRPORT_PICK_RADIUS_PX * AIRPORT_PICK_RADIUS_PX;
-    const pos = this.airportUnit;
     for (let i = 0; i < this.airportVisible.length; i++) {
       if (!this.airportVisible[i]) continue;
-      const x = pos[i * 3]!;
-      const y = pos[i * 3 + 1]!;
-      const z = pos[i * 3 + 2]!;
-      if (x * cam.x + y * cam.y + z * cam.z <= 1.0) continue; // behind the horizon
-      const p = this.project(x, y, z);
-      if (!p) continue;
-      const d = (p.sx - px) ** 2 + (p.sy - py) ** 2;
-      if (d < bestD) {
-        bestD = d;
-        best = i;
+      for (const off of offsets) {
+        let p: { sx: number; sy: number } | null;
+        if (flat) {
+          p = this.project(this.airportLatLonRad[i * 2 + 1]! + off, this.airportLatLonRad[i * 2]!, FLAT_AIRPORT_Z);
+        } else {
+          const x = this.airportUnit[i * 3]!;
+          const y = this.airportUnit[i * 3 + 1]!;
+          const z = this.airportUnit[i * 3 + 2]!;
+          if (x * cam.x + y * cam.y + z * cam.z <= 1.0) continue; // behind the horizon
+          p = this.project(x, y, z);
+        }
+        if (!p) continue;
+        const d = (p.sx - px) ** 2 + (p.sy - py) ** 2;
+        if (d < bestD) {
+          bestD = d;
+          best = i;
+        }
       }
     }
     if (best >= 0) return { kind: 'airport', index: best };
@@ -427,27 +660,38 @@ export class GlobeRenderer {
     //    the selected airport when there is a selection, otherwise the notable routes.
     let bestRoute = -1;
     let bestRouteD = ROUTE_PICK_RADIUS_PX;
-    const candidates = this.highlight.arcs.size > 0 ? this.highlight.arcs : this.highlight.notableArcs;
-    for (const [routeId, arc] of candidates) {
-      let prev: { sx: number; sy: number } | null = null;
-      for (let i = 0; i < arc.length; i += 3) {
-        const x = arc[i]!;
-        const y = arc[i + 1]!;
-        const z = arc[i + 2]!;
-        const p = this.isUnoccluded(x, y, z) ? this.project(x, y, z) : null;
-        if (p && prev) {
-          const d = distToSegment(px, py, prev.sx, prev.sy, p.sx, p.sy);
-          if (d < bestRouteD) {
-            bestRouteD = d;
-            bestRoute = routeId;
+    for (const [routeId, arc] of this.highlight.pickArcs) {
+      for (const off of offsets) {
+        let prev: { sx: number; sy: number } | null = null;
+        for (let i = 0; i < arc.length; i += 3) {
+          const x = arc[i]! + off;
+          const y = arc[i + 1]!;
+          const z = arc[i + 2]!;
+          const p = flat || this.isUnoccluded(x, y, z) ? this.project(x, y, z) : null;
+          if (p && prev) {
+            const d = distToSegment(px, py, prev.sx, prev.sy, p.sx, p.sy);
+            if (d < bestRouteD) {
+              bestRouteD = d;
+              bestRoute = routeId;
+            }
           }
+          prev = p;
         }
-        prev = p;
       }
     }
     if (bestRoute >= 0) return { kind: 'route', routeId: bestRoute };
     return null;
   }
+}
+
+/** Spherical interpolation between two unit vectors (handles the antiparallel case). */
+function slerpUnit(a: THREE.Vector3, b: THREE.Vector3, t: number): THREE.Vector3 {
+  const dot = THREE.MathUtils.clamp(a.dot(b), -1, 1);
+  const angle = Math.acos(dot);
+  if (angle < 1e-5) return a.clone();
+  let axis = new THREE.Vector3().crossVectors(a, b);
+  if (axis.lengthSq() < 1e-10) axis = new THREE.Vector3(0, 1, 0);
+  return a.clone().applyAxisAngle(axis.normalize(), angle * t);
 }
 
 function distToSegment(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {

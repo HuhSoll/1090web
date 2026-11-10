@@ -3,6 +3,8 @@ import type { MonthData, StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import type { Locale } from '../i18n/messages';
 
+export type ViewMode = 'flat' | 'globe';
+
 export type LoadStatus =
   | { state: 'idle' }
   | { state: 'loading' }
@@ -32,6 +34,7 @@ interface AppState {
   listHoverRoute: number | null;
   hover: HoverInfo | null;
   autoRotate: boolean;
+  viewMode: ViewMode;
   sourcesOpen: boolean;
   basemapError: boolean;
   /** Set when running the renderer stress test (?stress=N). */
@@ -51,12 +54,24 @@ interface AppState {
   setListHoverRoute: (r: number | null) => void;
   setHover: (h: HoverInfo | null) => void;
   setAutoRotate: (v: boolean) => void;
+  setViewMode: (m: ViewMode) => void;
   setSourcesOpen: (v: boolean) => void;
   setBasemapError: (v: boolean) => void;
   setStressRouteCount: (n: number | null) => void;
 }
 
 const LOCALE_KEY = 'aerograph.locale';
+const VIEW_KEY = 'aerograph.view';
+
+function initialViewMode(): ViewMode {
+  try {
+    const saved = localStorage.getItem(VIEW_KEY);
+    if (saved === 'flat' || saved === 'globe') return saved;
+  } catch {
+    // storage unavailable
+  }
+  return 'flat';
+}
 
 function initialLocale(): Locale {
   try {
@@ -83,6 +98,7 @@ export const useAppStore = create<AppState>((set) => ({
   listHoverRoute: null,
   hover: null,
   autoRotate: true,
+  viewMode: initialViewMode(),
   sourcesOpen: false,
   basemapError: false,
   stressRouteCount: null,
@@ -109,6 +125,14 @@ export const useAppStore = create<AppState>((set) => ({
   setListHoverRoute: (listHoverRoute) => set({ listHoverRoute }),
   setHover: (hover) => set({ hover }),
   setAutoRotate: (autoRotate) => set({ autoRotate }),
+  setViewMode: (viewMode) => {
+    try {
+      localStorage.setItem(VIEW_KEY, viewMode);
+    } catch {
+      // ignore
+    }
+    set({ viewMode });
+  },
   setSourcesOpen: (sourcesOpen) => set({ sourcesOpen }),
   setBasemapError: (basemapError) => set({ basemapError }),
   setStressRouteCount: (stressRouteCount) => set({ stressRouteCount }),

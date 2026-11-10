@@ -75,8 +75,12 @@ def git_state(root: Path = ROOT) -> dict:
             return ""
 
     commit = run("rev-parse", "HEAD")
-    dirty = run("status", "--porcelain", "--", "pipeline")
-    return {"commit": commit or None, "pipelineDirty": bool(dirty)}
+    # Tracked files changed since the commit = the code that ran is not exactly the commit.
+    # Untracked files (new helper scripts, outputs) do not affect a build and are listed apart.
+    modified = run("status", "--porcelain", "--untracked-files=no", "--", "pipeline")
+    untracked = run("ls-files", "--others", "--exclude-standard", "--", "pipeline")
+    return {"commit": commit or None, "pipelineDirty": bool(modified),
+            "pipelineUntracked": sorted(untracked.splitlines()) if untracked else []}
 
 
 def environment() -> dict:

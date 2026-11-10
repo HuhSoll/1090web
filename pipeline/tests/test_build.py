@@ -99,6 +99,18 @@ def test_duplicate_codes_merge_only_within_one_record(built):
     assert aliases["DUPC"]["status"].startswith("unresolved")  # matches two records: reported, not merged
 
 
+def test_canonical_labels_are_unique(built):
+    """Record 10's ident DUPC is record 9's ICAO code: the label must still name one record only."""
+    _, _, out, _ = built
+    ids = [a["id"] for a in json.loads((out / "airports.json").read_text(encoding="utf-8"))]
+    assert len(ids) == len(set(ids))
+    with (out / "research" / "airports.csv").open(encoding="utf-8") as fh:
+        rows = list(csv.DictReader(fh))
+    assert len({r["id"] for r in rows}) == len(rows)
+    dupc = [r for r in rows if r["id"] == "DUPC"]
+    assert [r["ourairports_id"] for r in dupc] == ["9"]
+
+
 def test_canonical_override_keeps_label_but_merges(tmp_path):
     from airports import load_airports
     from synthetic import write_inputs

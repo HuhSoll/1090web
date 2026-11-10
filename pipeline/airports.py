@@ -41,17 +41,8 @@ def load_airports(con, csv_path: Path, overrides_csv: Path | None = OVERRIDES) -
 
     CREATE OR REPLACE TABLE ap_override AS {ov};
 
-    CREATE OR REPLACE TABLE ap_rec AS
-    SELECT a.id AS rec_id,
-           coalesce(o.canonical, a.icao_code, a.gps_code, a.ident) AS canon,
-           a.ident, a.icao_code AS icao, coalesce(o.iata, a.iata_code) AS iata, a.name, a.municipality AS city,
-           a.iso_country AS country, a.continent, a.type,
-           a.latitude_deg::DOUBLE AS lat, a.longitude_deg::DOUBLE AS lon,
-           o.status AS override_status
-    FROM ap_raw a LEFT JOIN ap_override o ON o.ourairports_id = a.id
-    WHERE a.type NOT IN ({excluded});
-
-    CREATE OR REPLACE TABLE ap_code AS
+    -- code -> record, by priority icao (1) > ident (2) > gps (3), then airport size, then id.
+    CREATE OR REPLACE TABLE ap_rank AS
     WITH codes AS (
       SELECT icao_code AS code, 1 AS pri, id AS rec_id, type FROM ap_raw WHERE icao_code IS NOT NULL AND type NOT IN ({excluded})
       UNION ALL SELECT ident, 2, id, type FROM ap_raw WHERE type NOT IN ({excluded})
@@ -65,9 +56,35 @@ def load_airports(con, csv_path: Path, overrides_csv: Path | None = OVERRIDES) -
              count(DISTINCT rec_id) OVER (PARTITION BY code) AS n_recs
       FROM codes
     )
+    SELECT code, rec_id, n_recs FROM ranked WHERE rk = 1;
+
+    -- The canonical label must identify exactly one record. When a record's preferred label is a
+    -- code that resolves to ANOTHER record (e.g. its ident equals another airport's ICAO code),
+    -- it falls back to its own ident if that resolves to itself, else to 'OA<OurAirports id>'.
+    CREATE OR REPLACE TABLE ap_rec AS
+    WITH base AS (
+      SELECT a.id AS rec_id,
+             coalesce(o.canonical, a.icao_code, a.gps_code, a.ident) AS canon0,
+             o.canonical IS NOT NULL AS has_override,
+             a.ident, a.icao_code AS icao, coalesce(o.iata, a.iata_code) AS iata, a.name, a.municipality AS city,
+             a.iso_country AS country, a.continent, a.type,
+             a.latitude_deg::DOUBLE AS lat, a.longitude_deg::DOUBLE AS lon,
+             o.status AS override_status
+      FROM ap_raw a LEFT JOIN ap_override o ON o.ourairports_id = a.id
+      WHERE a.type NOT IN ({excluded}))
+    SELECT b.rec_id,
+           CASE WHEN b.has_override OR w.rec_id = b.rec_id THEN b.canon0
+                WHEN wi.rec_id = b.rec_id THEN b.ident
+                ELSE 'OA' || b.rec_id END AS canon,
+           b.ident, b.icao, b.iata, b.name, b.city, b.country, b.continent, b.type, b.lat, b.lon,
+           b.override_status
+    FROM base b
+    LEFT JOIN ap_rank w ON w.code = b.canon0
+    LEFT JOIN ap_rank wi ON wi.code = b.ident;
+
+    CREATE OR REPLACE TABLE ap_code AS
     SELECT r.code, r.rec_id, r.n_recs > 1 AS ambiguous, a.canon, a.lat, a.lon
-    FROM ranked r JOIN ap_rec a USING (rec_id)
-    WHERE r.rk = 1;
+    FROM ap_rank r JOIN ap_rec a USING (rec_id);
     """)
 
 

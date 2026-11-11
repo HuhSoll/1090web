@@ -35,6 +35,19 @@ cd pipeline && ../.venv/Scripts/python -m pytest -q && cd ..
 .venv/Scripts/python pipeline/analysis/reliability.py --dataset observed-2026-v2     --compare-dataset observed-2026 --raw-flights "data/raw/flights/*.parquet" --fetch-eurostat
 ```
 
+公的統計との照合（Phase 7）：米国 BTS T-100、ブラジル ANAC、日本の国土交通省の統計を取得し、路線・空港・全国合計の単位で比べます。取得したファイルは `data/raw/external/`（Git 管理外）に置き、SHA-256・取得日時・URL を `pipeline/validation/external_inputs.lock.json` に記録します。詳しくは [phase7-report.md](phase7-report.md)。
+
+```bash
+.venv/Scripts/python pipeline/validation/bts.py fetch --year 2026 --months 1-7      # 公式フォームから月ごとに取得
+.venv/Scripts/python pipeline/validation/bts.py import <手動で取得した zip> --year 2026 --month 8
+.venv/Scripts/python pipeline/validation/anac.py fetch-vra --year 2026 --months 1-9
+.venv/Scripts/python pipeline/validation/anac.py fetch-stats
+.venv/Scripts/python pipeline/validation/japan.py --year 2026 --months 1-8
+.venv/Scripts/python pipeline/validation/report.py --dataset observed-2026-v2      # data/research/<id>/phase7/
+```
+
+研究用の Parquet は Git に入れず、GitHub Releases で配布します（[research-data-release.md](research-data-release.md)）。
+
 元データを新しい版に差し替えるときは、`inputs.lock.json` を更新し、新しいデータセット ID とバージョンで生成してください。既存のデータセットは上書きしません。
 
 出力（`<id>` はデータセット ID）：

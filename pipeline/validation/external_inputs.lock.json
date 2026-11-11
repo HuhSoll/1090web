@@ -1,0 +1,229 @@
+{
+ "files": {
+  "Dados_Estatisticos.csv": {
+   "bytes": 361057599,
+   "note": "Dados Estatísticos do Transporte Aéreo (all years; only the requested year is read)",
+   "path": "data/raw/external/anac/Dados_Estatisticos.csv",
+   "retrieved": "2026-11-11T02:55:26Z",
+   "sha256": "7271b4cd7444361fac4062c165e75086e6f78a58d805511ed1b421afdca5f0f5",
+   "source": "ANAC_DADOS_ESTATISTICOS",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Dados Estatísticos do Transporte Aéreo/Dados_Estatisticos.csv"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_01.zip": {
+   "bytes": 625288,
+   "note": "form download: geography All, year 2026, period 1, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_01.zip",
+   "retrieved": "2026-11-10T16:40:04Z",
+   "sha256": "784d7ec64e4699522d41cdec0baf148c0280cbe71079f935bfa6bc639a41f9d3",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_02.zip": {
+   "bytes": 583141,
+   "note": "form download: geography All, year 2026, period 2, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_02.zip",
+   "retrieved": "2026-11-10T16:42:15Z",
+   "sha256": "e7ad26bc1683cafd0641d943b4a6c100bc4c9b7277e966979d7ce658eeb7f27b",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_03.zip": {
+   "bytes": 632926,
+   "note": "form download: geography All, year 2026, period 3, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_03.zip",
+   "retrieved": "2026-11-10T16:42:27Z",
+   "sha256": "de7d555c2044cd5a29e3817af1309bd32a20e71eb3e2b58b028848185e55d166",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_04.zip": {
+   "bytes": 602486,
+   "note": "form download: geography All, year 2026, period 4, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_04.zip",
+   "retrieved": "2026-11-10T16:40:17Z",
+   "sha256": "1ed2b23d0680f35b2fcb7c2583e0b99b6b28e5ac686a385a36b11279686ca98e",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_05.zip": {
+   "bytes": 620152,
+   "note": "form download: geography All, year 2026, period 5, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_05.zip",
+   "retrieved": "2026-11-10T16:42:43Z",
+   "sha256": "0638a752fa4d96b999d99ff619242a6fddacd575cc77c0d83983150df812fd02",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_06.zip": {
+   "bytes": 612780,
+   "note": "form download: geography All, year 2026, period 6, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_06.zip",
+   "retrieved": "2026-11-10T16:42:59Z",
+   "sha256": "bfcd28637cf8cf8553c79587f54775b8f37a857ea0e925ee73c259194e60b6dd",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "T100_SEGMENT_ALL_CARRIER_2026_07.zip": {
+   "bytes": 620372,
+   "note": "form download: geography All, year 2026, period 7, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_07.zip",
+   "retrieved": "2026-11-10T16:43:13Z",
+   "sha256": "31c64f369467422c75ca32bb87e6dd0230fdb74fdf8f0153448bf94e5d98e94f",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45"
+  },
+  "VRA_20261.csv": {
+   "bytes": 13008603,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20261.csv",
+   "retrieved": "2026-11-10T16:45:36Z",
+   "sha256": "b1f37c05f0b4e3b2d74432b86f29971e55e5f946c2515d46f23143d7fd5ed5e1",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/01 - Janeiro/VRA_20261.csv"
+  },
+  "VRA_20262.csv": {
+   "bytes": 11280038,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20262.csv",
+   "retrieved": "2026-11-10T16:46:07Z",
+   "sha256": "5b98ad5acc5a8716ea1e5cf872e4126a87182f54aa2bd6f0509b01bc11df1df4",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/02 - Fevereiro/VRA_20262.csv"
+  },
+  "VRA_20263.csv": {
+   "bytes": 12370375,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20263.csv",
+   "retrieved": "2026-11-10T16:46:46Z",
+   "sha256": "59ebbaedd9fb2047db44b26849021e79e15a17cd53b1d3756ec0c9d804879b0f",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/03 - Março/VRA_20263.csv"
+  },
+  "VRA_20264.csv": {
+   "bytes": 11401934,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20264.csv",
+   "retrieved": "2026-11-10T16:47:20Z",
+   "sha256": "487b1bab441a2fe8b58c60fc5a341d477e6c6aaf36b0bac529cbe197e2ea9ed8",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/04 - Abril/VRA_20264.csv"
+  },
+  "VRA_20265.csv": {
+   "bytes": 11651726,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20265.csv",
+   "retrieved": "2026-11-10T16:47:54Z",
+   "sha256": "bde9ebc8487a0a8900261576b752e7df500586d86c3ca676738804f8c0f5b9f1",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/05 - Maio/VRA_20265.csv"
+  },
+  "VRA_20266.csv": {
+   "bytes": 11496087,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20266.csv",
+   "retrieved": "2026-11-10T16:48:48Z",
+   "sha256": "c9fce3d120d34b871e1d7c6904d3029df729663a6588e5331df2c25fb0157a69",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/06 - Junho/VRA_20266.csv"
+  },
+  "VRA_20267.csv": {
+   "bytes": 12689123,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20267.csv",
+   "retrieved": "2026-11-10T16:50:15Z",
+   "sha256": "9c2b4090f421b946fc9a72d802484f20d94aedc1b23a82fdc4128b8c28cf9969",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/07 - Julho/VRA_20267.csv"
+  },
+  "VRA_20268.csv": {
+   "bytes": 12487755,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20268.csv",
+   "retrieved": "2026-11-11T02:37:59Z",
+   "sha256": "b55dca6f88afbedb8b122a7a09100706676b8f7e9687652cb8ed7e92c9a46c08",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/08 - Agosto/VRA_20268.csv"
+  },
+  "VRA_20269.csv": {
+   "bytes": 12141483,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20269.csv",
+   "retrieved": "2026-11-11T02:38:31Z",
+   "sha256": "60f5b89b7d3fb5b381085abce1c41dd9a48b0c9f4caf4696f5afaeabb4a66f66",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/09 - Setembro/VRA_20269.csv"
+  },
+  "koku_sokuho_2026_01.xlsx": {
+   "bytes": 32701,
+   "note": "航空輸送統計速報 2026年1月 (e-Stat statInfId 000040437678)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_01.xlsx",
+   "retrieved": "2026-11-11T02:45:15Z",
+   "sha256": "0b8b9c32f7ffa05868578d65ed549e96bd48595b6638fbd4d2f3e2fc62aeaa6a",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040437678&fileKind=0"
+  },
+  "koku_sokuho_2026_02.xlsx": {
+   "bytes": 32659,
+   "note": "航空輸送統計速報 2026年2月 (e-Stat statInfId 000040449355)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_02.xlsx",
+   "retrieved": "2026-11-11T02:45:17Z",
+   "sha256": "e4f0e424860c909d2bd75ea37dc8d4101d798dea5b34f70d9af29d4923e50ad6",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040449355&fileKind=0"
+  },
+  "koku_sokuho_2026_03.xlsx": {
+   "bytes": 32734,
+   "note": "航空輸送統計速報 2026年3月 (e-Stat statInfId 000040458264)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_03.xlsx",
+   "retrieved": "2026-11-11T02:45:19Z",
+   "sha256": "f8618938973d2ab54ed29c37180aef5183e9f025f4d97617998fe396d45decfb",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040458264&fileKind=0"
+  },
+  "koku_sokuho_2026_04.xlsx": {
+   "bytes": 32717,
+   "note": "航空輸送統計速報 2026年4月 (e-Stat statInfId 000040471559)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_04.xlsx",
+   "retrieved": "2026-11-11T02:45:21Z",
+   "sha256": "9ee072ece9b9fe09f1c1c16f4fe80884c1b5bc1efd441f8742a36e1d1abb3225",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040471559&fileKind=0"
+  },
+  "koku_sokuho_2026_05.xlsx": {
+   "bytes": 32661,
+   "note": "航空輸送統計速報 2026年5月 (e-Stat statInfId 000040482050)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_05.xlsx",
+   "retrieved": "2026-11-11T02:45:23Z",
+   "sha256": "dffea93a4cecee410c997629c900a004077496bdc2275da96aaecf88f24313e0",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040482050&fileKind=0"
+  },
+  "koku_sokuho_2026_06.xlsx": {
+   "bytes": 32679,
+   "note": "航空輸送統計速報 2026年6月 (e-Stat statInfId 000040497288)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_06.xlsx",
+   "retrieved": "2026-11-11T02:45:25Z",
+   "sha256": "0d16c189d015bf3c25187ffec297af09119f554d77491eb6c4d8655e9e7c0b73",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040497288&fileKind=0"
+  },
+  "koku_sokuho_2026_07.xlsx": {
+   "bytes": 32768,
+   "note": "航空輸送統計速報 2026年7月 (e-Stat statInfId 000040511136)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_07.xlsx",
+   "retrieved": "2026-11-11T02:45:27Z",
+   "sha256": "32bc3ebd0eec7d3e53a8c8ac6359576975941aad3216b9b4d376dd633c86fcb9",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040511136&fileKind=0"
+  },
+  "koku_sokuho_2026_08.xlsx": {
+   "bytes": 32671,
+   "note": "航空輸送統計速報 2026年8月 (e-Stat statInfId 000040523848)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_08.xlsx",
+   "retrieved": "2026-11-11T02:45:29Z",
+   "sha256": "45d6e2096c600af58922855202cf777231418273a8232d52fe35b96d24470d80",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040523848&fileKind=0"
+  }
+ }
+}

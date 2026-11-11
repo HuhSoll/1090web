@@ -1,0 +1,42 @@
+{
+ "dataset": "observed-2026-v2",
+ "datasetVersion": "2.0.0",
+ "tag": "research-observed-2026-v2-v2.0.0",
+ "repository": "HuhSoll/1090web",
+ "generatedAt": "2026-11-11T03:03:30Z",
+ "files": [
+  {
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet",
+   "asset": "observed-2026-v2__research__routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__research__routes_monthly.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/phase7/anac_route_comparison_dados_estatisticos.parquet",
+   "asset": "observed-2026-v2__phase7__anac_route_comparison_dados_estatisticos.parquet",
+   "bytes": 209955,
+   "sha256": "20e709198566d04cfbb6f987f9b8862ceede47f88492016307e44775b6d762e0",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__phase7__anac_route_comparison_dados_estatisticos.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/phase7/anac_route_comparison_vra.parquet",
+   "asset": "observed-2026-v2__phase7__anac_route_comparison_vra.parquet",
+   "bytes": 205285,
+   "sha256": "11386c53545115c5bfd44943fed7873be197caf3a898ef02b7d0e0dd22d3c0f8",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__phase7__anac_route_comparison_vra.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/phase7/bts_route_comparison.parquet",
+   "asset": "observed-2026-v2__phase7__bts_route_comparison.parquet",
+   "bytes": 3215535,
+   "sha256": "0b569c0c19f4989bf4f57c696f3d9e6a501ddcf79622d34565a4a37f9e54807b",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__phase7__bts_route_comparison.parquet"
+  }
+ ],
+ "regenerate": [
+  "python pipeline/build_dataset.py --dataset <id> --version <version>",
+  "python pipeline/analysis/reliability.py --dataset <id> ...",
+  "python pipeline/validation/report.py --dataset <id>"
+ ]
+}

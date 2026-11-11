@@ -1,0 +1,22 @@
+{
+ "all_sources": [
+  "Official statistics and ADS-B observations do not cover the same flights; agreement is a conditional external comparison, not accuracy.",
+  "The observed month is UTC (track start); official months are usually local departure dates.",
+  "Airport codes that match several OurAirports records, or none, are excluded (counts recorded).",
+  "Tiers T1-T4 describe the evidence for the airports; no probability of correctness is attached."
+ ],
+ "BTS_T100_SEGMENT": [
+  "T-100 covers certificated U.S. carriers (all their segments) and foreign carriers on flights touching the U.S.; business aviation, general aviation and on-demand air taxis are not reported.",
+  "Comparisons are restricted to routes with at least one U.S. airport (incl. territories).",
+  "The carrier-matched condition uses an evidence-based crosswalk (route-vector similarity); unmatched airline codes are kept apart, not classified.",
+  "2026-05 contains a 66-hour ADS-B collection gap (05-05 00:00 to 05-07 17:00 UTC); summaries are also given without May."
+ ],
+ "ANAC": [
+  "Dados Estatísticos covers Brazilian companies (all flights) and foreign companies (flights to/from Brazil); VRA covers scheduled flights only.",
+  "GRUPO_DE_VOO 'IMPRODUTIVO' (non-revenue) flights are reported separately and compared separately."
+ ],
+ "MLIT_AIR_TRANSPORT_FLASH": [
+  "Only national domestic flight totals of Japanese carriers are available monthly; no route or airport flight counts. Flash (速報) figures can be revised."
+ ],
+ "not_run": {}
+}

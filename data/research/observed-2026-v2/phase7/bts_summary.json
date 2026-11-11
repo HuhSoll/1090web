@@ -1,0 +1,763 @@
+{
+ "months": [
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04",
+  "2026-05",
+  "2026-06",
+  "2026-07"
+ ],
+ "records": 332658,
+ "exclusions_by_class_set": {
+  "scheduled_pax": {
+   "same_airport_after_resolution": {
+    "rows": 1909,
+    "flights": 8164.0
+   },
+   "airport_unresolved": {
+    "rows": 76,
+    "flights": 2351.0
+   }
+  },
+  "scheduled": {
+   "same_airport_after_resolution": {
+    "rows": 1980,
+    "flights": 8296.0
+   },
+   "airport_unresolved": {
+    "rows": 94,
+    "flights": 2616.0
+   }
+  },
+  "all_reported": {
+   "same_airport_after_resolution": {
+    "rows": 2666,
+    "flights": 13209.0
+   },
+   "airport_unresolved": {
+    "rows": 1077,
+    "flights": 7726.0
+   }
+  }
+ },
+ "unresolved_codes_top": [
+  {
+   "code": "RBN",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 2724.0
+  },
+  {
+   "code": "RBH",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 1297.0
+  },
+  {
+   "code": "JRV",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 1007.0
+  },
+  {
+   "code": "DGB",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 355.0
+  },
+  {
+   "code": "UXK",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 250.0
+  },
+  {
+   "code": "BS3",
+   "country": "BS",
+   "reason": "unresolved",
+   "flights": 232.0
+  },
+  {
+   "code": "PBK",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 189.0
+  },
+  {
+   "code": "DQS",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 185.0
+  },
+  {
+   "code": "TN8",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 123.0
+  },
+  {
+   "code": "T4X",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 119.0
+  },
+  {
+   "code": "A03",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 115.0
+  },
+  {
+   "code": "DIO",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 74.0
+  },
+  {
+   "code": "RLU",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 73.0
+  },
+  {
+   "code": "A72",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 70.0
+  },
+  {
+   "code": "JRA",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 46.0
+  },
+  {
+   "code": "HBI",
+   "country": "BS",
+   "reason": "unresolved",
+   "flights": 37.0
+  },
+  {
+   "code": "AA8",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 32.0
+  },
+  {
+   "code": "VWK",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 32.0
+  },
+  {
+   "code": "A52",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 24.0
+  },
+  {
+   "code": "PTL",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 23.0
+  },
+  {
+   "code": "A18",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 23.0
+  },
+  {
+   "code": "JZT",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 22.0
+  },
+  {
+   "code": "VZY",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 22.0
+  },
+  {
+   "code": "UBF",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 21.0
+  },
+  {
+   "code": "TSS",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 20.0
+  },
+  {
+   "code": "FVQ",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 20.0
+  },
+  {
+   "code": "UXR",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 20.0
+  },
+  {
+   "code": "VWE",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 20.0
+  },
+  {
+   "code": "ZXU",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 19.0
+  },
+  {
+   "code": "VA4",
+   "country": [
+    "AS",
+    "GU",
+    "MP",
+    "PR",
+    "UM",
+    "US",
+    "VI"
+   ],
+   "reason": "unresolved",
+   "flights": 18.0
+  }
+ ],
+ "crosswalk": {
+  "matched_codes": 132,
+  "observed_US_flights_matched_share": 0.862,
+  "reported_flights_matched_share": 0.9344,
+  "top_unmatched_codes": [
+   [
+    "EJA",
+    170664
+   ],
+   [
+    "LXJ",
+    69310
+   ],
+   [
+    "CXK",
+    23259
+   ],
+   [
+    "JRE",
+    16998
+   ],
+   [
+    "CNS",
+    16293
+   ],
+   [
+    "EJM",
+    15544
+   ],
+   [
+    "KAP",
+    14797
+   ],
+   [
+    "VJA",
+    13560
+   ],
+   [
+    "AMF",
+    13068
+   ],
+   [
+    "GPD",
+    12965
+   ],
+   [
+    "WUP",
+    11082
+   ],
+   [
+    "TWY",
+    9062
+   ],
+   [
+    "CAP",
+    8926
+   ],
+   [
+    "KOW",
+    8778
+   ],
+   [
+    "MTN",
+    8700
+   ],
+   [
+    "FDY",
+    8268
+   ],
+   [
+    "JTL",
+    7925
+   ],
+   [
+    "FFL",
+    7746
+   ],
+   [
+    "AIP",
+    7097
+   ],
+   [
+    "CSB",
+    6681
+   ],
+   [
+    "SKQ",
+    6267
+   ],
+   [
+    "PAT",
+    6151
+   ],
+   [
+    "SNC",
+    5663
+   ],
+   [
+    "LBQ",
+    5540
+   ],
+   [
+    "PCM",
+    5486
+   ]
+  ]
+ },
+ "rankings_vs_reported_excl_may": {
+  "T1": {
+   "spearman_union_top20": 0.7714,
+   "jaccard_top20": 1.0,
+   "entered": [],
+   "left": [],
+   "top_reported": [
+    "KORD",
+    "KATL",
+    "KDFW",
+    "KDEN",
+    "KLAX",
+    "KCLT",
+    "KPHX",
+    "KIAH",
+    "KMIA",
+    "KSEA",
+    "KJFK",
+    "KMCO",
+    "KLAS",
+    "KSFO",
+    "KEWR",
+    "KBOS",
+    "KLGA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ],
+   "top_observed": [
+    "KATL",
+    "KORD",
+    "KDFW",
+    "KDEN",
+    "KLAX",
+    "KCLT",
+    "KJFK",
+    "KSEA",
+    "KMCO",
+    "KSFO",
+    "KIAH",
+    "KBOS",
+    "KEWR",
+    "KLGA",
+    "KMSP",
+    "KPHX",
+    "KDTW",
+    "KLAS",
+    "KMIA",
+    "KPHL"
+   ]
+  },
+  "T1-T2": {
+   "spearman_union_top20": 0.9078,
+   "jaccard_top20": 0.9048,
+   "entered": [
+    "KDCA"
+   ],
+   "left": [
+    "KPHL"
+   ],
+   "top_reported": [
+    "KORD",
+    "KATL",
+    "KDFW",
+    "KDEN",
+    "KLAX",
+    "KCLT",
+    "KPHX",
+    "KIAH",
+    "KMIA",
+    "KSEA",
+    "KJFK",
+    "KMCO",
+    "KLAS",
+    "KSFO",
+    "KEWR",
+    "KBOS",
+    "KLGA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ],
+   "top_observed": [
+    "KORD",
+    "KATL",
+    "KDFW",
+    "KDEN",
+    "KCLT",
+    "KLAX",
+    "KPHX",
+    "KSEA",
+    "KMCO",
+    "KLAS",
+    "KIAH",
+    "KSFO",
+    "KEWR",
+    "KJFK",
+    "KLGA",
+    "KBOS",
+    "KDTW",
+    "KMIA",
+    "KMSP",
+    "KDCA"
+   ]
+  },
+  "T1-T3": {
+   "spearman_union_top20": 0.9293,
+   "jaccard_top20": 1.0,
+   "entered": [],
+   "left": [],
+   "top_reported": [
+    "KORD",
+    "KATL",
+    "KDFW",
+    "KDEN",
+    "KLAX",
+    "KCLT",
+    "KPHX",
+    "KIAH",
+    "KMIA",
+    "KSEA",
+    "KJFK",
+    "KMCO",
+    "KLAS",
+    "KSFO",
+    "KEWR",
+    "KBOS",
+    "KLGA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ],
+   "top_observed": [
+    "KORD",
+    "KATL",
+    "KDEN",
+    "KDFW",
+    "KCLT",
+    "KLAX",
+    "KPHX",
+    "KSEA",
+    "KIAH",
+    "KMCO",
+    "KLAS",
+    "KSFO",
+    "KJFK",
+    "KEWR",
+    "KLGA",
+    "KBOS",
+    "KMIA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ]
+  },
+  "T1-T4": {
+   "spearman_union_top20": 0.9835,
+   "jaccard_top20": 1.0,
+   "entered": [],
+   "left": [],
+   "top_reported": [
+    "KORD",
+    "KATL",
+    "KDFW",
+    "KDEN",
+    "KLAX",
+    "KCLT",
+    "KPHX",
+    "KIAH",
+    "KMIA",
+    "KSEA",
+    "KJFK",
+    "KMCO",
+    "KLAS",
+    "KSFO",
+    "KEWR",
+    "KBOS",
+    "KLGA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ],
+   "top_observed": [
+    "KORD",
+    "KATL",
+    "KDEN",
+    "KDFW",
+    "KLAX",
+    "KCLT",
+    "KIAH",
+    "KPHX",
+    "KSEA",
+    "KJFK",
+    "KMCO",
+    "KMIA",
+    "KSFO",
+    "KEWR",
+    "KLAS",
+    "KBOS",
+    "KLGA",
+    "KMSP",
+    "KDTW",
+    "KPHL"
+   ]
+  }
+ }
+}

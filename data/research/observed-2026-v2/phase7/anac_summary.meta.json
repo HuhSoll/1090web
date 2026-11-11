@@ -1,0 +1,210 @@
+{
+ "output": "anac_summary.json",
+ "externalSource": "ANAC",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0"
+ },
+ "externalFiles": [
+  {
+   "bytes": 361057599,
+   "note": "Dados Estatísticos do Transporte Aéreo (all years; only the requested year is read)",
+   "path": "data/raw/external/anac/Dados_Estatisticos.csv",
+   "retrieved": "2026-11-11T02:55:26Z",
+   "sha256": "7271b4cd7444361fac4062c165e75086e6f78a58d805511ed1b421afdca5f0f5",
+   "source": "ANAC_DADOS_ESTATISTICOS",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Dados Estatísticos do Transporte Aéreo/Dados_Estatisticos.csv",
+   "file": "Dados_Estatisticos.csv"
+  },
+  {
+   "bytes": 13008603,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20261.csv",
+   "retrieved": "2026-11-10T16:45:36Z",
+   "sha256": "b1f37c05f0b4e3b2d74432b86f29971e55e5f946c2515d46f23143d7fd5ed5e1",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/01 - Janeiro/VRA_20261.csv",
+   "file": "VRA_20261.csv"
+  },
+  {
+   "bytes": 11280038,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20262.csv",
+   "retrieved": "2026-11-10T16:46:07Z",
+   "sha256": "5b98ad5acc5a8716ea1e5cf872e4126a87182f54aa2bd6f0509b01bc11df1df4",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/02 - Fevereiro/VRA_20262.csv",
+   "file": "VRA_20262.csv"
+  },
+  {
+   "bytes": 12370375,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20263.csv",
+   "retrieved": "2026-11-10T16:46:46Z",
+   "sha256": "59ebbaedd9fb2047db44b26849021e79e15a17cd53b1d3756ec0c9d804879b0f",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/03 - Março/VRA_20263.csv",
+   "file": "VRA_20263.csv"
+  },
+  {
+   "bytes": 11401934,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20264.csv",
+   "retrieved": "2026-11-10T16:47:20Z",
+   "sha256": "487b1bab441a2fe8b58c60fc5a341d477e6c6aaf36b0bac529cbe197e2ea9ed8",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/04 - Abril/VRA_20264.csv",
+   "file": "VRA_20264.csv"
+  },
+  {
+   "bytes": 11651726,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20265.csv",
+   "retrieved": "2026-11-10T16:47:54Z",
+   "sha256": "bde9ebc8487a0a8900261576b752e7df500586d86c3ca676738804f8c0f5b9f1",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/05 - Maio/VRA_20265.csv",
+   "file": "VRA_20265.csv"
+  },
+  {
+   "bytes": 11496087,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20266.csv",
+   "retrieved": "2026-11-10T16:48:48Z",
+   "sha256": "c9fce3d120d34b871e1d7c6904d3029df729663a6588e5331df2c25fb0157a69",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/06 - Junho/VRA_20266.csv",
+   "file": "VRA_20266.csv"
+  },
+  {
+   "bytes": 12689123,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20267.csv",
+   "retrieved": "2026-11-10T16:50:15Z",
+   "sha256": "9c2b4090f421b946fc9a72d802484f20d94aedc1b23a82fdc4128b8c28cf9969",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/07 - Julho/VRA_20267.csv",
+   "file": "VRA_20267.csv"
+  },
+  {
+   "bytes": 12487755,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20268.csv",
+   "retrieved": "2026-11-11T02:37:59Z",
+   "sha256": "b55dca6f88afbedb8b122a7a09100706676b8f7e9687652cb8ed7e92c9a46c08",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/08 - Agosto/VRA_20268.csv",
+   "file": "VRA_20268.csv"
+  },
+  {
+   "bytes": 12141483,
+   "note": "Voo Regular Ativo, monthly file",
+   "path": "data/raw/external/anac/VRA_20269.csv",
+   "retrieved": "2026-11-11T02:38:31Z",
+   "sha256": "60f5b89b7d3fb5b381085abce1c41dd9a48b0c9f4caf4696f5afaeabb4a66f66",
+   "source": "ANAC_VRA",
+   "url": "https://sistemas.anac.gov.br/dadosabertos/Voos e operações aéreas/Voo Regular Ativo (VRA)/2026/09 - Setembro/VRA_20269.csv",
+   "file": "VRA_20269.csv"
+  }
+ ],
+ "datasetInputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  },
+  {
+   "role": "ourairports",
+   "file": "airports.csv",
+   "bytes": 12758651,
+   "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+   "path": "data/raw/ourairports/airports.csv"
+  }
+ ],
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ]
+ },
+ "conditions": {
+  "scope": "routes with >= 1 Brazilian airport",
+  "carrier_matched": "observed airline codes that appear in the ANAC file (ICAO codes)",
+  "dados_estatisticos": "DECOLAGENS by NATUREZA/GRUPO_DE_VOO",
+  "vra": "flights with Situação Voo = REALIZADO",
+  "tier_sets": {
+   "T1": [
+    "T1_track"
+   ],
+   "T1-T2": [
+    "T1_track",
+    "T2_track_conflict"
+   ],
+   "T1-T3": [
+    "T1_track",
+    "T2_track_conflict",
+    "T3_track_callsign"
+   ],
+   "T1-T4": [
+    "T1_track",
+    "T2_track_conflict",
+    "T3_track_callsign",
+    "T4_callsign_only"
+   ]
+  },
+  "thresholds": [
+   1,
+   4,
+   10,
+   30
+  ]
+ },
+ "metricDefinitions": {
+  "abs_error": "a - b (observed minus reported), per item",
+  "rel_error": "(a - b) / b, only when b >= min_base (default 10) to avoid unstable ratios on small counts",
+  "MAE": "mean of |a - b| over items",
+  "RMSE": "sqrt(mean of (a - b)^2) over items",
+  "WAPE": "sum |a - b| / sum b; undefined when sum b = 0",
+  "bias": "sum a / sum b - 1",
+  "pearson": "Pearson correlation of a and b over items (needs >= 3 items and variance)",
+  "spearman": "Spearman rank correlation (average ranks for ties)",
+  "jaccard": "|A and B| / |A or B| for route sets",
+  "note": "a = ADS-B observations (this dataset), b = official statistic. Coverage differs, so these are conditional external comparisons, not accuracy."
+ },
+ "counts": {
+  "ANAC_DADOS_ESTATISTICOS": {
+   "records": 29178
+  },
+  "ANAC_VRA": {
+   "records": 22870
+  }
+ },
+ "results": {},
+ "limitations": [
+  "Official statistics and ADS-B observations do not cover the same flights; agreement is a conditional external comparison, not accuracy.",
+  "The observed month is UTC (track start); official months are usually local departure dates.",
+  "Airport codes that match several OurAirports records, or none, are excluded (counts recorded).",
+  "Tiers T1-T4 describe the evidence for the airports; no probability of correctness is attached.",
+  "Dados Estatísticos covers Brazilian companies (all flights) and foreign companies (flights to/from Brazil); VRA covers scheduled flights only.",
+  "GRUPO_DE_VOO 'IMPRODUTIVO' (non-revenue) flights are reported separately and compared separately."
+ ],
+ "generatedAt": "2026-11-11T03:11:07Z",
+ "script": {
+  "name": "pipeline/validation/report.py",
+  "version": "7.1",
+  "git": {
+   "commit": "374d1d83e7af43d72e614a1ccb48f2a367de7dbe",
+   "pipelineDirty": false,
+   "pipelineUntracked": []
+  }
+ }
+}

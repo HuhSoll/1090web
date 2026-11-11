@@ -1,0 +1,190 @@
+{
+ "output": "bts_region_summary.csv",
+ "externalSource": "BTS_T100_SEGMENT",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0"
+ },
+ "externalFiles": [
+  {
+   "bytes": 625288,
+   "note": "form download: geography All, year 2026, period 1, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_01.zip",
+   "retrieved": "2026-11-10T16:40:04Z",
+   "sha256": "784d7ec64e4699522d41cdec0baf148c0280cbe71079f935bfa6bc639a41f9d3",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_01.zip"
+  },
+  {
+   "bytes": 583141,
+   "note": "form download: geography All, year 2026, period 2, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_02.zip",
+   "retrieved": "2026-11-10T16:42:15Z",
+   "sha256": "e7ad26bc1683cafd0641d943b4a6c100bc4c9b7277e966979d7ce658eeb7f27b",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_02.zip"
+  },
+  {
+   "bytes": 632926,
+   "note": "form download: geography All, year 2026, period 3, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_03.zip",
+   "retrieved": "2026-11-10T16:42:27Z",
+   "sha256": "de7d555c2044cd5a29e3817af1309bd32a20e71eb3e2b58b028848185e55d166",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_03.zip"
+  },
+  {
+   "bytes": 602486,
+   "note": "form download: geography All, year 2026, period 4, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_04.zip",
+   "retrieved": "2026-11-10T16:40:17Z",
+   "sha256": "1ed2b23d0680f35b2fcb7c2583e0b99b6b28e5ac686a385a36b11279686ca98e",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_04.zip"
+  },
+  {
+   "bytes": 620152,
+   "note": "form download: geography All, year 2026, period 5, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_05.zip",
+   "retrieved": "2026-11-10T16:42:43Z",
+   "sha256": "0638a752fa4d96b999d99ff619242a6fddacd575cc77c0d83983150df812fd02",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_05.zip"
+  },
+  {
+   "bytes": 612780,
+   "note": "form download: geography All, year 2026, period 6, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_06.zip",
+   "retrieved": "2026-11-10T16:42:59Z",
+   "sha256": "bfcd28637cf8cf8553c79587f54775b8f37a857ea0e925ee73c259194e60b6dd",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_06.zip"
+  },
+  {
+   "bytes": 620372,
+   "note": "form download: geography All, year 2026, period 7, fields YEAR,MONTH,ORIGIN,DEST,ORIGIN_COUNTRY,DEST_COUNTRY,ORIGIN_AIRPORT_ID,DEST_AIRPORT_ID,UNIQUE_CARRIER,CARRIER,CARRIER_GROUP_NEW,CLASS,AIRCRAFT_TYPE,AIRCRAFT_CONFIG,DEPARTURES_SCHEDULED,DEPARTURES_PERFORMED,SEATS,PASSENGERS,FREIGHT,DATA_SOURCE",
+   "path": "data/raw/external/bts/T100_SEGMENT_ALL_CARRIER_2026_07.zip",
+   "retrieved": "2026-11-10T16:43:13Z",
+   "sha256": "31c64f369467422c75ca32bb87e6dd0230fdb74fdf8f0153448bf94e5d98e94f",
+   "source": "BTS_T100_SEGMENT",
+   "url": "https://transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FMG&QO_fu146_anzr=Nv4%20Pn44vr45",
+   "file": "T100_SEGMENT_ALL_CARRIER_2026_07.zip"
+  }
+ ],
+ "datasetInputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  },
+  {
+   "role": "ourairports",
+   "file": "airports.csv",
+   "bytes": 12758651,
+   "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+   "path": "data/raw/ourairports/airports.csv"
+  }
+ ],
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07"
+  ]
+ },
+ "conditions": {
+  "class_sets": {
+   "scheduled_pax": [
+    "F"
+   ],
+   "scheduled": [
+    "F",
+    "G"
+   ],
+   "all_reported": [
+    "F",
+    "G",
+    "L",
+    "P"
+   ]
+  },
+  "tier_sets": {
+   "T1": [
+    "T1_track"
+   ],
+   "T1-T2": [
+    "T1_track",
+    "T2_track_conflict"
+   ],
+   "T1-T3": [
+    "T1_track",
+    "T2_track_conflict",
+    "T3_track_callsign"
+   ],
+   "T1-T4": [
+    "T1_track",
+    "T2_track_conflict",
+    "T3_track_callsign",
+    "T4_callsign_only"
+   ]
+  },
+  "thresholds": [
+   1,
+   4,
+   10,
+   30
+  ],
+  "scope": "routes with >= 1 U.S. airport",
+  "carrier_matched": "observed airline codes matched to T-100 carriers (bts_carrier_crosswalk.csv)",
+  "reported_flights": "DEPARTURES_PERFORMED"
+ },
+ "metricDefinitions": {
+  "abs_error": "a - b (observed minus reported), per item",
+  "rel_error": "(a - b) / b, only when b >= min_base (default 10) to avoid unstable ratios on small counts",
+  "MAE": "mean of |a - b| over items",
+  "RMSE": "sqrt(mean of (a - b)^2) over items",
+  "WAPE": "sum |a - b| / sum b; undefined when sum b = 0",
+  "bias": "sum a / sum b - 1",
+  "pearson": "Pearson correlation of a and b over items (needs >= 3 items and variance)",
+  "spearman": "Spearman rank correlation (average ranks for ties)",
+  "jaccard": "|A and B| / |A or B| for route sets",
+  "note": "a = ADS-B observations (this dataset), b = official statistic. Coverage differs, so these are conditional external comparisons, not accuracy."
+ },
+ "counts": {
+  "records": 332658,
+  "route_months_detail": 336953
+ },
+ "results": {},
+ "limitations": [
+  "Official statistics and ADS-B observations do not cover the same flights; agreement is a conditional external comparison, not accuracy.",
+  "The observed month is UTC (track start); official months are usually local departure dates.",
+  "Airport codes that match several OurAirports records, or none, are excluded (counts recorded).",
+  "Tiers T1-T4 describe the evidence for the airports; no probability of correctness is attached.",
+  "T-100 covers certificated U.S. carriers (all their segments) and foreign carriers on flights touching the U.S.; business aviation, general aviation and on-demand air taxis are not reported.",
+  "Comparisons are restricted to routes with at least one U.S. airport (incl. territories).",
+  "The carrier-matched condition uses an evidence-based crosswalk (route-vector similarity); unmatched airline codes are kept apart, not classified.",
+  "2026-05 contains a 66-hour ADS-B collection gap (05-05 00:00 to 05-07 17:00 UTC); summaries are also given without May."
+ ],
+ "generatedAt": "2026-11-11T03:10:21Z",
+ "script": {
+  "name": "pipeline/validation/report.py",
+  "version": "7.1",
+  "git": {
+   "commit": "374d1d83e7af43d72e614a1ccb48f2a367de7dbe",
+   "pipelineDirty": false,
+   "pipelineUntracked": []
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "definitions": {
+  "abs_error": "a - b (observed minus reported), per item",
+  "rel_error": "(a - b) / b, only when b >= min_base (default 10) to avoid unstable ratios on small counts",
+  "MAE": "mean of |a - b| over items",
+  "RMSE": "sqrt(mean of (a - b)^2) over items",
+  "WAPE": "sum |a - b| / sum b; undefined when sum b = 0",
+  "bias": "sum a / sum b - 1",
+  "pearson": "Pearson correlation of a and b over items (needs >= 3 items and variance)",
+  "spearman": "Spearman rank correlation (average ranks for ties)",
+  "jaccard": "|A and B| / |A or B| for route sets",
+  "note": "a = ADS-B observations (this dataset), b = official statistic. Coverage differs, so these are conditional external comparisons, not accuracy."
+ },
+ "thresholds": [
+  1,
+  4,
+  10,
+  30
+ ],
+ "tier_sets": {
+  "T1": [
+   "T1_track"
+  ],
+  "T1-T2": [
+   "T1_track",
+   "T2_track_conflict"
+  ],
+  "T1-T3": [
+   "T1_track",
+   "T2_track_conflict",
+   "T3_track_callsign"
+  ],
+  "T1-T4": [
+   "T1_track",
+   "T2_track_conflict",
+   "T3_track_callsign",
+   "T4_callsign_only"
+  ]
+ },
+ "status": {
+  "BTS_T100_SEGMENT": "run",
+  "ANAC": "run",
+  "MLIT": "run"
+ }
+}

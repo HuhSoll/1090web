@@ -1,0 +1,155 @@
+{
+ "output": "japan_national_comparison.csv",
+ "externalSource": "MLIT_AIR_TRANSPORT_FLASH",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0"
+ },
+ "externalFiles": [
+  {
+   "bytes": 32701,
+   "note": "航空輸送統計速報 2026年1月 (e-Stat statInfId 000040437678)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_01.xlsx",
+   "retrieved": "2026-11-11T02:45:15Z",
+   "sha256": "0b8b9c32f7ffa05868578d65ed549e96bd48595b6638fbd4d2f3e2fc62aeaa6a",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040437678&fileKind=0",
+   "file": "koku_sokuho_2026_01.xlsx"
+  },
+  {
+   "bytes": 32659,
+   "note": "航空輸送統計速報 2026年2月 (e-Stat statInfId 000040449355)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_02.xlsx",
+   "retrieved": "2026-11-11T02:45:17Z",
+   "sha256": "e4f0e424860c909d2bd75ea37dc8d4101d798dea5b34f70d9af29d4923e50ad6",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040449355&fileKind=0",
+   "file": "koku_sokuho_2026_02.xlsx"
+  },
+  {
+   "bytes": 32734,
+   "note": "航空輸送統計速報 2026年3月 (e-Stat statInfId 000040458264)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_03.xlsx",
+   "retrieved": "2026-11-11T02:45:19Z",
+   "sha256": "f8618938973d2ab54ed29c37180aef5183e9f025f4d97617998fe396d45decfb",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040458264&fileKind=0",
+   "file": "koku_sokuho_2026_03.xlsx"
+  },
+  {
+   "bytes": 32717,
+   "note": "航空輸送統計速報 2026年4月 (e-Stat statInfId 000040471559)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_04.xlsx",
+   "retrieved": "2026-11-11T02:45:21Z",
+   "sha256": "9ee072ece9b9fe09f1c1c16f4fe80884c1b5bc1efd441f8742a36e1d1abb3225",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040471559&fileKind=0",
+   "file": "koku_sokuho_2026_04.xlsx"
+  },
+  {
+   "bytes": 32661,
+   "note": "航空輸送統計速報 2026年5月 (e-Stat statInfId 000040482050)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_05.xlsx",
+   "retrieved": "2026-11-11T02:45:23Z",
+   "sha256": "dffea93a4cecee410c997629c900a004077496bdc2275da96aaecf88f24313e0",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040482050&fileKind=0",
+   "file": "koku_sokuho_2026_05.xlsx"
+  },
+  {
+   "bytes": 32679,
+   "note": "航空輸送統計速報 2026年6月 (e-Stat statInfId 000040497288)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_06.xlsx",
+   "retrieved": "2026-11-11T02:45:25Z",
+   "sha256": "0d16c189d015bf3c25187ffec297af09119f554d77491eb6c4d8655e9e7c0b73",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040497288&fileKind=0",
+   "file": "koku_sokuho_2026_06.xlsx"
+  },
+  {
+   "bytes": 32768,
+   "note": "航空輸送統計速報 2026年7月 (e-Stat statInfId 000040511136)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_07.xlsx",
+   "retrieved": "2026-11-11T02:45:27Z",
+   "sha256": "32bc3ebd0eec7d3e53a8c8ac6359576975941aad3216b9b4d376dd633c86fcb9",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040511136&fileKind=0",
+   "file": "koku_sokuho_2026_07.xlsx"
+  },
+  {
+   "bytes": 32671,
+   "note": "航空輸送統計速報 2026年8月 (e-Stat statInfId 000040523848)",
+   "path": "data/raw/external/mlit/koku_sokuho_2026_08.xlsx",
+   "retrieved": "2026-11-11T02:45:29Z",
+   "sha256": "45d6e2096c600af58922855202cf777231418273a8232d52fe35b96d24470d80",
+   "source": "MLIT_AIR_TRANSPORT_FLASH",
+   "url": "https://www.e-stat.go.jp/stat-search/file-download?statInfId=000040523848&fileKind=0",
+   "file": "koku_sokuho_2026_08.xlsx"
+  }
+ ],
+ "datasetInputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  },
+  {
+   "role": "ourairports",
+   "file": "airports.csv",
+   "bytes": 12758651,
+   "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+   "path": "data/raw/ourairports/airports.csv"
+  }
+ ],
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08"
+  ]
+ },
+ "conditions": {
+  "observed": "flights with both airports in Japan, all airline codes, by tier set",
+  "reported": "運航回数, 国内定期 + 国内その他 (Japanese carriers)"
+ },
+ "metricDefinitions": {
+  "abs_error": "a - b (observed minus reported), per item",
+  "rel_error": "(a - b) / b, only when b >= min_base (default 10) to avoid unstable ratios on small counts",
+  "MAE": "mean of |a - b| over items",
+  "RMSE": "sqrt(mean of (a - b)^2) over items",
+  "WAPE": "sum |a - b| / sum b; undefined when sum b = 0",
+  "bias": "sum a / sum b - 1",
+  "pearson": "Pearson correlation of a and b over items (needs >= 3 items and variance)",
+  "spearman": "Spearman rank correlation (average ranks for ties)",
+  "jaccard": "|A and B| / |A or B| for route sets",
+  "note": "a = ADS-B observations (this dataset), b = official statistic. Coverage differs, so these are conditional external comparisons, not accuracy."
+ },
+ "counts": {
+  "months": 8
+ },
+ "results": {},
+ "limitations": [
+  "Official statistics and ADS-B observations do not cover the same flights; agreement is a conditional external comparison, not accuracy.",
+  "The observed month is UTC (track start); official months are usually local departure dates.",
+  "Airport codes that match several OurAirports records, or none, are excluded (counts recorded).",
+  "Tiers T1-T4 describe the evidence for the airports; no probability of correctness is attached.",
+  "Only national domestic flight totals of Japanese carriers are available monthly; no route or airport flight counts. Flash (速報) figures can be revised."
+ ],
+ "generatedAt": "2026-11-11T03:11:16Z",
+ "script": {
+  "name": "pipeline/validation/report.py",
+  "version": "7.1",
+  "git": {
+   "commit": "374d1d83e7af43d72e614a1ccb48f2a367de7dbe",
+   "pipelineDirty": false,
+   "pipelineUntracked": []
+  }
+ }
+}

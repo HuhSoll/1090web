@@ -1,0 +1,73 @@
+{
+ "output": "external_validation_summary.csv",
+ "externalSource": "all",
+ "dataset": {
+  "id": "observed-2026-v2",
+  "version": "2.0.0"
+ },
+ "externalFiles": [],
+ "datasetInputs": [
+  {
+   "role": "routes_monthly",
+   "file": "routes_monthly.parquet",
+   "bytes": 10395245,
+   "sha256": "e323ef907c191b2d6ed438c3c4db5f7655597683e863c75d1f259fd66a33daa1",
+   "path": "public/data/observed-2026-v2/research/routes_monthly.parquet"
+  },
+  {
+   "role": "ourairports",
+   "file": "airports.csv",
+   "bytes": 12758651,
+   "sha256": "b311ab030775908769395b6814840f01732b27a5176b85f1a9ed3b5d98ff052b",
+   "path": "data/raw/ourairports/airports.csv"
+  }
+ ],
+ "period": {
+  "months": [
+   "2026-01",
+   "2026-02",
+   "2026-03",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ]
+ },
+ "conditions": {
+  "selection": "directed routes, thresholds 1/10/30, all months and all months without May"
+ },
+ "metricDefinitions": {
+  "abs_error": "a - b (observed minus reported), per item",
+  "rel_error": "(a - b) / b, only when b >= min_base (default 10) to avoid unstable ratios on small counts",
+  "MAE": "mean of |a - b| over items",
+  "RMSE": "sqrt(mean of (a - b)^2) over items",
+  "WAPE": "sum |a - b| / sum b; undefined when sum b = 0",
+  "bias": "sum a / sum b - 1",
+  "pearson": "Pearson correlation of a and b over items (needs >= 3 items and variance)",
+  "spearman": "Spearman rank correlation (average ranks for ties)",
+  "jaccard": "|A and B| / |A or B| for route sets",
+  "note": "a = ADS-B observations (this dataset), b = official statistic. Coverage differs, so these are conditional external comparisons, not accuracy."
+ },
+ "counts": {
+  "rows": 440
+ },
+ "results": {},
+ "limitations": [
+  "Official statistics and ADS-B observations do not cover the same flights; agreement is a conditional external comparison, not accuracy.",
+  "The observed month is UTC (track start); official months are usually local departure dates.",
+  "Airport codes that match several OurAirports records, or none, are excluded (counts recorded).",
+  "Tiers T1-T4 describe the evidence for the airports; no probability of correctness is attached."
+ ],
+ "generatedAt": "2026-11-11T03:11:16Z",
+ "script": {
+  "name": "pipeline/validation/report.py",
+  "version": "7.1",
+  "git": {
+   "commit": "374d1d83e7af43d72e614a1ccb48f2a367de7dbe",
+   "pipelineDirty": false,
+   "pipelineUntracked": []
+  }
+ }
+}

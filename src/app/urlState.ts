@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import type { StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
-import { useAppStore } from '../state/store';
+import { configContext, configFromParams, configToParams, sanitizeConfig, type ResearchConfig } from '../research/model';
+import { useAppStore, type AppMode, type ResearchCompare } from '../state/store';
 
 /**
  * Shareable URLs: the month, comparison, filters and selected airport live in the query string.
@@ -9,7 +10,8 @@ import { useAppStore } from '../state/store';
  *   ?month=2026-08&compare=2026-01&airport=RJTT&country=JP&airline=JAL&traffic=passenger
  *    &airports=observed&min=30&view=globe
  *
- * `dataset` and `stress` are owned by the loader and passed through untouched.
+ * Research Mode adds `mode=research` and its conditions (rm=month, rt=tier set, rmin=threshold, …;
+ * see research/model.ts). `dataset` and `stress` are owned by the loader and passed through untouched.
  */
 export interface UrlState {
   monthIndex?: number;
@@ -17,6 +19,9 @@ export interface UrlState {
   airport?: number | null;
   filters?: Partial<NetworkFilters>;
   advisories?: boolean;
+  appMode?: AppMode;
+  research?: Partial<ResearchConfig>;
+  researchCompare?: Pick<ResearchCompare, 'field' | 'value'>;
 }
 
 const PASSTHROUGH = ['dataset', 'stress'] as const;
@@ -49,6 +54,16 @@ export function parseUrlState(search: string, network: StaticNetwork): UrlState 
   if (Number.isFinite(min) && min > 0 && min <= 100000) filters.minFlights = Math.round(min);
   if (Object.keys(filters).length > 0) out.filters = filters;
   if (p.get('advisories') === '1') out.advisories = true;
+  if (p.get('mode') === 'research') {
+    out.appMode = 'research';
+    out.research = configFromParams(p);
+    // rcmp=<field>:<value>, e.g. minFlights:10, month:2026-04, tiers:C, area:C:JP
+    const cmp = /^(month|minFlights|tiers|area):(.+)$/.exec(p.get('rcmp') ?? '');
+    if (cmp) {
+      const field = cmp[1] as ResearchCompare['field'];
+      out.researchCompare = { field, value: field === 'minFlights' ? Number(cmp[2]) : cmp[2]! };
+    }
+  }
   return out;
 }
 
@@ -60,6 +75,9 @@ export interface SerializableState {
   filters: NetworkFilters;
   viewMode: 'flat' | 'globe';
   advisoriesEnabled: boolean;
+  appMode?: AppMode;
+  researchConfig?: ResearchConfig | null;
+  researchCompare?: ResearchCompare;
 }
 
 export function serializeUrlState(state: SerializableState, network: StaticNetwork, currentSearch: string): string {
@@ -88,6 +106,12 @@ export function serializeUrlState(state: SerializableState, network: StaticNetwo
   if (f.minFlights > 0) p.set('min', String(f.minFlights));
   if (state.viewMode === 'globe') p.set('view', 'globe');
   if (state.advisoriesEnabled) p.set('advisories', '1');
+  if (state.appMode === 'research') {
+    p.set('mode', 'research');
+    if (state.researchConfig) configToParams(state.researchConfig, p);
+    const c = state.researchCompare;
+    if (c?.enabled && c.value !== null) p.set('rcmp', `${c.field}:${c.value}`);
+  }
   const s = p.toString();
   return s ? `?${s}` : '';
 }
@@ -110,6 +134,11 @@ export function useUrlState(): void {
     }
     if (u.airport !== undefined && u.airport !== null) st.selectAirport(u.airport);
     if (u.advisories) st.setAdvisoriesEnabled(true);
+    if (u.appMode === 'research') {
+      st.setResearchConfig(sanitizeConfig(u.research ?? {}, configContext(network)).config);
+      if (u.researchCompare) st.setResearchCompare({ enabled: true, ...u.researchCompare });
+      st.setAppMode('research');
+    }
   }, [network]);
 
   useEffect(

@@ -1,9 +1,12 @@
 /**
  * UI strings. `en` defines the key set; `ja` is typed against it, so a missing translation is a
  * compile error (and tests/i18n.test.ts additionally checks for empty strings).
- * Placeholders use {name} syntax.
+ * Placeholders use {name} syntax. Research Mode strings live in researchMessages.ts.
  */
+import { researchEn, researchJa } from './researchMessages';
+
 export const en = {
+  ...researchEn,
   'app.loading': 'Loading network…',
   'app.loadingMonth': 'Loading {month}…',
   'app.error.title': 'Could not load the network data',
@@ -174,6 +177,7 @@ export type MessageKey = keyof typeof en;
 export type Messages = Record<MessageKey, string>;
 
 export const ja: Messages = {
+  ...researchJa,
   'app.loading': 'ネットワークを読み込み中…',
   'app.loadingMonth': '{month} を読み込み中…',
   'app.error.title': 'ネットワークデータを読み込めませんでした',

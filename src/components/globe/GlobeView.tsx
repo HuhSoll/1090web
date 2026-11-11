@@ -43,6 +43,7 @@ export function GlobeView({ view: monthView, comparison }: Props) {
   const autoRotate = useAppStore((s) => s.autoRotate);
   const viewMode = useAppStore((s) => s.viewMode);
   const viewInsets = useAppStore((s) => s.viewInsets);
+  const appMode = useAppStore((s) => s.appMode);
 
   // 1. Create / dispose the renderer.
   useEffect(() => {
@@ -88,6 +89,11 @@ export function GlobeView({ view: monthView, comparison }: Props) {
       rendererRef.current = null;
     };
   }, []);
+
+  // The map is covered by Research Mode: stop drawing until it is visible again.
+  useEffect(() => {
+    rendererRef.current?.setPaused(appMode === 'research');
+  }, [appMode]);
 
   // 2. Static geometry: once per dataset.
   useEffect(() => {

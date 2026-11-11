@@ -6,6 +6,12 @@ import { computeNetworkView, type NetworkView } from '../domain/networkView';
 import { useAppStore } from '../state/store';
 import { PLAYBACK_INTERVAL_MS, resolveDatasetId } from './config';
 
+/** The active loader, shared with Research Mode so month files are fetched and cached once. */
+let activeLoader: DatasetLoader | null = null;
+export function getDatasetLoader(): DatasetLoader | null {
+  return activeLoader;
+}
+
 function readStressParam(): number | null {
   const raw = new URLSearchParams(window.location.search).get('stress');
   if (!raw) return null;
@@ -32,6 +38,7 @@ export function useDataset(): { retry: () => void } {
     const controller = new AbortController();
     const loader = new DatasetLoader(import.meta.env.BASE_URL, resolveDatasetId());
     loaderRef.current = loader;
+    activeLoader = loader;
     st.setStatus({ state: 'loading' });
     loader
       .loadStatic(controller.signal)

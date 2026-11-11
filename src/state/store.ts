@@ -3,6 +3,18 @@ import type { MonthData, StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import type { Locale } from '../i18n/messages';
 import type { AdvisoryFile } from '../data/model/advisory';
+import type { ResearchConfig } from '../research/model';
+
+export type AppMode = 'explore' | 'research';
+export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'export';
+/** What the comparison changes: exactly one condition at a time. */
+export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area';
+export interface ResearchCompare {
+  enabled: boolean;
+  field: CompareField;
+  /** month 'YYYY-MM', threshold number, tier set 'A'..'D', or area 'C:JP' / 'R:EU' */
+  value: string | number | null;
+}
 
 export type ViewMode = 'flat' | 'globe';
 
@@ -55,6 +67,13 @@ interface AppState {
   basemapError: boolean;
   /** Set when running the renderer stress test (?stress=N). */
   stressRouteCount: number | null;
+  /** Explore (map) or Research (analysis) screen; Explore state is kept while in Research. */
+  appMode: AppMode;
+  researchConfig: ResearchConfig | null;
+  researchTab: ResearchTab;
+  researchCompare: ResearchCompare;
+  /** Shown in Explore after "show on map": Research conditions Explore cannot express. */
+  researchMapNote: string | null;
 
   setLocale: (l: Locale) => void;
   setStatus: (s: LoadStatus) => void;
@@ -82,6 +101,12 @@ interface AppState {
   setViewInsets: (v: { top: number; bottom: number }) => void;
   setBasemapError: (v: boolean) => void;
   setStressRouteCount: (n: number | null) => void;
+  setAppMode: (m: AppMode) => void;
+  setResearchConfig: (c: ResearchConfig) => void;
+  patchResearchConfig: (c: Partial<ResearchConfig>) => void;
+  setResearchTab: (t: ResearchTab) => void;
+  setResearchCompare: (c: Partial<ResearchCompare>) => void;
+  setResearchMapNote: (n: string | null) => void;
 }
 
 const LOCALE_KEY = '1090web.locale';
@@ -140,6 +165,11 @@ export const useAppStore = create<AppState>((set) => ({
   viewInsets: { top: 0, bottom: 0 },
   basemapError: false,
   stressRouteCount: null,
+  appMode: 'explore',
+  researchConfig: null,
+  researchTab: 'overview',
+  researchCompare: { enabled: false, field: 'month', value: null },
+  researchMapNote: null,
 
   setLocale: (locale) => {
     try {
@@ -193,4 +223,10 @@ export const useAppStore = create<AppState>((set) => ({
     set((s) => (s.viewInsets.top === v.top && s.viewInsets.bottom === v.bottom ? s : { viewInsets: v })),
   setBasemapError: (basemapError) => set({ basemapError }),
   setStressRouteCount: (stressRouteCount) => set({ stressRouteCount }),
+  setAppMode: (appMode) => set((s) => ({ appMode, hover: null, playing: false, researchMapNote: appMode === 'research' ? null : s.researchMapNote })),
+  setResearchConfig: (researchConfig) => set({ researchConfig }),
+  patchResearchConfig: (c) => set((s) => (s.researchConfig ? { researchConfig: { ...s.researchConfig, ...c } } : s)),
+  setResearchTab: (researchTab) => set({ researchTab }),
+  setResearchCompare: (c) => set((s) => ({ researchCompare: { ...s.researchCompare, ...c } })),
+  setResearchMapNote: (researchMapNote) => set({ researchMapNote }),
 }));

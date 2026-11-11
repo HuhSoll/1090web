@@ -18,6 +18,8 @@ import { useAdvisoryLoader } from './useAdvisories';
 // The map renderer (three.js, d3-geo, topojson) is the bulk of the bundle. Loading it as a
 // separate chunk lets the panels render immediately while WebGL code downloads.
 const GlobeView = lazy(() => import('../components/globe/GlobeView').then((m) => ({ default: m.GlobeView })));
+// Research Mode is loaded only when opened.
+const ResearchView = lazy(() => import('../components/research/ResearchView').then((m) => ({ default: m.ResearchView })));
 
 export function App() {
   const { retry } = useDataset();
@@ -32,6 +34,10 @@ export function App() {
   const basemapError = useAppStore((s) => s.basemapError);
   const drawerOpen = useAppStore((s) => s.drawerOpen);
   const setDrawerOpen = useAppStore((s) => s.setDrawerOpen);
+  const appMode = useAppStore((s) => s.appMode);
+  const mapNote = useAppStore((s) => s.researchMapNote);
+  const setMapNote = useAppStore((s) => s.setResearchMapNote);
+  const research = appMode === 'research';
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -42,7 +48,7 @@ export function App() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       const st = useAppStore.getState();
-      if (st.sourcesOpen) return;
+      if (st.sourcesOpen || st.appMode === 'research') return;
       if (st.drawerOpen) {
         st.setDrawerOpen(false);
         return;
@@ -75,13 +81,21 @@ export function App() {
         </ErrorBoundary>
       </main>
 
-      {(kind === 'demo' || stress !== null) && (
+      {research && (
+        <ErrorBoundary fallback={() => <div className="globe-fallback" role="alert"><h2>{t('r.loadError')}</h2></div>}>
+          <Suspense fallback={<div className="overlay" role="status"><div className="spinner" aria-hidden="true" /></div>}>
+            <ResearchView />
+          </Suspense>
+        </ErrorBoundary>
+      )}
+
+      {!research && (kind === 'demo' || stress !== null) && (
         <div className="banner" role="note">
           <span className="badge warn-badge">{stress !== null ? t('stress.badge') : t('demo.badge')}</span>
           <span>{stress !== null ? t('stress.banner', { count: number(stress) }) : t('demo.banner')}</span>
         </div>
       )}
-      {kind === 'observed' && stress === null && (
+      {!research && kind === 'observed' && stress === null && (
         <div className="banner banner-info" role="note">
           <span className="badge info-badge">{t('observed.badge')}</span>
           <span>{t('observed.banner')}</span>
@@ -89,7 +103,7 @@ export function App() {
       )}
 
       {/* Mobile only: compact header that opens the sidebar as a drawer. */}
-      <div className="mobile-bar">
+      {!research && <div className="mobile-bar">
         <button
           type="button"
           className="icon-btn"
@@ -101,15 +115,20 @@ export function App() {
           <Icon name="menu" />
         </button>
         <Logo />
-      </div>
-      {drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={() => setDrawerOpen(false)} />}
-      <Sidebar view={view} />
-      <InfoPanel view={view} comparison={comparison} />
-      {comparison && <CompareLegend comparison={comparison} />}
+      </div>}
+      {!research && drawerOpen && <div className="drawer-scrim" aria-hidden="true" onClick={() => setDrawerOpen(false)} />}
+      {!research && <Sidebar view={view} />}
+      {!research && <InfoPanel view={view} comparison={comparison} />}
+      {!research && comparison && <CompareLegend comparison={comparison} />}
       <TopBar />
-      <Timeline />
-      <Tooltip view={view} />
+      {!research && <Timeline />}
+      {!research && <Tooltip view={view} />}
       <SourcesDialog />
+      {!research && mapNote && (
+        <button type="button" className="toast r-map-toast" onClick={() => setMapNote(null)}>
+          {mapNote} <span className="muted">({t('r.map.dismiss')})</span>
+        </button>
+      )}
 
       {basemapError && (
         <div className="toast" role="status">

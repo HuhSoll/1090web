@@ -46,6 +46,12 @@ cd pipeline && ../.venv/Scripts/python -m pytest -q && cd ..
 .venv/Scripts/python pipeline/validation/report.py --dataset observed-2026-v2      # data/research/<id>/phase7/
 ```
 
+研究モード（ブラウザ）用の軽量なファイル（根拠区分 T2・T3 の内訳、路線の観測月数、品質・外部照合の要約）は、研究用の集計から作ります。`public/data/<id>/research-web/` に出力され、サイトで配信されます（約 12 MB）。
+
+```bash
+.venv/Scripts/python pipeline/research_web.py --dataset observed-2026-v2
+```
+
 研究用の Parquet は Git に入れず、GitHub Releases で配布します（[research-data-release.md](research-data-release.md)）。
 
 元データを新しい版に差し替えるときは、`inputs.lock.json` を更新し、新しいデータセット ID とバージョンで生成してください。既存のデータセットは上書きしません。

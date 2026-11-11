@@ -201,6 +201,21 @@ export class GlobeRenderer {
     this.frame = requestAnimationFrame(this.loop);
   }
 
+  /**
+   * Stops (or resumes) the animation loop, e.g. while another screen covers the map. Nothing
+   * about the scene changes; resuming redraws the current state.
+   */
+  setPaused(paused: boolean): void {
+    if (this.disposed || paused === this.paused) return;
+    this.paused = paused;
+    if (paused) {
+      cancelAnimationFrame(this.frame);
+    } else {
+      this.markDirty();
+      this.frame = requestAnimationFrame(this.loop);
+    }
+  }
+
   get viewMode(): ViewMode {
     return this.mode;
   }
@@ -673,8 +688,10 @@ export class GlobeRenderer {
     this.markDirty();
   }
 
+  private paused = false;
+
   private readonly loop = (now: number): void => {
-    if (this.disposed) return;
+    if (this.disposed || this.paused) return;
     this.frame = requestAnimationFrame(this.loop);
 
     if (this.transition) {

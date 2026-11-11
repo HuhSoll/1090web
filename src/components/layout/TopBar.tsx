@@ -9,19 +9,29 @@ export function TopBar() {
   const setSourcesOpen = useAppStore((s) => s.setSourcesOpen);
   const viewMode = useAppStore((s) => s.viewMode);
   const setViewMode = useAppStore((s) => s.setViewMode);
+  const appMode = useAppStore((s) => s.appMode);
+  const setAppMode = useAppStore((s) => s.setAppMode);
+  const ready = useAppStore((s) => s.network !== null && s.stressRouteCount === null);
   return (
     <div className="topbar">
+      <div className="segmented panel lang" role="radiogroup" aria-label={t('mode.label')}>
+        {(['explore', 'research'] as const).map((m) => (
+          <button key={m} type="button" role="radio" aria-checked={appMode === m} className={appMode === m ? 'is-active' : ''} disabled={m === 'research' && !ready} onClick={() => setAppMode(m)}>
+            {t(m === 'explore' ? 'mode.explore' : 'mode.research')}
+          </button>
+        ))}
+      </div>
       <button type="button" className="pill-btn panel" onClick={() => setSourcesOpen(true)} aria-label={t('source.open')}>
         <Icon name="info" size={14} />
         <span className="pill-label">{t('source.open')}</span>
       </button>
-      <div className="segmented panel lang" role="radiogroup" aria-label={t('view.label')}>
+      {appMode === 'explore' && <div className="segmented panel lang" role="radiogroup" aria-label={t('view.label')}>
         {(['flat', 'globe'] as const).map((m) => (
           <button key={m} type="button" role="radio" aria-checked={viewMode === m} className={viewMode === m ? 'is-active' : ''} onClick={() => setViewMode(m)}>
             {t(m === 'flat' ? 'view.flat' : 'view.globe')}
           </button>
         ))}
-      </div>
+      </div>}
       <div className="segmented panel lang" role="radiogroup" aria-label={t('lang.label')}>
         {LOCALES.map((l) => (
           <button key={l} type="button" role="radio" aria-checked={locale === l} className={locale === l ? 'is-active' : ''} onClick={() => setLocale(l)} lang={l}>

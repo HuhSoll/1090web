@@ -93,6 +93,8 @@ class BuildConfig:
     lock_path: Path | None = provenance.LOCK_PATH
     record_git: bool = True
     log: callable = field(default=print)
+    #: globally sorted flight ids (Explore build); the temporal pipeline turns this off for speed
+    stable_fid: bool = True
 
 
 # ---- SQL stages ------------------------------------------------------------------------------
@@ -100,6 +102,10 @@ class BuildConfig:
 
 def load_flights(con, cfg: BuildConfig) -> dict:
     files = ", ".join(f"'{p.as_posix()}'" for p in cfg.flight_files)
+    # Stable fid: the global sort makes ids independent of row order (needed for the Explore build's
+    # determinism test). The temporal pipeline uses row_key as its id and can skip the costly sort.
+    fid_sql = ("row_number() OVER (ORDER BY quarter, ICAO_Hex, Track_Origin_DateTime_UTC, Track_Destination_DateTime_UTC, "
+               "Callsign, Track_Origin_ApplicableAirports, Track_Destination_ApplicableAirports)") if cfg.stable_fid else "row_number() OVER ()"
     month_filter = ""
     if cfg.months:
         month_filter = "AND strftime(ref_time, '%Y-%m') IN (" + ", ".join(f"'{m}'" for m in cfg.months) + ")"
@@ -111,13 +117,19 @@ def load_flights(con, cfg: BuildConfig) -> dict:
     CREATE OR REPLACE TABLE flights AS
     WITH t AS (
       SELECT *,
+        -- reference time (unchanged since v1): track start, else track end. Times are UTC.
         TRY_CAST(CASE WHEN Track_Origin_DateTime_UTC <> '-' THEN Track_Origin_DateTime_UTC
                       ELSE Track_Destination_DateTime_UTC END AS TIMESTAMP) AS ref_time
       FROM raw)
     SELECT
-      row_number() OVER (ORDER BY quarter, ICAO_Hex, Track_Origin_DateTime_UTC, Track_Destination_DateTime_UTC,
-                                  Callsign, Track_Origin_ApplicableAirports, Track_Destination_ApplicableAirports) AS fid,
+      {fid_sql} AS fid,
       quarter, ref_time, ref_time::DATE AS day, strftime(ref_time, '%Y-%m') AS month,
+      TRY_CAST(nullif(Track_Origin_DateTime_UTC, '-') AS TIMESTAMP) AS org_time,
+      TRY_CAST(nullif(Track_Destination_DateTime_UTC, '-') AS TIMESTAMP) AS dst_time,
+      CASE WHEN Track_Origin_DateTime_UTC <> '-' THEN 'TRACK_START' ELSE 'TRACK_END_FALLBACK' END AS time_basis,
+      -- content-based id: the same raw row always gets the same id, whatever subset is processed
+      substr(md5(concat_ws('|', quarter, ICAO_Hex, Track_Origin_DateTime_UTC, Track_Destination_DateTime_UTC, Callsign,
+                           Track_Origin_ApplicableAirports, Track_Destination_ApplicableAirports, Airline)), 1, 16) AS row_key,
       Airline AS airline, AC_Type AS ac_type, AC_Type_Detailed AS ac_type_detailed,
       regexp_extract_all(Track_Origin_ApplicableAirports, '[A-Z0-9]{{3,4}}') AS org_cands,
       regexp_extract_all(Track_Destination_ApplicableAirports, '[A-Z0-9]{{3,4}}') AS dst_cands,
@@ -394,6 +406,20 @@ regional differences and receiver changes also move the ratio. Nothing is impute
 # ---- main build -------------------------------------------------------------------------------
 
 
+def prepare(con, cfg: BuildConfig, log=lambda m: None) -> dict:
+    """Shared front half of every build: airports, aircraft classes, flights in scope, airport
+    resolution (R1-R5) and tiers. Leaves the tables `flights`, `resolved` and `on_map` in `con`.
+    Used by build() and by the temporal pipeline (pipeline/temporal.py), so both always apply
+    exactly the same rules."""
+    load_airports(con, cfg.ourairports_csv)
+    con.execute(f"CREATE TABLE aircls AS SELECT ac_type, ac_type_detailed, class FROM read_csv('{cfg.classes_csv.as_posix()}', all_varchar=true)")
+    stats = load_flights(con, cfg)
+    log(f"flights in scope: {stats['flights_in_scope']:,}")
+    resolve(con)
+    log("airports resolved")
+    return stats
+
+
 def build(cfg: BuildConfig) -> dict:
     t0 = time.time()
     log = lambda m: cfg.log(f"[{time.time() - t0:6.1f}s] {m}")
@@ -411,12 +437,7 @@ def build(cfg: BuildConfig) -> dict:
         log("inputs verified against lock file")
 
     con = duckdb.connect()
-    load_airports(con, cfg.ourairports_csv)
-    con.execute(f"CREATE TABLE aircls AS SELECT ac_type, ac_type_detailed, class FROM read_csv('{cfg.classes_csv.as_posix()}', all_varchar=true)")
-    stats = load_flights(con, cfg)
-    log(f"flights in scope: {stats['flights_in_scope']:,}")
-    resolve(con)
-    log("airports resolved")
+    stats = prepare(con, cfg, log)
     aggregate(con)
     coverage(con)
     q = lambda s: con.execute(s).fetchall()

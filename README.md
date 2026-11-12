@@ -20,6 +20,8 @@
 - データ品質（収集停止、異常日、根拠の構成）と、米国・ブラジル・日本の公式統計との条件付きの照合結果を表示
 - 結果を CSV、条件と出典を JSON で保存。JSON や URL から同じ条件を復元できます
 
+時間軸のデータ（2026年1〜9月の UTC の日ごと）も用意しています。任意の日・1時間・6時間などの時間窓で、その間に記録が始まった便（航跡の開始時刻、なければ終了時刻）のネットワークを作れます。画面での利用は今後のフェーズで実装します（形式は [docs/temporal-data-model.md](docs/temporal-data-model.md)）。
+
 値はすべて ADS-B で観測できた便のネットワークの構造指標で、旅客数や経済的な重要度ではありません。指標の定義は [docs/research-methodology.md](docs/research-methodology.md)、外部統計との照合は [docs/phase7-report.md](docs/phase7-report.md) にあります。
 
 

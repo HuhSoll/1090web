@@ -3,7 +3,7 @@
  "datasetVersion": "2.0.0",
  "tag": "research-observed-2026-v2-v2.0.0",
  "repository": "HuhSoll/1090web",
- "generatedAt": "2026-11-11T03:03:30Z",
+ "generatedAt": "2026-11-12T06:44:50Z",
  "files": [
   {
    "path": "public/data/observed-2026-v2/research/routes_monthly.parquet",
@@ -32,6 +32,69 @@
    "bytes": 3215535,
    "sha256": "0b569c0c19f4989bf4f57c696f3d9e6a501ddcf79622d34565a4a37f9e54807b",
    "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__phase7__bts_route_comparison.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-01.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-01.parquet",
+   "bytes": 63873361,
+   "sha256": "4a1a9f37ba284e0d9d5f9fed290c327492e3f1751e58171691e2d467fcc397af",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-01.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-02.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-02.parquet",
+   "bytes": 60378277,
+   "sha256": "6f970fb167f8e78a56e8ab839a16b5e186a92216660a0d407485c6febf562d80",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-02.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-03.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-03.parquet",
+   "bytes": 67202966,
+   "sha256": "02079c869e1000185cc0b6f90655c6551cc5ddf33ebfd60f50e1f4a604952f75",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-03.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-04.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-04.parquet",
+   "bytes": 66869072,
+   "sha256": "48f5f7ce471924e89fa039e30a9ecdb224fb22c0506d08b4060281c4d7854411",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-04.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-05.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-05.parquet",
+   "bytes": 62386882,
+   "sha256": "fb302a86b291baa0a2b5b3467c3cf26796630dceb4e28d71d4ac3db40918d0e6",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-05.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-06.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-06.parquet",
+   "bytes": 68742057,
+   "sha256": "52ca82c3789de4b65d2c5f05fabc56b6bc6fa55c46788068bf348fe9b20b78e3",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-06.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-07.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-07.parquet",
+   "bytes": 74993766,
+   "sha256": "7dbacc91ed9e5f41a2fba12e339ff98436b99d221e1f0240d27bd92545d3dd21",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-07.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-08.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-08.parquet",
+   "bytes": 73960787,
+   "sha256": "b3bb011769013fd8b5328a973df4cf7e607d1da512c331714b4ab9cb08ecc45b",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-08.parquet"
+  },
+  {
+   "path": "data/research/observed-2026-v2/temporal/flights_2026-09.parquet",
+   "asset": "observed-2026-v2__temporal__flights_2026-09.parquet",
+   "bytes": 72495260,
+   "sha256": "ead26f90218b56dcfece223248893fbb2f726340955cc130c83f798e60a61b03",
+   "url": "https://github.com/HuhSoll/1090web/releases/download/research-observed-2026-v2-v2.0.0/observed-2026-v2__temporal__flights_2026-09.parquet"
   }
  ],
  "regenerate": [

@@ -52,6 +52,14 @@ cd pipeline && ../.venv/Scripts/python -m pytest -q && cd ..
 .venv/Scripts/python pipeline/research_web.py --dataset observed-2026-v2
 ```
 
+時間軸データ（Phase 9A）：月次データと同じ空港判定・分類で、便ごとの時刻（航跡の開始・終了、基準時刻）を保持します。研究用は月ごとの Parquet（`data/research/<id>/temporal/`、非公開）、公開用は UTC の日ごとのファイル（`public/data/<id>/temporal/`、約 220 MB、gzip で約 65 MB）です。日ごとの合計は月次データと路線・方向・航空会社・分類・根拠のすべての組で一致することを確認します。形式は [temporal-data-model.md](temporal-data-model.md)。
+
+```bash
+.venv/Scripts/python pipeline/temporal.py --months 2026-03 --days 2026-03-01,2026-03-10   # 一部だけ
+.venv/Scripts/python pipeline/temporal.py                                                 # 全期間（約 25 分）
+.venv/Scripts/python pipeline/temporal_verify.py                                          # 月次データとの照合
+```
+
 研究用の Parquet は Git に入れず、GitHub Releases で配布します（[research-data-release.md](research-data-release.md)）。
 
 元データを新しい版に差し替えるときは、`inputs.lock.json` を更新し、新しいデータセット ID とバージョンで生成してください。既存のデータセットは上書きしません。

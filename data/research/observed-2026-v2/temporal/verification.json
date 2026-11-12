@@ -1,0 +1,332 @@
+{
+ "months": {
+  "2026-01": {
+   "monthly_flights": 2385019,
+   "daily_sum_flights": 2385019,
+   "keys": 198239,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 56216,
+    "KORD": 62143,
+    "KDFW": 44956,
+    "EGLL": 38699,
+    "LFPG": 35307,
+    "EHAM": 30930,
+    "EDDF": 30492,
+    "LTFM": 37979,
+    "OMDB": 38936,
+    "RJTT": 39723,
+    "RJAA": 20878,
+    "WSSS": 31319,
+    "VHHH": 26380,
+    "ZBAA": 32736,
+    "YSSY": 24270,
+    "SBGR": 23079,
+    "SBSP": 14523,
+    "SBGL": 10499,
+    "KLAX": 41328,
+    "KJFK": 31683
+   }
+  },
+  "2026-02": {
+   "monthly_flights": 2250329,
+   "daily_sum_flights": 2250329,
+   "keys": 194314,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 55587,
+    "KORD": 64146,
+    "KDFW": 45538,
+    "EGLL": 35603,
+    "LFPG": 33236,
+    "EHAM": 32056,
+    "EDDF": 28605,
+    "LTFM": 34585,
+    "OMDB": 33899,
+    "RJTT": 36414,
+    "RJAA": 18733,
+    "WSSS": 29114,
+    "VHHH": 27738,
+    "ZBAA": 29843,
+    "YSSY": 22497,
+    "SBGR": 20323,
+    "SBSP": 13078,
+    "SBGL": 9230,
+    "KLAX": 38178,
+    "KJFK": 29097
+   }
+  },
+  "2026-03": {
+   "monthly_flights": 2505703,
+   "daily_sum_flights": 2505703,
+   "keys": 215000,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 64153,
+    "KORD": 74502,
+    "KDFW": 52794,
+    "EGLL": 39163,
+    "LFPG": 37580,
+    "EHAM": 37919,
+    "EDDF": 34009,
+    "LTFM": 37335,
+    "OMDB": 9709,
+    "RJTT": 40815,
+    "RJAA": 20690,
+    "WSSS": 30683,
+    "VHHH": 32041,
+    "ZBAA": 32888,
+    "YSSY": 24470,
+    "SBGR": 22176,
+    "SBSP": 14475,
+    "SBGL": 10491,
+    "KLAX": 43760,
+    "KJFK": 34842
+   }
+  },
+  "2026-04": {
+   "monthly_flights": 2512945,
+   "daily_sum_flights": 2512945,
+   "keys": 216814,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 64441,
+    "KORD": 80409,
+    "KDFW": 52574,
+    "EGLL": 38549,
+    "LFPG": 39093,
+    "EHAM": 39177,
+    "EDDF": 33553,
+    "LTFM": 39475,
+    "OMDB": 15031,
+    "RJTT": 39260,
+    "RJAA": 20320,
+    "WSSS": 28539,
+    "VHHH": 31954,
+    "ZBAA": 30208,
+    "YSSY": 23947,
+    "SBGR": 19707,
+    "SBSP": 14319,
+    "SBGL": 8473,
+    "KLAX": 43067,
+    "KJFK": 35881
+   }
+  },
+  "2026-05": {
+   "monthly_flights": 2357603,
+   "daily_sum_flights": 2357603,
+   "keys": 220899,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 60209,
+    "KORD": 77236,
+    "KDFW": 49996,
+    "EGLL": 36743,
+    "LFPG": 36938,
+    "EHAM": 37323,
+    "EDDF": 36185,
+    "LTFM": 36791,
+    "OMDB": 14081,
+    "RJTT": 37115,
+    "RJAA": 18832,
+    "WSSS": 25480,
+    "VHHH": 27997,
+    "ZBAA": 23073,
+    "YSSY": 20904,
+    "SBGR": 20048,
+    "SBSP": 13188,
+    "SBGL": 7785,
+    "KLAX": 40964,
+    "KJFK": 33428
+   }
+  },
+  "2026-06": {
+   "monthly_flights": 2569324,
+   "daily_sum_flights": 2569324,
+   "keys": 236834,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 64549,
+    "KORD": 77137,
+    "KDFW": 53758,
+    "EGLL": 39128,
+    "LFPG": 40111,
+    "EHAM": 39350,
+    "EDDF": 37867,
+    "LTFM": 39360,
+    "OMDB": 19628,
+    "RJTT": 37451,
+    "RJAA": 18524,
+    "WSSS": 27249,
+    "VHHH": 28781,
+    "ZBAA": 26571,
+    "YSSY": 22198,
+    "SBGR": 21592,
+    "SBSP": 13745,
+    "SBGL": 8390,
+    "KLAX": 44336,
+    "KJFK": 36702
+   }
+  },
+  "2026-07": {
+   "monthly_flights": 2827243,
+   "daily_sum_flights": 2827243,
+   "keys": 241263,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 67189,
+    "KORD": 82004,
+    "KDFW": 60336,
+    "EGLL": 40745,
+    "LFPG": 41846,
+    "EHAM": 41328,
+    "EDDF": 39753,
+    "LTFM": 44999,
+    "OMDB": 27373,
+    "RJTT": 40624,
+    "RJAA": 20216,
+    "WSSS": 28714,
+    "VHHH": 31926,
+    "ZBAA": 35465,
+    "YSSY": 24559,
+    "SBGR": 24030,
+    "SBSP": 14542,
+    "SBGL": 9772,
+    "KLAX": 47562,
+    "KJFK": 36319
+   }
+  },
+  "2026-08": {
+   "monthly_flights": 2782084,
+   "daily_sum_flights": 2782084,
+   "keys": 249978,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 63256,
+    "KORD": 79748,
+    "KDFW": 54847,
+    "EGLL": 40031,
+    "LFPG": 41836,
+    "EHAM": 40881,
+    "EDDF": 38722,
+    "LTFM": 45111,
+    "OMDB": 29646,
+    "RJTT": 39444,
+    "RJAA": 20541,
+    "WSSS": 28408,
+    "VHHH": 31622,
+    "ZBAA": 34185,
+    "YSSY": 22438,
+    "SBGR": 23273,
+    "SBSP": 14338,
+    "SBGL": 9110,
+    "KLAX": 43736,
+    "KJFK": 36480
+   }
+  },
+  "2026-09": {
+   "monthly_flights": 2718365,
+   "daily_sum_flights": 2718365,
+   "keys": 248886,
+   "keys_differing": 0,
+   "major_airports_differing": [],
+   "major_airport_movements": {
+    "KATL": 61820,
+    "KORD": 80045,
+    "KDFW": 53998,
+    "EGLL": 38819,
+    "LFPG": 40393,
+    "EHAM": 40358,
+    "EDDF": 38951,
+    "LTFM": 43276,
+    "OMDB": 28631,
+    "RJTT": 39377,
+    "RJAA": 20393,
+    "WSSS": 28117,
+    "VHHH": 29910,
+    "ZBAA": 33077,
+    "YSSY": 23583,
+    "SBGR": 22944,
+    "SBSP": 14405,
+    "SBGL": 9123,
+    "KLAX": 42762,
+    "KJFK": 35167
+   }
+  }
+ },
+ "index_vs_files": {
+  "days": 273,
+  "differing": []
+ },
+ "research_vs_routes_monthly": {
+  "2026-01": {
+   "keys": 218313,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2385019,
+   "temporal_flights": 2385019
+  },
+  "2026-02": {
+   "keys": 213375,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2250329,
+   "temporal_flights": 2250329
+  },
+  "2026-03": {
+   "keys": 238386,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2505703,
+   "temporal_flights": 2505703
+  },
+  "2026-04": {
+   "keys": 240554,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2512945,
+   "temporal_flights": 2512945
+  },
+  "2026-05": {
+   "keys": 245358,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2357603,
+   "temporal_flights": 2357603
+  },
+  "2026-06": {
+   "keys": 266936,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2569324,
+   "temporal_flights": 2569324
+  },
+  "2026-07": {
+   "keys": 267249,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2827243,
+   "temporal_flights": 2827243
+  },
+  "2026-08": {
+   "keys": 280183,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2782084,
+   "temporal_flights": 2782084
+  },
+  "2026-09": {
+   "keys": 275422,
+   "keys_differing": 0,
+   "routes_monthly_flights": 2718365,
+   "temporal_flights": 2718365
+  }
+ },
+ "tiers_on_map": {
+  "T1_track": 11625624,
+  "T2_track_conflict": 1527228,
+  "T3_track_callsign": 3194437,
+  "T4_callsign_only": 6561326
+ },
+ "ok": true
+}

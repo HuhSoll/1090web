@@ -1,0 +1,140 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-12T06:37:41Z",
+ "months": [
+  "2026-01",
+  "2026-02",
+  "2026-03",
+  "2026-04",
+  "2026-05",
+  "2026-06",
+  "2026-07",
+  "2026-08",
+  "2026-09"
+ ],
+ "timeDefinitions": {
+  "trackStartTime": "first point of the ADS-B track (UTC); not necessarily the take-off time",
+  "trackEndTime": "last point of the ADS-B track (UTC); not necessarily the landing time",
+  "referenceTime": "trackStartTime, else trackEndTime (the definition used by the monthly data)",
+  "timeBasis": {
+   "TRACK_START": "referenceTime is the track start",
+   "TRACK_END_FALLBACK": "track start missing; referenceTime is the track end"
+  },
+  "windowMembership": "a flight belongs to [start, end) when start <= referenceTime < end (UTC)",
+  "dayFiles": "a day file holds the flights whose referenceTime falls on that UTC date (minute resolution; track times in full precision are in the research data)",
+  "notMixed": "flights possibly airborne during a window (track start/end overlapping it) are a different selection and are not used"
+ },
+ "timeQuality": {
+  "raw": {
+   "airline_rows": 28101918,
+   "both_times_missing": 0,
+   "time_parse_failures": 0,
+   "start_missing_end_only": 2777516,
+   "end_missing_start_only": 1195235,
+   "times_with_timezone_markers": 0,
+   "outside_file_quarter": 1044817,
+   "outside_year": 194680
+  },
+  "flights": {
+   "flights": 26862421,
+   "track_start_missing": 2644502,
+   "track_end_missing": 1139438,
+   "end_before_start": 0,
+   "zero_duration": 132,
+   "shorter_than_5_min": 86805,
+   "longer_than_20_h": 1005,
+   "crosses_utc_day": 1756600,
+   "crosses_month": 58895,
+   "crosses_quarter": 20046,
+   "duration_median_s": 5208.0,
+   "duration_p99_s": 39396.0,
+   "duration_max_s": 6708995.0
+  },
+  "implied_speed": {
+   "checked": 19925944,
+   "faster_than_1300_kmh": 1674634,
+   "note": "airport-to-airport distance / track duration; the track may start after take-off, so high values point to track or time problems, not to fast aircraft"
+  },
+  "time_basis_by_tier": {
+   "T1_track|TRACK_START": 12781147,
+   "T2_track_conflict|TRACK_START": 1545254,
+   "T3_track_callsign|TRACK_START": 3195397,
+   "T4_callsign_only|TRACK_END_FALLBACK": 2048147,
+   "T4_callsign_only|TRACK_START": 4567644,
+   "X_unresolved|TRACK_END_FALLBACK": 596355,
+   "X_unresolved|TRACK_START": 2128477
+  },
+  "start_missing_by_region": {
+   "AF": [
+    633579,
+    122936
+   ],
+   "AS": [
+    6584130,
+    1502963
+   ],
+   "EU": [
+    6501823,
+    181135
+   ],
+   "NA": [
+    10211397,
+    332872
+   ],
+   "OC": [
+    1117810,
+    91521
+   ],
+   "SA": [
+    935106,
+    143670
+   ],
+   "?": [
+    878576,
+    269405
+   ]
+  },
+  "identical_raw_rows_extra_copies": 18,
+  "thresholds": {
+   "long_track_hours": 20,
+   "short_track_minutes": 5,
+   "max_plausible_kmh": 1300
+  },
+  "scope": {
+   "raw_rows": 43083171,
+   "raw_rows_without_airline": 14981253,
+   "flights_in_scope": 26862421,
+   "removed_quarter_overlap_or_bad_time": 1239497
+  }
+ },
+ "inputs": [
+  {
+   "role": "flights",
+   "file": "2026_Q1_detailed_github.parquet",
+   "bytes": 840340093,
+   "sha256": "12ec161c7f1739934053d743625bb48e86b3785c3fcb0549b0e08ae93b1199ce"
+  },
+  {
+   "role": "flights",
+   "file": "2026_Q2_detailed_github.parquet",
+   "bytes": 911949077,
+   "sha256": "2bef8bc41b9c5fc0708271859362a10d9a703a15ad57863e7e934bf3738226db"
+  },
+  {
+   "role": "flights",
+   "file": "2026_Q3_detailed_github.parquet",
+   "bytes": 1026954012,
+   "sha256": "d7cf25ffb128b4ceade6a2b898e6901f829ebf8ac065985fcdaf1787ffa1d1c1"
+  }
+ ],
+ "script": {
+  "name": "pipeline/temporal.py",
+  "version": "9a.1",
+  "git": {
+   "commit": "11599f6ece06ebb81751b5c074aaa210018f710b",
+   "pipelineDirty": false,
+   "pipelineUntracked": []
+  }
+ },
+ "note": "Research data: not published. flightId is derived from the raw row content and is stable across runs."
+}

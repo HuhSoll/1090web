@@ -1,6 +1,7 @@
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
 import { Icon } from '../common/Icon';
+import { TimeModeToggle } from './TemporalTimeline';
 
 export function Timeline() {
   const { t, monthLabel } = useI18n();
@@ -30,6 +31,7 @@ export function Timeline() {
 
   return (
     <div className="timeline panel" role="group" aria-label={t('timeline.label')}>
+      <TimeModeToggle />
       <div className="timeline-buttons">
         <button type="button" className="icon-btn" disabled={disabled} onClick={() => go(monthIndex - 1)} aria-label={t('timeline.prev')} title={t('timeline.prev')}>
           <Icon name="prev" />

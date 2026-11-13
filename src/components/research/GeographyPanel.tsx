@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { periodOf } from '../../research/periods';
 import { useI18n } from '../../i18n/useI18n';
 import type { AreaPair, AreaStat } from '../../research/network';
 import type { AnalysisResult } from '../../research/results';
@@ -40,7 +41,7 @@ export function GeographyPanel({ result }: { result: AnalysisResult }) {
       </div>
       <Note warn>{t('r.geo.note')}</Note>
       <section>
-        <h3 className="r-h">{t(unit === 'country' ? 'r.geo.countriesTitle' : 'r.geo.regionsTitle', { month: monthLabel(result.config.month) })}</h3>
+        <h3 className="r-h">{t(unit === 'country' ? 'r.geo.countriesTitle' : 'r.geo.regionsTitle', { month: monthLabel(periodOf(result.config)) })}</h3>
         <p className="hint">{t('r.geo.definition')}</p>
         <SortTable
           key={`s-${unit}`}

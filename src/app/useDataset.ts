@@ -32,6 +32,7 @@ export function useDataset(): { retry: () => void } {
   const stressRouteCount = useAppStore((s) => s.stressRouteCount);
   const compareEnabled = useAppStore((s) => s.compareEnabled);
   const compareBaseIndex = useAppStore((s) => s.compareBaseIndex);
+  const exploreTime = useAppStore((s) => s.exploreTime);
 
   const loadStatic = useCallback(() => {
     const st = useAppStore.getState();
@@ -64,9 +65,10 @@ export function useDataset(): { retry: () => void } {
 
   useEffect(() => loadStatic(), [loadStatic]);
 
-  // Month loading (skipped in stress mode, which has a single in-memory snapshot).
+  // Month loading (skipped in stress mode, which has a single in-memory snapshot, and in the
+  // temporal view, where useTemporal provides the data).
   useEffect(() => {
-    if (!network || stressRouteCount !== null) return;
+    if (!network || stressRouteCount !== null || exploreTime !== 'monthly') return;
     const entry = network.manifest.months[monthIndex];
     const loader = loaderRef.current;
     if (!entry || !loader) return;
@@ -92,11 +94,12 @@ export function useDataset(): { retry: () => void } {
     return () => {
       cancelled = true;
     };
-  }, [network, monthIndex, stressRouteCount, monthReloadKey]);
+  }, [network, monthIndex, stressRouteCount, monthReloadKey, exploreTime]);
 
   // Comparison base month (loaded only while comparing; cached by the loader).
   useEffect(() => {
     const st = useAppStore.getState();
+    if (exploreTime !== 'monthly') return; // the temporal view provides its own base window
     if (!compareEnabled || !network || stressRouteCount !== null) {
       if (st.baseMonth) st.setBaseMonth(null);
       return;
@@ -117,11 +120,11 @@ export function useDataset(): { retry: () => void } {
     return () => {
       cancelled = true;
     };
-  }, [network, compareEnabled, compareBaseIndex, stressRouteCount, monthReloadKey]);
+  }, [network, compareEnabled, compareBaseIndex, stressRouteCount, monthReloadKey, exploreTime]);
 
   // Playback: advance after the current month has been displayed for a while.
   useEffect(() => {
-    if (!playing || !network || monthLoading || !month) return;
+    if (!playing || !network || monthLoading || !month || exploreTime !== 'monthly') return;
     const n = network.manifest.months.length;
     if (n < 2) return;
     const id = window.setTimeout(() => {
@@ -129,7 +132,7 @@ export function useDataset(): { retry: () => void } {
       st.setMonthIndex((st.monthIndex + 1) % n);
     }, PLAYBACK_INTERVAL_MS);
     return () => window.clearTimeout(id);
-  }, [playing, network, month, monthLoading]);
+  }, [playing, network, month, monthLoading, exploreTime]);
 
   const retry = useCallback(() => {
     if (status.state === 'error') {

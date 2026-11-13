@@ -4,6 +4,7 @@ import { useI18n } from '../../i18n/useI18n';
 import { CLASSES, defaultConfig, REGIONS, THRESHOLD_PRESETS, type ResearchConfig, type TierSet } from '../../research/model';
 import { useAppStore } from '../../state/store';
 import { Note } from './common';
+import { formatUtc, parseUtc } from '../../temporal/window';
 
 const TIER_KEYS: Record<TierSet, 'r.tiers.A' | 'r.tiers.B' | 'r.tiers.C' | 'r.tiers.D'> = {
   A: 'r.tiers.A',
@@ -11,6 +12,37 @@ const TIER_KEYS: Record<TierSet, 'r.tiers.A' | 'r.tiers.B' | 'r.tiers.C' | 'r.ti
   C: 'r.tiers.C',
   D: 'r.tiers.D',
 };
+
+/** UTC start / end of a time window. The inputs show UTC wall time; nothing is converted to local time. */
+function WindowFields({ config }: { config: ResearchConfig }) {
+  const { t } = useI18n();
+  const patch = useAppStore((s) => s.patchResearchConfig);
+  const w = config.window!;
+  const toInput = (ms: number) => new Date(ms).toISOString().slice(0, 16);
+  const set = (k: 'startMs' | 'endMs', v: string) => {
+    const ms = parseUtc(v);
+    if (ms === null) return;
+    const next = { ...w, [k]: ms, preset: 'custom' };
+    if (next.endMs > next.startMs) patch({ window: next, month: new Date(next.startMs).toISOString().slice(0, 7) });
+  };
+  const hours = (w.endMs - w.startMs) / 3_600_000;
+  return (
+    <div className="field">
+      <label className="field-label" htmlFor="r-ws">{t('r.set.windowStart')}</label>
+      <input id="r-ws" className="r-input" type="datetime-local" value={toInput(w.startMs)} onChange={(e) => set('startMs', e.target.value)} />
+      <label className="field-label" htmlFor="r-we">{t('r.set.windowEnd')}</label>
+      <input id="r-we" className="r-input" type="datetime-local" value={toInput(w.endMs)} onChange={(e) => set('endMs', e.target.value)} />
+      <p className="hint">{t('r.set.windowSummary', { start: formatUtc(w.startMs), end: formatUtc(w.endMs), hours: Math.round(hours * 10) / 10 })}</p>
+      <label className="field-label" htmlFor="r-wb">{t('t.basis')}</label>
+      <select id="r-wb" value={w.basis} onChange={(e) => patch({ window: { ...w, basis: e.target.value as 'all' | 'start' } })}>
+        <option value="all">{t('t.basis.all')}</option>
+        <option value="start">{t('t.basis.start')}</option>
+      </select>
+      <Note>{t('r.set.windowNote')}</Note>
+      {hours < 24 && <Note warn>{t('t.shortWindowNote')}</Note>}
+    </div>
+  );
+}
 
 export function SettingsPanel({ config }: { config: ResearchConfig }) {
   const { t, monthLabel, countryName, number } = useI18n();
@@ -36,13 +68,37 @@ export function SettingsPanel({ config }: { config: ResearchConfig }) {
   return (
     <div className="r-settings-body">
       <div className="field">
-        <label className="field-label" htmlFor="r-month">{t('r.set.month')}</label>
-        <select id="r-month" value={config.month} onChange={(e) => patch({ month: e.target.value })}>
-          {months.map((m) => (
-            <option key={m.month} value={m.month}>{monthLabel(m.month)}</option>
-          ))}
-        </select>
+        <span className="field-label">{t('r.set.period')}</span>
+        <div className="segmented" role="radiogroup" aria-label={t('r.set.period')}>
+          <button type="button" role="radio" aria-checked={!config.window} className={!config.window ? 'is-active' : ''} onClick={() => {
+            patch({ window: null });
+            if (useAppStore.getState().researchCompare.field === 'window') useAppStore.getState().setResearchCompare({ enabled: false });
+          }}>
+            {t('r.set.periodMonth')}
+          </button>
+          <button type="button" role="radio" aria-checked={!!config.window} className={config.window ? 'is-active' : ''}
+            onClick={() => {
+              if (config.window) return;
+              if (useAppStore.getState().researchCompare.field === 'month') useAppStore.getState().setResearchCompare({ enabled: false });
+              const start = Date.UTC(Number(config.month.slice(0, 4)), Number(config.month.slice(5, 7)) - 1, 1);
+              patch({ window: { startMs: start, endMs: start + 86_400_000, basis: 'all', preset: 'day', stepMs: 86_400_000 }, minFlights: 1 });
+            }}>
+            {t('r.set.periodWindow')}
+          </button>
+        </div>
       </div>
+      {!config.window ? (
+        <div className="field">
+          <label className="field-label" htmlFor="r-month">{t('r.set.month')}</label>
+          <select id="r-month" value={config.month} onChange={(e) => patch({ month: e.target.value })}>
+            {months.map((m) => (
+              <option key={m.month} value={m.month}>{monthLabel(m.month)}</option>
+            ))}
+          </select>
+        </div>
+      ) : (
+        <WindowFields config={config} />
+      )}
 
       <div className="field">
         <label className="field-label" htmlFor="r-area">{t('r.set.area')}</label>
@@ -153,7 +209,7 @@ export function SettingsPanel({ config }: { config: ResearchConfig }) {
 
       <div className="field">
         <div className="field-row">
-          <label className="field-label" htmlFor="r-min">{t('r.set.minFlights')}</label>
+          <label className="field-label" htmlFor="r-min">{t(config.window ? 'r.set.minFlightsWindow' : 'r.set.minFlights')}</label>
           <span className="field-value">≥ {config.minFlights}</span>
         </div>
         <div className="segmented">
@@ -173,7 +229,7 @@ export function SettingsPanel({ config }: { config: ResearchConfig }) {
             if (Number.isFinite(v) && v >= 1 && v <= 100000) patch({ minFlights: v });
           }}
         />
-        <Note>{t('r.set.minFlightsNote')}</Note>
+        <Note>{t(config.window ? 'r.set.minFlightsWindowNote' : 'r.set.minFlightsNote')}</Note>
       </div>
 
       <div className="field">

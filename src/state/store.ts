@@ -4,15 +4,44 @@ import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import type { Locale } from '../i18n/messages';
 import type { AdvisoryFile } from '../data/model/advisory';
 import type { ResearchConfig } from '../research/model';
+import type { WindowSeries } from '../temporal/aggregate';
+import type { TemporalSelection, TimeBasisFilter, TimeWindow } from '../temporal/window';
+
+/** Explore shows a calendar month (monthly files) or any UTC time window (day files). */
+export type ExploreTime = 'monthly' | 'temporal';
+
+/** What the temporal view is showing (or loading). Everything refers to the RESULT's window. */
+export type TemporalStatus =
+  | { state: 'idle' }
+  | { state: 'loading'; window: TimeWindow; done: number; total: number }
+  | { state: 'ready'; result: TemporalResultInfo }
+  | { state: 'error'; window: TimeWindow; message: string };
+
+export interface TemporalResultInfo {
+  window: TimeWindow;
+  /** the selection asked for more than the data covers */
+  clipped: boolean;
+  basis: TimeBasisFilter;
+  flights: number;
+  trackStart: number;
+  fallback: number;
+  series: WindowSeries;
+  days: string[];
+  missingDays: string[];
+  elapsedMs: number;
+  fromCache: boolean;
+  /** comparison window (same length) when comparing */
+  base: { window: TimeWindow; flights: number } | null;
+}
 
 export type AppMode = 'explore' | 'research';
 export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'export';
 /** What the comparison changes: exactly one condition at a time. */
-export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area';
+export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area' | 'window';
 export interface ResearchCompare {
   enabled: boolean;
   field: CompareField;
-  /** month 'YYYY-MM', threshold number, tier set 'A'..'D', or area 'C:JP' / 'R:EU' */
+  /** month 'YYYY-MM', threshold number, tier set 'A'..'D', area 'C:JP' / 'R:EU', or window shift 'previous' / 'day' / 'week' */
   value: string | number | null;
 }
 
@@ -74,6 +103,10 @@ interface AppState {
   researchCompare: ResearchCompare;
   /** Shown in Explore after "show on map": Research conditions Explore cannot express. */
   researchMapNote: string | null;
+  exploreTime: ExploreTime;
+  temporalSel: TemporalSelection | null;
+  temporalPlaying: boolean;
+  temporalStatus: TemporalStatus;
 
   setLocale: (l: Locale) => void;
   setStatus: (s: LoadStatus) => void;
@@ -107,6 +140,11 @@ interface AppState {
   setResearchTab: (t: ResearchTab) => void;
   setResearchCompare: (c: Partial<ResearchCompare>) => void;
   setResearchMapNote: (n: string | null) => void;
+  setExploreTime: (m: ExploreTime) => void;
+  setTemporalSel: (s: TemporalSelection) => void;
+  patchTemporalSel: (s: Partial<TemporalSelection>) => void;
+  setTemporalPlaying: (v: boolean) => void;
+  setTemporalStatus: (s: TemporalStatus) => void;
 }
 
 const LOCALE_KEY = '1090web.locale';
@@ -170,6 +208,10 @@ export const useAppStore = create<AppState>((set) => ({
   researchTab: 'overview',
   researchCompare: { enabled: false, field: 'month', value: null },
   researchMapNote: null,
+  exploreTime: 'monthly',
+  temporalSel: null,
+  temporalPlaying: false,
+  temporalStatus: { state: 'idle' },
 
   setLocale: (locale) => {
     try {
@@ -229,4 +271,14 @@ export const useAppStore = create<AppState>((set) => ({
   setResearchTab: (researchTab) => set({ researchTab }),
   setResearchCompare: (c) => set((s) => ({ researchCompare: { ...s.researchCompare, ...c } })),
   setResearchMapNote: (researchMapNote) => set({ researchMapNote }),
+  // switching keeps the selection and filters; comparisons belong to one mode and are reset
+  setExploreTime: (exploreTime) =>
+    set((s) => (s.exploreTime === exploreTime ? s : {
+      exploreTime, playing: false, temporalPlaying: false, compareEnabled: false, baseMonth: null, month: null,
+      temporalStatus: { state: 'idle' } as TemporalStatus,
+    })),
+  setTemporalSel: (temporalSel) => set({ temporalSel }),
+  patchTemporalSel: (p) => set((s) => (s.temporalSel ? { temporalSel: { ...s.temporalSel, ...p } } : s)),
+  setTemporalPlaying: (temporalPlaying) => set({ temporalPlaying }),
+  setTemporalStatus: (temporalStatus) => set({ temporalStatus }),
 }));

@@ -6,7 +6,7 @@
 import type { StaticNetwork } from '../data/model/network';
 import { PAGERANK_ALPHA, PAGERANK_TOL, type MetricsResult } from './analysis';
 import type { ResearchMeta } from './data';
-import { configHash, sanitizeConfig, type ConfigContext, type ResearchConfig } from './model';
+import { configHash, sanitizeConfig, TIER_SETS, type ConfigContext, type ResearchConfig } from './model';
 import type { AreaNetwork, ResearchNetwork, RouteRow } from './network';
 
 export const EXPORT_FORMAT = '1090web-research-analysis';
@@ -60,16 +60,21 @@ export function toCsv(columns: string[], rows: unknown[][]): string {
   return [columns.join(','), ...rows.map((r) => r.map(csvEscape).join(','))].join('\n') + '\n';
 }
 
+/** Row stamp; time-window analyses add the UTC window (monthly CSVs keep their Phase 8 columns). */
 function stamp(r: AnalysisResult, meta: ResearchMeta) {
-  return [r.hash, meta.manifest.datasetId, meta.manifest.datasetVersion ?? '', r.config.month];
+  const base = [r.hash, meta.manifest.datasetId, meta.manifest.datasetVersion ?? '', r.config.month];
+  const w = r.config.window;
+  return w ? [...base, new Date(w.startMs).toISOString(), new Date(w.endMs).toISOString(), w.basis] : base;
 }
+const stampCols = (r: AnalysisResult) =>
+  r.config.window ? [...STAMP_COLS, 'window_start_utc', 'window_end_utc', 'time_basis_filter'] : STAMP_COLS;
 const STAMP_COLS = ['config_hash', 'dataset_id', 'dataset_version', 'month'];
 
 export function airportsCsv(r: AnalysisResult, net: StaticNetwork, meta: ResearchMeta, sortBy: AirportMetricKey = 'degree'): string {
   const scores = airportScores(r, sortBy);
   const order = r.network.airports.map((a, node) => ({ a, node })).sort((x, y) =>
     scores.get(y.a)! - scores.get(x.a)! || net.airports[x.a]!.id.localeCompare(net.airports[y.a]!.id));
-  const cols = [...STAMP_COLS, 'rank_by', 'rank', 'airport_id', 'iata', 'icao', 'name', 'country', 'degree', 'in_degree', 'out_degree',
+  const cols = [...stampCols(r), 'rank_by', 'rank', 'airport_id', 'iata', 'icao', 'name', 'country', 'degree', 'in_degree', 'out_degree',
     'strength_flights', 'in_strength', 'out_strength', 'degree_centrality', 'betweenness', 'betweenness_raw', 'harmonic_closeness',
     'harmonic_closeness_normalized', 'pagerank', 'clustering'];
   let rank = 0;
@@ -90,7 +95,7 @@ export function airportsCsv(r: AnalysisResult, net: StaticNetwork, meta: Researc
 }
 
 export function routesCsv(r: AnalysisResult, net: StaticNetwork, meta: ResearchMeta): string {
-  const cols = [...STAMP_COLS, 'origin', 'destination', 'directed', 'flights', 'previous_month', 'previous_flights', 'change_pct',
+  const cols = [...stampCols(r), 'origin', 'destination', 'directed', 'flights', 'previous_month', 'previous_flights', 'change_pct',
     'flights_T1', 'flights_T2', 'flights_T3', 'flights_T4', 'months_present'];
   const rows = r.routes.map((x) => [...stamp(r, meta), net.airports[x.origin]!.id, net.airports[x.destination]!.id, x.directed, x.flights,
     r.previousMonth ?? '', x.previous, x.previous ? (100 * (x.flights - x.previous)) / x.previous : '', ...x.tiers, x.monthsPresent]);
@@ -98,7 +103,7 @@ export function routesCsv(r: AnalysisResult, net: StaticNetwork, meta: ResearchM
 }
 
 export function areaCsv(r: AnalysisResult, meta: ResearchMeta, area: AreaNetwork): string {
-  const cols = [...STAMP_COLS, 'unit', 'from', 'to', 'directed', 'flights'];
+  const cols = [...stampCols(r), 'unit', 'from', 'to', 'directed', 'flights'];
   const rows = [
     ...area.pairs.map((p) => [...stamp(r, meta), area.unit, p.from, p.to, area.directed, p.flights]),
     ...area.stats.filter((s) => s.domestic > 0).map((s) => [...stamp(r, meta), area.unit, s.area, s.area, area.directed, s.domestic]),
@@ -117,7 +122,7 @@ export function summaryCsv(r: AnalysisResult, meta: ResearchMeta): string {
     ['dropped_by_min_flights_routes', r.network.droppedByMinFlights.routes], ['dropped_by_min_flights_flights', r.network.droppedByMinFlights.flights],
     ['dropped_by_min_months_routes', r.network.droppedByMinMonths.routes], ['path_measures_exact', s.path.exact], ['path_sources', s.path.sources],
   ];
-  return toCsv([...STAMP_COLS, 'metric', 'value'], rows.map(([k, v]) => [...stamp(r, meta), k, v]));
+  return toCsv([...stampCols(r), 'metric', 'value'], rows.map(([k, v]) => [...stamp(r, meta), k, v]));
 }
 
 // ---- JSON (conditions + provenance) ----------------------------------------------------------------
@@ -134,6 +139,27 @@ export interface AnalysisDocument {
   computedAt: string;
   summary: Record<string, unknown>;
   comparison?: { config: ResearchConfig; configHash: string; changed: string[] };
+  /** present when the analysis is a time window (Phase 9B); times are UTC */
+  temporal?: {
+    startTimeUtc: string;
+    endTimeUtc: string;
+    timeBasisFilter: 'all' | 'start';
+    windowPreset: string;
+    stepDuration: string;
+    membership: string;
+    source: string;
+    datasetId: string;
+    datasetVersion: string | null;
+    selectedAirports: string[];
+    selectedCountries: string[];
+    selectedRegion: string | null;
+    selectedAirlines: string[];
+    aircraftClass: string[];
+    confidenceTiers: string[];
+    minimumFlightCount: number;
+    directionMode: 'directed' | 'undirected';
+    analysisMetrics: string[];
+  };
 }
 
 export function analysisDocument(r: AnalysisResult, meta: ResearchMeta, comparison?: AnalysisDocument['comparison']): AnalysisDocument {
@@ -179,6 +205,29 @@ export function analysisDocument(r: AnalysisResult, meta: ResearchMeta, comparis
       largestComponent: s.largestComponent, averageClustering: s.averageClustering, transitivity: s.transitivity,
     },
     ...(comparison ? { comparison } : {}),
+    ...(r.config.window ? {
+      temporal: {
+        startTimeUtc: new Date(r.config.window.startMs).toISOString(),
+        endTimeUtc: new Date(r.config.window.endMs).toISOString(),
+        timeBasisFilter: r.config.window.basis,
+        windowPreset: r.config.window.preset,
+        stepDuration: `PT${Math.round(r.config.window.stepMs / 3_600_000)}H`,
+        membership: 'start <= referenceTime < end; referenceTime = ADS-B track start, else track end (not a take-off time)',
+        source: `public/data/${meta.manifest.datasetId}/temporal/days (day files, minute resolution)`,
+        // the same conditions under the names of the Phase 9B spec (config above stays authoritative)
+        datasetId: meta.manifest.datasetId,
+        datasetVersion: meta.manifest.datasetVersion,
+        selectedAirports: r.config.airport ? [r.config.airport] : [],
+        selectedCountries: r.config.country ? [r.config.country] : [],
+        selectedRegion: r.config.region,
+        selectedAirlines: r.config.carrier ? [r.config.carrier] : [],
+        aircraftClass: r.config.classes,
+        confidenceTiers: TIER_SETS[r.config.tiers].map((n) => `T${n}`),
+        minimumFlightCount: r.config.minFlights,
+        directionMode: r.config.directed ? 'directed' : 'undirected',
+        analysisMetrics: [...AIRPORT_METRICS],
+      },
+    } : {}),
   };
 }
 

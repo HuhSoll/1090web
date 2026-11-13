@@ -21,7 +21,8 @@ export type Difference =
   | 'threshold'
   | 'relation'
   | 'month'
-  | 'nationalTotal';
+  | 'nationalTotal'
+  | 'window';
 
 export interface ValidationMatch {
   source: ValidationSource;
@@ -47,11 +48,11 @@ export function findValidation(config: ResearchConfig, rows: readonly ExternalRo
   if (config.airport) common.push('airport');
 
   if (config.country === 'JP') {
-    const japan = (quality.external.japan ?? []).find((r) => r.month === config.month && r.tiers === TIER_LABEL[config.tiers]) ?? null;
+    const japan = config.window ? null : (quality.external.japan ?? []).find((r) => r.month === config.month && r.tiers === TIER_LABEL[config.tiers]) ?? null;
     const differences: Difference[] = ['nationalTotal', ...common];
     if (config.relation !== 'domestic') differences.push('relation');
     if (config.minFlights > 1) differences.push('threshold');
-    if (!japan) differences.push('month');
+    if (!japan || config.window) differences.push(config.window ? 'window' : 'month');
     return { source: 'MLIT_AIR_TRANSPORT_FLASH', scope: 'Japan-domestic', row: null, reference: null, japan, usedThreshold: null, differences };
   }
   const spec = config.country ? COUNTRY_SOURCE[config.country] : undefined;
@@ -67,8 +68,9 @@ export function findValidation(config: ResearchConfig, rows: readonly ExternalRo
   const pick = (months: string) =>
     rows.find((r) => r.source === spec.source && r.scope === scope && r.months === months && r.tiers === TIER_LABEL[config.tiers]
       && r.direction === direction && r.min_flights === usedThreshold) ?? null;
-  const row = pick(config.month);
-  if (!row) differences.push('month');
+  // a time window is never matched with a monthly comparison
+  const row = config.window ? null : pick(config.month);
+  if (!row) differences.push(config.window ? 'window' : 'month');
   return { source: spec.source, scope, row, reference: pick('all_excl_2026-05'), japan: null, usedThreshold, differences };
 }
 

@@ -5,7 +5,11 @@ import type { StaticNetwork } from '../data/model/network';
 import { useAppStore, type ResearchCompare } from '../state/store';
 import { airportContinents, mergeMonth, ResearchLoader, type ResearchMeta, type ResearchMonth } from './data';
 import { CancelledError, MetricsClient } from './metricsClient';
-import { canonicalConfig, configHash, type ResearchConfig } from './model';
+import { canonicalConfig, configHash, type ResearchConfig, type ResearchWindow } from './model';
+import { toResearchMonth } from '../temporal/aggregate';
+import { SupersededError } from '../temporal/client';
+import { getTemporalClient, loadTemporalMeta, windowDays, windowLabel } from '../temporal/useTemporal';
+import { clampWindow, DAY_MS } from '../temporal/window';
 export { configContext } from './model';
 import { areaNetwork, buildResearchNetwork, edgeArrays, routeRows, type ScopeContext } from './network';
 import type { AnalysisResult } from './results';
@@ -31,6 +35,34 @@ function loadResearchMonth(network: StaticNetwork, month: string): Promise<Resea
   // keep at most 4 merged months in memory
   while (monthCache.size > 4) monthCache.delete(monthCache.keys().next().value!);
   return p;
+}
+
+/** One worker channel per analysis client (main / comparison), so newer requests supersede older ones. */
+const channels = new WeakMap<MetricsClient, string>();
+function channelOf(c: MetricsClient): string {
+  let ch = channels.get(c);
+  if (!ch) {
+    ch = `research-${Math.random().toString(36).slice(2, 10)}`;
+    channels.set(c, ch);
+  }
+  return ch;
+}
+
+/**
+ * A time window as Research Mode input, aggregated from the day files in the temporal worker.
+ * Windows outside the data give an empty month (allowEmpty, for the 'previous period' column).
+ */
+function loadWindowMonth(network: StaticNetwork, w: ResearchWindow, channel: string, allowEmpty = false): Promise<ResearchMonth | null> {
+  return loadTemporalMeta().then((meta) => {
+    const c = clampWindow(w, meta.range);
+    if (!c) {
+      if (allowEmpty) return null;
+      throw new Error('window outside the data');
+    }
+    return getTemporalClient(network)
+      .aggregate(channel, { window: c.window, basis: w.basis, binMs: DAY_MS, filter: null })
+      .then((r) => toResearchMonth(r.rows, network.carriers.map((x) => x.id), windowLabel(c.window), windowDays(c.window)));
+  });
 }
 
 export type MetaState = { state: 'loading' } | { state: 'error'; message: string } | { state: 'ready'; meta: ResearchMeta };
@@ -76,17 +108,25 @@ export function useAnalysis(config: ResearchConfig | null, meta: ResearchMeta | 
     const hash = configHash(config);
     const months = network.manifest.months.map((m) => m.month);
     const i = months.indexOf(config.month);
-    const previousMonth = i > 0 ? months[i - 1]! : null;
+    const w = config.window;
+    // a time window is compared with the window of the same length just before it
+    const prevWindow = w ? { ...w, startMs: w.startMs - (w.endMs - w.startMs), endMs: w.startMs } : null;
+    const previousMonth = w ? windowLabel(prevWindow!) : i > 0 ? months[i - 1]! : null;
+    const channel = channelOf(client);
     const ctx: ScopeContext = {
       network,
       continentOf: airportContinents(network, meta.quality.continents),
       persistence: meta.persistence,
     };
-    Promise.all([loadResearchMonth(network, config.month), previousMonth ? loadResearchMonth(network, previousMonth) : Promise.resolve(null)])
+    const current: Promise<ResearchMonth> = w
+      ? loadWindowMonth(network, w, `${channel}:current`).then((m) => m!) // throws instead of returning null
+      : loadResearchMonth(network, config.month);
+    const previous = w ? loadWindowMonth(network, prevWindow!, `${channel}:previous`, true) : previousMonth ? loadResearchMonth(network, previousMonth) : Promise.resolve(null);
+    Promise.all([current, previous])
       .then(([month, prev]) => {
         if (!alive) return null;
         const net = buildResearchNetwork(ctx, month, config);
-        const prevNet = prev ? buildResearchNetwork(ctx, prev, { ...config, month: prev.month }) : null;
+        const prevNet = prev ? buildResearchNetwork(ctx, prev, { ...config, month: w ? config.month : prev.month }) : null;
         const edges = edgeArrays(net, config.directed);
         return client
           .run(key, edges, { pathMethod: config.pathMethod, samples: config.samples, seed: config.seed }, (done, total) => {
@@ -110,7 +150,7 @@ export function useAnalysis(config: ResearchConfig | null, meta: ResearchMeta | 
           });
       })
       .catch((err: unknown) => {
-        if (!alive || err instanceof CancelledError) return;
+        if (!alive || err instanceof CancelledError || err instanceof SupersededError) return;
         setState({ state: 'error', hash, message: err instanceof Error ? err.message : String(err) });
       });
     return () => {
@@ -138,6 +178,12 @@ export function compareConfig(base: ResearchConfig | null, cmp: ResearchCompare)
       return typeof cmp.value === 'number' && cmp.value !== base.minFlights ? { ...base, minFlights: cmp.value } : null;
     case 'tiers':
       return cmp.value !== base.tiers && ['A', 'B', 'C', 'D'].includes(String(cmp.value)) ? { ...base, tiers: cmp.value as ResearchConfig['tiers'] } : null;
+    case 'window': {
+      if (!base.window) return null;
+      const len = base.window.endMs - base.window.startMs;
+      const shift = cmp.value === 'previous' ? len : cmp.value === 'day' ? 86_400_000 : cmp.value === 'week' ? 7 * 86_400_000 : 0;
+      return shift ? { ...base, window: { ...base.window, startMs: base.window.startMs - shift, endMs: base.window.endMs - shift } } : null;
+    }
     case 'area': {
       const v = String(cmp.value);
       const next = v.startsWith('C:') ? { ...base, country: v.slice(2), region: null } : v.startsWith('R:') ? { ...base, country: null, region: v.slice(2) } : null;

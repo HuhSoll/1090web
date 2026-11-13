@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useI18n } from '../../i18n/useI18n';
 import { exploreFiltersFor } from '../../research/mapLink';
 import { defaultConfig } from '../../research/model';
+import { defaultSelection } from '../../temporal/window';
 import { compareConfig, useAnalysis, useMetricsClients, useResearchMeta } from '../../research/useResearch';
 import { useAppStore, type ResearchTab } from '../../state/store';
 import { Logo } from '../common/Logo';
@@ -51,6 +52,15 @@ export function ResearchView() {
     const idx = network.manifest.months.findIndex((m) => m.month === config.month);
     if (idx >= 0) st.setMonthIndex(idx);
     st.setCompareEnabled(false);
+    if (config.window) {
+      // the same window in the temporal view (as a custom window, so it is shown exactly)
+      const w = config.window;
+      const base = st.temporalSel ?? { ...defaultSelection({ startMs: w.startMs, endMs: w.endMs }), speed: 'normal' as const };
+      st.setExploreTime('temporal');
+      st.setTemporalSel({ ...base, preset: 'custom', customStartMs: w.startMs, customEndMs: w.endMs, cursorMs: w.startMs, basis: w.basis, stepMs: w.stepMs, compare: 'off' });
+    } else if (st.exploreTime === 'temporal') {
+      st.setExploreTime('monthly');
+    }
     st.setFilters(filters);
     st.selectAirport(airport);
     st.setAppMode('explore');

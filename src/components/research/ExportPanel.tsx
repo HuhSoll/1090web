@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { periodSlug } from '../../research/periods';
 import { useI18n } from '../../i18n/useI18n';
 import type { ResearchMeta } from '../../research/data';
 import { changedFields, configHash, type ResearchConfig } from '../../research/model';
@@ -26,7 +27,7 @@ export function ExportPanel({ result, meta, other }: { result: AnalysisResult; m
   const fileRef = useRef<HTMLInputElement>(null);
   const [importMsg, setImportMsg] = useState<{ ok: boolean; lines: string[] } | null>(null);
   const [copied, setCopied] = useState(false);
-  const base = `1090web_${result.config.month}_${result.hash}`;
+  const base = `1090web_${periodSlug(result.config)}_${result.hash}`;
 
   const comparisonCsv = () => {
     if (!other) return '';

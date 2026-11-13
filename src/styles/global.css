@@ -837,6 +837,156 @@ input[type='range'] {
   font-size: 12px;
 }
 
+/* ---------- temporal timeline (Phase 9B) ---------- */
+
+.time-toggle {
+  flex: none;
+}
+
+.time-toggle button {
+  padding: 4px 9px;
+  white-space: nowrap;
+}
+
+.timeline.is-temporal {
+  height: auto;
+  min-height: 72px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.t-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.t-controls {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.t-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.t-field select,
+.t-field input[type='date'],
+.t-field input[type='datetime-local'] {
+  width: auto;
+  padding: 3px 6px;
+  font-size: 12px;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  color-scheme: dark;
+}
+
+.t-check input {
+  accent-color: var(--accent);
+}
+
+.t-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.t-strip {
+  position: relative;
+  height: 5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.t-strip span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.t-window {
+  background: rgba(127, 214, 255, 0.45);
+  min-width: 2px;
+}
+
+.t-marker {
+  background: var(--text-faint);
+  opacity: 0.6;
+  min-width: 2px;
+}
+
+.t-marker.is-gap {
+  background: var(--warn);
+  opacity: 1;
+}
+
+.t-progress {
+  width: 100%;
+}
+
+.t-research {
+  flex: none;
+  border: 1px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+.t-research:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.t-notes {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.mono-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.app.is-temporal .info {
+  max-height: calc(100% - var(--gutter) * 2 - 48px - 190px);
+}
+
+.app.is-temporal .compare-legend,
+.app.is-temporal .globe-controls {
+  bottom: calc(var(--gutter) + 190px);
+}
+
+.t-spark {
+  display: block;
+  width: 100%;
+  height: 44px;
+}
+
+.t-spark .line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.t-spark .base {
+  fill: none;
+  stroke: var(--warn);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.t-spark .gap {
+  fill: var(--warn);
+  opacity: 0.18;
+}
+
 /* Compare legend (bottom-left of the map area) */
 .compare-legend {
   position: absolute;
@@ -1244,6 +1394,21 @@ input[type='range'] {
 
   .timeline-compare {
     min-width: 0;
+  }
+
+  .timeline.is-temporal {
+    max-height: 46%;
+    overflow-y: auto;
+  }
+
+  .t-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .app.is-temporal .info {
+    bottom: calc(var(--gutter) + 230px);
+    max-height: 30%;
   }
 
   .tooltip {

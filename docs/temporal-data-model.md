@@ -100,7 +100,8 @@ const month = windowAsResearchMonth(sel, carrierIds, '2026-03-10T12/18');
 
 - `selectWindow`（純粋関数）は二分探索で選ぶだけで、データをコピーしません。
 - 必要な日のファイルが存在しない場合は `missingDays` に入ります（値は作りません）。
-- 1つの窓で読み込む日数の上限は 10 日です（それより長い期間は月次データを使います）。
+- `TemporalLoader.window()` で1つの窓に読み込む日数の上限は 10 日です。
+- Phase 9B からは、画面での集計は Web Worker の `WindowAggregator`（`src/temporal/aggregate.ts`）が1日ずつ足し込むので、期間の長さに上限はありません（3月の31日分が月次データと一致することをテストで確認）。使い方は [temporal-explorer.md](temporal-explorer.md)。
 
 ## 6. 品質情報
 
@@ -113,8 +114,10 @@ const month = windowAsResearchMonth(sel, carrierIds, '2026-03-10T12/18');
 
 時間軸（`src/temporal/`）とネットワーク（`src/research/`）は独立しています。将来のシミュレーションは、観測データを変えずに、その上に「仮想イベント」を重ねる形を想定しています。
 
+Phase 9B で最小限のイベントの型を `src/temporal/scenario.ts` に置きました（`eventId`・`eventType`・`startTime`・`endTime`・`affectedAirports`・`affectedRoutes`・`source`・`sourceUrl`・`isHypothetical`）。下の型は Phase 9A 時点の案です。
+
 ```ts
-// 想定するイベントの型（未実装）
+// 想定するイベントの型（Phase 9A の案）
 type ScenarioEvent =
   | { kind: 'airportClosure'; airport: string; startMs: number; endMs: number | null }
   | { kind: 'airportReopen'; airport: string; atMs: number }

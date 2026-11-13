@@ -3,9 +3,11 @@ import { DEFAULT_FILTERS, thresholdStepsFor, type NetworkView, type TrafficMode 
 import { useAppStore } from '../../state/store';
 import { AirlinePicker } from './AirlinePicker';
 import { useI18n } from '../../i18n/useI18n';
+import { usePeriodKey } from '../../i18n/usePeriodKey';
 
 export function FilterPanel({ view }: { view: NetworkView | null }) {
   const { t, countryName, number, locale } = useI18n();
+  const periodKey = usePeriodKey();
   const network = useAppStore((s) => s.network);
   const filters = useAppStore((s) => s.filters);
   const setFilters = useAppStore((s) => s.setFilters);
@@ -113,7 +115,7 @@ export function FilterPanel({ view }: { view: NetworkView | null }) {
 
       <label className="field">
         <span className="field-row">
-          <span className="field-label">{t('filters.threshold')}</span>
+          <span className="field-label">{t(periodKey('filters.threshold'))}</span>
           <span className="field-value">
             {filters.minFlights > 0 ? t('filters.thresholdValue', { value: number(filters.minFlights) }) : t('filters.thresholdOff')}
           </span>

@@ -4,6 +4,8 @@ import { Icon } from '../components/common/Icon';
 import { Logo } from '../components/common/Logo';
 import { Sidebar } from '../components/layout/Sidebar';
 import { Timeline } from '../components/layout/Timeline';
+import { TemporalTimeline } from '../components/layout/TemporalTimeline';
+import { useTemporal } from '../temporal/useTemporal';
 import { TopBar } from '../components/layout/TopBar';
 import { InfoPanel } from '../components/panels/InfoPanel';
 import { CompareLegend } from '../components/panels/ComparePanels';
@@ -25,6 +27,8 @@ export function App() {
   const { retry } = useDataset();
   useUrlState();
   useAdvisoryLoader();
+  const temporalMeta = useTemporal();
+  const exploreTime = useAppStore((s) => s.exploreTime);
   const view = useNetworkView();
   const comparison = useComparison();
   const { t, number, locale } = useI18n();
@@ -61,7 +65,7 @@ export function App() {
   }, []);
 
   return (
-    <div className="app">
+    <div className={`app ${exploreTime === 'temporal' && !research ? 'is-temporal' : ''}`}>
       <div className="backdrop" aria-hidden="true" />
       <main className="stage">
         <ErrorBoundary
@@ -121,7 +125,7 @@ export function App() {
       {!research && <InfoPanel view={view} comparison={comparison} />}
       {!research && comparison && <CompareLegend comparison={comparison} />}
       <TopBar />
-      {!research && <Timeline />}
+      {!research && (exploreTime === 'temporal' ? <TemporalTimeline meta={temporalMeta} /> : <Timeline />)}
       {!research && <Tooltip view={view} />}
       <SourcesDialog />
       {!research && mapNote && (

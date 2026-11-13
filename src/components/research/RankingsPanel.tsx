@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { periodOf } from '../../research/periods';
 import { useI18n } from '../../i18n/useI18n';
 import { AIRPORT_METRICS, type AirportMetricKey, type AnalysisResult } from '../../research/results';
 import type { RouteRow } from '../../research/network';
@@ -83,7 +84,7 @@ export function RankingsPanel({ result, focus, onFocus, onShowOnMap }: {
   return (
     <div className="r-stack">
       <section>
-        <h3 className="r-h">{t('r.rank.airportsTitle', { metric: t(`r.metric.${metric}`), month: monthLabel(config.month) })}</h3>
+        <h3 className="r-h">{t('r.rank.airportsTitle', { metric: t(`r.metric.${metric}`), month: monthLabel(periodOf(config)) })}</h3>
         <p className="hint">{t('r.rank.definition', {
           tiers: t(`r.tiersShort.${config.tiers}`), min: config.minFlights,
           graph: t(config.directed ? 'r.graph.directed' : 'r.graph.undirected'), n: rows.length,
@@ -185,7 +186,7 @@ function RouteTable({ result }: { result: AnalysisResult }) {
   ];
   return (
     <section>
-      <h3 className="r-h">{t('r.rank.routesTitle', { month: monthLabel(result.config.month) })}</h3>
+      <h3 className="r-h">{t('r.rank.routesTitle', { month: monthLabel(periodOf(result.config)) })}</h3>
       <p className="hint">{t('r.rank.routesDefinition', { min: result.config.minFlights, tiers: t(`r.tiersShort.${result.config.tiers}`) })}</p>
       <SortTable columns={columns} rows={result.routes} rowKey={(r) => `${r.origin}-${r.destination}`} initialSort={{ key: 'flights', desc: true }} />
       <Note>{t('r.rank.routesNote')}</Note>

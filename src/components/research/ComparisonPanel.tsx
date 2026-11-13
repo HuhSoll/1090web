@@ -6,6 +6,8 @@ import { AIRPORT_METRICS, airportScores, type AirportMetricKey, type AnalysisRes
 import { compareRankings } from '../../research/stats';
 import type { AnalysisState } from '../../research/useResearch';
 import { useAppStore, type CompareField } from '../../state/store';
+import { gapDaysIn } from '../../research/periods';
+import { windowLabel } from '../../temporal/useTemporal';
 import { Note, SortTable, type Column } from './common';
 import { useFormat } from './format';
 
@@ -25,6 +27,7 @@ export function ComparisonPanel({ result, other, otherConfig, meta }: {
     month: network.manifest.months.map((m) => ({ value: m.month, label: monthLabel(m.month) })).filter((o) => o.value !== config.month),
     minFlights: [...THRESHOLD_PRESETS].filter((v) => v !== config.minFlights).map((v) => ({ value: v, label: `≥ ${v}` })),
     tiers: (['D', 'C', 'B', 'A'] as const).filter((v) => v !== config.tiers).map((v) => ({ value: v, label: t(`r.tiersShort.${v}`) })),
+    window: config.window ? (['previous', 'day', 'week'] as const).map((v) => ({ value: v, label: t(`r.cmp.window.${v}`) })) : [],
     area: [
       ...REGIONS.map((r) => ({ value: `R:${r}`, label: t(`r.region.${r}`) })),
       ...[...new Set(network.airports.map((a) => a.country))].map((c) => ({ value: `C:${c}`, label: countryName(c) })).sort((a, b) => a.label.localeCompare(b.label)),
@@ -40,7 +43,7 @@ export function ComparisonPanel({ result, other, otherConfig, meta }: {
           <label className="field-label" htmlFor="r-cmp-field">{t('r.cmp.change')}</label>
           <select id="r-cmp-field" value={cmp.enabled ? cmp.field : ''} onChange={(e) => (e.target.value ? choose(e.target.value as CompareField) : setCmp({ enabled: false }))}>
             <option value="">{t('r.cmp.off')}</option>
-            <option value="month">{t('r.cmp.field.month')}</option>
+            {config.window ? <option value="window">{t('r.cmp.field.window')}</option> : <option value="month">{t('r.cmp.field.month')}</option>}
             <option value="minFlights">{t('r.cmp.field.minFlights')}</option>
             <option value="tiers">{t('r.cmp.field.tiers')}</option>
             <option value="area">{t('r.cmp.field.area')}</option>
@@ -65,9 +68,11 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
   const network = useAppStore((s) => s.network)!;
   const [metric, setMetric] = useState<AirportMetricKey>('degree');
   const changed = changedFields(a.config, b);
-  const unchanged = (['month', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation'] as const).filter((k) => !changed.includes(k));
+  const unchanged = (['month', 'window', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation'] as const).filter((k) => !changed.includes(k));
   const r = other.state === 'ready' && !other.stale ? other.result : null;
-  const gapMonths = [a.config.month, b.month].filter((m) => (meta.quality.months.find((q) => q.month === m)?.gapDays.length ?? 0) > 0);
+  const gapMonths = a.config.window || b.window
+    ? [a.config.window, b.window].filter((w) => w && gapDaysIn(meta, w.startMs, w.endMs).length > 0).map((w) => windowLabel(w!))
+    : [a.config.month, b.month].filter((m) => (meta.quality.months.find((q) => q.month === m)?.gapDays.length ?? 0) > 0);
 
   const cmp = useMemo(() => (r ? compareRankings(airportScores(a, metric), airportScores(r, metric), 20) : null), [a, r, metric]);
   const label = (i: number) => network.airports[i]!.iata ?? network.airports[i]!.id;
@@ -101,7 +106,7 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
           {changed.map((k) => (
             <div className="kv-row r-changed" key={k}>
               <dt>{t(`r.field.${k}`)}</dt>
-              <dd>A: {String(a.config[k] ?? '—')} → B: {String(b[k] ?? '—')}</dd>
+              <dd>A: {k === 'window' ? (a.config.window ? windowLabel(a.config.window) : '—') : String(a.config[k] ?? '—')} → B: {k === 'window' ? (b.window ? windowLabel(b.window) : '—') : String(b[k] ?? '—')}</dd>
             </div>
           ))}
         </dl>

@@ -1,6 +1,7 @@
 import { useI18n } from '../../i18n/useI18n';
 import type { ResearchMeta } from '../../research/data';
 import type { AnalysisResult } from '../../research/results';
+import { gapDaysIn, isShortWindow, periodOf } from '../../research/periods';
 import { Note, Stat } from './common';
 import { useFormat } from './format';
 
@@ -10,7 +11,9 @@ export function OverviewPanel({ result, meta }: { result: AnalysisResult; meta: 
   const f = useFormat();
   const { network: net, metrics, config } = result;
   const s = metrics.summary;
-  const q = meta.quality.months.find((m) => m.month === config.month);
+  // monthly quality applies to calendar-month analyses only
+  const q = config.window ? undefined : meta.quality.months.find((m) => m.month === config.month);
+  const windowGaps = config.window ? gapDaysIn(meta, config.window.startMs, config.window.endMs) : [];
   const days = q?.calendarDays ?? net.daysInMonth;
   const tierTotal = net.tierFlights.reduce((a, b) => a + b, 0);
   const n = net.airports.length;
@@ -18,12 +21,25 @@ export function OverviewPanel({ result, meta }: { result: AnalysisResult; meta: 
 
   return (
     <div className="r-stack">
-      <h3 className="r-h">{t('r.ov.title', { month: monthLabel(config.month) })}</h3>
+      <h3 className="r-h">{t('r.ov.title', { month: monthLabel(periodOf(config)) })}</h3>
+      {config.window && <Note>{t('t.membership')}</Note>}
+      {isShortWindow(config) && <Note warn>{t('t.shortWindowNote')}</Note>}
+      {windowGaps.length > 0 && (
+        <section className="r-box r-warn">
+          <h4 className="r-h4">{t('r.gap.title')}</h4>
+          <p className="small">{t('r.ov.windowGap', { days: windowGaps.join(', ') })}</p>
+        </section>
+      )}
       <div className="stats r-stats">
         <Stat label={t('r.ov.airports')} value={f.int(n)} />
         <Stat label={config.directed ? t('r.ov.routesDirected') : t('r.ov.routes')} value={f.int(config.directed ? net.directedRoutes : net.routes.length)} />
         <Stat label={t('r.ov.flights')} value={f.int(net.flights)} note={t('r.ov.flightsNote')} />
-        <Stat label={t('r.ov.perDay')} value={f.int(days ? net.flights / days : null)} note={t('r.ov.perDayNote', { days: days ?? '—' })} />
+        {config.window ? (
+          // a window is not scaled up to a day: flights per hour of the window
+          <Stat label={t('r.ov.perHour')} value={f.int(net.flights / ((config.window.endMs - config.window.startMs) / 3_600_000))} note={t('r.ov.perHourNote', { hours: (config.window.endMs - config.window.startMs) / 3_600_000 })} />
+        ) : (
+          <Stat label={t('r.ov.perDay')} value={f.int(days ? net.flights / days : null)} note={t('r.ov.perDayNote', { days: days ?? '—' })} />
+        )}
         <Stat label={t('r.ov.meanDegree')} value={f.dec(n ? metrics.degree.reduce((a, b) => a + b, 0) / n : null, 1)} note={t('r.ov.meanDegreeNote')} />
         <Stat label={t('r.ov.density')} value={f.dec(s.density, 4)} />
         <Stat label={t('r.ov.components')} value={f.int(s.components)} />

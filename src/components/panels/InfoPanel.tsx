@@ -2,11 +2,13 @@ import { useEffect, useMemo, useRef } from 'react';
 import { computeRankings, computeRouteDetail, connectedRoutes, type NetworkView } from '../../domain/networkView';
 import { useAppStore } from '../../state/store';
 import { useI18n } from '../../i18n/useI18n';
+import { usePeriodKey } from '../../i18n/usePeriodKey';
 import { greatCircleKm } from '../../utils/geo';
 import { Icon } from '../common/Icon';
 import type { StaticNetwork } from '../../data/model/network';
 import type { Comparison } from '../../domain/comparison';
 import { CompareAirport, CompareRoute, CompareSummary } from './ComparePanels';
+import { TemporalStats } from './TemporalStats';
 import { useActiveAdvisories } from '../../app/useAdvisories';
 import { advisoriesForCountry } from '../../domain/advisories';
 
@@ -14,6 +16,7 @@ export function InfoPanel({ view, comparison }: { view: NetworkView | null; comp
   const network = useAppStore((s) => s.network);
   const selectedAirport = useAppStore((s) => s.selectedAirport);
   const selectedRoute = useAppStore((s) => s.selectedRoute);
+  const temporal = useAppStore((s) => s.exploreTime === 'temporal');
   const ref = useRef<HTMLElement>(null);
   useReportViewInsets(ref);
   if (!network || !view) return null;
@@ -28,6 +31,7 @@ export function InfoPanel({ view, comparison }: { view: NetworkView | null; comp
       ) : (
         <Summary network={network} view={view} />
       )}
+      {temporal && <TemporalStats />}
     </aside>
   );
 }
@@ -86,6 +90,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Summary({ network, view }: { network: StaticNetwork; view: NetworkView }) {
   const { t, number } = useI18n();
+  const periodKey = usePeriodKey();
   const rankings = useMemo(() => computeRankings(view, 5), [view]);
   const selectAirport = useAppStore((s) => s.selectAirport);
   const selectRoute = useAppStore((s) => s.selectRoute);
@@ -106,7 +111,7 @@ function Summary({ network, view }: { network: StaticNetwork; view: NetworkView 
       <div className="stats">
         <Stat label={t('summary.routes')} value={number(view.visibleRouteCount)} />
         <Stat label={t('summary.airports')} value={number(view.visibleAirportCount)} />
-        <Stat label={t('summary.flights')} value={number(view.totalFlights)} />
+        <Stat label={t(periodKey('summary.flights'))} value={number(view.totalFlights)} />
       </div>
       {share > 0 && (
         <p className="hint">{t('summary.callsignShare', { share: `${Math.round(share * 100)}%` })}</p>
@@ -181,6 +186,7 @@ function AirportDetail({
   comparison: Comparison | null;
 }) {
   const { t, number, countryName } = useI18n();
+  const periodKey = usePeriodKey();
   const selectAirport = useAppStore((s) => s.selectAirport);
   const selectRoute = useAppStore((s) => s.selectRoute);
   const setListHoverRoute = useAppStore((s) => s.setListHoverRoute);
@@ -214,7 +220,7 @@ function AirportDetail({
       {comparison && <CompareAirport network={network} comparison={comparison} airportIndex={airportIndex} />}
       {!comparison && (
       <div className="stats">
-        <Stat label={t('airport.flights')} value={number(flights)} />
+        <Stat label={t(periodKey('airport.flights'))} value={number(flights)} />
         <Stat label={t('airport.routes')} value={number(routes.length)} />
       </div>
       )}
@@ -222,7 +228,7 @@ function AirportDetail({
         {t('airport.coords')}: {airport.lat.toFixed(3)}, {airport.lon.toFixed(3)}
       </p>
 
-      {!comparison && <h3 className="section-title">{t('airport.routeList')}</h3>}
+      {!comparison && <h3 className="section-title">{t(periodKey('airport.routeList'))}</h3>}
       {comparison ? null : routes.length === 0 ? (
         <p className="hint">{flights > 0 ? t('airport.noRoutes') : t('airport.hidden')}</p>
       ) : (
@@ -270,6 +276,7 @@ function RouteDetailView({
   comparison: Comparison | null;
 }) {
   const { t, number } = useI18n();
+  const periodKey = usePeriodKey();
   const month = useAppStore((s) => s.month);
   const filters = useAppStore((s) => s.filters);
   const selectRoute = useAppStore((s) => s.selectRoute);
@@ -314,7 +321,7 @@ function RouteDetailView({
       {comparison && <CompareRoute comparison={comparison} routeId={routeId} />}
       {!visible && !comparison && <p className="hint warn">{t('route.hidden')}</p>}
       <div className="stats">
-        <Stat label={t('route.flights')} value={number(total)} />
+        <Stat label={t(periodKey('route.flights'))} value={number(total)} />
         <Stat label={t('route.distance')} value={t('unit.km', { value: number(km) })} />
       </div>
 

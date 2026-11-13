@@ -2,7 +2,9 @@ import { useEffect, useRef } from 'react';
 import type { StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import { configContext, configFromParams, configToParams, sanitizeConfig, type ResearchConfig } from '../research/model';
-import { useAppStore, type AppMode, type ResearchCompare } from '../state/store';
+import { useAppStore, type AppMode, type ExploreTime, type ResearchCompare } from '../state/store';
+import { selectionFromParams, selectionToParams } from '../temporal/urlParams';
+import { defaultSelection, type TemporalSelection } from '../temporal/window';
 
 /**
  * Shareable URLs: the month, comparison, filters and selected airport live in the query string.
@@ -22,6 +24,8 @@ export interface UrlState {
   appMode?: AppMode;
   research?: Partial<ResearchConfig>;
   researchCompare?: Pick<ResearchCompare, 'field' | 'value'>;
+  exploreTime?: ExploreTime;
+  temporal?: Partial<TemporalSelection>;
 }
 
 const PASSTHROUGH = ['dataset', 'stress'] as const;
@@ -54,6 +58,10 @@ export function parseUrlState(search: string, network: StaticNetwork): UrlState 
   if (Number.isFinite(min) && min > 0 && min <= 100000) filters.minFlights = Math.round(min);
   if (Object.keys(filters).length > 0) out.filters = filters;
   if (p.get('advisories') === '1') out.advisories = true;
+  if (p.get('time') === 'temporal') {
+    out.exploreTime = 'temporal';
+    out.temporal = selectionFromParams(p);
+  }
   if (p.get('mode') === 'research') {
     out.appMode = 'research';
     out.research = configFromParams(p);
@@ -78,6 +86,8 @@ export interface SerializableState {
   appMode?: AppMode;
   researchConfig?: ResearchConfig | null;
   researchCompare?: ResearchCompare;
+  exploreTime?: ExploreTime;
+  temporalSel?: TemporalSelection | null;
 }
 
 export function serializeUrlState(state: SerializableState, network: StaticNetwork, currentSearch: string): string {
@@ -106,6 +116,10 @@ export function serializeUrlState(state: SerializableState, network: StaticNetwo
   if (f.minFlights > 0) p.set('min', String(f.minFlights));
   if (state.viewMode === 'globe') p.set('view', 'globe');
   if (state.advisoriesEnabled) p.set('advisories', '1');
+  if (state.exploreTime === 'temporal') {
+    p.set('time', 'temporal');
+    if (state.temporalSel) selectionToParams(state.temporalSel, p);
+  }
   if (state.appMode === 'research') {
     p.set('mode', 'research');
     if (state.researchConfig) configToParams(state.researchConfig, p);
@@ -134,6 +148,12 @@ export function useUrlState(): void {
     }
     if (u.airport !== undefined && u.airport !== null) st.selectAirport(u.airport);
     if (u.advisories) st.setAdvisoriesEnabled(true);
+    if (u.exploreTime === 'temporal') {
+      if (u.temporal && u.temporal.cursorMs !== undefined) {
+        st.setTemporalSel({ ...defaultSelection({ startMs: u.temporal.cursorMs, endMs: u.temporal.cursorMs + 1 }), ...u.temporal });
+      }
+      st.setExploreTime('temporal');
+    }
     if (u.appMode === 'research') {
       st.setResearchConfig(sanitizeConfig(u.research ?? {}, configContext(network)).config);
       if (u.researchCompare) st.setResearchCompare({ enabled: true, ...u.researchCompare });

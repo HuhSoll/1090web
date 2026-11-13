@@ -20,8 +20,24 @@ export const THRESHOLD_PRESETS = [1, 4, 10, 30] as const;
 export const CLASSES: readonly AircraftClass[] = ['passenger', 'cargo', 'unknown'];
 export const REGIONS = ['AF', 'AS', 'EU', 'NA', 'OC', 'SA'] as const;
 
+/**
+ * A UTC time window [startMs, endMs) analysed instead of the calendar month (Phase 9B), built
+ * from the day files. `month` stays set (the month of the window start) for persistence and
+ * labels. preset / stepMs record how the window was chosen in the temporal view.
+ */
+export interface ResearchWindow {
+  startMs: number;
+  endMs: number;
+  /** 'start' = only flights whose reference time is the track start */
+  basis: 'all' | 'start';
+  preset: string;
+  stepMs: number;
+}
+
 export interface ResearchConfig {
   month: string;
+  /** null = the calendar month (monthly files); otherwise a time window */
+  window: ResearchWindow | null;
   /** ISO 3166-1 alpha-2, or null */
   country: string | null;
   /** continent code (AF, AS, EU, NA, OC, SA), or null; ignored when a country is set */
@@ -46,6 +62,7 @@ export interface ResearchConfig {
 export function defaultConfig(month: string): ResearchConfig {
   return {
     month,
+    window: null,
     country: null,
     region: null,
     airport: null,
@@ -64,7 +81,7 @@ export function defaultConfig(month: string): ResearchConfig {
 
 /** Fields that change the network (everything except how path measures are computed). */
 export const NETWORK_FIELDS = [
-  'month', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation',
+  'month', 'window', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation',
 ] as const satisfies readonly (keyof ResearchConfig)[];
 
 import type { StaticNetwork } from '../data/model/network';
@@ -101,6 +118,7 @@ export function sanitizeConfig(raw: Partial<ResearchConfig>, ctx: ConfigContext)
   const intIn = (lo: number, hi: number) => (v: unknown) => Number.isInteger(v) && (v as number) >= lo && (v as number) <= hi;
   const config: ResearchConfig = {
     month: pick('month', (v) => typeof v === 'string' && ctx.months.includes(v)),
+    window: pick('window', (v) => v === null || isWindow(v)),
     country: pick('country', (v) => v === null || (typeof v === 'string' && ctx.countries.has(v))),
     region: pick('region', (v) => v === null || (REGIONS as readonly unknown[]).includes(v)),
     airport: pick('airport', (v) => v === null || (typeof v === 'string' && ctx.airportIds.has(v))),
@@ -120,8 +138,19 @@ export function sanitizeConfig(raw: Partial<ResearchConfig>, ctx: ConfigContext)
 }
 
 /** Stable JSON (fixed key order) used for hashing and caching. */
+function isWindow(v: unknown): v is ResearchWindow {
+  const w = v as ResearchWindow;
+  return typeof w === 'object' && w !== null && Number.isFinite(w.startMs) && Number.isFinite(w.endMs) && w.endMs > w.startMs
+    && w.endMs - w.startMs <= 400 * 86_400_000 && (w.basis === 'all' || w.basis === 'start')
+    && typeof w.preset === 'string' && Number.isFinite(w.stepMs);
+}
+
+/**
+ * Stable JSON (fixed key order) used for hashing and caching. `window` is left out when null so
+ * monthly configs keep the hashes they had before time windows existed (Phase 8 exports).
+ */
 export function canonicalConfig(c: ResearchConfig): string {
-  const keys = Object.keys(defaultConfig('')).sort() as (keyof ResearchConfig)[];
+  const keys = (Object.keys(defaultConfig('')) as (keyof ResearchConfig)[]).filter((k) => k !== 'window' || c.window !== null).sort();
   return JSON.stringify(keys.map((k) => [k, c[k]]));
 }
 
@@ -153,7 +182,20 @@ const URL_KEYS: Record<string, keyof ResearchConfig> = {
   rp: 'minMonths', rt: 'tiers', rd: 'directed', rrel: 'relation', rb: 'pathMethod', rs: 'samples', rseed: 'seed',
 };
 
+const iso = (ms: number) => `${new Date(ms).toISOString().slice(0, 16)}Z`;
+const parseIso = (s: string | null) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})Z$/.exec(s ?? '');
+  return m ? Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!, +m[4]!, +m[5]!) : null;
+};
+
 export function configToParams(c: ResearchConfig, p: URLSearchParams): void {
+  if (c.window) {
+    p.set('rws', iso(c.window.startMs));
+    p.set('rwe', iso(c.window.endMs));
+    if (c.window.basis !== 'all') p.set('rwb', c.window.basis);
+    p.set('rwp', c.window.preset);
+    p.set('rwst', String(c.window.stepMs));
+  }
   const d = defaultConfig(c.month);
   for (const [param, key] of Object.entries(URL_KEYS)) {
     const v = c[key];
@@ -170,6 +212,11 @@ export function configFromParams(p: URLSearchParams): Partial<ResearchConfig> {
   const set = <K extends keyof ResearchConfig>(k: K, v: ResearchConfig[K]) => {
     out[k] = v;
   };
+  const ws = parseIso(p.get('rws'));
+  const we = parseIso(p.get('rwe'));
+  if (ws !== null && we !== null) {
+    out.window = { startMs: ws, endMs: we, basis: p.get('rwb') === 'start' ? 'start' : 'all', preset: p.get('rwp') ?? 'custom', stepMs: Number(p.get('rwst') ?? 86_400_000) };
+  }
   for (const [param, key] of Object.entries(URL_KEYS)) {
     const raw = p.get(param);
     if (raw === null) continue;

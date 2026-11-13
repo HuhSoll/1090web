@@ -4,9 +4,11 @@
  * Placeholders use {name} syntax. Research Mode strings live in researchMessages.ts.
  */
 import { researchEn, researchJa } from './researchMessages';
+import { temporalEn, temporalJa } from './temporalMessages';
 
 export const en = {
   ...researchEn,
+  ...temporalEn,
   'app.loading': 'Loading network…',
   'app.loadingMonth': 'Loading {month}…',
   'app.error.title': 'Could not load the network data',
@@ -178,6 +180,7 @@ export type Messages = Record<MessageKey, string>;
 
 export const ja: Messages = {
   ...researchJa,
+  ...temporalJa,
   'app.loading': 'ネットワークを読み込み中…',
   'app.loadingMonth': '{month} を読み込み中…',
   'app.error.title': 'ネットワークデータを読み込めませんでした',

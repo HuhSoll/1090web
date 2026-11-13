@@ -9,6 +9,7 @@ import type { StaticNetwork } from '../../data/model/network';
 import type { Comparison } from '../../domain/comparison';
 import { CompareAirport, CompareRoute, CompareSummary } from './ComparePanels';
 import { TemporalStats } from './TemporalStats';
+import { closeAirport } from '../../simulation/start';
 import { useActiveAdvisories } from '../../app/useAdvisories';
 import { advisoriesForCountry } from '../../domain/advisories';
 
@@ -227,6 +228,9 @@ function AirportDetail({
       <p className="muted small">
         {t('airport.coords')}: {airport.lat.toFixed(3)}, {airport.lon.toFixed(3)}
       </p>
+      {network.manifest.kind === 'observed' && (
+        <button type="button" className="pill-btn sim-quick" onClick={() => closeAirport(airport.id)}>{t('sim.quick')}</button>
+      )}
 
       {!comparison && <h3 className="section-title">{t(periodKey('airport.routeList'))}</h3>}
       {comparison ? null : routes.length === 0 ? (

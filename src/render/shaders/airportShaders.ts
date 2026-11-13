@@ -70,7 +70,10 @@ void main() {
 
   vec3 color;
   float strength;
-  if (vState >= 2.0) {
+  if (vState >= 3.5) {
+    color = vec3(1.0, 0.38, 0.28); // scenario target (simulation): warm red
+    strength = 1.4;
+  } else if (vState >= 2.0) {
     color = vec3(1.0, 0.80, 0.42); // selected / hovered: amber
     strength = 1.3;
   } else if (vState >= 1.0) {

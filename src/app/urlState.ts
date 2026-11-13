@@ -4,6 +4,8 @@ import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import { configContext, configFromParams, configToParams, sanitizeConfig, type ResearchConfig } from '../research/model';
 import { useAppStore, type AppMode, type ExploreTime, type ResearchCompare } from '../state/store';
 import { selectionFromParams, selectionToParams } from '../temporal/urlParams';
+import { scenarioFromParams, scenarioToParams } from '../simulation/urlParams';
+import type { SimulationScenario } from '../simulation/model';
 import { defaultSelection, type TemporalSelection } from '../temporal/window';
 
 /**
@@ -26,6 +28,7 @@ export interface UrlState {
   researchCompare?: Pick<ResearchCompare, 'field' | 'value'>;
   exploreTime?: ExploreTime;
   temporal?: Partial<TemporalSelection>;
+  simulation?: SimulationScenario | null;
 }
 
 const PASSTHROUGH = ['dataset', 'stress'] as const;
@@ -62,11 +65,13 @@ export function parseUrlState(search: string, network: StaticNetwork): UrlState 
     out.exploreTime = 'temporal';
     out.temporal = selectionFromParams(p);
   }
+  const sim = scenarioFromParams(p, network.manifest.datasetId ?? '');
+  if (sim) out.simulation = sim;
   if (p.get('mode') === 'research') {
     out.appMode = 'research';
     out.research = configFromParams(p);
     // rcmp=<field>:<value>, e.g. minFlights:10, month:2026-04, tiers:C, area:C:JP
-    const cmp = /^(month|minFlights|tiers|area):(.+)$/.exec(p.get('rcmp') ?? '');
+    const cmp = /^(month|minFlights|tiers|area|window|scenario):(.+)$/.exec(p.get('rcmp') ?? '');
     if (cmp) {
       const field = cmp[1] as ResearchCompare['field'];
       out.researchCompare = { field, value: field === 'minFlights' ? Number(cmp[2]) : cmp[2]! };
@@ -88,6 +93,8 @@ export interface SerializableState {
   researchCompare?: ResearchCompare;
   exploreTime?: ExploreTime;
   temporalSel?: TemporalSelection | null;
+  simOpen?: boolean;
+  simScenario?: SimulationScenario | null;
 }
 
 export function serializeUrlState(state: SerializableState, network: StaticNetwork, currentSearch: string): string {
@@ -120,6 +127,7 @@ export function serializeUrlState(state: SerializableState, network: StaticNetwo
     p.set('time', 'temporal');
     if (state.temporalSel) selectionToParams(state.temporalSel, p);
   }
+  if (state.simOpen && state.simScenario) scenarioToParams(state.simScenario, p);
   if (state.appMode === 'research') {
     p.set('mode', 'research');
     if (state.researchConfig) configToParams(state.researchConfig, p);
@@ -153,6 +161,10 @@ export function useUrlState(): void {
         st.setTemporalSel({ ...defaultSelection({ startMs: u.temporal.cursorMs, endMs: u.temporal.cursorMs + 1 }), ...u.temporal });
       }
       st.setExploreTime('temporal');
+    }
+    if (u.simulation) {
+      st.setSimScenario(u.simulation);
+      st.setSimOpen(true);
     }
     if (u.appMode === 'research') {
       st.setResearchConfig(sanitizeConfig(u.research ?? {}, configContext(network)).config);

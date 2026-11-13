@@ -10,6 +10,8 @@ export const AirportState = {
   Connected: 1,
   Selected: 2,
   Hovered: 3,
+  /** a scenario target (simulation): drawn larger in a warm red */
+  Marked: 4,
 } as const;
 
 /**
@@ -105,9 +107,10 @@ export class AirportLayer {
     return this.baseSizes[index] ?? 0;
   }
 
-  setStates(selected: number | null, hovered: number | null, connected: ReadonlySet<number> | null): void {
+  setStates(selected: number | null, hovered: number | null, connected: ReadonlySet<number> | null, marked: readonly number[] = []): void {
     this.states.fill(AirportState.Normal);
     if (connected) for (const i of connected) this.states[i] = AirportState.Connected;
+    for (const i of marked) this.states[i] = AirportState.Marked;
     if (hovered !== null) this.states[hovered] = AirportState.Hovered;
     if (selected !== null) this.states[selected] = AirportState.Selected;
     this.material.uniforms.uHasSelection!.value = selected !== null ? 1 : 0;

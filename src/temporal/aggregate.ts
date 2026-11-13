@@ -10,6 +10,7 @@
 import type { MonthData } from '../data/model/network';
 import type { MonthRecordTuple } from '../data/model/schema';
 import type { ResearchMonth } from '../research/data';
+import { affected, matchFlight, MATCH, type Disruption } from '../simulation/disruption';
 import { lowerBound, type DayEvents } from './model';
 import type { TimeBasisFilter, TimeWindow } from './window';
 
@@ -69,6 +70,34 @@ export interface AggregateResult {
   /** days in the window, the days with a file, the days loaded */
   days: string[];
   missingDays: string[];
+  /** Phase 9C: flights selected by the scenario (null without one) */
+  affected?: AggregateRows | null;
+  disruption?: DisruptionStats | null;
+}
+
+/**
+ * Flights of the window matched against a scenario (Phase 9C), from the flight records before any
+ * aggregation. Counts are observed flights selected as affected by the hypothetical disruption.
+ */
+export interface DisruptionStats {
+  proxy: 'endpoint' | 'reference';
+  /** affected flights under the chosen proxy (each flight once) */
+  affected: number;
+  /** affected flights by the flight's time basis: [TRACK_START, TRACK_END_FALLBACK] */
+  byBasis: [number, number];
+  /** matched by the departure side, the arrival side, a route suspension (a flight can have several) */
+  dep: number;
+  arr: number;
+  route: number;
+  /** touching a closed airport on a side without any time (kept, not counted as affected) */
+  undetermined: number;
+  /** the same selection with the other proxy, for comparison (null when unavailable) */
+  affectedReference: number;
+  affectedEndpoint: number | null;
+  /** affected flights per series bin */
+  series: number[];
+  /** days matched without track ends (reference proxy used for them) */
+  daysWithoutEndpoints: string[];
 }
 
 const N_CLASS = 3;
@@ -82,6 +111,10 @@ export class WindowAggregator {
   private readonly binFlights: number[];
   private readonly binRoutes: Set<number>[];
   private readonly binPartners: Set<number>[] | null;
+  private disruption: Disruption | null = null;
+  private proxy: 'endpoint' | 'reference' = 'endpoint';
+  private readonly affectedCounts = new Map<number, number>();
+  private stats: DisruptionStats | null = null;
 
   constructor(
     readonly window: TimeWindow,
@@ -115,12 +148,33 @@ export class WindowAggregator {
     return true;
   }
 
+  /**
+   * Matches every flight against a disruption while aggregating. The endpoint proxy needs days
+   * with track ends (attachEndpoints); without them the reference proxy is used and reported.
+   */
+  setDisruption(d: Disruption, proxy: 'endpoint' | 'reference'): void {
+    this.disruption = d;
+    this.proxy = proxy;
+    this.stats = {
+      proxy, affected: 0, byBasis: [0, 0], dep: 0, arr: 0, route: 0, undetermined: 0,
+      affectedReference: 0, affectedEndpoint: proxy === 'endpoint' ? 0 : null, series: this.binFlights.map(() => 0), daysWithoutEndpoints: [],
+    };
+  }
+
+  disruptionStats(): DisruptionStats | null {
+    return this.stats;
+  }
+
   /** Adds the part of a decoded day inside the window. */
   addDay(ev: DayEvents): void {
     const from = lowerBound(ev.timeMs, this.window.startMs);
     const to = lowerBound(ev.timeMs, this.window.endMs);
     const geo = this.geo;
     const airport = this.filter?.airport ?? null;
+    if (this.stats && this.proxy === 'endpoint' && !ev.endMs && from < to) {
+      this.stats.daysWithoutEndpoints.push(ev.day);
+      this.stats.affectedEndpoint = null;
+    }
     for (let i = from; i < to; i++) {
       const basis = ev.basis[i]!;
       if (basis === 0) this.trackStart++;
@@ -134,6 +188,26 @@ export class WindowAggregator {
       const k = this.key(route, dir, carrier, tier, cls);
       this.counts.set(k, (this.counts.get(k) ?? 0) + 1);
       this.flights++;
+      if (this.disruption && geo) {
+        const st = this.stats!;
+        const times = { refMs: ev.timeMs[i]!, basis, endMs: ev.endMs ? ev.endMs[i]! : NaN };
+        const ra = geo.a[route]!;
+        const rb = geo.b[route]!;
+        const ref = matchFlight(this.disruption, route, dir, ra, rb, times, 'reference');
+        const end = ev.endMs ? matchFlight(this.disruption, route, dir, ra, rb, times, 'endpoint') : null;
+        if (affected(ref)) st.affectedReference++;
+        if (end !== null && affected(end) && st.affectedEndpoint !== null) st.affectedEndpoint++;
+        const flags = this.proxy === 'endpoint' && end !== null ? end : ref;
+        if (affected(flags)) {
+          this.affectedCounts.set(k, (this.affectedCounts.get(k) ?? 0) + 1);
+          st.affected++;
+          st.byBasis[basis === 0 ? 0 : 1]++;
+          if (flags & MATCH.DEP) st.dep++;
+          if (flags & MATCH.ARR) st.arr++;
+          if (flags & MATCH.ROUTE) st.route++;
+          st.series[Math.floor((ev.timeMs[i]! - this.window.startMs) / this.binMs)]!++;
+        } else if (flags & MATCH.UNDETERMINED) st.undetermined++;
+      }
       if (this.passesSeries(route, carrier, tier, cls)) {
         const bin = Math.floor((ev.timeMs[i]! - this.window.startMs) / this.binMs);
         this.binFlights[bin]!++;
@@ -149,7 +223,16 @@ export class WindowAggregator {
   }
 
   rows(): AggregateRows {
-    const keys = [...this.counts.keys()].sort((x, y) => x - y);
+    return this.rowsOf(this.counts);
+  }
+
+  /** The flights selected by the disruption, in the same row layout (empty without one). */
+  affectedRows(): AggregateRows {
+    return this.rowsOf(this.affectedCounts);
+  }
+
+  private rowsOf(counts: Map<number, number>): AggregateRows {
+    const keys = [...counts.keys()].sort((x, y) => x - y);
     const n = keys.length;
     const r: AggregateRows = {
       size: n,
@@ -161,7 +244,7 @@ export class WindowAggregator {
       count: new Int32Array(n),
     };
     keys.forEach((k, i) => {
-      r.count[i] = this.counts.get(k)!;
+      r.count[i] = counts.get(k)!;
       r.cls[i] = k % N_CLASS;
       let rest = Math.floor(k / N_CLASS);
       r.tier[i] = (rest % N_TIER) + 1;
@@ -230,4 +313,30 @@ export function toResearchMonth(rows: AggregateRows, carriers: readonly string[]
     target[i] = rows.count[i]!;
   }
   return m;
+}
+
+/** rows minus affected rows (same keys; rows with nothing left are dropped). Inputs are not changed. */
+export function subtractRows(all: AggregateRows, minus: AggregateRows): AggregateRows {
+  const sub = new Map<string, number>();
+  for (let i = 0; i < minus.size; i++) {
+    sub.set(`${minus.route[i]},${minus.dir[i]},${minus.carrier[i]},${minus.tier[i]},${minus.cls[i]}`, minus.count[i]!);
+  }
+  const keep: number[] = [];
+  const counts: number[] = [];
+  for (let i = 0; i < all.size; i++) {
+    const c = all.count[i]! - (sub.get(`${all.route[i]},${all.dir[i]},${all.carrier[i]},${all.tier[i]},${all.cls[i]}`) ?? 0);
+    if (c < 0) throw new Error('affected flights exceed observed flights');
+    if (c > 0) {
+      keep.push(i);
+      counts.push(c);
+    }
+  }
+  const pick = <T extends Int32Array | Uint8Array>(a: T): T => {
+    const out = new (a.constructor as new (n: number) => T)(keep.length);
+    keep.forEach((src, k) => {
+      out[k] = a[src]!;
+    });
+    return out;
+  };
+  return { size: keep.length, route: pick(all.route), dir: pick(all.dir), carrier: pick(all.carrier), tier: pick(all.tier), cls: pick(all.cls), count: Int32Array.from(counts) };
 }

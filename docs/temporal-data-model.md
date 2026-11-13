@@ -103,6 +103,15 @@ const month = windowAsResearchMonth(sel, carrierIds, '2026-03-10T12/18');
 - `TemporalLoader.window()` で1つの窓に読み込む日数の上限は 10 日です。
 - Phase 9B からは、画面での集計は Web Worker の `WindowAggregator`（`src/temporal/aggregate.ts`）が1日ずつ足し込むので、期間の長さに上限はありません（3月の31日分が月次データと一致することをテストで確認）。使い方は [temporal-explorer.md](temporal-explorer.md)。
 
+### 到着側の時刻（Phase 9C、`endpoints/YYYY-MM-DD.json`）
+
+日別ファイルと同じ順序で、各便の航跡終了を持つ補助ファイルです（`pipeline/temporal_endpoints.py`、研究用 Parquet から生成）。
+
+- `e[i]`：便 i の基準時刻の分から航跡終了の分までの分数（各時刻を分単位で切り捨て）。−1 は不明（基準時刻が航跡終了＝開始時刻なし、終了時刻なし、終了が開始より前）。
+- 生成時に全日について、日別ファイルの便の並び（路線・分・航空会社・区分）との一致を照合します。すべての公開項目が同じ便は区別できないため、値を昇順に割り当てます。
+- ブラウザは `attachEndpoints()` で、時刻順に並べ替えた便に対応づけます（`DayEvents.endMs`）。
+- 容量：77.7 MB（gzip 26.7 MB）。時刻照合のシミュレーションで空港を停止するときだけ読み込みます。
+
 ## 6. 品質情報
 
 - `index.json` の各日：便数、1時間ごとの便数、大陸別の便数、Phase 6B の判定（少ない／多い、範囲、根拠、全世界の比率、ギャップ時間）。

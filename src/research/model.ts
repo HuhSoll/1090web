@@ -34,8 +34,23 @@ export interface ResearchWindow {
   stepMs: number;
 }
 
+/**
+ * A simulation scenario applied to the analysed network (Phase 9C). Only what changes the network
+ * is kept here; the full scenario lives in src/simulation (JSON files carry both).
+ */
+export interface ResearchScenario {
+  model: 'structural' | 'temporal';
+  /** structural: events in effect at this instant (null = all enabled events) */
+  evaluationTime: string | null;
+  timeProxy: 'endpoint' | 'reference';
+  events: SimulationEvent[];
+  name: string;
+}
+
 export interface ResearchConfig {
   month: string;
+  /** null = the observed network; otherwise the simulated network of this scenario */
+  scenario: ResearchScenario | null;
   /** null = the calendar month (monthly files); otherwise a time window */
   window: ResearchWindow | null;
   /** ISO 3166-1 alpha-2, or null */
@@ -62,6 +77,7 @@ export interface ResearchConfig {
 export function defaultConfig(month: string): ResearchConfig {
   return {
     month,
+    scenario: null,
     window: null,
     country: null,
     region: null,
@@ -81,10 +97,11 @@ export function defaultConfig(month: string): ResearchConfig {
 
 /** Fields that change the network (everything except how path measures are computed). */
 export const NETWORK_FIELDS = [
-  'month', 'window', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation',
+  'month', 'window', 'scenario', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation',
 ] as const satisfies readonly (keyof ResearchConfig)[];
 
 import type { StaticNetwork } from '../data/model/network';
+import { eventsFromParam, eventsToParam, type SimulationEvent } from '../simulation/model';
 
 export interface ConfigContext {
   months: readonly string[];
@@ -119,6 +136,7 @@ export function sanitizeConfig(raw: Partial<ResearchConfig>, ctx: ConfigContext)
   const config: ResearchConfig = {
     month: pick('month', (v) => typeof v === 'string' && ctx.months.includes(v)),
     window: pick('window', (v) => v === null || isWindow(v)),
+    scenario: pick('scenario', (v) => v === null || isScenario(v)),
     country: pick('country', (v) => v === null || (typeof v === 'string' && ctx.countries.has(v))),
     region: pick('region', (v) => v === null || (REGIONS as readonly unknown[]).includes(v)),
     airport: pick('airport', (v) => v === null || (typeof v === 'string' && ctx.airportIds.has(v))),
@@ -137,7 +155,14 @@ export function sanitizeConfig(raw: Partial<ResearchConfig>, ctx: ConfigContext)
   return { config, dropped };
 }
 
-/** Stable JSON (fixed key order) used for hashing and caching. */
+function isScenario(v: unknown): v is ResearchScenario {
+  const x = v as ResearchScenario;
+  return typeof x === 'object' && x !== null && (x.model === 'structural' || x.model === 'temporal')
+    && (x.timeProxy === 'endpoint' || x.timeProxy === 'reference') && Array.isArray(x.events) && x.events.length <= 500
+    && x.events.every((e) => e && typeof e === 'object' && typeof e.eventType === 'string' && Array.isArray(e.targetIds))
+    && (x.evaluationTime === null || typeof x.evaluationTime === 'string') && typeof x.name === 'string';
+}
+
 function isWindow(v: unknown): v is ResearchWindow {
   const w = v as ResearchWindow;
   return typeof w === 'object' && w !== null && Number.isFinite(w.startMs) && Number.isFinite(w.endMs) && w.endMs > w.startMs
@@ -150,8 +175,16 @@ function isWindow(v: unknown): v is ResearchWindow {
  * monthly configs keep the hashes they had before time windows existed (Phase 8 exports).
  */
 export function canonicalConfig(c: ResearchConfig): string {
-  const keys = (Object.keys(defaultConfig('')) as (keyof ResearchConfig)[]).filter((k) => k !== 'window' || c.window !== null).sort();
-  return JSON.stringify(keys.map((k) => [k, c[k]]));
+  const keys = (Object.keys(defaultConfig('')) as (keyof ResearchConfig)[])
+    .filter((k) => (k !== 'window' || c.window !== null) && (k !== 'scenario' || c.scenario !== null)).sort();
+  return JSON.stringify(keys.map((k) => [k, k === 'scenario' && c.scenario ? scenarioKey(c.scenario) : c[k]]));
+}
+
+/** Result-relevant part of a scenario: enabled events, sorted (ids and names left out). */
+function scenarioKey(x: ResearchScenario) {
+  return [x.model, x.model === 'structural' ? x.evaluationTime : null, x.model === 'temporal' ? x.timeProxy : null,
+    x.events.filter((e) => e.enabled).map((e) => JSON.stringify([e.eventType === 'MULTIPLE_AIRPORT_CLOSURE' ? 'AIRPORT_CLOSURE' : e.eventType,
+      e.startTimeUtc, e.endTimeUtc, e.targetType, [...e.targetIds].sort(), e.direction])).sort()];
 }
 
 /** FNV-1a 32-bit hash of the canonical config (identifier, not a security measure). */
@@ -189,6 +222,15 @@ const parseIso = (s: string | null) => {
 };
 
 export function configToParams(c: ResearchConfig, p: URLSearchParams): void {
+  if (c.scenario) {
+    const ev = eventsToParam(c.scenario.events);
+    if (ev !== null) {
+      p.set('rsm', c.scenario.model);
+      p.set('rse', ev);
+      if (c.scenario.evaluationTime) p.set('rst', c.scenario.evaluationTime);
+      if (c.scenario.timeProxy !== 'endpoint') p.set('rsp', c.scenario.timeProxy);
+    }
+  }
   if (c.window) {
     p.set('rws', iso(c.window.startMs));
     p.set('rwe', iso(c.window.endMs));
@@ -212,6 +254,11 @@ export function configFromParams(p: URLSearchParams): Partial<ResearchConfig> {
   const set = <K extends keyof ResearchConfig>(k: K, v: ResearchConfig[K]) => {
     out[k] = v;
   };
+  const sm = p.get('rsm');
+  const se = p.get('rse');
+  if ((sm === 'structural' || sm === 'temporal') && se) {
+    out.scenario = { model: sm, events: eventsFromParam(se), evaluationTime: p.get('rst'), timeProxy: p.get('rsp') === 'reference' ? 'reference' : 'endpoint', name: '' };
+  }
   const ws = parseIso(p.get('rws'));
   const we = parseIso(p.get('rwe'));
   if (ws !== null && we !== null) {

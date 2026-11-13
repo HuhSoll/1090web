@@ -30,6 +30,8 @@ export interface GlobeSelectionInput {
   highlightedRoutes: readonly { routeId: number; weight: number }[];
   /** Route drawn in the focus colour (hovered or selected route). */
   focusRoute: number | null;
+  /** Airports marked as scenario targets (simulation). */
+  markedAirports?: readonly number[];
 }
 
 export type PickHit = { kind: 'airport'; index: number } | { kind: 'route'; routeId: number };
@@ -294,8 +296,10 @@ export class GlobeRenderer {
       sel.selectedAirport,
       sel.hoveredAirport,
       sel.selectedAirport !== null || sel.focusRoute !== null ? connectedAirports : null,
+      sel.markedAirports ?? [],
     );
     this.pinnedAirports = new Set(connectedAirports);
+    for (const i of sel.markedAirports ?? []) this.pinnedAirports.add(i);
     if (sel.selectedAirport !== null) this.pinnedAirports.add(sel.selectedAirport);
     if (sel.hoveredAirport !== null) this.pinnedAirports.add(sel.hoveredAirport);
     this.declutterPending = true;

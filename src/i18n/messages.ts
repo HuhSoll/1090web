@@ -5,10 +5,12 @@
  */
 import { researchEn, researchJa } from './researchMessages';
 import { temporalEn, temporalJa } from './temporalMessages';
+import { simulationEn, simulationJa } from './simulationMessages';
 
 export const en = {
   ...researchEn,
   ...temporalEn,
+  ...simulationEn,
   'app.loading': 'Loading network…',
   'app.loadingMonth': 'Loading {month}…',
   'app.error.title': 'Could not load the network data',
@@ -181,6 +183,7 @@ export type Messages = Record<MessageKey, string>;
 export const ja: Messages = {
   ...researchJa,
   ...temporalJa,
+  ...simulationJa,
   'app.loading': 'ネットワークを読み込み中…',
   'app.loadingMonth': '{month} を読み込み中…',
   'app.error.title': 'ネットワークデータを読み込めませんでした',

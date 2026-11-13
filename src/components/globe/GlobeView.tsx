@@ -12,7 +12,18 @@ interface Props {
   view: NetworkView | null;
   /** When comparing months, routes are weighted by the larger month and coloured by change. */
   comparison: Comparison | null;
+  /** Simulation: scenario targets, directly suspended routes, an alternative path to highlight. */
+  marks?: SimMarks | null;
 }
+
+export interface SimMarks {
+  airports: readonly number[];
+  suspendedRoutes: readonly number[];
+  pathRoutes: readonly number[];
+}
+
+/** Directly suspended routes (scenario targets): warm amber, solid. Lost connections stay dashed orange. */
+const SUSPENDED_COLOR = '#ffd27a';
 
 /** Thick-line colours for new / no-longer-seen routes; match the route shader's compare branch. */
 const NEW_COLOR = '#ccffe6';
@@ -24,7 +35,7 @@ const logNorm = (v: number, max: number) => (v > 0 && max > 0 ? Math.log1p(v) / 
  * React bridge for the imperative GlobeRenderer. React owns state; the renderer only receives
  * typed arrays and selection descriptors, and reports picks back through callbacks.
  */
-export function GlobeView({ view: monthView, comparison }: Props) {
+export function GlobeView({ view: monthView, comparison, marks = null }: Props) {
   const hiddenKinds = useAppStore((s) => s.compareHiddenKinds);
   const view = useMemo(
     () => (comparison ? comparisonAsView(comparison, hiddenKinds) : monthView),
@@ -126,9 +137,11 @@ export function GlobeView({ view: monthView, comparison }: Props) {
     for (let i = 0; i < rw.length; i++) rw[i] = logNorm(view.routeFlights[i]!, view.maxRouteFlights);
     const aw = new Float32Array(view.airportFlights.length);
     for (let i = 0; i < aw.length; i++) aw[i] = logNorm(view.airportFlights[i]!, view.maxAirportFlights);
+    // scenario targets stay visible even when they have no flights left
+    for (const i of marks?.airports ?? []) aw[i] = Math.max(aw[i]!, 0.35);
     const connectedIds = connected ? new Set(connected.map((c) => c.routeId)) : null;
     r.setWeights(rw, aw, connectedIds, comparison ? comparison.kind : null);
-  }, [network, view, connected, comparison]);
+  }, [network, view, connected, comparison, marks]);
 
   // 3b. Notable (highest-volume) routes get slightly thicker lines.
   useEffect(() => {
@@ -136,8 +149,13 @@ export function GlobeView({ view: monthView, comparison }: Props) {
     if (!r || !network || !view) return;
     // In compare mode the thick lines go to the busiest new / no-longer-seen routes, which are
     // otherwise easy to miss among thousands of thin lines.
+    const suspended = (marks?.suspendedRoutes ?? []).map((routeId) => ({ routeId, weight: 0.8, color: SUSPENDED_COLOR }));
     r.setNotableRoutes(
-      comparison
+      suspended.length || marks
+        ? [...suspended, ...(comparison ? standoutChanges(comparison, hiddenKinds).filter((c) => !marks?.suspendedRoutes.includes(c.routeId)).map(({ routeId }) => ({
+            routeId, weight: logNorm(comparison.weight[routeId]!, comparison.maxWeight), color: GONE_COLOR, dashed: true,
+          })) : [])]
+        : comparison
         ? standoutChanges(comparison, hiddenKinds).map(({ routeId, kind }) => ({
             routeId,
             weight: logNorm(comparison.weight[routeId]!, comparison.maxWeight),
@@ -146,7 +164,7 @@ export function GlobeView({ view: monthView, comparison }: Props) {
           }))
         : notableRoutes(view).map((n) => ({ routeId: n.routeId, weight: logNorm(n.flights, view.maxRouteFlights) })),
     );
-  }, [network, view, comparison, hiddenKinds]);
+  }, [network, view, comparison, hiddenKinds, marks]);
 
   // 4. Selection / hover.
   const hoveredAirport = hover?.kind === 'airport' ? hover.id : null;
@@ -154,17 +172,18 @@ export function GlobeView({ view: monthView, comparison }: Props) {
   useEffect(() => {
     const r = rendererRef.current;
     if (!r || !view) return;
-    const highlighted = (connected ?? []).map((c) => ({
-      routeId: c.routeId,
-      weight: logNorm(c.flights, view.maxRouteFlights),
-    }));
+    const path = marks?.pathRoutes ?? [];
+    const highlighted = path.length
+      ? path.map((routeId) => ({ routeId, weight: 1 }))
+      : (connected ?? []).map((c) => ({ routeId: c.routeId, weight: logNorm(c.flights, view.maxRouteFlights) }));
     r.setSelection({
       selectedAirport,
       hoveredAirport,
       highlightedRoutes: highlighted,
       focusRoute: listHoverRoute ?? hoveredRoute ?? selectedRoute,
+      markedAirports: marks?.airports ?? [],
     });
-  }, [view, connected, selectedAirport, hoveredAirport, hoveredRoute, listHoverRoute, selectedRoute]);
+  }, [view, connected, selectedAirport, hoveredAirport, hoveredRoute, listHoverRoute, selectedRoute, marks]);
 
   // Safety-advisory overlay: tint countries with an advisory in effect this month.
   const activeAdvisories = useActiveAdvisories();

@@ -70,6 +70,37 @@ export interface DayEvents {
   tier: Uint8Array;
   /** 0 TRACK_START, 1 TRACK_END_FALLBACK */
   basis: Uint8Array;
+  /** position of each event in the day file (the decoder sorts by time) */
+  src?: Int32Array;
+  /**
+   * Track end (UTC ms, minute precision) where known; NaN when unknown. Only present after
+   * attachEndpoints (Phase 9C endpoint files). For TRACK_END_FALLBACK events it is timeMs.
+   */
+  endMs?: Float64Array;
+}
+
+/** Phase 9C endpoint file: minutes from the reference minute to the track-end minute, -1 = unknown. */
+export interface EndpointFile {
+  schemaVersion: number;
+  day: string;
+  n: number;
+  e: number[];
+}
+
+/** Adds the track end of each event (file order -> the decoder's time order). */
+export function attachEndpoints(ev: DayEvents, f: EndpointFile): DayEvents {
+  if (f.schemaVersion !== 1) throw new Error(`unsupported endpoint schema ${f.schemaVersion}`);
+  if (f.day !== ev.day || f.n !== ev.size || f.e.length !== ev.size || !ev.src) throw new Error(`endpoints for ${f.day} do not match the day file`);
+  const endMs = new Float64Array(ev.size);
+  for (let k = 0; k < ev.size; k++) {
+    if (ev.basis[k] === 1) {
+      endMs[k] = ev.timeMs[k]!;
+      continue;
+    }
+    const v = f.e[ev.src[k]!]!;
+    endMs[k] = v >= 0 ? ev.timeMs[k]! + v * 60_000 : NaN;
+  }
+  return { ...ev, endMs };
 }
 
 export function dayStartMs(day: string): number {
@@ -115,6 +146,7 @@ export function decodeDay(f: DayFile): DayEvents {
     aircraftClass: new Uint8Array(n),
     tier: new Uint8Array(n),
     basis: new Uint8Array(n),
+    src: Int32Array.from(order),
   };
   order.forEach((src, k) => {
     ev.timeMs[k] = base + minute[src]! * 60_000;

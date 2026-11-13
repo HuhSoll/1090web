@@ -32,6 +32,18 @@
 
 使い方は [docs/temporal-explorer.md](docs/temporal-explorer.md)、データ形式は [docs/temporal-data-model.md](docs/temporal-data-model.md) にあります。
 
+## シミュレーション
+
+空港や路線が使えなくなったと仮定して、ネットワークのつながりがどう変わるかを調べられます。空港の詳細パネルの「この空港の停止をシミュレーション」か、上部の「シミュレーション」から始めます。
+
+- 複数の空港、路線（片方向・双方向）を停止し、開始・終了の日時（UTC）を指定できます
+- 「構造」は期間中ずっと使えないと仮定した分析、「時刻照合」は便の記録の時刻が停止の時間に入るものだけを除く分析です（出発は航跡開始、到着は航跡終了で判定）
+- 基準の期間を固定するか、時間窓の表示に連動させるかを選べます
+- 失われた接続、ほかの空港への波及（2・3ホップ以内の到達、ネットワーク効率）、空港ごとの影響、代替経路を表示し、地図・地球儀に重ねます
+- シナリオは JSON で保存・共有でき、結果は CSV・JSON で出力、研究モードで中心性を比較できます
+
+結果は観測された ADS-B のネットワークの構造分析で、欠航数や運航の予測ではありません。使い方は [docs/simulation-guide.md](docs/simulation-guide.md)、計算方法は [docs/simulation-methodology.md](docs/simulation-methodology.md) にあります。
+
 値はすべて ADS-B で観測できた便のネットワークの構造指標で、旅客数や経済的な重要度ではありません。指標の定義は [docs/research-methodology.md](docs/research-methodology.md)、外部統計との照合は [docs/phase7-report.md](docs/phase7-report.md) にあります。
 
 

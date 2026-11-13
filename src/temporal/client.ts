@@ -4,6 +4,7 @@
  * by window, time basis, bin size and series filter.
  */
 import type { StaticNetwork } from '../data/model/network';
+import type { DisruptionWire } from '../simulation/disruption';
 import type { AggregateResult, RouteGeo, SeriesFilter } from './aggregate';
 import type { TimeBasisFilter, TimeWindow } from './window';
 
@@ -19,6 +20,8 @@ export interface AggregateRequest {
   basis: TimeBasisFilter;
   binMs: number;
   filter: SeriesFilter | null;
+  /** Phase 9C: match the flight records against a scenario (key = canonical form, for caching) */
+  disruption?: { wire: DisruptionWire; proxy: 'endpoint' | 'reference'; key: string } | null;
 }
 
 export type AggregateResponse = AggregateResult & { elapsedMs: number; daysRead: number; fromCache: boolean };
@@ -26,7 +29,7 @@ export type AggregateResponse = AggregateResult & { elapsedMs: number; daysRead:
 type Pending = { id: number; resolve: (r: AggregateResponse) => void; reject: (e: Error) => void; onProgress?: (done: number, total: number) => void; key: string };
 
 export function requestKey(r: AggregateRequest): string {
-  return JSON.stringify([r.window.startMs, r.window.endMs, r.basis, r.binMs, r.filter]);
+  return JSON.stringify([r.window.startMs, r.window.endMs, r.basis, r.binMs, r.filter, r.disruption ? [r.disruption.key, r.disruption.proxy] : null]);
 }
 
 /** Country -> index, in order of first appearance among the airports. */

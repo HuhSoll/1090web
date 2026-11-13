@@ -6,7 +6,10 @@ import { useAppStore, type ResearchCompare } from '../state/store';
 import { airportContinents, mergeMonth, ResearchLoader, type ResearchMeta, type ResearchMonth } from './data';
 import { CancelledError, MetricsClient } from './metricsClient';
 import { canonicalConfig, configHash, type ResearchConfig, type ResearchWindow } from './model';
-import { toResearchMonth } from '../temporal/aggregate';
+import { subtractRows, toResearchMonth } from '../temporal/aggregate';
+import { applyStructuralResearch, networkIndex, resolveDisruption, scenarioContext, structuralState, toWire } from '../simulation/disruption';
+import { canonicalScenario, newScenario, parseIsoUtc } from '../simulation/model';
+import type { ResearchScenario } from './model';
 import { SupersededError } from '../temporal/client';
 import { getTemporalClient, loadTemporalMeta, windowDays, windowLabel } from '../temporal/useTemporal';
 import { clampWindow, DAY_MS } from '../temporal/window';
@@ -52,17 +55,49 @@ function channelOf(c: MetricsClient): string {
  * A time window as Research Mode input, aggregated from the day files in the temporal worker.
  * Windows outside the data give an empty month (allowEmpty, for the 'previous period' column).
  */
-function loadWindowMonth(network: StaticNetwork, w: ResearchWindow, channel: string, allowEmpty = false): Promise<ResearchMonth | null> {
+function loadWindowMonth(network: StaticNetwork, w: ResearchWindow, channel: string, allowEmpty = false, scenario: ResearchScenario | null = null): Promise<ResearchMonth | null> {
   return loadTemporalMeta().then((meta) => {
     const c = clampWindow(w, meta.range);
     if (!c) {
       if (allowEmpty) return null;
       throw new Error('window outside the data');
     }
+    const temporal = scenario?.model === 'temporal' ? scenarioDisruption(network, scenario, meta.index.datasetVersion, meta.range) : null;
+    const disruption = temporal ? { wire: toWire(temporal), proxy: scenario!.timeProxy, key: researchScenarioKey(scenario!) } : null;
     return getTemporalClient(network)
-      .aggregate(channel, { window: c.window, basis: w.basis, binMs: DAY_MS, filter: null })
-      .then((r) => toResearchMonth(r.rows, network.carriers.map((x) => x.id), windowLabel(c.window), windowDays(c.window)));
+      .aggregate(channel, { window: c.window, basis: w.basis, binMs: DAY_MS, filter: null, disruption })
+      .then((r) => {
+        const rows = r.affected ? subtractRows(r.rows, r.affected) : r.rows;
+        const m = toResearchMonth(rows, network.carriers.map((x) => x.id), windowLabel(c.window), windowDays(c.window));
+        return scenario?.model === 'structural' ? applyStructural(network, m, scenario, c.window, meta.index.datasetVersion, meta.range) : m;
+      });
   });
+}
+
+/** Simulated networks in Research Mode (Phase 9C): the same application code as the simulation. */
+function scenarioDisruption(network: StaticNetwork, s: ResearchScenario, version: string | null, range: { startMs: number; endMs: number }) {
+  return resolveDisruption(s.events, networkIndex(network), scenarioContext(network, version, range.startMs, range.endMs));
+}
+
+function researchScenarioKey(s: ResearchScenario): string {
+  const x = newScenario('', null, 0, 1);
+  return canonicalScenario({ ...x, simulationModel: s.model, events: s.events, evaluationTime: s.evaluationTime, filters: { ...x.filters, timeProxy: s.timeProxy } });
+}
+
+function applyStructural(network: StaticNetwork, m: ResearchMonth, s: ResearchScenario, w: { startMs: number; endMs: number }, version: string | null, range: { startMs: number; endMs: number }): ResearchMonth {
+  const d = scenarioDisruption(network, s, version, range);
+  const at = parseIsoUtc(s.evaluationTime);
+  const st = structuralState(d, at === null ? { window: { s: w.startMs, e: w.endMs } } : { at });
+  return applyStructuralResearch(m, st, (rid) => [network.routes[rid]!.a, network.routes[rid]!.b]);
+}
+
+/** A calendar month with a structural scenario (monthly data; the month is the period). */
+function withScenario(network: StaticNetwork, m: Promise<ResearchMonth>, s: ResearchScenario | null, month: string): Promise<ResearchMonth> {
+  if (!s) return m;
+  if (s.model === 'temporal') return Promise.reject(new Error('a temporal scenario needs a time window'));
+  const start = Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)) - 1, 1);
+  const end = Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)), 1);
+  return Promise.all([m, loadTemporalMeta()]).then(([x, meta]) => applyStructural(network, x, s, { startMs: start, endMs: end }, meta.index.datasetVersion, meta.range));
 }
 
 export type MetaState = { state: 'loading' } | { state: 'error'; message: string } | { state: 'ready'; meta: ResearchMeta };
@@ -119,8 +154,9 @@ export function useAnalysis(config: ResearchConfig | null, meta: ResearchMeta | 
       persistence: meta.persistence,
     };
     const current: Promise<ResearchMonth> = w
-      ? loadWindowMonth(network, w, `${channel}:current`).then((m) => m!) // throws instead of returning null
-      : loadResearchMonth(network, config.month);
+      ? loadWindowMonth(network, w, `${channel}:current`, false, config.scenario).then((m) => m!) // throws instead of returning null
+      : withScenario(network, loadResearchMonth(network, config.month), config.scenario, config.month);
+    // the previous period is the observed network (route changes are against what was flown)
     const previous = w ? loadWindowMonth(network, prevWindow!, `${channel}:previous`, true) : previousMonth ? loadResearchMonth(network, previousMonth) : Promise.resolve(null);
     Promise.all([current, previous])
       .then(([month, prev]) => {
@@ -184,6 +220,8 @@ export function compareConfig(base: ResearchConfig | null, cmp: ResearchCompare)
       const shift = cmp.value === 'previous' ? len : cmp.value === 'day' ? 86_400_000 : cmp.value === 'week' ? 7 * 86_400_000 : 0;
       return shift ? { ...base, window: { ...base.window, startMs: base.window.startMs - shift, endMs: base.window.endMs - shift } } : null;
     }
+    case 'scenario':
+      return base.scenario && cmp.value === 'off' ? { ...base, scenario: null } : null;
     case 'area': {
       const v = String(cmp.value);
       const next = v.startsWith('C:') ? { ...base, country: v.slice(2), region: null } : v.startsWith('R:') ? { ...base, country: null, region: v.slice(2) } : null;

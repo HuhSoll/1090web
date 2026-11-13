@@ -1,3 +1,6 @@
+import type { SimulationOutput } from '../simulation/engine';
+import type { ImpactResult } from '../simulation/impact';
+import type { SimulationScenario } from '../simulation/model';
 import { create } from 'zustand';
 import type { MonthData, StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
@@ -35,9 +38,23 @@ export interface TemporalResultInfo {
 }
 
 export type AppMode = 'explore' | 'research';
+
+/** Phase 9C simulation (see src/simulation). */
+export type SimView = 'after' | 'before' | 'overlay';
+export type SimStatus =
+  | { state: 'idle' }
+  /** previous: the last result, kept on the map only (never shown as the current numbers) */
+  | { state: 'loading'; done: number; total: number; previous: SimulationOutput | null }
+  | { state: 'ready'; output: SimulationOutput }
+  | { state: 'error'; message: string };
+export type SimImpactState =
+  | { state: 'idle' }
+  | { state: 'running'; key: string; done: number; total: number }
+  | { state: 'ready'; key: string; result: ImpactResult }
+  | { state: 'error'; key: string; message: string };
 export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'export';
 /** What the comparison changes: exactly one condition at a time. */
-export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area' | 'window';
+export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area' | 'window' | 'scenario';
 export interface ResearchCompare {
   enabled: boolean;
   field: CompareField;
@@ -107,6 +124,17 @@ interface AppState {
   temporalSel: TemporalSelection | null;
   temporalPlaying: boolean;
   temporalStatus: TemporalStatus;
+  simOpen: boolean;
+  simScenario: SimulationScenario | null;
+  simView: SimView;
+  simStatus: SimStatus;
+  simImpact: SimImpactState;
+  /** airport pair (global indices) whose alternative paths are shown */
+  simPair: [number, number] | null;
+  /** run the connectivity analysis automatically (not during playback) */
+  simAutoImpact: boolean;
+  /** route ids drawn as an alternative path */
+  simPathRoutes: number[];
 
   setLocale: (l: Locale) => void;
   setStatus: (s: LoadStatus) => void;
@@ -145,6 +173,15 @@ interface AppState {
   patchTemporalSel: (s: Partial<TemporalSelection>) => void;
   setTemporalPlaying: (v: boolean) => void;
   setTemporalStatus: (s: TemporalStatus) => void;
+  setSimOpen: (open: boolean) => void;
+  setSimScenario: (s: SimulationScenario | null) => void;
+  patchSimScenario: (p: Partial<SimulationScenario>) => void;
+  setSimView: (v: SimView) => void;
+  setSimStatus: (s: SimStatus) => void;
+  setSimImpact: (s: SimImpactState) => void;
+  setSimPair: (p: [number, number] | null) => void;
+  setSimAutoImpact: (v: boolean) => void;
+  setSimPathRoutes: (r: number[]) => void;
 }
 
 const LOCALE_KEY = '1090web.locale';
@@ -212,6 +249,14 @@ export const useAppStore = create<AppState>((set) => ({
   temporalSel: null,
   temporalPlaying: false,
   temporalStatus: { state: 'idle' },
+  simOpen: false,
+  simScenario: null,
+  simView: 'overlay',
+  simStatus: { state: 'idle' },
+  simImpact: { state: 'idle' },
+  simPair: null,
+  simAutoImpact: true,
+  simPathRoutes: [],
 
   setLocale: (locale) => {
     try {
@@ -281,4 +326,14 @@ export const useAppStore = create<AppState>((set) => ({
   patchTemporalSel: (p) => set((s) => (s.temporalSel ? { temporalSel: { ...s.temporalSel, ...p } } : s)),
   setTemporalPlaying: (temporalPlaying) => set({ temporalPlaying }),
   setTemporalStatus: (temporalStatus) => set({ temporalStatus }),
+  // closing the simulation drops its results: the map returns to the observed network
+  setSimOpen: (simOpen) => set(simOpen ? { simOpen } : { simOpen, simStatus: { state: 'idle' }, simImpact: { state: 'idle' }, simPair: null, simPathRoutes: [] }),
+  setSimScenario: (simScenario) => set({ simScenario }),
+  patchSimScenario: (p) => set((s) => (s.simScenario ? { simScenario: { ...s.simScenario, ...p } } : s)),
+  setSimView: (simView) => set({ simView }),
+  setSimStatus: (simStatus) => set({ simStatus }),
+  setSimImpact: (simImpact) => set({ simImpact }),
+  setSimPair: (simPair) => set({ simPair }),
+  setSimAutoImpact: (simAutoImpact) => set({ simAutoImpact }),
+  setSimPathRoutes: (simPathRoutes) => set({ simPathRoutes }),
 }));

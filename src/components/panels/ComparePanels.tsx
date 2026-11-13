@@ -63,6 +63,36 @@ export function CompareLegend({ comparison }: { comparison: Comparison }) {
   );
 }
 
+/** Simulation legend (Phase 9C): what each line and point means; lines can be hidden like in compare mode. */
+export function SimLegend({ comparison, temporal }: { comparison: Comparison | null; temporal: boolean }) {
+  const { t, number } = useI18n();
+  const hidden = useAppStore((s) => s.compareHiddenKinds);
+  const toggle = useAppStore((s) => s.toggleCompareKind);
+  const items = (temporal ? ['gone', 'down', 'stable'] : ['gone', 'stable']) as ('gone' | 'down' | 'stable')[];
+  return (
+    <div className="compare-legend panel" aria-label={t('sim.legend')}>
+      <span className="section-title">{t('sim.legend')}</span>
+      <ul>
+        <li><span className="legend-item"><span className="swatch swatch-dot" style={{ background: '#ff6147' }} /><span>{t('sim.legend.target')}</span></span></li>
+        <li><span className="legend-item"><span className="swatch" style={{ background: '#ffd27a', height: 4 }} /><span>{t('sim.legend.suspended')}</span></span></li>
+        {comparison && items.map((k) => {
+          const shown = !hidden.includes(KIND_OF[k]);
+          return (
+            <li key={k}>
+              <button type="button" className={`legend-item ${shown ? '' : 'is-off'}`} aria-pressed={shown} onClick={() => toggle(KIND_OF[k])}>
+                <span className="swatch" style={CHANGE_SWATCH[k]} />
+                <span>{t(`sim.legend.${k}${temporal && k === 'gone' ? 'Temporal' : ''}` as 'sim.legend.gone')}</span>
+                <span className="muted small">{number(comparison.counts[k])}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <span className="muted tiny">{t(temporal ? 'sim.legend.hintTemporal' : 'sim.legend.hintStructural')}</span>
+    </div>
+  );
+}
+
 function RouteChangeList({ network, items }: { network: StaticNetwork; items: RouteChange[] }) {
   const selectRoute = useAppStore((s) => s.selectRoute);
   const setListHoverRoute = useAppStore((s) => s.setListHoverRoute);

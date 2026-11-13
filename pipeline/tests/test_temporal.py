@@ -215,3 +215,41 @@ def test_public_size_budget_is_enforced(built, monkeypatch):
     monkeypatch.setattr(temporal, "MAX_PUBLIC_FILE_BYTES", 100)
     with pytest.raises(RuntimeError, match="exceeds the budget"):
         run(tmp, inputs, "d")
+
+
+# ---- Phase 9C: track ends aligned with the day files ------------------------------------------------
+
+def test_endpoint_files_align_with_day_files(built, tmp_path):
+    import shutil
+
+    import temporal_endpoints
+    tmp, _, cfg, _ = built
+    pub = tmp_path / "public"
+    shutil.copytree(cfg.public_out, pub)
+    m = temporal_endpoints.generate("ds", tmp / "ds", pub, cfg.research_out, log=lambda *_: None)
+    assert m["stats"]["endBeforeStart"] == 1  # d06: end before start -> unknown, not a negative duration
+    day = json.loads((pub / "days" / "2026-03-10.json").read_text(encoding="utf-8"))
+    ep = json.loads((pub / "endpoints" / "2026-03-10.json").read_text(encoding="utf-8"))
+    assert ep["n"] == day["n"] == len(ep["e"])
+    by_minute = {}
+    for e, v in zip(temporal.decode_day(day), ep["e"]):
+        by_minute.setdefault((e["minute"], e["basis"]), []).append(v)
+    assert by_minute[(300, 1)] == [-1]          # d02: start missing -> reference is the end, no second time
+    assert by_minute[(720, 0)] == [60, 60]      # d03 twice: 12:00 -> 13:00
+    assert by_minute[(1079, 0)] == [61]         # d04: 17:59:59 -> 19:00 (floor of each minute)
+    # d01 starts 2026-03-31 23:30 and ends 2026-04-01 01:10: 100 minutes, across day, month and quarter
+    d31 = json.loads((pub / "days" / "2026-03-31.json").read_text(encoding="utf-8"))
+    e31 = json.loads((pub / "endpoints" / "2026-03-31.json").read_text(encoding="utf-8"))
+    assert [v for e, v in zip(temporal.decode_day(d31), e31["e"]) if e["minute"] == 1410] == [100]
+    # the existing day files are not changed
+    assert (pub / "days" / "2026-03-10.json").read_bytes() == (cfg.public_out / "days" / "2026-03-10.json").read_bytes()
+
+
+def test_endpoint_alignment_check_rejects_a_mismatch(built):
+    import temporal_endpoints
+    _, _, cfg, _ = built
+    day = json.loads((cfg.public_out / "days" / "2026-03-10.json").read_text(encoding="utf-8"))
+    keys = [(e["route"], e["minute"], e["carrier"], e["direction"] + 2 * e["class"] + 6 * (e["tier"] - 1) + 24 * e["basis"]) for e in temporal.decode_day(day)]
+    temporal_endpoints.check_alignment(day, keys)
+    with pytest.raises(RuntimeError):
+        temporal_endpoints.check_alignment(day, keys[:-1])

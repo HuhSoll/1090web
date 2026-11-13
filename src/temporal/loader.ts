@@ -3,7 +3,7 @@
  * window needs. Decoded days are kept in a small LRU cache to bound memory.
  */
 import { assetUrl, fetchJson } from '../data/loaders/fetchJson';
-import { daysForWindow, decodeDay, selectWindow, type DayEvents, type DayFile, type TemporalIndex, type WindowSelection } from './model';
+import { attachEndpoints, daysForWindow, decodeDay, selectWindow, type DayEvents, type DayFile, type EndpointFile, type TemporalIndex, type WindowSelection } from './model';
 
 export interface TemporalManifest {
   schemaVersion: number;
@@ -25,6 +25,7 @@ export class TemporalLoader {
   private index: Promise<TemporalIndex> | null = null;
   private manifest: Promise<TemporalManifest> | null = null;
   private readonly cache = new Map<string, Promise<DayEvents>>();
+  private readonly epCache = new Map<string, Promise<DayEvents>>();
 
   /** maxDays: decoded days kept in memory (a day is about 2-3 MB decoded) */
   constructor(baseUrl: string, datasetId: string, private readonly maxDays = 10) {
@@ -56,6 +57,24 @@ export class TemporalLoader {
     p.catch(() => this.cache.delete(day));
     this.cache.set(day, p);
     while (this.cache.size > this.maxDays) this.cache.delete(this.cache.keys().next().value!);
+    return p;
+  }
+
+  /**
+   * The day with track ends attached (Phase 9C). Kept in its own small cache; the plain day stays
+   * in the day cache. Fails when the endpoint file is missing (callers fall back to reference time).
+   */
+  loadDayWithEndpoints(day: string): Promise<DayEvents> {
+    const hit = this.epCache.get(day);
+    if (hit) {
+      this.epCache.delete(day);
+      this.epCache.set(day, hit);
+      return hit;
+    }
+    const p = Promise.all([this.loadDay(day), fetchJson<EndpointFile>(`${this.root}endpoints/${day}.json`)]).then(([ev, f]) => attachEndpoints(ev, f));
+    p.catch(() => this.epCache.delete(day));
+    this.epCache.set(day, p);
+    while (this.epCache.size > Math.max(2, Math.floor(this.maxDays / 2))) this.epCache.delete(this.epCache.keys().next().value!);
     return p;
   }
 

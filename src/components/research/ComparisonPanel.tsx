@@ -28,6 +28,7 @@ export function ComparisonPanel({ result, other, otherConfig, meta }: {
     minFlights: [...THRESHOLD_PRESETS].filter((v) => v !== config.minFlights).map((v) => ({ value: v, label: `≥ ${v}` })),
     tiers: (['D', 'C', 'B', 'A'] as const).filter((v) => v !== config.tiers).map((v) => ({ value: v, label: t(`r.tiersShort.${v}`) })),
     window: config.window ? (['previous', 'day', 'week'] as const).map((v) => ({ value: v, label: t(`r.cmp.window.${v}`) })) : [],
+    scenario: config.scenario ? [{ value: 'off', label: t('r.cmp.scenario.off') }] : [],
     area: [
       ...REGIONS.map((r) => ({ value: `R:${r}`, label: t(`r.region.${r}`) })),
       ...[...new Set(network.airports.map((a) => a.country))].map((c) => ({ value: `C:${c}`, label: countryName(c) })).sort((a, b) => a.label.localeCompare(b.label)),
@@ -44,6 +45,7 @@ export function ComparisonPanel({ result, other, otherConfig, meta }: {
           <select id="r-cmp-field" value={cmp.enabled ? cmp.field : ''} onChange={(e) => (e.target.value ? choose(e.target.value as CompareField) : setCmp({ enabled: false }))}>
             <option value="">{t('r.cmp.off')}</option>
             {config.window ? <option value="window">{t('r.cmp.field.window')}</option> : <option value="month">{t('r.cmp.field.month')}</option>}
+            {config.scenario && <option value="scenario">{t('r.cmp.field.scenario')}</option>}
             <option value="minFlights">{t('r.cmp.field.minFlights')}</option>
             <option value="tiers">{t('r.cmp.field.tiers')}</option>
             <option value="area">{t('r.cmp.field.area')}</option>
@@ -68,12 +70,18 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
   const network = useAppStore((s) => s.network)!;
   const [metric, setMetric] = useState<AirportMetricKey>('degree');
   const changed = changedFields(a.config, b);
-  const unchanged = (['month', 'window', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation'] as const).filter((k) => !changed.includes(k));
+  const unchanged = (['month', 'window', 'scenario', 'country', 'region', 'airport', 'carrier', 'classes', 'minFlights', 'minMonths', 'tiers', 'directed', 'relation'] as const).filter((k) => !changed.includes(k));
   const r = other.state === 'ready' && !other.stale ? other.result : null;
   const gapMonths = a.config.window || b.window
     ? [a.config.window, b.window].filter((w) => w && gapDaysIn(meta, w.startMs, w.endMs).length > 0).map((w) => windowLabel(w!))
     : [a.config.month, b.month].filter((m) => (meta.quality.months.find((q) => q.month === m)?.gapDays.length ?? 0) > 0);
 
+  const show = (k: keyof ResearchConfig, c: ResearchConfig) =>
+    k === 'window' ? (c.window ? windowLabel(c.window) : '—')
+      : k === 'scenario' ? (c.scenario ? t('r.cmp.scenario.on', { n: c.scenario.events.filter((e) => e.enabled).length }) : t('r.cmp.scenario.off'))
+        : String(c[k] ?? '—');
+  // a scenario removes airports: normalised measures then refer to different node sets
+  const nodeSetsDiffer = r !== null && a.network.airports.length !== r.network.airports.length;
   const cmp = useMemo(() => (r ? compareRankings(airportScores(a, metric), airportScores(r, metric), 20) : null), [a, r, metric]);
   const label = (i: number) => network.airports[i]!.iata ?? network.airports[i]!.id;
 
@@ -106,7 +114,7 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
           {changed.map((k) => (
             <div className="kv-row r-changed" key={k}>
               <dt>{t(`r.field.${k}`)}</dt>
-              <dd>A: {k === 'window' ? (a.config.window ? windowLabel(a.config.window) : '—') : String(a.config[k] ?? '—')} → B: {k === 'window' ? (b.window ? windowLabel(b.window) : '—') : String(b[k] ?? '—')}</dd>
+              <dd>A: {show(k, a.config)} → B: {show(k, b)}</dd>
             </div>
           ))}
         </dl>
@@ -120,6 +128,7 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
         <>
           <section className="r-box">
             <h4 className="r-h4">{t('r.cmp.summary')}</h4>
+            {nodeSetsDiffer && <Note warn>{t('r.cmp.nodeSetsDiffer')}</Note>}
             <table className="r-table r-compact">
               <thead><tr><th />{['A', 'B', 'Δ'].map((h) => <th key={h} className="num">{h}</th>)}</tr></thead>
               <tbody>
@@ -128,7 +137,7 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
                     <td>{t(key)}</td>
                     <td className="num">{Number.isInteger(x) ? f.int(x) : f.dec(x, 4)}</td>
                     <td className="num">{Number.isInteger(y) ? f.int(y) : f.dec(y, 4)}</td>
-                    <td className="num">{x ? f.signedPct((y - x) / x) : '—'}</td>
+                    <td className="num">{x && !(nodeSetsDiffer && NORMALISED.has(key)) ? f.signedPct((y - x) / x) : '—'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -161,6 +170,9 @@ function ComparisonResult({ a, other, b, meta }: { a: AnalysisResult; other: Ana
     </>
   );
 }
+
+/** Measures normalised by the number of airports: no change rate across different node sets. */
+const NORMALISED = new Set(['r.ov.density', 'r.ov.clustering']);
 
 export function Progress({ state }: { state: AnalysisState }) {
   const { t } = useI18n();

@@ -1,0 +1,1391 @@
+{
+ "schemaVersion": 1,
+ "datasetId": "observed-2026-v2",
+ "script": {
+  "name": "pipeline/temporal_endpoints.py",
+  "version": "9c.1"
+ },
+ "source": "data/research/observed-2026-v2/temporal/flights_*.parquet (trackEndTimeUtc)",
+ "format": {
+  "e": "minutes from the flight's reference minute to its track-end minute (floor of each); -1 = unknown (reference time is already the track end, or the track end is missing). Same order as days/<day>.json.",
+  "meaning": "track end is the last ADS-B point, not necessarily the landing time; it is a proxy for the arrival side"
+ },
+ "stats": {
+  "flights": 22908615,
+  "endKnown": 19925944,
+  "fallback": 2039716,
+  "endMissing": 942955,
+  "maxMinutes": 57992,
+  "endBeforeStart": 0
+ },
+ "files": {
+  "endpoints/2026-01-01.json": {
+   "bytes": 251715,
+   "gzip": 86919,
+   "sha256": "7766c08599c195fadad28780621eda44052fccf8f24dd0f90f36057ae9a2a0c7"
+  },
+  "endpoints/2026-01-02.json": {
+   "bytes": 285138,
+   "gzip": 98767,
+   "sha256": "0bbc4d62aeecbf837b913d04badade17d6dcc20ca418eea9cd4c5bc5a34cdf65"
+  },
+  "endpoints/2026-01-03.json": {
+   "bytes": 278706,
+   "gzip": 96505,
+   "sha256": "fcd3ef830ddbf96b0e521fd1145993d36cab874dd0a9e9ca83a440448aab8ea5"
+  },
+  "endpoints/2026-01-04.json": {
+   "bytes": 286243,
+   "gzip": 98683,
+   "sha256": "f489a4cc11f63dc935ac4ed4f6c76ffe3985d45bcdc00133c1e798f339096b5b"
+  },
+  "endpoints/2026-01-05.json": {
+   "bytes": 285578,
+   "gzip": 98478,
+   "sha256": "de5d520d82d4561fc0b909a53ac8ec8d2e8198b004b1e45ed3feda86715da9ef"
+  },
+  "endpoints/2026-01-06.json": {
+   "bytes": 269329,
+   "gzip": 93357,
+   "sha256": "5c1248def4e3cd52067927caefdaf1226ae55f565b1e95db8ff449f28474e175"
+  },
+  "endpoints/2026-01-07.json": {
+   "bytes": 259797,
+   "gzip": 89687,
+   "sha256": "bfc783b3bdd133c86c4b40db56512215a6ecc7c5796f6e24c1e706b401a50592"
+  },
+  "endpoints/2026-01-08.json": {
+   "bytes": 271344,
+   "gzip": 93979,
+   "sha256": "88cdb54323aa480bb3afefdc94adab4c9d21a249a952f08b222119fda45190f6"
+  },
+  "endpoints/2026-01-09.json": {
+   "bytes": 279259,
+   "gzip": 96615,
+   "sha256": "91675fb65372e5e279a16c819e4c03231be48170f655b982f2b7a44db024000d"
+  },
+  "endpoints/2026-01-10.json": {
+   "bytes": 258275,
+   "gzip": 89891,
+   "sha256": "dcd37e9dadd2bcb651f08ba5ba06eb3f24c1e1de943424e7c1f5216fc8e0c5a3"
+  },
+  "endpoints/2026-01-11.json": {
+   "bytes": 267956,
+   "gzip": 92838,
+   "sha256": "1ee51d47ba20b1e031f0e6891247d833a0bd374f9d343e014a82ebf4d3ce0ff0"
+  },
+  "endpoints/2026-01-12.json": {
+   "bytes": 271452,
+   "gzip": 93742,
+   "sha256": "90bc8472ef09caff1d46ded4e9576506d8af7d408bb68bcdd8ca4477ab7cf3a9"
+  },
+  "endpoints/2026-01-13.json": {
+   "bytes": 254221,
+   "gzip": 87903,
+   "sha256": "856e3501a2f0b019ba1eb0d9ee39e75f87b8cb43202842f016e0022eb5d79942"
+  },
+  "endpoints/2026-01-14.json": {
+   "bytes": 254756,
+   "gzip": 87897,
+   "sha256": "065b88b4a9257cb1469b70d4bcad58db5eccd5133140b408a1a3cb20d1a02ab9"
+  },
+  "endpoints/2026-01-15.json": {
+   "bytes": 270488,
+   "gzip": 93372,
+   "sha256": "59c1dad2d8bc8c410d7dcfde826908813f25c82f1d5ed01d67d6f824698c796f"
+  },
+  "endpoints/2026-01-16.json": {
+   "bytes": 283163,
+   "gzip": 97643,
+   "sha256": "bdd67e33daf9a14ed4c6f867e2e30b3d0f1cbf7a86419c1a72aa7212f9bfc610"
+  },
+  "endpoints/2026-01-17.json": {
+   "bytes": 255561,
+   "gzip": 88467,
+   "sha256": "9f198e7e0209e3720bad8a420b71dc240d87b970d3b190a99626dc83c278fd13"
+  },
+  "endpoints/2026-01-18.json": {
+   "bytes": 260380,
+   "gzip": 89978,
+   "sha256": "ae264713b8b63bfe55caf7b52b5047f943c5abd23305500a951bfb8cee430702"
+  },
+  "endpoints/2026-01-19.json": {
+   "bytes": 272565,
+   "gzip": 94084,
+   "sha256": "e963cf7b6f104be295bea32dfad49dc666ff161a06aa319acb1527c56956572c"
+  },
+  "endpoints/2026-01-20.json": {
+   "bytes": 259485,
+   "gzip": 89551,
+   "sha256": "6d4fe9fb5c9b73fdb427bb9ceb530f09fc5640d00aa25f3e1f9afe06da0e450f"
+  },
+  "endpoints/2026-01-21.json": {
+   "bytes": 257312,
+   "gzip": 88841,
+   "sha256": "bf98c6574a526c1e7a6eac2c3740c5eece5e6896e77718de3002676a891716d0"
+  },
+  "endpoints/2026-01-22.json": {
+   "bytes": 269134,
+   "gzip": 93015,
+   "sha256": "3acaa23500ef658216d2d4541c62028bb109d35e4f132ff7e168339a747b5e9c"
+  },
+  "endpoints/2026-01-23.json": {
+   "bytes": 162993,
+   "gzip": 55666,
+   "sha256": "99db41f816bd3dc22ba85f7c204490c10153999d677771360a62a7548d7c249b"
+  },
+  "endpoints/2026-01-24.json": {
+   "bytes": 251309,
+   "gzip": 86705,
+   "sha256": "631c5d5b450a54df5a3ec4c188a134f88407ae6175fa01821ff025e671b0af0a"
+  },
+  "endpoints/2026-01-25.json": {
+   "bytes": 219884,
+   "gzip": 75257,
+   "sha256": "1d6074b2c589a244d04b34baea93c6298ad246abc42d5a6925ea425614e19d90"
+  },
+  "endpoints/2026-01-26.json": {
+   "bytes": 237920,
+   "gzip": 81822,
+   "sha256": "7a78d1d810d3b0c8ead96ecdce987db5af8c6978a456cf92940ee88650203cbd"
+  },
+  "endpoints/2026-01-27.json": {
+   "bytes": 243129,
+   "gzip": 84019,
+   "sha256": "56663d0c30ba853c296332af9402a37ea49cb175e4e9057ee08bf509760e7258"
+  },
+  "endpoints/2026-01-28.json": {
+   "bytes": 250809,
+   "gzip": 86134,
+   "sha256": "6069e43de2cd6687078886684731c0a8aacb94bec5fc3dc1b7e36355a1ef8f3b"
+  },
+  "endpoints/2026-01-29.json": {
+   "bytes": 271011,
+   "gzip": 93571,
+   "sha256": "37dc38ee18650c471ad74a4f64ed552d0d89a57bcf6e07611fd14bbbd0b37e3a"
+  },
+  "endpoints/2026-01-30.json": {
+   "bytes": 278399,
+   "gzip": 95758,
+   "sha256": "c39faf6e2260bff96d52758fb9eacb89b2d2e424707098e71c50dc4276a3f598"
+  },
+  "endpoints/2026-01-31.json": {
+   "bytes": 248299,
+   "gzip": 85464,
+   "sha256": "3d158efa429e182823b6d9754848cff956bf9e1e3f719b210a653e5e9dc80f66"
+  },
+  "endpoints/2026-02-01.json": {
+   "bytes": 261328,
+   "gzip": 89735,
+   "sha256": "25afcec02c5392af3729efac974a7f5d43b05f6e459ffd9abb2456e5948b21a8"
+  },
+  "endpoints/2026-02-02.json": {
+   "bytes": 272677,
+   "gzip": 93797,
+   "sha256": "f8b6d3cb4f927102b46bac67d0cccc51b69281ca0d193071f74703cb9fb278fa"
+  },
+  "endpoints/2026-02-03.json": {
+   "bytes": 258600,
+   "gzip": 88964,
+   "sha256": "46f74f1b7274a3479bcc19e6d6715df793a9ea48e7b060a47cb54c9fb6ae2487"
+  },
+  "endpoints/2026-02-04.json": {
+   "bytes": 256852,
+   "gzip": 88306,
+   "sha256": "7220671f860a830ad13bce794f846678b30c02718af00f6499dc60b073804679"
+  },
+  "endpoints/2026-02-05.json": {
+   "bytes": 274580,
+   "gzip": 94458,
+   "sha256": "ecc8fa5716cf7cba62171c8077bdb3748aa836b1e6c7df64b9bfc455962cb104"
+  },
+  "endpoints/2026-02-06.json": {
+   "bytes": 281707,
+   "gzip": 97554,
+   "sha256": "11d735ed60cd1c9b89b58ffdc3a22194af025b8ad781a7e3b4ccfb422d26f9f9"
+  },
+  "endpoints/2026-02-07.json": {
+   "bytes": 255367,
+   "gzip": 89001,
+   "sha256": "e0bf7862b1278fe0333f7380cebf177f2192093028c869f3b74227cf4870351a"
+  },
+  "endpoints/2026-02-08.json": {
+   "bytes": 266258,
+   "gzip": 91805,
+   "sha256": "9c54d1a9f6e1778abcaae040af9f5c7928ca4ece3a79aa6a4d32c074e2052783"
+  },
+  "endpoints/2026-02-09.json": {
+   "bytes": 276972,
+   "gzip": 95031,
+   "sha256": "9bb520bea668dc2bd5a8e24230668f56da217f6c10cc1170b3679715f18fed8d"
+  },
+  "endpoints/2026-02-10.json": {
+   "bytes": 263854,
+   "gzip": 90972,
+   "sha256": "67b0728ba559c85dc1fabc3a4888d82644ec0f80035cf18f34dc8972e2cd19bf"
+  },
+  "endpoints/2026-02-11.json": {
+   "bytes": 264665,
+   "gzip": 91331,
+   "sha256": "3cfede22de6ce4ebbb4cee873fb472e8ce4d1e9e5ce310cdb42ddf12d525020b"
+  },
+  "endpoints/2026-02-12.json": {
+   "bytes": 282728,
+   "gzip": 97380,
+   "sha256": "cc087ad651640f378c0aea879535e5a7fd688cbe4fff7366202d2d8cb319f4f5"
+  },
+  "endpoints/2026-02-13.json": {
+   "bytes": 295217,
+   "gzip": 102025,
+   "sha256": "23470c537d393a1786a941d2d4727c725f80d41b8190b9c27ed23fa123c29934"
+  },
+  "endpoints/2026-02-14.json": {
+   "bytes": 272589,
+   "gzip": 94571,
+   "sha256": "ddd4e3b933d9806d0ba3c942b1eba12a5b13a0b23bc45d87410aad8ece234257"
+  },
+  "endpoints/2026-02-15.json": {
+   "bytes": 271348,
+   "gzip": 93893,
+   "sha256": "0885bdcbb7c2dfe14d36b53a5263a09909f721ad8129db99411617ec11f39302"
+  },
+  "endpoints/2026-02-16.json": {
+   "bytes": 278728,
+   "gzip": 96723,
+   "sha256": "793a0867d1ca7655948a33b0c440477121dd8d22079d769681f7813993f6b6b1"
+  },
+  "endpoints/2026-02-17.json": {
+   "bytes": 268017,
+   "gzip": 93238,
+   "sha256": "07042af4f1d1a3bc0e790fbe5edab723291e76de361d3a8fa7a50ae87e39fd74"
+  },
+  "endpoints/2026-02-18.json": {
+   "bytes": 264074,
+   "gzip": 92036,
+   "sha256": "acd927aa7ae2ce777fab8a015f699dc43c6be7be64e7cf9f7540a9b9dda385ff"
+  },
+  "endpoints/2026-02-19.json": {
+   "bytes": 277527,
+   "gzip": 96447,
+   "sha256": "b4d0d8051b68b5de1a3ca4e4149d278b353ff04604699ea7077503e26214aa5e"
+  },
+  "endpoints/2026-02-20.json": {
+   "bytes": 288582,
+   "gzip": 100066,
+   "sha256": "44fedf82e36fa574213b7a4b104b04874fdd33c53a085960ccac9c4f551fadcb"
+  },
+  "endpoints/2026-02-21.json": {
+   "bytes": 271270,
+   "gzip": 94637,
+   "sha256": "87b536b3b47d456cc3f184d47430438612d961e3e972fc49c50da863dcb295e9"
+  },
+  "endpoints/2026-02-22.json": {
+   "bytes": 269457,
+   "gzip": 93758,
+   "sha256": "4cbdea7fad3fa1527953497361bbaf2783f71734a8f6d7de08866695b3bec702"
+  },
+  "endpoints/2026-02-23.json": {
+   "bytes": 263723,
+   "gzip": 90741,
+   "sha256": "07652cfbf8dc20fd7d041cc638f8d60e512383002152a05d8c4c5b72ca2eb47c"
+  },
+  "endpoints/2026-02-24.json": {
+   "bytes": 261750,
+   "gzip": 89756,
+   "sha256": "8efcccd91fa6c23722d637124b3fa51abfa1c0a4e9d3019f83cc49493d98bcc9"
+  },
+  "endpoints/2026-02-25.json": {
+   "bytes": 270954,
+   "gzip": 93235,
+   "sha256": "a65bd542e16beeff8cbcc870f5f030c9ae16d0c102a5d8ada89df6f227aeb025"
+  },
+  "endpoints/2026-02-26.json": {
+   "bytes": 287838,
+   "gzip": 99140,
+   "sha256": "f59604fc2c25f3528ecf94bdba7afc9f6aa4145241f9a1873cdbd73862bcf5c7"
+  },
+  "endpoints/2026-02-27.json": {
+   "bytes": 296359,
+   "gzip": 101438,
+   "sha256": "8ba5d53c322a048831ed53356bac3dd28c1ffea6e743085abb83b2661b2b3b98"
+  },
+  "endpoints/2026-02-28.json": {
+   "bytes": 263173,
+   "gzip": 89856,
+   "sha256": "bfcd911ecbd25733b4bea7e627de1dc3f8547a9db721eccc7e83923a1e142d67"
+  },
+  "endpoints/2026-03-01.json": {
+   "bytes": 271021,
+   "gzip": 92402,
+   "sha256": "f656ed9b39cf4fedb96f49ffe242e068767506a65408c2f0508f1e23dc5623d9"
+  },
+  "endpoints/2026-03-02.json": {
+   "bytes": 272154,
+   "gzip": 92689,
+   "sha256": "e0efc40b4d96c8eaa689f0f8c0b47a341f3c97f15eebc3cbec334edd7364248e"
+  },
+  "endpoints/2026-03-03.json": {
+   "bytes": 258959,
+   "gzip": 88530,
+   "sha256": "db060319ca08d79e42e127d316145e2b0e02a9fd2d1509f68937329154512d94"
+  },
+  "endpoints/2026-03-04.json": {
+   "bytes": 257754,
+   "gzip": 88213,
+   "sha256": "62ebb651ab82a5658708775175b04a0005053c7797b17ae837074df1b4169aa1"
+  },
+  "endpoints/2026-03-05.json": {
+   "bytes": 270932,
+   "gzip": 92415,
+   "sha256": "70464081d77dccda9a0fb1c8697ab95525ecd57bab57142bcc85100d90481333"
+  },
+  "endpoints/2026-03-06.json": {
+   "bytes": 279700,
+   "gzip": 95448,
+   "sha256": "9f616ff9b93e38fb5dc65b8b70b933c1754987115a8a92ac607dcff76bb5e9a1"
+  },
+  "endpoints/2026-03-07.json": {
+   "bytes": 255969,
+   "gzip": 87941,
+   "sha256": "6fd95445a386ee5232de900e295d15eab7a19b6c281f8ba9899a59c3448bec62"
+  },
+  "endpoints/2026-03-08.json": {
+   "bytes": 274052,
+   "gzip": 93591,
+   "sha256": "b3ab22aa7bc26aec784a7802aea5f2dbb8419c55bb05a17cfbffef8934cb8ea5"
+  },
+  "endpoints/2026-03-09.json": {
+   "bytes": 280139,
+   "gzip": 95127,
+   "sha256": "bb7ff00ebaecbb83119d723155043e2b35b9ecdcddefedfa914c7e5a23cd0644"
+  },
+  "endpoints/2026-03-10.json": {
+   "bytes": 264946,
+   "gzip": 90720,
+   "sha256": "b0555c8e50e5829ac3d401a783986c2d1780c0ca71d92602d803514502a82561"
+  },
+  "endpoints/2026-03-11.json": {
+   "bytes": 260887,
+   "gzip": 89454,
+   "sha256": "028c88c6e7c217f834ce9357936de229f1966e9c276c3ffd239510e5d54b56f1"
+  },
+  "endpoints/2026-03-12.json": {
+   "bytes": 274896,
+   "gzip": 94552,
+   "sha256": "fa497d2bd665b77338fa7d25365de262fdc328c2e1d971f99ca31f9acb963700"
+  },
+  "endpoints/2026-03-13.json": {
+   "bytes": 284753,
+   "gzip": 97217,
+   "sha256": "3ed9868eee973c35bbd16120f3da1c17450efea07de21a67a5b1c4724c794855"
+  },
+  "endpoints/2026-03-14.json": {
+   "bytes": 264048,
+   "gzip": 90688,
+   "sha256": "5441622aca1d46111e1e9991e6020495dd557d0c5b4885b8f965015a4ba8d950"
+  },
+  "endpoints/2026-03-15.json": {
+   "bytes": 263785,
+   "gzip": 90603,
+   "sha256": "6c50888638072019f501d637e5b114f5f2696d6562723d61e18904434f3e681e"
+  },
+  "endpoints/2026-03-16.json": {
+   "bytes": 261011,
+   "gzip": 89939,
+   "sha256": "5eaa67d10b24b75b6a86627b13400713f39af263963c528df3a9a0c9f2e1e9c5"
+  },
+  "endpoints/2026-03-17.json": {
+   "bytes": 266762,
+   "gzip": 91676,
+   "sha256": "4fd9bdd39e58726d5345238aaefaae510f371e693703f084317d7d4c2ef18ff8"
+  },
+  "endpoints/2026-03-18.json": {
+   "bytes": 272746,
+   "gzip": 93055,
+   "sha256": "98a052ae4047a74dd1cbff2fc9f1f51258b56a3a33957650c78b97869a360f7a"
+  },
+  "endpoints/2026-03-19.json": {
+   "bytes": 284438,
+   "gzip": 96953,
+   "sha256": "eacdc7a677df7d9b956d62e41e485efb06e641803e9e2f3dfbd65387219bea2f"
+  },
+  "endpoints/2026-03-20.json": {
+   "bytes": 290590,
+   "gzip": 99206,
+   "sha256": "e74dd49330acf3cd1bbbf57e29d012789f34a756110f18074b7289d9e8894efa"
+  },
+  "endpoints/2026-03-21.json": {
+   "bytes": 267142,
+   "gzip": 91266,
+   "sha256": "bca80e256b145e1b405dc2141c97fc41ac833142c03ee4dac5a1aaf6f92c0d76"
+  },
+  "endpoints/2026-03-22.json": {
+   "bytes": 277582,
+   "gzip": 94856,
+   "sha256": "0a15de7920e16c601f0ea3d4036fbdd8d150eaca62bce1bb2c5ff8e332fd1cf6"
+  },
+  "endpoints/2026-03-23.json": {
+   "bytes": 282461,
+   "gzip": 96740,
+   "sha256": "ba14d9d7b66c474598bd5d7b44998d7249c7e7954b98ffd4741c44abdc65107b"
+  },
+  "endpoints/2026-03-24.json": {
+   "bytes": 261884,
+   "gzip": 89905,
+   "sha256": "142cc4bf51d03dc9eec8beb7fcd518ac707807b0739d0ac512f566642f265e97"
+  },
+  "endpoints/2026-03-25.json": {
+   "bytes": 270727,
+   "gzip": 93060,
+   "sha256": "0f8f6a15e025ef9a27005746c4813b904772cbe6da350e8ceb850086bd9e27cf"
+  },
+  "endpoints/2026-03-26.json": {
+   "bytes": 288835,
+   "gzip": 99064,
+   "sha256": "f54d574ef9d59b81304f4eed930712db91135679daa8369160c3a8290c65ab09"
+  },
+  "endpoints/2026-03-27.json": {
+   "bytes": 297742,
+   "gzip": 101838,
+   "sha256": "16b19afb46d16a3b4f8ad6c61179364b33046f8fb4545027fd92510fe5397892"
+  },
+  "endpoints/2026-03-28.json": {
+   "bytes": 273273,
+   "gzip": 93426,
+   "sha256": "8be2d9f34ad014330cd17935136355e75be3b43e52748fb4fa0779e520eeec72"
+  },
+  "endpoints/2026-03-29.json": {
+   "bytes": 279737,
+   "gzip": 95954,
+   "sha256": "5d5607938d05e921e1cebc4e5f9c54196a47fdcbe125d2ae83645b64670cfa9e"
+  },
+  "endpoints/2026-03-30.json": {
+   "bytes": 281636,
+   "gzip": 96766,
+   "sha256": "64e2cc0623d5472f7ba172a5d6a7a1e6aeced6cab0f82dbfed296531a5a48e3d"
+  },
+  "endpoints/2026-03-31.json": {
+   "bytes": 276264,
+   "gzip": 95110,
+   "sha256": "7ed3c335571a0de82974808e41f6095f807393fa36cd18d153714b2b1e9310fa"
+  },
+  "endpoints/2026-04-01.json": {
+   "bytes": 276938,
+   "gzip": 95235,
+   "sha256": "05a005096853d6d936a9a1765ea3e893a6fdee3a4ef76e8204cfd881f6aaba0d"
+  },
+  "endpoints/2026-04-02.json": {
+   "bytes": 277856,
+   "gzip": 96164,
+   "sha256": "9892baedbb5823fbe6e3a606005ca60f0dad9ae88e8889cf795e1776e24c852b"
+  },
+  "endpoints/2026-04-03.json": {
+   "bytes": 295609,
+   "gzip": 101934,
+   "sha256": "efecd5b854892bce602249ce6d2943d769b510f941e350764ea61ff85cab9858"
+  },
+  "endpoints/2026-04-04.json": {
+   "bytes": 273232,
+   "gzip": 94065,
+   "sha256": "113ae02b319e81df5379eaacb351bf1a9dc4fe4ed42deabd1cd1b193cbbf9999"
+  },
+  "endpoints/2026-04-05.json": {
+   "bytes": 276209,
+   "gzip": 95186,
+   "sha256": "5bb43b997afd0377fd753ef92c6db848e393fa0370a0ab9dd48b1c5f66a7747d"
+  },
+  "endpoints/2026-04-06.json": {
+   "bytes": 295246,
+   "gzip": 101407,
+   "sha256": "55a54d12c35d41ff296beb2c723fefddfc3f28967c6137dfdffffe96ca808370"
+  },
+  "endpoints/2026-04-07.json": {
+   "bytes": 288211,
+   "gzip": 99357,
+   "sha256": "7382bd15a00efcf76c8011722fcf18cec78dfeabfbb62a65f413953ee1109bf5"
+  },
+  "endpoints/2026-04-08.json": {
+   "bytes": 283757,
+   "gzip": 97601,
+   "sha256": "6f9f4c39a9db4f11e12e7833176264fcb732702caf6eea084e8d5e41051a6049"
+  },
+  "endpoints/2026-04-09.json": {
+   "bytes": 292195,
+   "gzip": 100862,
+   "sha256": "b274cb0a46f0f299107db0052ce6b7646ade3f94a1cf37ef1eb60e3696756680"
+  },
+  "endpoints/2026-04-10.json": {
+   "bytes": 292128,
+   "gzip": 101125,
+   "sha256": "8d941e56c2401cbc188cb5e260f1dd2e58456990f72c04db337387a8de0a6f57"
+  },
+  "endpoints/2026-04-11.json": {
+   "bytes": 273211,
+   "gzip": 94787,
+   "sha256": "af79c3bc81ac1f7b9383f5af48f9f9e65b06d3d0c414e4df1a7315daa39f9b0a"
+  },
+  "endpoints/2026-04-12.json": {
+   "bytes": 282649,
+   "gzip": 97200,
+   "sha256": "d51a9097f1c6dd7f9cb20a483c52ce3ea731a47f5c21bf22bc6f82e93146ffa3"
+  },
+  "endpoints/2026-04-13.json": {
+   "bytes": 286859,
+   "gzip": 98125,
+   "sha256": "568a14b47fe42cf198fd58c984c4bbce4bfa1a802860ded62bd9a2380aa049cd"
+  },
+  "endpoints/2026-04-14.json": {
+   "bytes": 276123,
+   "gzip": 94716,
+   "sha256": "2d739730874cc6e79177f209025c57ba9d21bfdd25529221a710f32084d24c8f"
+  },
+  "endpoints/2026-04-15.json": {
+   "bytes": 275423,
+   "gzip": 94792,
+   "sha256": "56178a640724911031ae698c5a5696e4f6fdaf539c87eb64b8da9893150e2dfc"
+  },
+  "endpoints/2026-04-16.json": {
+   "bytes": 288111,
+   "gzip": 98892,
+   "sha256": "82a3e24a64f9592a4498e728a836d84e9cbf20322e9029bb8b6153d4d08de7b7"
+  },
+  "endpoints/2026-04-17.json": {
+   "bytes": 293866,
+   "gzip": 100527,
+   "sha256": "f8c8b2812802fde7591d2a3f75e4616fedbee1176517075939b61b6c8ac68b35"
+  },
+  "endpoints/2026-04-18.json": {
+   "bytes": 270644,
+   "gzip": 92995,
+   "sha256": "9e2d836c95a8ad165e5760069e2bc338206e0af69f9e0918148586ec79bb6d3a"
+  },
+  "endpoints/2026-04-19.json": {
+   "bytes": 283241,
+   "gzip": 97389,
+   "sha256": "f0b098b1805b288b7b36b8b1587e31541d36ac3b9eed11fb16e00050920526c9"
+  },
+  "endpoints/2026-04-20.json": {
+   "bytes": 287265,
+   "gzip": 98337,
+   "sha256": "48a252e0e2eed866694e6f6d66c0f44bc67e11f09220f550c14e31b181ee2800"
+  },
+  "endpoints/2026-04-21.json": {
+   "bytes": 277641,
+   "gzip": 95223,
+   "sha256": "91c1d98e6e5e14949a99f40fbff5413a5b3c48b3adcdb8741c072bb3f02c882a"
+  },
+  "endpoints/2026-04-22.json": {
+   "bytes": 279512,
+   "gzip": 96165,
+   "sha256": "b2d659e0fafc18447a72bd0b0d89af5bc506e85d772496a2e336e8e091fbf568"
+  },
+  "endpoints/2026-04-23.json": {
+   "bytes": 293204,
+   "gzip": 100413,
+   "sha256": "2547156cade6d4c8ba5a123119347fa5557fba32003758cc5b479ec1ceface15"
+  },
+  "endpoints/2026-04-24.json": {
+   "bytes": 297484,
+   "gzip": 101526,
+   "sha256": "89c0f611f867b8f74c41ba209a8142d3d4318ba390ff8014532022a74e8bf6f1"
+  },
+  "endpoints/2026-04-25.json": {
+   "bytes": 270069,
+   "gzip": 92694,
+   "sha256": "c5e5cba12f533bda9b67874bf75bfffa36d11ccb1926012c227c3c8019b9c9cf"
+  },
+  "endpoints/2026-04-26.json": {
+   "bytes": 281738,
+   "gzip": 96393,
+   "sha256": "06c6349a81491729014521dcedb821c628c7a55b1596bcadf07d3ea8399f0dfa"
+  },
+  "endpoints/2026-04-27.json": {
+   "bytes": 288410,
+   "gzip": 99118,
+   "sha256": "1ad7159238e3ca2640df32cfb5acc986095e0530b292eafca24d032b205b2645"
+  },
+  "endpoints/2026-04-28.json": {
+   "bytes": 279951,
+   "gzip": 96551,
+   "sha256": "75f09b2e08d66a173a781560f33eef8be850401b657974bbd6c60121e82c212f"
+  },
+  "endpoints/2026-04-29.json": {
+   "bytes": 282423,
+   "gzip": 97558,
+   "sha256": "8d40806b25dec51d398bc45615c7393affd0262ed37c5b5d17142ace34b758db"
+  },
+  "endpoints/2026-04-30.json": {
+   "bytes": 299092,
+   "gzip": 102515,
+   "sha256": "28d1561cb479caf1c849a5961127c29207fee51359d0058d59b32608a420dfaa"
+  },
+  "endpoints/2026-05-01.json": {
+   "bytes": 299149,
+   "gzip": 102555,
+   "sha256": "11230094903db82651942f918f36cb082f265151f79c8528c981fdcd22593254"
+  },
+  "endpoints/2026-05-02.json": {
+   "bytes": 268939,
+   "gzip": 93123,
+   "sha256": "50dbcc11adb3b93a0ba7033850c18549cc0c82bef6b55325e380c0f3022bb0c8"
+  },
+  "endpoints/2026-05-03.json": {
+   "bytes": 284503,
+   "gzip": 98162,
+   "sha256": "cf9c82725cc1f88f817d12ee44560f215f874c303e916b80c87538ab6c792bdc"
+  },
+  "endpoints/2026-05-04.json": {
+   "bytes": 237103,
+   "gzip": 81418,
+   "sha256": "b0837d7398ce8fd8266d6c17476a84ea5b7de2a5e8e0a29382150cbcab94f17f"
+  },
+  "endpoints/2026-05-05.json": {
+   "bytes": 65,
+   "gzip": 73,
+   "sha256": "cc1b82ee123e06b5f48e19a0c4e6c7a269e19b15dd97d5092cc0f1bdc35a1c28"
+  },
+  "endpoints/2026-05-06.json": {
+   "bytes": 51,
+   "gzip": 70,
+   "sha256": "4aa250ec763d65d2a42ae6a275d91cf8d8f457f5d88dc92c1e04ba479fdc5641"
+  },
+  "endpoints/2026-05-07.json": {
+   "bytes": 87644,
+   "gzip": 32152,
+   "sha256": "40f79dfd3ea671cfc3b1f523feafd962edc4dabdbd10d16cb890d959b9782b7a"
+  },
+  "endpoints/2026-05-08.json": {
+   "bytes": 296278,
+   "gzip": 102093,
+   "sha256": "a3625985c154dbc19dc6efc2b94ce9a4aec07550d292233d404b89f40744ec92"
+  },
+  "endpoints/2026-05-09.json": {
+   "bytes": 271881,
+   "gzip": 93994,
+   "sha256": "fef20c8dcbdcfd040c80c15022dbab6a873532970bede12e14bc1f0e65111888"
+  },
+  "endpoints/2026-05-10.json": {
+   "bytes": 280485,
+   "gzip": 96752,
+   "sha256": "bef18edbf7d0baded1155850a2df1abbc498eea8c991a2bd63f634b9e00b11da"
+  },
+  "endpoints/2026-05-11.json": {
+   "bytes": 286186,
+   "gzip": 98591,
+   "sha256": "d6e07e0b0e519d38f767f9abd0c1410ba03fc533dce177c0136295f9f8f0fe9e"
+  },
+  "endpoints/2026-05-12.json": {
+   "bytes": 279202,
+   "gzip": 95926,
+   "sha256": "078db8228db06bd388621226dc46dedd6529088685d51c5b116b5b2d73b03235"
+  },
+  "endpoints/2026-05-13.json": {
+   "bytes": 283683,
+   "gzip": 97710,
+   "sha256": "ac13f3a7a494c4fdc24431c25c4c583c211403946bf2f9f2dd5d1b666ffab998"
+  },
+  "endpoints/2026-05-14.json": {
+   "bytes": 290215,
+   "gzip": 99501,
+   "sha256": "9081af01b13ee16ac88af04f6a7668fef8a3b4b7c120f33da3a08a6181f674bd"
+  },
+  "endpoints/2026-05-15.json": {
+   "bytes": 291615,
+   "gzip": 100093,
+   "sha256": "cf3f3e41a73853035b0cdbcbb7c058ce9148be575efd3a71c529b71f12d95004"
+  },
+  "endpoints/2026-05-16.json": {
+   "bytes": 270835,
+   "gzip": 93227,
+   "sha256": "2dcdf007e4220a31080c6b06f0878ae8ec044fb1c3198c6d05c54b852f5353ad"
+  },
+  "endpoints/2026-05-17.json": {
+   "bytes": 282385,
+   "gzip": 96697,
+   "sha256": "b2068e32ed9875137143a5ce97d451db77aae0a65d258abde519e2d2864a3ff5"
+  },
+  "endpoints/2026-05-18.json": {
+   "bytes": 286865,
+   "gzip": 98087,
+   "sha256": "b39f28ac24f077a8718b89a25ef2fd63ec49c50f495309b7287266eb6b8c589b"
+  },
+  "endpoints/2026-05-19.json": {
+   "bytes": 276428,
+   "gzip": 94604,
+   "sha256": "d728308f12449be4fc4f6bfce33a0cac0bd2389e8079d153d2d953d130c90fcb"
+  },
+  "endpoints/2026-05-20.json": {
+   "bytes": 277941,
+   "gzip": 96005,
+   "sha256": "e1fc2bcc902e2c502b4a7f37fcebaa930807a9ec0016726d9db5e1c45df03999"
+  },
+  "endpoints/2026-05-21.json": {
+   "bytes": 293295,
+   "gzip": 101059,
+   "sha256": "7c855569cfb4c65f9f760de6b5587d1048adc27bae3f00092308b2b27b289b50"
+  },
+  "endpoints/2026-05-22.json": {
+   "bytes": 297801,
+   "gzip": 101920,
+   "sha256": "79c59a23d8eb2c524286b3b201aea2e82343cdb64ad968bcbd3dbbac26634f68"
+  },
+  "endpoints/2026-05-23.json": {
+   "bytes": 272061,
+   "gzip": 93368,
+   "sha256": "fbe835130c99854556e360c09f3d220f8a20b85129c7af90b6d4ff93044068f8"
+  },
+  "endpoints/2026-05-24.json": {
+   "bytes": 277058,
+   "gzip": 94503,
+   "sha256": "4a03653c0dedaf4dea977d589dcf078440ad71b339104338d74c231cd3e76434"
+  },
+  "endpoints/2026-05-25.json": {
+   "bytes": 283621,
+   "gzip": 96636,
+   "sha256": "32ffc6ef682f4728ce270ae697edc8f0a75669ab02d3e8622a116acc1347ebbb"
+  },
+  "endpoints/2026-05-26.json": {
+   "bytes": 280361,
+   "gzip": 95432,
+   "sha256": "d42c3c5a109597ed5bc9e1b8e43f4897f88ee6a3ae6d915cadd3db7c95bf02d6"
+  },
+  "endpoints/2026-05-27.json": {
+   "bytes": 283670,
+   "gzip": 97291,
+   "sha256": "e60e86cd39e7fe4e44f9f64e94876e5aa42496b17f3ae175f154e905f3594363"
+  },
+  "endpoints/2026-05-28.json": {
+   "bytes": 294372,
+   "gzip": 100858,
+   "sha256": "b7628e8262806648b23fd327ebbb184e8d0eef9acb1b2f154355a449db24797c"
+  },
+  "endpoints/2026-05-29.json": {
+   "bytes": 297989,
+   "gzip": 101675,
+   "sha256": "b6d8e7b38373bb20f0e0db37791e6fc9efa826409940eb1056ab4064825a6bd9"
+  },
+  "endpoints/2026-05-30.json": {
+   "bytes": 274582,
+   "gzip": 93913,
+   "sha256": "a02f8b362549de6a57ded7642c21a0ced090c373d24dbaa36b5e23514579f9de"
+  },
+  "endpoints/2026-05-31.json": {
+   "bytes": 283399,
+   "gzip": 97187,
+   "sha256": "9ca869ee7e2daf3e0a8725101c78676852e63237327cf200f7fb7a46f0ff2681"
+  },
+  "endpoints/2026-06-01.json": {
+   "bytes": 289347,
+   "gzip": 99015,
+   "sha256": "568e1e74898961f3ffafe617ade17ea06b8692c1223a48dbdd92059e05dbcee2"
+  },
+  "endpoints/2026-06-02.json": {
+   "bytes": 278267,
+   "gzip": 95631,
+   "sha256": "6971203dd816dccbb273d306c7dddfa1d1ff7163f87320888be5aecab58bfc71"
+  },
+  "endpoints/2026-06-03.json": {
+   "bytes": 283027,
+   "gzip": 97116,
+   "sha256": "eb4b1300a729a0ba837407c90bc42c625f5272ad34432cf194a157d3f899908a"
+  },
+  "endpoints/2026-06-04.json": {
+   "bytes": 294570,
+   "gzip": 101186,
+   "sha256": "02036047a6e069d89a6a31aa250240ac14e3eb8b0682edbd86868bc4be45acb4"
+  },
+  "endpoints/2026-06-05.json": {
+   "bytes": 299464,
+   "gzip": 102326,
+   "sha256": "177fa04b90ad7a7a8118eba25abda0624fd4445c81dd603532340ffa7b78b5db"
+  },
+  "endpoints/2026-06-06.json": {
+   "bytes": 274055,
+   "gzip": 94573,
+   "sha256": "97a43ba7da4ab5ac6567b339ce2544be6b0feba45baca460217be8bbab384ecb"
+  },
+  "endpoints/2026-06-07.json": {
+   "bytes": 286795,
+   "gzip": 98287,
+   "sha256": "241735dde69e6365431494c3c4978c2c69e0382c09e928acbb39d58187e7b31a"
+  },
+  "endpoints/2026-06-08.json": {
+   "bytes": 294971,
+   "gzip": 101001,
+   "sha256": "df7ede91bceb20f605d3b7ae4470d6fc9b430772790dcaaf4ebc01db0bde8dec"
+  },
+  "endpoints/2026-06-09.json": {
+   "bytes": 286540,
+   "gzip": 98233,
+   "sha256": "ce4df211169e91d02f3e04a44bce040e848c408c582d063eff6984afde6cd42c"
+  },
+  "endpoints/2026-06-10.json": {
+   "bytes": 274074,
+   "gzip": 94061,
+   "sha256": "0fceaa46adcef20d85f3b9cc5c133aca555c2c24b0e8a3349737b50d4b2bdcc2"
+  },
+  "endpoints/2026-06-11.json": {
+   "bytes": 185604,
+   "gzip": 63002,
+   "sha256": "84eef3636c07adf7f77b2b584cb2f831992af29e9625e97eee489874ef268195"
+  },
+  "endpoints/2026-06-12.json": {
+   "bytes": 292714,
+   "gzip": 101040,
+   "sha256": "6d766712e2ac3ba9b606b82848ca5410752edfe67f3de3297e66d595b50a8969"
+  },
+  "endpoints/2026-06-13.json": {
+   "bytes": 286974,
+   "gzip": 98325,
+   "sha256": "747737d632750c4c0c62a0238c991168919c5767d777cbe6ea286c638a67a5b0"
+  },
+  "endpoints/2026-06-14.json": {
+   "bytes": 293868,
+   "gzip": 101204,
+   "sha256": "512b62cad3f7aa03a7f2bc099667e5cbe3567b53214db78cd5b44482f610a88a"
+  },
+  "endpoints/2026-06-15.json": {
+   "bytes": 298022,
+   "gzip": 102637,
+   "sha256": "76b5b8bf61629076c05e2b67df328f1b9452ffb170b9cd5524715332f4c29d6b"
+  },
+  "endpoints/2026-06-16.json": {
+   "bytes": 295646,
+   "gzip": 101799,
+   "sha256": "91dc23cd323cd95868e69836e72b668f7b3cb854b7b979a8018d018f936b844a"
+  },
+  "endpoints/2026-06-17.json": {
+   "bytes": 296705,
+   "gzip": 101718,
+   "sha256": "883d7099a4b63af43ac3e61be60c2bb2601c4c37513e665b41ee232598dff2c0"
+  },
+  "endpoints/2026-06-18.json": {
+   "bytes": 302667,
+   "gzip": 104340,
+   "sha256": "8552e1bb49862a9baec141471f1288928f73aa7e5dc47f8d17e5268ccaed21bf"
+  },
+  "endpoints/2026-06-19.json": {
+   "bytes": 303247,
+   "gzip": 104512,
+   "sha256": "20674e9981452e5e258f8f641e6153bfffdf6ad4a84743067a48ab605ee64e1a"
+  },
+  "endpoints/2026-06-20.json": {
+   "bytes": 286867,
+   "gzip": 98650,
+   "sha256": "08647cc7cb988a045ff0cad9b163a6fb3827e4bd6687784eb1d39d4ee8d0fb6a"
+  },
+  "endpoints/2026-06-21.json": {
+   "bytes": 297060,
+   "gzip": 101992,
+   "sha256": "efb42b372df973873c59f29f46e8eaebe361bee558b078a1e0b069c521cd28e5"
+  },
+  "endpoints/2026-06-22.json": {
+   "bytes": 302650,
+   "gzip": 103834,
+   "sha256": "605336197ea6fb83f3fddad268952faf9102394c9667afb571e7bb3411e7f5c6"
+  },
+  "endpoints/2026-06-23.json": {
+   "bytes": 298345,
+   "gzip": 102430,
+   "sha256": "09353e354ed07d6916c38d7f7803d6a287d3d4f95a2681ba82489ad247b76b19"
+  },
+  "endpoints/2026-06-24.json": {
+   "bytes": 301664,
+   "gzip": 102985,
+   "sha256": "beadc90027e5cec10983c7f0488c6c50bbcc83670095ca19c70e0730a24bc8c3"
+  },
+  "endpoints/2026-06-25.json": {
+   "bytes": 312333,
+   "gzip": 107141,
+   "sha256": "a89f70332a01ce15ef38c29fd13de150564f3b96c0cf08e18c369dde35e01cef"
+  },
+  "endpoints/2026-06-26.json": {
+   "bytes": 315018,
+   "gzip": 107685,
+   "sha256": "70912ad0401416b60432a0e0ddb9571d48e008808cba67fca874544622b53c88"
+  },
+  "endpoints/2026-06-27.json": {
+   "bytes": 290590,
+   "gzip": 99749,
+   "sha256": "153884e0a9f093d75245a4e93f4c8897a52bd8f99cd669f29b0df29265d85972"
+  },
+  "endpoints/2026-06-28.json": {
+   "bytes": 301199,
+   "gzip": 103062,
+   "sha256": "8743b021dd3dad27a3a495d9d2c7bf10de6c059876e2459475f96365d7f82137"
+  },
+  "endpoints/2026-06-29.json": {
+   "bytes": 304805,
+   "gzip": 103758,
+   "sha256": "c9db3ef59e322e6ed4738a5731f06dff2e7c6da7c08d8b6e1cc0c03d6eda3414"
+  },
+  "endpoints/2026-06-30.json": {
+   "bytes": 300551,
+   "gzip": 102501,
+   "sha256": "b5c79590f1e924acb1963874c10d160d0a74de927ab9daf5f83b6205ac2470ef"
+  },
+  "endpoints/2026-07-01.json": {
+   "bytes": 305935,
+   "gzip": 104781,
+   "sha256": "14348173fad03a1e17e3456a20c4e14e2f4f7b6a8e0474452b0bfe06d33bb1e3"
+  },
+  "endpoints/2026-07-02.json": {
+   "bytes": 312740,
+   "gzip": 107140,
+   "sha256": "f505a4f63ec2a9edfa258f4f15d63f721c189583f70bd49b688cba99d81922e3"
+  },
+  "endpoints/2026-07-03.json": {
+   "bytes": 311011,
+   "gzip": 106412,
+   "sha256": "2f9fd06049491d5b627afb528607fec30fa30a05974a5f0efb6ba7e1acb098ea"
+  },
+  "endpoints/2026-07-04.json": {
+   "bytes": 283349,
+   "gzip": 97338,
+   "sha256": "107eb7db275500cf90d61341c57b41bdc52b93377788a641902f51494f34ee27"
+  },
+  "endpoints/2026-07-05.json": {
+   "bytes": 294439,
+   "gzip": 101344,
+   "sha256": "3294ebb9ac03e9f037b22d3af7e14ca72416f8ef7ebf00b6ac0dbc34f58dd8ff"
+  },
+  "endpoints/2026-07-06.json": {
+   "bytes": 307783,
+   "gzip": 105347,
+   "sha256": "f54d3cb1b0993fe847fcdb397423e049972a8c5747e12b431d1047c6371ca494"
+  },
+  "endpoints/2026-07-07.json": {
+   "bytes": 306883,
+   "gzip": 105041,
+   "sha256": "1371e50be7efba9f0d778f716aa1412ab4db197f29d4fca58b5a3fb519432e75"
+  },
+  "endpoints/2026-07-08.json": {
+   "bytes": 309650,
+   "gzip": 105679,
+   "sha256": "f5d7e4c6ff9da3488e11d44ba96e545fddffd62fe243f41f021b1de2ae912425"
+  },
+  "endpoints/2026-07-09.json": {
+   "bytes": 312858,
+   "gzip": 107270,
+   "sha256": "6f32068d9ce24fa9aa0070d2f1bec3f23de8b649d3fd0c79bd5c56aa4b228ddb"
+  },
+  "endpoints/2026-07-10.json": {
+   "bytes": 318861,
+   "gzip": 109396,
+   "sha256": "3b58347d3d3c121382b4363419e178564c7b03c058a6c93ee6cfff4bf8d075d0"
+  },
+  "endpoints/2026-07-11.json": {
+   "bytes": 296123,
+   "gzip": 101570,
+   "sha256": "6ac40d0baaaa48a63caf3802aaf67a6d132cf019cb9f51c5b840d016faa2c3d9"
+  },
+  "endpoints/2026-07-12.json": {
+   "bytes": 306501,
+   "gzip": 104997,
+   "sha256": "580d409070c0108374f099dca7725d13b404259f00ac6a4a2357c85ab8aab310"
+  },
+  "endpoints/2026-07-13.json": {
+   "bytes": 315507,
+   "gzip": 107702,
+   "sha256": "46dc4145cf5e6b55b469c6ec654ea5ab0be22a3e6763acc22294a36414847ed1"
+  },
+  "endpoints/2026-07-14.json": {
+   "bytes": 312027,
+   "gzip": 106417,
+   "sha256": "e9e03d23cffa36a057aa7d847e4382425a11f6ee8ad7996e3554bebc6ebdc239"
+  },
+  "endpoints/2026-07-15.json": {
+   "bytes": 316193,
+   "gzip": 107927,
+   "sha256": "0d19e1d9b518bf05bff14bf67a50d467a3c722ef8b582ec3003cc15fb31976a3"
+  },
+  "endpoints/2026-07-16.json": {
+   "bytes": 321195,
+   "gzip": 109619,
+   "sha256": "390b7665fd57a915460826d99a5f3e0afe92381152f7eed8bc4d09461c0f4322"
+  },
+  "endpoints/2026-07-17.json": {
+   "bytes": 322894,
+   "gzip": 109872,
+   "sha256": "2b3b47dcf07a769b12324149ad1056fbce7478e6ba073a9f51f06862e0cf98f5"
+  },
+  "endpoints/2026-07-18.json": {
+   "bytes": 297998,
+   "gzip": 101727,
+   "sha256": "a47f8d92488dba8c336532b3b2438505d3b1f748d13792313d7f415765703cf2"
+  },
+  "endpoints/2026-07-19.json": {
+   "bytes": 305074,
+   "gzip": 104135,
+   "sha256": "fbb4a76b763a09647df8c8b971962f02eb89079b623da98de6713fc556fee5ca"
+  },
+  "endpoints/2026-07-20.json": {
+   "bytes": 312008,
+   "gzip": 106620,
+   "sha256": "f22a9d625131a39397809fa830342c960900151b04243fc239e2ce25d00862a3"
+  },
+  "endpoints/2026-07-21.json": {
+   "bytes": 300690,
+   "gzip": 103324,
+   "sha256": "d7617dd93456b4745c5d485aca5add70dfbdd0f27dea67094467efc8ebc4c344"
+  },
+  "endpoints/2026-07-22.json": {
+   "bytes": 310383,
+   "gzip": 106607,
+   "sha256": "24ce9ff101766c768ed17d23dd8986329e4abcc5ee1664c6fe399eb6fb13cb1d"
+  },
+  "endpoints/2026-07-23.json": {
+   "bytes": 320197,
+   "gzip": 110150,
+   "sha256": "61436d602f437fa921c5bfd6249469f39de9d12e4df139963977a7f6c4d38193"
+  },
+  "endpoints/2026-07-24.json": {
+   "bytes": 324216,
+   "gzip": 111193,
+   "sha256": "d0c08bda209bfb16e6a97546f9b3d677bcea6505bee70973cdc95b8a1d824879"
+  },
+  "endpoints/2026-07-25.json": {
+   "bytes": 300734,
+   "gzip": 103497,
+   "sha256": "9189b42d3dd314661a688cbc4e1f16f9527a801a325dfdc9cacf4292d223c477"
+  },
+  "endpoints/2026-07-26.json": {
+   "bytes": 306327,
+   "gzip": 105503,
+   "sha256": "7a4819b7d539c8032863b11e88d2d30f51a32dc57b9668a81ebf208b426cd33b"
+  },
+  "endpoints/2026-07-27.json": {
+   "bytes": 310472,
+   "gzip": 106468,
+   "sha256": "2730680b4e5d29d6ea4935437f0fbdb7d84653e4dbbbcf54944220078679e5fa"
+  },
+  "endpoints/2026-07-28.json": {
+   "bytes": 305318,
+   "gzip": 104809,
+   "sha256": "6a3cccfe7aa06436e601d32eab6a36da9eecd85d384f45779a78a3fc66fc745a"
+  },
+  "endpoints/2026-07-29.json": {
+   "bytes": 313075,
+   "gzip": 107133,
+   "sha256": "49098016eb000c57ca2fb8ca78c7d030f9e1a661e4ef06c7c171822211a02158"
+  },
+  "endpoints/2026-07-30.json": {
+   "bytes": 324405,
+   "gzip": 110892,
+   "sha256": "799397fa3d4b968ef6deb520a9f75a85dc9b11099c62b0036fffe7fda1ac1674"
+  },
+  "endpoints/2026-07-31.json": {
+   "bytes": 326450,
+   "gzip": 111655,
+   "sha256": "2de4b8ca5a4ea8b081277c9e23d8b1a87542eb0177222b3abea4ad9c964a94ea"
+  },
+  "endpoints/2026-08-01.json": {
+   "bytes": 196926,
+   "gzip": 67248,
+   "sha256": "a0f3c0cb592219bdb4ddcca2d51329337f6971aff279c8abbee3b4e63b705c2c"
+  },
+  "endpoints/2026-08-02.json": {
+   "bytes": 302499,
+   "gzip": 103901,
+   "sha256": "844349aca557cf360bcc72721c6116204ab62371395c6b57ed23e1ca413f2450"
+  },
+  "endpoints/2026-08-03.json": {
+   "bytes": 322522,
+   "gzip": 109839,
+   "sha256": "02b0bf8554e9e3f12e123f2d2855fe448ffb663ba34346dcb13f097227dece90"
+  },
+  "endpoints/2026-08-04.json": {
+   "bytes": 320990,
+   "gzip": 109223,
+   "sha256": "adb91d158f810d685c8f2b0c8bbfa929bd1e82433405d3ba2498cf1a1436da34"
+  },
+  "endpoints/2026-08-05.json": {
+   "bytes": 318166,
+   "gzip": 108405,
+   "sha256": "98c01287dbd2979c5771e1ec9e276eaa7d7877a365972a66cd8f787d256b1bca"
+  },
+  "endpoints/2026-08-06.json": {
+   "bytes": 321685,
+   "gzip": 109837,
+   "sha256": "05e3ee0c5d0827e8902a430afeee960bc1aea64afaaf96204a895077b07c31e0"
+  },
+  "endpoints/2026-08-07.json": {
+   "bytes": 325045,
+   "gzip": 111044,
+   "sha256": "757d80314a110823ef5c07072e68f0cb320bbf6992b5268079fb5980d0ec1376"
+  },
+  "endpoints/2026-08-08.json": {
+   "bytes": 303131,
+   "gzip": 104015,
+   "sha256": "29fc00e37068a8dbe736a36068299008fc2206b1d6bc5ac9639bff504cee92e5"
+  },
+  "endpoints/2026-08-09.json": {
+   "bytes": 220580,
+   "gzip": 77220,
+   "sha256": "1808ca8b5853ace1acc072ca2b107aca1a64968dc8c7aefe93a0679e3c972101"
+  },
+  "endpoints/2026-08-10.json": {
+   "bytes": 315379,
+   "gzip": 108100,
+   "sha256": "31a7b373bf96e4e5455bb999373973b3a242e677ffb273b6dd7901e901626d57"
+  },
+  "endpoints/2026-08-11.json": {
+   "bytes": 312736,
+   "gzip": 107204,
+   "sha256": "9a70855cbbd4f185c451fdb720ff644f08408afab80ba3add16e705c24bc01ba"
+  },
+  "endpoints/2026-08-12.json": {
+   "bytes": 255600,
+   "gzip": 87886,
+   "sha256": "436221718a081cea1ad94cfa4251b02495a5b1380a996eb7960cf104fda65b2f"
+  },
+  "endpoints/2026-08-13.json": {
+   "bytes": 251899,
+   "gzip": 87957,
+   "sha256": "157137f4f5a0ee773541b4000f0da369c8f892dbbde4ef5754da84f561127fc1"
+  },
+  "endpoints/2026-08-14.json": {
+   "bytes": 330227,
+   "gzip": 112799,
+   "sha256": "a2d8c36e69d220b58def7aea86108f36bc44b575c3063dca70d39316e6cd37f6"
+  },
+  "endpoints/2026-08-15.json": {
+   "bytes": 310406,
+   "gzip": 105314,
+   "sha256": "7183a05b4586637350ac4a57387e3deacaac64e40b5b1fa6640185cfa53f259a"
+  },
+  "endpoints/2026-08-16.json": {
+   "bytes": 312824,
+   "gzip": 106331,
+   "sha256": "128c27d1a6648bccfbb243d1fa579af9c22dcdb89cb2188d63a1a0298dbb9125"
+  },
+  "endpoints/2026-08-17.json": {
+   "bytes": 324068,
+   "gzip": 110536,
+   "sha256": "53d3d5970c77678c9e23b899927ca24d1881f3e7268a70d8ee3258c9ad2394f5"
+  },
+  "endpoints/2026-08-18.json": {
+   "bytes": 314960,
+   "gzip": 107584,
+   "sha256": "7c2e82f057a2fb76562d56df708aaba0f850342b049343dedeb6a9909d9509a4"
+  },
+  "endpoints/2026-08-19.json": {
+   "bytes": 297535,
+   "gzip": 103187,
+   "sha256": "e09f53623d3171613a7548d666dd4402ad26b093f0e650d785583f9db4e76f46"
+  },
+  "endpoints/2026-08-20.json": {
+   "bytes": 320070,
+   "gzip": 109327,
+   "sha256": "0abb6b1b81ff97707d5537209b6c8375f72fc83648259978625232b7305063b4"
+  },
+  "endpoints/2026-08-21.json": {
+   "bytes": 327135,
+   "gzip": 111746,
+   "sha256": "94e573f20ae9c04cb116e453be9240dba10060724b6d66b15172c84792b653e5"
+  },
+  "endpoints/2026-08-22.json": {
+   "bytes": 302210,
+   "gzip": 103999,
+   "sha256": "94a7f3b075bdd1be5f64af49286007e4184ec2d355997e04971dfc6955261648"
+  },
+  "endpoints/2026-08-23.json": {
+   "bytes": 311815,
+   "gzip": 106482,
+   "sha256": "2270ffe7ea216da67bf4669bb1dccf0122cd94229749fde12a020df7bb03d97e"
+  },
+  "endpoints/2026-08-24.json": {
+   "bytes": 319620,
+   "gzip": 109183,
+   "sha256": "901e0be56053f65340dc8f7ecc56c605bd681f18eac90fa7874bca7ea18e4960"
+  },
+  "endpoints/2026-08-25.json": {
+   "bytes": 311706,
+   "gzip": 106616,
+   "sha256": "193ccecbaf39620e4bd5eae1838c984d6046f77c3a88c88cfdc587809b1b3781"
+  },
+  "endpoints/2026-08-26.json": {
+   "bytes": 313071,
+   "gzip": 107511,
+   "sha256": "346963675230589ba2d164eccca2e9e7c75ca8d19c2cebe83dd3db218556a6b8"
+  },
+  "endpoints/2026-08-27.json": {
+   "bytes": 320030,
+   "gzip": 110559,
+   "sha256": "d86136b23f469b31bc92c8183594683dc5b794ef913e0acd37e454aac86a46e8"
+  },
+  "endpoints/2026-08-28.json": {
+   "bytes": 327021,
+   "gzip": 112604,
+   "sha256": "37ff21119f1f35be06a418feb7a971f95049abceebcc2b8df8f05d4a9d38360a"
+  },
+  "endpoints/2026-08-29.json": {
+   "bytes": 305980,
+   "gzip": 104812,
+   "sha256": "b34a639a289aa6663ba36e9c722e053751eb2b7d0311f52a08026022d7a47c8b"
+  },
+  "endpoints/2026-08-30.json": {
+   "bytes": 310198,
+   "gzip": 106027,
+   "sha256": "af5d004b48e82b7828fa4fca9439db64c0dc64f63a092005827c91609e2fa5cf"
+  },
+  "endpoints/2026-08-31.json": {
+   "bytes": 313505,
+   "gzip": 107378,
+   "sha256": "18018cb494c05ec9085775985eb314a926656f147f47503abb34248af8c17660"
+  },
+  "endpoints/2026-09-01.json": {
+   "bytes": 302980,
+   "gzip": 104037,
+   "sha256": "69ddecb1b1da33cfb122e713df3026d774f4a1acb09d1cd844579403742b8030"
+  },
+  "endpoints/2026-09-02.json": {
+   "bytes": 307181,
+   "gzip": 105684,
+   "sha256": "90bb5c791dd9a61af749bdafce4c7b889655b08dc9e83f5010b8a59494c6a48d"
+  },
+  "endpoints/2026-09-03.json": {
+   "bytes": 316939,
+   "gzip": 109292,
+   "sha256": "4e12384638f0c1103ddaeceeb195bd543debc2b127fb3e1f05ad784fb5e6035f"
+  },
+  "endpoints/2026-09-04.json": {
+   "bytes": 325754,
+   "gzip": 111902,
+   "sha256": "2e50cc6e23183d5a05a0d95f711d68f81feb5e97408d1b92b8904c987bb9ff39"
+  },
+  "endpoints/2026-09-05.json": {
+   "bytes": 297175,
+   "gzip": 102357,
+   "sha256": "0032e3911d838ec176ba1749f394f2fddc1441f21a80cab0ba2c082ce6a6705e"
+  },
+  "endpoints/2026-09-06.json": {
+   "bytes": 293946,
+   "gzip": 101133,
+   "sha256": "aa8ef303bbc532b5bd49bcefb6d4e3a357cbdfff2fbd23eecc757ce56e9a6318"
+  },
+  "endpoints/2026-09-07.json": {
+   "bytes": 307289,
+   "gzip": 105147,
+   "sha256": "5db7a8d5121139cf6c715112718fd5b57f6c2fb4ef845b9cedb12cc91fcccdd2"
+  },
+  "endpoints/2026-09-08.json": {
+   "bytes": 295271,
+   "gzip": 101010,
+   "sha256": "f69b3dfcd9bbd21cca42309ca5089cfd7c92e5128b133e2ce2dadab878e0dde7"
+  },
+  "endpoints/2026-09-09.json": {
+   "bytes": 305169,
+   "gzip": 105113,
+   "sha256": "5a7a963571bb293aca616420bf884c22f5980d4f3a6d15dba66edeaaf2faf704"
+  },
+  "endpoints/2026-09-10.json": {
+   "bytes": 315984,
+   "gzip": 108841,
+   "sha256": "b9e4253e0b0d6ea2717147d956218a35e2fcb7702c3e9698999928ce590023ba"
+  },
+  "endpoints/2026-09-11.json": {
+   "bytes": 320740,
+   "gzip": 110316,
+   "sha256": "ac13f0091ecefdade9f025dbc0d5a40d8964d85f183656bf572ff83fe822e257"
+  },
+  "endpoints/2026-09-12.json": {
+   "bytes": 295155,
+   "gzip": 101439,
+   "sha256": "4b8cd4a9e28396ae5b16a31cb734aa03d3ed14a250b681232213ff9008a92c84"
+  },
+  "endpoints/2026-09-13.json": {
+   "bytes": 305858,
+   "gzip": 104952,
+   "sha256": "ef6a79038c0f98ea3f92f20fc8d99f4b4c186a115cf5e5b268ead0f662188d1c"
+  },
+  "endpoints/2026-09-14.json": {
+   "bytes": 316903,
+   "gzip": 109123,
+   "sha256": "c9c295d9a04490021fcd1fadfa8ce0053afecdbd22c9207b71b2784a948867c8"
+  },
+  "endpoints/2026-09-15.json": {
+   "bytes": 305318,
+   "gzip": 104876,
+   "sha256": "87db979eb544a9222a48bd3ebc216c925c8c6921eb087797eeb440f0aa6c38eb"
+  },
+  "endpoints/2026-09-16.json": {
+   "bytes": 306316,
+   "gzip": 105190,
+   "sha256": "da63f46fc28e561c6d14c5573cc312c03b7384058c0864e7da83a7882f6659cc"
+  },
+  "endpoints/2026-09-17.json": {
+   "bytes": 315467,
+   "gzip": 108382,
+   "sha256": "5de026a588cac0af75e183e243f570a87abb3c18c72f12b390bc69d4b2d859b5"
+  },
+  "endpoints/2026-09-18.json": {
+   "bytes": 323990,
+   "gzip": 110701,
+   "sha256": "1eaeceed4acdd678360765af555f12b71cfbfdc2037a214b9f94cc9db05357a1"
+  },
+  "endpoints/2026-09-19.json": {
+   "bytes": 288195,
+   "gzip": 98899,
+   "sha256": "a6172aea36c63a790f9fb919c7a9d5534dd7b07217b1b5556a377ea6029dfb4b"
+  },
+  "endpoints/2026-09-20.json": {
+   "bytes": 304688,
+   "gzip": 104750,
+   "sha256": "8dc97fc91448a87aa3a1d6e587f13164b31b8d3b9cc59d62d34eba6cfca057a7"
+  },
+  "endpoints/2026-09-21.json": {
+   "bytes": 304432,
+   "gzip": 104939,
+   "sha256": "eddf5e7f3632260fdebb84deab0ecdddda1970d27c734101a7f7aa964958856d"
+  },
+  "endpoints/2026-09-22.json": {
+   "bytes": 304684,
+   "gzip": 104765,
+   "sha256": "8a1fd0ee9936968606987190ccf1f6926a11d9087e66bad1edeb6eab4435d4d4"
+  },
+  "endpoints/2026-09-23.json": {
+   "bytes": 308167,
+   "gzip": 105795,
+   "sha256": "e1504c4e59703de055e7d94f9415fdc5e6ce488319aa9fd81f7df2deba389db5"
+  },
+  "endpoints/2026-09-24.json": {
+   "bytes": 316872,
+   "gzip": 108999,
+   "sha256": "39bcc9c7a865a63b82b25993ef025b2c9ec7a4c149690b76c07aaee0ec317697"
+  },
+  "endpoints/2026-09-25.json": {
+   "bytes": 318757,
+   "gzip": 109344,
+   "sha256": "a4b8f30549b13c267a8209262b7dc5d0cbf9e647e5d071ee5b7c9d0b2634d2fa"
+  },
+  "endpoints/2026-09-26.json": {
+   "bytes": 292989,
+   "gzip": 100479,
+   "sha256": "07a3157196108b4e5024f0176e90c7272101dc32fe16589147d95dca5a596f2b"
+  },
+  "endpoints/2026-09-27.json": {
+   "bytes": 303227,
+   "gzip": 103719,
+   "sha256": "2bb60ba5d06a355c38b6b268a086b4f237e5047b9469687799f4fc84f8c07c85"
+  },
+  "endpoints/2026-09-28.json": {
+   "bytes": 313054,
+   "gzip": 107242,
+   "sha256": "8ed93b54a77806c5961df1715f208b38763c6334735cfa96a05b1859b6958efb"
+  },
+  "endpoints/2026-09-29.json": {
+   "bytes": 305159,
+   "gzip": 104407,
+   "sha256": "a29b2c86d078a82489cf42f72bd159b52de66965c1438d82f030bdbe99b8dfcf"
+  },
+  "endpoints/2026-09-30.json": {
+   "bytes": 306001,
+   "gzip": 104976,
+   "sha256": "058a2a4a905e1a17014262fed325c0cd24448c983dbb4ac131ede64335aa8370"
+  }
+ },
+ "totalBytes": 77658722,
+ "totalGzipBytes": 26673474,
+ "elapsedSeconds": 45.6
+}

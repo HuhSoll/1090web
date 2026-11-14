@@ -296,3 +296,45 @@ export const toWire = (d: Disruption): DisruptionWire => ({ dep: [...d.dep], arr
 export function fromWire(w: DisruptionWire): Disruption {
   return { dep: new Map(w.dep), arr: new Map(w.arr), ab: new Map(w.ab), ba: new Map(w.ba), targetAirports: [], targetRoutes: [], issues: [], applied: [] };
 }
+
+// ---- the scenario over time (Phase 9D) -------------------------------------------------------------
+
+/** Every finite start / end of the applied intervals, ascending: the state can only change there. */
+export function boundaries(d: Disruption): number[] {
+  const out = new Set<number>();
+  for (const m of [d.dep, d.arr, d.ab, d.ba]) {
+    for (const list of m.values()) {
+      for (const x of list) {
+        if (Number.isFinite(x.s)) out.add(x.s);
+        if (Number.isFinite(x.e)) out.add(x.e);
+      }
+    }
+  }
+  return [...out].sort((a, b) => a - b);
+}
+
+/**
+ * Identifies what is unavailable at an instant (structural model). Two instants with the same
+ * signature give the same simulated network on the same baseline, so their results can be shared.
+ */
+export function activeSignature(d: Disruption, at: number): string {
+  const st = structuralState(d, { at });
+  const part = (x: Set<number>) => [...x].sort((a, b) => a - b).join(',');
+  return `d${part(st.dep)}|a${part(st.arr)}|f${part(st.ab)}|b${part(st.ba)}`;
+}
+
+/** Is the event in effect at the instant? (enabled, valid period, half-open [start, end)) */
+export function eventActiveAt(e: SimulationEvent, at: number): boolean {
+  if (!e.enabled) return false;
+  const s = e.startTimeUtc === null ? -Infinity : parseIsoUtc(e.startTimeUtc);
+  const t = e.endTimeUtc === null ? Infinity : parseIsoUtc(e.endTimeUtc);
+  return s !== null && t !== null && t > s && at >= s && at < t;
+}
+
+/** Does the event overlap [startMs, endMs)? */
+export function eventOverlapsWindow(e: SimulationEvent, startMs: number, endMs: number): boolean {
+  if (!e.enabled) return false;
+  const s = e.startTimeUtc === null ? -Infinity : parseIsoUtc(e.startTimeUtc);
+  const t = e.endTimeUtc === null ? Infinity : parseIsoUtc(e.endTimeUtc);
+  return s !== null && t !== null && t > s && s < endMs && t > startMs;
+}

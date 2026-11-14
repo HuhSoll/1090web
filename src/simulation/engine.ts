@@ -88,14 +88,21 @@ export function researchConfigOf(s: SimulationScenario, month: string): Research
 }
 
 /** Which events count in the structural model (see the module doc of disruption.ts). */
-export function structuralWhen(s: SimulationScenario, window: Interval): { at: number } | { window: Interval } | null {
+/**
+ * Which events count in the structural model. Phase 9D: always the events in effect at the
+ * simulation time (the timeline cursor), for a fixed and a dynamic baseline alike, so a 6-hour
+ * closure is never shown as closed for a whole 24-hour window. Without a simulation time (a
+ * Phase 9C call) the 9C rule applies: the evaluation time, else every event overlapping the window.
+ */
+export function structuralWhen(s: SimulationScenario, window: Interval, atMs?: number | null): { at: number } | { window: Interval } | null {
+  if (atMs !== undefined && atMs !== null) return { at: atMs };
   if (s.baselineMode === 'dynamic') return { window };
   const at = parseIsoUtc(s.evaluationTime);
   return at === null ? { window } : { at };
 }
 
 /** Baseline route ids (after thresholds) restrict the simulated network to the same routes. */
-function restrictTo(net: ResearchNetwork, base: ResearchNetwork): ResearchNetwork {
+export function restrictTo(net: ResearchNetwork, base: ResearchNetwork): ResearchNetwork {
   const keep = new Set(base.routes.map((r) => r.routeId));
   const routes = net.routes.filter((r) => keep.has(r.routeId));
   const airports = new Set<number>();
@@ -124,6 +131,8 @@ export interface BuildInput {
   affected: AggregateRows | null;
   temporal: DisruptionStats | null;
   key: string;
+  /** simulation time (Phase 9D timeline cursor); structural events are evaluated at this instant */
+  atMs?: number | null;
 }
 
 export function buildSimulation(inp: BuildInput): SimulationOutput {
@@ -140,7 +149,7 @@ export function buildSimulation(inp: BuildInput): SimulationOutput {
   let structural: StructuralState | null = null;
   let evaluation: SimulationOutput['evaluation'] = null;
   if (s.simulationModel === 'structural') {
-    evaluation = structuralWhen(s, { s: inp.window.startMs, e: inp.window.endMs });
+    evaluation = structuralWhen(s, { s: inp.window.startMs, e: inp.window.endMs }, inp.atMs);
     structural = structuralState(inp.disruption, evaluation);
     afterR = applyStructuralResearch(beforeR, structural, routeEnds);
     afterE = applyStructuralExplore(beforeE, structural, routeEnds);
@@ -208,7 +217,7 @@ export function impactInputOf(before: ResearchNetwork, after: ResearchNetwork, d
   };
 }
 
-function directImpact(
+export function directImpact(
   network: StaticNetwork, scope: ScopeContext, s: SimulationScenario, d: Disruption,
   beforeR: ResearchMonth, afterR: ResearchMonth, before: ResearchNetwork, after: ResearchNetwork,
 ): DirectImpact {

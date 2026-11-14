@@ -111,6 +111,9 @@ export function useTemporal(): MetaState {
   const selectedAirport = useAppStore((s) => s.selectedAirport);
   const playing = useAppStore((s) => s.temporalPlaying);
   const status = useAppStore((s) => s.temporalStatus);
+  // while the simulation is open its own result is on the map; the cursor still drives it
+  const simOpen = useAppStore((s) => s.simOpen);
+  const simAt = useAppStore((s) => (s.simStatus.state === 'ready' ? s.simStatus.atMs : s.simStatus.state === 'error' ? -1 : null));
   const enabled = exploreTime === 'temporal' && network !== null;
   const meta = useTemporalMeta(enabled);
   const range = meta.state === 'ready' ? meta.meta.range : null;
@@ -128,7 +131,7 @@ export function useTemporal(): MetaState {
   const key = JSON.stringify([win?.window, sel?.basis, sel?.compare, filters, selectedAirport]);
 
   useEffect(() => {
-    if (!enabled || !sel || !range || !network) return;
+    if (!enabled || !sel || !range || !network || simOpen) return;
     const st = useAppStore.getState();
     if (!win) {
       st.setTemporalStatus({ state: 'error', window: windowFor(sel), message: 'outside' });
@@ -194,11 +197,13 @@ export function useTemporal(): MetaState {
     };
     // `key` covers the window, basis, comparison, filters and selected airport
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, key, network]);
+  }, [enabled, key, network, simOpen]);
 
   // playback: the next step starts only after the current window is on screen
+  // with the simulation open, the next step waits for the simulation result of this instant
+  const stepReady = simOpen ? simAt !== null && (simAt === sel?.cursorMs || simAt === -1) : status.state === 'ready';
   useEffect(() => {
-    if (!enabled || !playing || !sel || !range || status.state !== 'ready') return;
+    if (!enabled || !playing || !sel || !range || !stepReady) return;
     const id = window.setTimeout(() => {
       const st = useAppStore.getState();
       const cur = st.temporalSel;
@@ -208,7 +213,7 @@ export function useTemporal(): MetaState {
       else st.patchTemporalSel(next);
     }, SPEED_MS[sel.speed]);
     return () => window.clearTimeout(id);
-  }, [enabled, playing, sel, range, status]);
+  }, [enabled, playing, sel, range, stepReady]);
 
   // leaving the temporal view stops its requests
   useEffect(() => {

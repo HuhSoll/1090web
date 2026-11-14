@@ -32,6 +32,8 @@ export interface GlobeSelectionInput {
   focusRoute: number | null;
   /** Airports marked as scenario targets (simulation). */
   markedAirports?: readonly number[];
+  /** Airports affected by a scenario: shown in the 'connected' style even without a selection. */
+  impactedAirports?: readonly number[];
 }
 
 export type PickHit = { kind: 'airport'; index: number } | { kind: 'route'; routeId: number };
@@ -295,7 +297,8 @@ export class GlobeRenderer {
     this.airports.setStates(
       sel.selectedAirport,
       sel.hoveredAirport,
-      sel.selectedAirport !== null || sel.focusRoute !== null ? connectedAirports : null,
+      sel.selectedAirport !== null || sel.focusRoute !== null || (sel.impactedAirports?.length ?? 0) > 0
+        ? new Set([...connectedAirports, ...(sel.impactedAirports ?? [])]) : null,
       sel.markedAirports ?? [],
     );
     this.pinnedAirports = new Set(connectedAirports);

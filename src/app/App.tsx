@@ -8,7 +8,7 @@ import { TemporalTimeline } from '../components/layout/TemporalTimeline';
 import { useTemporal } from '../temporal/useTemporal';
 import { TopBar } from '../components/layout/TopBar';
 import { InfoPanel } from '../components/panels/InfoPanel';
-import { CompareLegend, SimLegend } from '../components/panels/ComparePanels';
+import { CompareLegend } from '../components/panels/ComparePanels';
 import { useSimMap } from './useSimMap';
 import { SourcesDialog } from '../components/panels/SourcesDialog';
 import { Tooltip } from '../components/common/Tooltip';
@@ -23,7 +23,7 @@ import { useAdvisoryLoader } from './useAdvisories';
 const GlobeView = lazy(() => import('../components/globe/GlobeView').then((m) => ({ default: m.GlobeView })));
 // Research Mode is loaded only when opened.
 // The simulation panel (and its engine) is loaded only when opened.
-const SimulationPanel = lazy(() => import('../components/simulation/SimulationPanel').then((m) => ({ default: m.SimulationPanel })));
+const SimulationView = lazy(() => import('../components/simulation/SimulationView').then((m) => ({ default: m.SimulationView })));
 const ResearchView = lazy(() => import('../components/research/ResearchView').then((m) => ({ default: m.ResearchView })));
 
 export function App() {
@@ -39,7 +39,6 @@ export function App() {
   const view = sim.view;
   const comparison = sim.comparison;
   const simOpen = useAppStore((s) => s.simOpen);
-  const simFixed = useAppStore((s) => s.simOpen && s.simScenario?.baselineMode === 'fixed');
   const { t, number, locale } = useI18n();
   const status = useAppStore((s) => s.status);
   const kind = useAppStore((s) => s.network?.manifest.kind);
@@ -74,7 +73,7 @@ export function App() {
   }, []);
 
   return (
-    <div className={`app ${exploreTime === 'temporal' && !research ? 'is-temporal' : ''}`}>
+    <div className={`app ${exploreTime === 'temporal' && !research ? 'is-temporal' : ''} ${simOpen && !research ? 'is-sim' : ''}`}>
       <div className="backdrop" aria-hidden="true" />
       <main className="stage">
         <ErrorBoundary
@@ -135,14 +134,13 @@ export function App() {
       {!research && simOpen && (
         <ErrorBoundary fallback={() => <div className="info panel" role="alert"><p className="hint warn">{t('sim.err.failed', { message: '' })}</p></div>}>
           <Suspense fallback={<div className="info panel" role="status"><div className="spinner" aria-hidden="true" /></div>}>
-            <SimulationPanel />
+            <SimulationView comparison={comparison} temporal={sim.temporal} />
           </Suspense>
         </ErrorBoundary>
       )}
       {!research && !simOpen && comparison && <CompareLegend comparison={comparison} />}
-      {!research && simOpen && sim.marks && <SimLegend comparison={comparison} temporal={sim.temporal} />}
       <TopBar />
-      {!research && !simFixed && (exploreTime === 'temporal' ? <TemporalTimeline meta={temporalMeta} /> : <Timeline />)}
+      {!research && !simOpen && (exploreTime === 'temporal' ? <TemporalTimeline meta={temporalMeta} /> : <Timeline />)}
       {!research && <Tooltip view={view} />}
       <SourcesDialog />
       {!research && mapNote && (

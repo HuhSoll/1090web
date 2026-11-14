@@ -1,6 +1,7 @@
 import type { SimulationOutput } from '../simulation/engine';
 import type { ImpactResult } from '../simulation/impact';
 import type { SimulationScenario } from '../simulation/model';
+import type { SeriesPoint } from '../simulation/series';
 import { create } from 'zustand';
 import type { MonthData, StaticNetwork } from '../data/model/network';
 import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
@@ -40,12 +41,21 @@ export interface TemporalResultInfo {
 export type AppMode = 'explore' | 'research';
 
 /** Phase 9C simulation (see src/simulation). */
-export type SimView = 'after' | 'before' | 'overlay';
+/**
+ * focus: only what changed (default); overlay: before + after; after / before: one network;
+ * airports: airports by impact (Phase 9D)
+ */
+export type SimView = 'focus' | 'overlay' | 'after' | 'before' | 'airports';
+/** Airport impact measure used by the 'airports' map view and the ranking. */
+export type SimAirportMetric = 'lost' | 'hop2' | 'degree';
+/** One value of the scenario time series (see simulation/series.ts). */
+export type SimSeriesState = { key: string; stepMs: number; points: SeriesPoint[]; done: number; total: number; method: string } | null;
 export type SimStatus =
   | { state: 'idle' }
   /** previous: the last result, kept on the map only (never shown as the current numbers) */
   | { state: 'loading'; done: number; total: number; previous: SimulationOutput | null }
-  | { state: 'ready'; output: SimulationOutput }
+  /** atMs: the simulation time the result is shown for (several times can share one output) */
+  | { state: 'ready'; output: SimulationOutput; atMs: number | null }
   | { state: 'error'; message: string };
 export type SimImpactState =
   | { state: 'idle' }
@@ -126,6 +136,16 @@ interface AppState {
   temporalStatus: TemporalStatus;
   simOpen: boolean;
   simScenario: SimulationScenario | null;
+  /** undo / redo of scenario edits (not of the simulation time) */
+  simPast: SimulationScenario[];
+  simFuture: SimulationScenario[];
+  simSelectedEvent: string | null;
+  /** 'Show before' held down: the map shows the observed network while true */
+  simPeek: boolean;
+  simAirportMetric: SimAirportMetric;
+  simSeries: SimSeriesState;
+  /** Explore's time mode before the simulation opened (restored on close) */
+  simPrevExploreTime: ExploreTime | null;
   simView: SimView;
   simStatus: SimStatus;
   simImpact: SimImpactState;
@@ -175,6 +195,14 @@ interface AppState {
   setTemporalStatus: (s: TemporalStatus) => void;
   setSimOpen: (open: boolean) => void;
   setSimScenario: (s: SimulationScenario | null) => void;
+  /** a user edit: recorded for undo */
+  editSimScenario: (s: SimulationScenario) => void;
+  undoSim: () => void;
+  redoSim: () => void;
+  setSimSelectedEvent: (id: string | null) => void;
+  setSimPeek: (v: boolean) => void;
+  setSimAirportMetric: (m: SimAirportMetric) => void;
+  setSimSeries: (s: SimSeriesState) => void;
   patchSimScenario: (p: Partial<SimulationScenario>) => void;
   setSimView: (v: SimView) => void;
   setSimStatus: (s: SimStatus) => void;
@@ -251,7 +279,14 @@ export const useAppStore = create<AppState>((set) => ({
   temporalStatus: { state: 'idle' },
   simOpen: false,
   simScenario: null,
-  simView: 'overlay',
+  simPast: [],
+  simFuture: [],
+  simSelectedEvent: null,
+  simPeek: false,
+  simAirportMetric: 'lost',
+  simSeries: null,
+  simPrevExploreTime: null,
+  simView: 'focus',
   simStatus: { state: 'idle' },
   simImpact: { state: 'idle' },
   simPair: null,
@@ -327,8 +362,34 @@ export const useAppStore = create<AppState>((set) => ({
   setTemporalPlaying: (temporalPlaying) => set({ temporalPlaying }),
   setTemporalStatus: (temporalStatus) => set({ temporalStatus }),
   // closing the simulation drops its results: the map returns to the observed network
-  setSimOpen: (simOpen) => set(simOpen ? { simOpen } : { simOpen, simStatus: { state: 'idle' }, simImpact: { state: 'idle' }, simPair: null, simPathRoutes: [] }),
+  // Opening switches Explore to the temporal view (the timeline's clock); closing drops the
+  // results and restores the previous time mode, so the map returns to the observed network.
+  setSimOpen: (simOpen) => set((s) => {
+    if (simOpen === s.simOpen) return s;
+    if (simOpen) return { simOpen, simPrevExploreTime: s.exploreTime, exploreTime: 'temporal', playing: false };
+    const back = s.simPrevExploreTime ?? s.exploreTime;
+    return {
+      simOpen, simStatus: { state: 'idle' }, simImpact: { state: 'idle' }, simPair: null, simPathRoutes: [], simSeries: null,
+      simSelectedEvent: null, simPeek: false, temporalPlaying: false, simPrevExploreTime: null,
+      ...(back !== s.exploreTime ? { exploreTime: back, month: null, baseMonth: null, compareEnabled: false, temporalStatus: { state: 'idle' } as TemporalStatus } : {}),
+    };
+  }),
   setSimScenario: (simScenario) => set({ simScenario }),
+  editSimScenario: (next) => set((s) => ({ simScenario: next, simPast: s.simScenario ? [...s.simPast, s.simScenario].slice(-50) : s.simPast, simFuture: [] })),
+  undoSim: () => set((s) => {
+    const prev = s.simPast[s.simPast.length - 1];
+    if (!prev || !s.simScenario) return s;
+    return { simScenario: prev, simPast: s.simPast.slice(0, -1), simFuture: [s.simScenario, ...s.simFuture].slice(0, 50) };
+  }),
+  redoSim: () => set((s) => {
+    const next = s.simFuture[0];
+    if (!next || !s.simScenario) return s;
+    return { simScenario: next, simFuture: s.simFuture.slice(1), simPast: [...s.simPast, s.simScenario].slice(-50) };
+  }),
+  setSimSelectedEvent: (simSelectedEvent) => set({ simSelectedEvent }),
+  setSimPeek: (simPeek) => set({ simPeek }),
+  setSimAirportMetric: (simAirportMetric) => set({ simAirportMetric }),
+  setSimSeries: (simSeries) => set({ simSeries }),
   patchSimScenario: (p) => set((s) => (s.simScenario ? { simScenario: { ...s.simScenario, ...p } } : s)),
   setSimView: (simView) => set({ simView }),
   setSimStatus: (simStatus) => set({ simStatus }),

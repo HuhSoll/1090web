@@ -9,6 +9,7 @@ import { useAppStore, type CompareField } from '../../state/store';
 import { gapDaysIn } from '../../research/periods';
 import { windowLabel } from '../../temporal/useTemporal';
 import { Note, SortTable, type Column } from './common';
+import { eventLabel } from '../../simulation/labels';
 import { useFormat } from './format';
 
 export function ComparisonPanel({ result, other, otherConfig, meta }: {
@@ -28,7 +29,10 @@ export function ComparisonPanel({ result, other, otherConfig, meta }: {
     minFlights: [...THRESHOLD_PRESETS].filter((v) => v !== config.minFlights).map((v) => ({ value: v, label: `≥ ${v}` })),
     tiers: (['D', 'C', 'B', 'A'] as const).filter((v) => v !== config.tiers).map((v) => ({ value: v, label: t(`r.tiersShort.${v}`) })),
     window: config.window ? (['previous', 'day', 'week'] as const).map((v) => ({ value: v, label: t(`r.cmp.window.${v}`) })) : [],
-    scenario: config.scenario ? [{ value: 'off', label: t('r.cmp.scenario.off') }] : [],
+    scenario: config.scenario ? [
+      { value: 'off', label: t('r.cmp.scenario.off') },
+      ...config.scenario.events.map((e, i) => ({ value: `without:${i}`, label: t('r.cmp.scenario.without', { event: eventLabel(e, (id) => network.airports.find((a) => a.id === id)?.iata ?? id) }) })),
+    ] : [],
     area: [
       ...REGIONS.map((r) => ({ value: `R:${r}`, label: t(`r.region.${r}`) })),
       ...[...new Set(network.airports.map((a) => a.country))].map((c) => ({ value: `C:${c}`, label: countryName(c) })).sort((a, b) => a.label.localeCompare(b.label)),

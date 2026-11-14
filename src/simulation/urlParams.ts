@@ -2,7 +2,7 @@
  * Scenario <-> URL (short scenarios only; longer ones are shared as JSON files):
  *   sim=1&sm=t&sb=d&ss=2026-03-10T00:00Z&se=2026-03-11T00:00Z&st=...&sev=A~OMDB~b~...&sti=C&smin=4&sd=1&sbas=start&sp=ref
  */
-import { eventsFromParam, eventsToParam, isoMinute, newScenario, parseIsoUtc, type SimulationScenario } from './model';
+import { durationMs, eventsFromParam, eventsToParam, isoMinute, newScenario, parseIsoUtc, type SimulationScenario } from './model';
 
 export function scenarioToParams(s: SimulationScenario, p: URLSearchParams): void {
   p.set('sim', '1');
@@ -18,6 +18,7 @@ export function scenarioToParams(s: SimulationScenario, p: URLSearchParams): voi
   if (s.analysisSettings.directed) p.set('sd', '1');
   if (s.filters.basis === 'start') p.set('sbas', 'start');
   if (s.filters.timeProxy === 'reference') p.set('sp', 'ref');
+  if (s.timeline.step !== 'PT1H') p.set('sts', s.timeline.step);
 }
 
 /** null when the URL has no scenario. Events are validated later, like a loaded file. */
@@ -39,5 +40,12 @@ export function scenarioFromParams(p: URLSearchParams, datasetId: string): Simul
   s.analysisSettings.directed = p.get('sd') === '1';
   if (p.get('sbas') === 'start') s.filters.basis = 'start';
   if (p.get('sp') === 'ref') s.filters.timeProxy = 'reference';
+  const tst = p.get('sts');
+  if (tst && durationMs(tst) !== null) s.timeline.step = tst;
+  // a Phase 9C link without a simulation time: evaluate at the earliest event start in the period
+  if (s.evaluationTime === null) {
+    const starts = s.events.map((e) => parseIsoUtc(e.startTimeUtc)).filter((x): x is number => x !== null && x >= start && x < end);
+    s.evaluationTime = isoMinute(starts.length ? Math.min(...starts) : start);
+  }
   return s;
 }

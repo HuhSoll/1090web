@@ -14,6 +14,8 @@ export function issueText(t: ReturnType<typeof useI18n>['t'], i: ScenarioIssue):
     case 'dataset_id_differs':
     case 'dataset_version_differs':
       return t(`sim.issue.${i.code}`, { value: i.value ?? '—' });
+    case 'migrated_evaluation_time':
+      return t('sim.issue.migrated_evaluation_time', { value: i.value });
     case 'dropped_field':
       return t('sim.issue.dropped_field', { field: i.field });
     default:

@@ -1,39 +1,50 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useI18n } from '../../i18n/useI18n';
 import type { MessageKey } from '../../i18n/messages';
 import { defaultConfig } from '../../research/model';
 import { useAppStore } from '../../state/store';
-import { scenarioContext } from '../../simulation/disruption';
-import { airportsCsv, areasCsv, lostPairsCsv, metricsCsv, resultJson, routesCsv } from '../../simulation/exports';
+import { eventActiveAt, scenarioContext } from '../../simulation/disruption';
+import { airportsCsv, areasCsv, eventsCsv, lostPairsCsv, metricsCsv, resultJson, routesCsv, seriesCsv } from '../../simulation/exports';
+import { isoMinute, parseIsoUtc, parseScenario, scenarioHash, scenarioJson, type SimulationEvent, type SimulationScenario } from '../../simulation/model';
 import {
-  isoMinute,
-  parseIsoUtc,
-  parseScenario,
-  scenarioHash,
-  scenarioJson,
-  type SimulationEvent,
-  type SimulationScenario,
-} from '../../simulation/model';
-import { closeAirport, currentPeriod, reopenAirport, resumeRoute, suspendRoute } from '../../simulation/start';
-import { useSimContext, useSimulation } from '../../simulation/useSimulation';
-import { formatUtc, HOUR_MS } from '../../temporal/window';
+  addAirportEvent,
+  addRouteEvent,
+  closeAirport,
+  currentPeriod,
+  duplicateEvent,
+  editScenario,
+  loadScenario,
+  removeEvent,
+  reopenAirport,
+  resumeRoute,
+  setEventTime,
+  updateEvent,
+} from '../../simulation/start';
+import type { SimContext } from '../../simulation/useSimulation';
+import { formatUtc } from '../../temporal/window';
 import { Icon } from '../common/Icon';
 import { downloadText } from '../research/format';
-import { SimResults } from './SimResults';
+import { eventLabel } from '../../simulation/labels';
+import { AirportTable, Breakdown, Connectivity, EventContributions, ImpactSummary, PairAnalysis, Warnings } from './SimResults';
 import { issueText } from './issueText';
 
 const toInput = (iso: string | null) => (iso ? iso.slice(0, 16) : '');
 const fromInput = (v: string) => (v ? parseIsoUtc(`${v}Z`) : null);
 
-/** Simulation panel (right side, replaces the details panel while open). */
-export function SimulationPanel() {
+export type SectionId = 'airports' | 'paths' | 'detail' | 'conditions' | 'export' | 'limits';
+
+/**
+ * Simulation panel (right). Order of what is shown first: what is stopped, at what time, what was
+ * lost, which airports are affected, how much the whole network changed. Everything else sits in
+ * sections that open on demand (and from the summary cards).
+ */
+export function SimulationPanel({ ctx }: { ctx: SimContext }) {
   const { t } = useI18n();
   const scenario = useAppStore((s) => s.simScenario);
   const setScenario = useAppStore((s) => s.setSimScenario);
   const setOpen = useAppStore((s) => s.setSimOpen);
-  const ctx = useSimContext(scenario);
-  useSimulation(scenario, ctx);
-  const [advanced, setAdvanced] = useState(false);
+  const [open, setSectionOpen] = useState<Record<SectionId, boolean>>({ airports: false, paths: false, detail: false, conditions: false, export: false, limits: false });
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   // the dataset version is known once the temporal index is loaded
   useEffect(() => {
@@ -43,11 +54,21 @@ export function SimulationPanel() {
   }, [scenario, ctx.meta, setScenario]);
 
   if (!scenario) return null;
-  const patch = (p: Partial<SimulationScenario>) => setScenario({ ...scenario, ...p });
+  const reveal = (id: SectionId) => {
+    setSectionOpen((o) => ({ ...o, [id]: true }));
+    requestAnimationFrame(() => bodyRef.current?.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ block: 'start', behavior: 'smooth' }));
+  };
+  const section = (id: SectionId, title: MessageKey, children: ReactNode) => (
+    <details className="sim-section sim-fold" data-section={id} open={open[id]}
+      onToggle={(e) => { const isOpen = (e.currentTarget as HTMLDetailsElement).open; if (isOpen !== open[id]) setSectionOpen((o) => ({ ...o, [id]: isOpen })); }}>
+      <summary className="field-label">{t(title)}</summary>
+      {open[id] && children}
+    </details>
+  );
 
   return (
     <aside className="info panel sim-panel" aria-label={t('sim.title')}>
-      <div className="info-body">
+      <div className="info-body" ref={bodyRef}>
         <div className="info-head">
           <h2 className="section-title">{t('sim.title')}</h2>
           <span className="badge warn-badge">{t('sim.badge')}</span>
@@ -55,142 +76,192 @@ export function SimulationPanel() {
             <Icon name="close" />
           </button>
         </div>
-        <p className="hint">{t('sim.intro')}</p>
-
-        <Targets scenario={scenario} onChange={(events) => patch({ events })} advanced={advanced} />
-
-        <section className="sim-section">
-          <div className="sim-row">
-            <span className="field-label">{t('sim.settings')}</span>
-            <button type="button" className="link-btn" aria-expanded={advanced} onClick={() => setAdvanced(!advanced)}>
-              {advanced ? t('sim.advanced.hide') : t('sim.advanced.show')}
-            </button>
-          </div>
-          <p className="hint">{settingsSummary(t, scenario, ctx.window)}</p>
-          {advanced && <AdvancedSettings scenario={scenario} patch={patch} />}
-        </section>
-
-        <ViewToggle />
-        <SimResults scenario={scenario} ctx={ctx} />
-        <ExportBar scenario={scenario} />
-        <Assumptions model={scenario.simulationModel} />
+        <ContextLine scenario={scenario} ctx={ctx} onConditions={() => reveal('conditions')} />
+        <Warnings scenario={scenario} ctx={ctx} />
+        <ImpactSummary scenario={scenario} ctx={ctx} onReveal={reveal} />
+        <EventsSection scenario={scenario} atMs={ctx.atMs} />
+        {section('airports', 'sim.sec.airports', <AirportTable onPick={() => reveal('paths')} />)}
+        {section('paths', 'sim.sec.paths', <PairAnalysis ctx={ctx} />)}
+        {section('detail', 'sim.sec.detail', <><Connectivity /><EventContributions ctx={ctx} /><Breakdown /></>)}
+        {section('conditions', 'sim.sec.conditions', <AdvancedSettings scenario={scenario} />)}
+        {section('export', 'sim.sec.export', <ExportBar scenario={scenario} ctx={ctx} />)}
+        {section('limits', 'sim.sec.limits', <Assumptions model={scenario.simulationModel} />)}
       </div>
     </aside>
   );
-
-  function settingsSummary(tt: typeof t, s: SimulationScenario, w: { startMs: number; endMs: number } | null) {
-    return [
-      tt(`sim.model.${s.simulationModel}`),
-      tt(`sim.baseline.${s.baselineMode}`),
-      w ? `${formatUtc(w.startMs, false)} – ${formatUtc(w.endMs)}` : '—',
-      s.filters.tiers === 'D' ? 'T1–T4' : s.filters.tiers === 'C' ? 'T1–T3' : s.filters.tiers === 'B' ? 'T1–T2' : 'T1',
-      tt(s.analysisSettings.directed ? 'sim.directed' : 'sim.undirected'),
-    ].join(' · ');
-  }
 }
 
-function code(network: { airports: { id: string; iata: string | null }[] }, id: string) {
-  const a = network.airports.find((x) => x.id === id);
-  return a?.iata ?? id;
+/** One line: how the result is computed (model, baseline, period, conditions) and its meaning. */
+function ContextLine({ scenario: s, ctx, onConditions }: { scenario: SimulationScenario; ctx: SimContext; onConditions: () => void }) {
+  const { t } = useI18n();
+  const w = ctx.window;
+  const tiers = s.filters.tiers === 'D' ? 'T1–T4' : s.filters.tiers === 'C' ? 'T1–T3' : s.filters.tiers === 'B' ? 'T1–T2' : 'T1';
+  return (
+    <div className="sim-context">
+      <div className="sim-row">
+        <span className="sim-chip">{t(`sim.model.${s.simulationModel}`)}</span>
+        <span className="sim-chip">{t(`sim.baseline.${s.baselineMode}`)}</span>
+        <span className="small muted">{w ? `${formatUtc(w.startMs, false)} – ${formatUtc(w.endMs)}` : '—'} · {tiers} · {t(s.analysisSettings.directed ? 'sim.directed' : 'sim.undirected')}</span>
+        <button type="button" className="link-btn" onClick={onConditions}>{t('sim.sec.conditions')}</button>
+      </div>
+      <p className="hint">
+        {s.simulationModel === 'structural'
+          ? t('sim.meaning.structural', { time: ctx.atMs !== null ? formatUtc(ctx.atMs) : '—' })
+          : t('sim.meaning.temporal')}
+      </p>
+    </div>
+  );
 }
 
-/** Scenario targets: the selected airport / route can be added; each event can be switched off or removed. */
-function Targets({ scenario, onChange, advanced }: { scenario: SimulationScenario; onChange: (e: SimulationEvent[]) => void; advanced: boolean }) {
+/** What is stopped: the event list (click = select, highlighted on the timeline and the map) or the editor. */
+function EventsSection({ scenario, atMs }: { scenario: SimulationScenario; atMs: number | null }) {
   const { t } = useI18n();
   const network = useAppStore((s) => s.network)!;
   const selectedAirport = useAppStore((s) => s.selectedAirport);
   const selectedRoute = useAppStore((s) => s.selectedRoute);
+  const selectedEvent = useAppStore((s) => s.simSelectedEvent);
+  const setSelected = useAppStore((s) => s.setSimSelectedEvent);
+  const code = (id: string) => network.airports.find((a) => a.id === id)?.iata ?? id;
   const ap = selectedAirport !== null ? network.airports[selectedAirport]! : null;
-  const isTarget = ap ? scenario.events.some((e) => e.targetType === 'airport' && e.targetIds.includes(ap.id)) : false;
   const route = selectedRoute !== null ? network.routes[selectedRoute]! : null;
   const ra = route ? network.airports[route.a]!.id : null;
   const rb = route ? network.airports[route.b]!.id : null;
+  const apIsTarget = ap ? scenario.events.some((e) => e.targetType === 'airport' && e.targetIds.includes(ap.id)) : false;
   const routeIsTarget = ra && rb ? scenario.events.some((e) => e.targetType === 'route' && e.targetIds.some((x) => x === `${ra}>${rb}` || x === `${rb}>${ra}`)) : false;
-  const update = (id: string, p: Partial<SimulationEvent>) => onChange(scenario.events.map((e) => (e.eventId === id ? { ...e, ...p } : e)));
+  const ev = scenario.events.find((e) => e.eventId === selectedEvent) ?? null;
+  const at = atMs ?? parseIsoUtc(scenario.analysisStart)!;
 
   return (
     <section className="sim-section">
-      <span className="field-label">{t('sim.targets')}</span>
-      {scenario.events.length === 0 && <p className="hint">{t('sim.targets.empty')}</p>}
-      <ul className="sim-events">
-        {scenario.events.map((e) => (
-          <li key={e.eventId} className={e.enabled ? '' : 'is-off'}>
-            <div className="sim-row">
-              <label className="sim-check">
-                <input type="checkbox" checked={e.enabled} onChange={(x) => update(e.eventId, { enabled: x.target.checked })} />
-                <span className="sim-event-type">{t(`sim.event.${e.eventType}` as MessageKey)}</span>
-              </label>
-              <button type="button" className="icon-btn sim-remove" onClick={() => onChange(scenario.events.filter((x) => x.eventId !== e.eventId))} aria-label={t('sim.event.remove')} title={t('sim.event.remove')}>
-                <Icon name="close" size={12} />
-              </button>
-            </div>
-            <div className="sim-event-targets code">
-              {e.targetIds.map((id) => (e.targetType === 'route' ? id.split('>').map((x) => code(network, x)).join(e.direction === 'directed' ? ' → ' : ' ⇄ ') : code(network, id))).join(', ')}
-            </div>
-            <div className="hint">
-              {e.startTimeUtc || e.endTimeUtc
-                ? `${e.startTimeUtc ? formatUtc(parseIsoUtc(e.startTimeUtc) ?? 0, false) : '…'} – ${e.endTimeUtc ? formatUtc(parseIsoUtc(e.endTimeUtc) ?? 0) : '…'}`
-                : t('sim.event.always')}
-              {e.targetType === 'airport' && e.direction !== 'both' ? ` · ${t(`sim.side.${e.direction}` as MessageKey)}` : ''}
-            </div>
-            {advanced && (
-              <div className="sim-event-edit">
-                <label className="t-field"><span className="muted small">{t('sim.event.start')}</span>
-                  <input type="datetime-local" step={60} value={toInput(e.startTimeUtc)} onChange={(x) => { const ms = fromInput(x.target.value); update(e.eventId, { startTimeUtc: ms === null ? null : isoMinute(ms) }); }} />
-                </label>
-                <label className="t-field"><span className="muted small">{t('sim.event.end')}</span>
-                  <input type="datetime-local" step={60} value={toInput(e.endTimeUtc)} onChange={(x) => { const ms = fromInput(x.target.value); update(e.eventId, { endTimeUtc: ms === null ? null : isoMinute(ms) }); }} />
-                </label>
-                {e.targetType === 'airport' ? (
-                  <label className="t-field"><span className="muted small">{t('sim.side')}</span>
-                    <select value={e.direction} onChange={(x) => update(e.eventId, { direction: x.target.value as SimulationEvent['direction'] })}>
-                      {(['both', 'departures', 'arrivals'] as const).map((d) => <option key={d} value={d}>{t(`sim.side.${d}`)}</option>)}
-                    </select>
-                  </label>
-                ) : (
-                  <label className="t-field"><span className="muted small">{t('sim.direction')}</span>
-                    <select value={e.direction} onChange={(x) => update(e.eventId, { direction: x.target.value as SimulationEvent['direction'] })}>
-                      <option value="both">{t('sim.direction.both')}</option>
-                      <option value="directed">{t('sim.direction.directed')}</option>
-                    </select>
-                  </label>
-                )}
-                <p className="hint">{t('sim.event.timeNote')}</p>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-      {ap && (
-        <div className="sim-row sim-pick">
+      <div className="sim-row">
+        <span className="field-label">{t('sim.targets')}</span>
+        <span className="small muted">{atMs !== null ? t('sim.tl.at', { time: formatUtc(atMs) }) : ''}</span>
+      </div>
+      {ev ? (
+        <EventEditor ev={ev} code={code} onClose={() => setSelected(null)} />
+      ) : (
+        <>
+          {scenario.events.length === 0 && <p className="hint">{t('sim.targets.empty')}</p>}
+          <ul className="sim-events">
+            {scenario.events.map((e) => {
+              const active = eventActiveAt(e, at);
+              return (
+                <li key={e.eventId} className={`${e.enabled ? '' : 'is-off'} ${active ? 'is-active' : ''}`}>
+                  <div className="sim-row">
+                    <input type="checkbox" checked={e.enabled} aria-label={t('sim.ev.enabled')} onChange={(x) => updateEvent(e.eventId, { enabled: x.target.checked })} />
+                    <button type="button" className="sim-event-name" onClick={() => setSelected(e.eventId)} title={t('sim.ev.edit')}>
+                      <span className="code">{eventLabel(e, code)}</span>
+                    </button>
+                    <span className={`sim-state ${active ? 'is-on' : ''}`}>{t(active ? 'sim.ev.activeNow' : 'sim.ev.inactiveNow')}</span>
+                    <button type="button" className="icon-btn sim-remove" onClick={() => removeEvent(e.eventId)} aria-label={t('sim.event.remove')} title={t('sim.event.remove')}>
+                      <Icon name="close" size={12} />
+                    </button>
+                  </div>
+                  <div className="hint">
+                    {t(`sim.event.${e.eventType}` as MessageKey)} · {timeText(e, t)}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+      {ap && !ev && (
+        <div className="sim-pick">
           <span className="code">{ap.iata ?? ap.id}</span>
-          {isTarget
-            ? <button type="button" className="pill-btn" onClick={() => reopenAirport(ap.id)}>{t('sim.reopenAirport')}</button>
-            : <button type="button" className="pill-btn sim-primary" onClick={() => closeAirport(ap.id)}>{t('sim.closeAirport')}</button>}
+          {apIsTarget && <button type="button" className="pill-btn" onClick={() => reopenAirport(ap.id)}>{t('sim.reopenAirport')}</button>}
+          <button type="button" className="pill-btn sim-primary" onClick={() => addAirportEvent(ap.id, at, at + 6 * 3_600_000)}>{t('sim.ev.addTimed')}</button>
+          {!apIsTarget && <button type="button" className="pill-btn" onClick={() => closeAirport(ap.id)}>{t('sim.ev.addAlways')}</button>}
         </div>
       )}
-      {route && ra && rb && (
-        <div className="sim-row sim-pick">
-          <span className="code">{code(network, ra)} – {code(network, rb)}</span>
-          {routeIsTarget ? (
-            <button type="button" className="pill-btn" onClick={() => resumeRoute(ra, rb)}>{t('sim.resumeRoute')}</button>
-          ) : (
-            <>
-              <button type="button" className="pill-btn sim-primary" onClick={() => suspendRoute(ra, rb, 'both')}>{t('sim.suspendRoute')}</button>
-              <button type="button" className="pill-btn" onClick={() => suspendRoute(ra, rb, 'directed')}>{code(network, ra)} → {code(network, rb)}</button>
-              <button type="button" className="pill-btn" onClick={() => suspendRoute(rb, ra, 'directed')}>{code(network, rb)} → {code(network, ra)}</button>
-            </>
-          )}
+      {route && ra && rb && !ev && (
+        <div className="sim-pick">
+          <span className="code">{code(ra)} – {code(rb)}</span>
+          {routeIsTarget && <button type="button" className="pill-btn" onClick={() => resumeRoute(ra, rb)}>{t('sim.resumeRoute')}</button>}
+          <button type="button" className="pill-btn sim-primary" onClick={() => addRouteEvent(ra, rb, 'both', at, at + 6 * 3_600_000)}>{t('sim.ev.addRoute')}</button>
+          <button type="button" className="pill-btn" onClick={() => addRouteEvent(ra, rb, 'directed', at, at + 6 * 3_600_000)}>{code(ra)} → {code(rb)}</button>
+          <button type="button" className="pill-btn" onClick={() => addRouteEvent(rb, ra, 'directed', at, at + 6 * 3_600_000)}>{code(rb)} → {code(ra)}</button>
         </div>
       )}
-      {!ap && !route && <p className="hint">{t('sim.pickHint')}</p>}
+      {!ap && !route && !ev && scenario.events.length === 0 && <p className="hint">{t('sim.pickHint')}</p>}
     </section>
   );
 }
 
-function AdvancedSettings({ scenario: s, patch }: { scenario: SimulationScenario; patch: (p: Partial<SimulationScenario>) => void }) {
+function timeText(e: SimulationEvent, t: ReturnType<typeof useI18n>['t']): string {
+  if (!e.startTimeUtc && !e.endTimeUtc) return t('sim.event.always');
+  const s = parseIsoUtc(e.startTimeUtc);
+  const en = parseIsoUtc(e.endTimeUtc);
+  return `${s === null ? '…' : formatUtc(s, false)} – ${en === null ? '…' : formatUtc(en)}`;
+}
+
+/** Exact editing of one event (times typed in UTC; the timeline drag snaps to the hour). */
+function EventEditor({ ev, code, onClose }: { ev: SimulationEvent; code: (id: string) => string; onClose: () => void }) {
   const { t } = useI18n();
-  const exploreTime = useAppStore((st) => st.exploreTime);
+  const [error, setError] = useState(false);
+  const setTime = (which: 'start' | 'end', v: string) => {
+    const ms = v ? fromInput(v) : null;
+    if (v && ms === null) return;
+    setError(!setEventTime(ev.eventId, which, ms));
+  };
+  return (
+    <div className="sim-editor">
+      <div className="sim-row">
+        <span className="sim-event-type">{t(`sim.event.${ev.eventType}` as MessageKey)}</span>
+        <span className="code">{eventLabel({ ...ev, label: '' }, code)}</span>
+        <button type="button" className="link-btn" onClick={onClose}>{t('sim.ev.done')}</button>
+      </div>
+      <label className="t-field"><span className="muted small">{t('sim.ev.label')}</span>
+        <input className="r-input" type="text" maxLength={120} value={ev.label} placeholder={eventLabel({ ...ev, label: '' }, code)} onChange={(e) => updateEvent(ev.eventId, { label: e.target.value })} />
+      </label>
+      <label className="t-field"><span className="muted small">{t('sim.event.start')}</span>
+        <input type="datetime-local" step={60} value={toInput(ev.startTimeUtc)} onChange={(e) => setTime('start', e.target.value)} />
+      </label>
+      <label className="t-field"><span className="muted small">{t('sim.event.end')}</span>
+        <input type="datetime-local" step={60} value={toInput(ev.endTimeUtc)} onChange={(e) => setTime('end', e.target.value)} />
+      </label>
+      {error && <p className="hint warn">{t('sim.ev.badTime')}</p>}
+      <p className="hint">{t('sim.event.timeNote')}</p>
+      {ev.targetType === 'airport' ? (
+        <label className="t-field"><span className="muted small">{t('sim.side')}</span>
+          <select value={ev.direction} onChange={(x) => updateEvent(ev.eventId, { direction: x.target.value as SimulationEvent['direction'] })}>
+            {(['both', 'departures', 'arrivals'] as const).map((d) => <option key={d} value={d}>{t(`sim.side.${d}`)}</option>)}
+          </select>
+        </label>
+      ) : (
+        <label className="t-field"><span className="muted small">{t('sim.direction')}</span>
+          <select value={ev.direction} onChange={(x) => updateEvent(ev.eventId, { direction: x.target.value as SimulationEvent['direction'] })}>
+            <option value="both">{t('sim.direction.both')}</option>
+            <option value="directed">{t('sim.direction.directed')}</option>
+          </select>
+        </label>
+      )}
+      <label className="t-field"><span className="muted small">{t('sim.ev.source')}</span>
+        <select value={ev.sourceType} onChange={(x) => updateEvent(ev.eventId, { sourceType: x.target.value as SimulationEvent['sourceType'] })}>
+          <option value="hypothetical">{t('sim.ev.hypothetical')}</option>
+          <option value="reported">{t('sim.ev.reported')}</option>
+        </select>
+      </label>
+      {ev.sourceType === 'reported' && (
+        <>
+          <label className="t-field"><span className="muted small">{t('sim.ev.sourceRef')}</span>
+            <input className="r-input" type="text" maxLength={500} value={ev.sourceReference ?? ''} onChange={(e) => updateEvent(ev.eventId, { sourceReference: e.target.value || null })} />
+          </label>
+          {!ev.sourceReference && <p className="hint warn">{t('sim.ev.needSource')}</p>}
+        </>
+      )}
+      <div className="sim-actions">
+        <label className="sim-check"><input type="checkbox" checked={ev.enabled} onChange={(x) => updateEvent(ev.eventId, { enabled: x.target.checked })} /><span className="small">{t('sim.ev.enabled')}</span></label>
+        <button type="button" className="pill-btn" onClick={() => duplicateEvent(ev.eventId)}>{t('sim.ev.duplicate')}</button>
+        <button type="button" className="pill-btn" onClick={() => removeEvent(ev.eventId)}>{t('sim.event.remove')}</button>
+      </div>
+    </div>
+  );
+}
+
+function AdvancedSettings({ scenario: s }: { scenario: SimulationScenario }) {
+  const { t } = useI18n();
+  const patch = (p: Partial<SimulationScenario>) => editScenario(p);
   const seg = <T extends string>(label: string, value: T, options: readonly T[], key: (v: T) => MessageKey, set: (v: T) => void) => (
     <div className="field">
       <span className="field-label">{label}</span>
@@ -201,15 +272,11 @@ function AdvancedSettings({ scenario: s, patch }: { scenario: SimulationScenario
       </div>
     </div>
   );
-  const evalMs = parseIsoUtc(s.evaluationTime);
   return (
     <div className="sim-advanced">
       {seg(t('sim.model'), s.simulationModel, ['structural', 'temporal'] as const, (v) => `sim.model.${v}`, (v) => patch({ simulationModel: v }))}
       <p className="hint">{t(`sim.model.${s.simulationModel}.note`)}</p>
-      {seg(t('sim.baseline'), s.baselineMode, ['fixed', 'dynamic'] as const, (v) => `sim.baseline.${v}`, (v) => {
-        patch({ baselineMode: v });
-        if (v === 'dynamic' && exploreTime !== 'temporal') useAppStore.getState().setExploreTime('temporal');
-      })}
+      {seg(t('sim.baseline'), s.baselineMode, ['fixed', 'dynamic'] as const, (v) => `sim.baseline.${v}`, (v) => patch({ baselineMode: v }))}
       <p className="hint">{t(`sim.baseline.${s.baselineMode}.note`)}</p>
       {s.baselineMode === 'fixed' && (
         <div className="field">
@@ -223,25 +290,6 @@ function AdvancedSettings({ scenario: s, patch }: { scenario: SimulationScenario
           <button type="button" className="link-btn" onClick={() => { const p = currentPeriod(); if (p) patch({ analysisStart: isoMinute(p.startMs), analysisEnd: isoMinute(p.endMs) }); }}>
             {t('sim.period.useShown')}
           </button>
-        </div>
-      )}
-      {s.baselineMode === 'fixed' && s.simulationModel === 'structural' && (
-        <div className="field">
-          <span className="field-label">{t('sim.evaluation')}</span>
-          <label className="sim-check">
-            <input type="checkbox" checked={s.evaluationTime !== null}
-              onChange={(e) => patch({ evaluationTime: e.target.checked ? (s.events.find((x) => x.startTimeUtc)?.startTimeUtc ?? s.analysisStart) : null })} />
-            <span className="small">{t('sim.evaluation.at')}</span>
-          </label>
-          {s.evaluationTime !== null && evalMs !== null && (
-            <div className="sim-row">
-              <button type="button" className="icon-btn" aria-label={t('sim.evaluation.prev')} onClick={() => patch({ evaluationTime: isoMinute(evalMs - HOUR_MS) })}><Icon name="prev" /></button>
-              <input type="datetime-local" step={60} value={toInput(s.evaluationTime)} aria-label={t('sim.evaluation')}
-                onChange={(e) => { const ms = fromInput(e.target.value); if (ms !== null) patch({ evaluationTime: isoMinute(ms) }); }} />
-              <button type="button" className="icon-btn" aria-label={t('sim.evaluation.next')} onClick={() => patch({ evaluationTime: isoMinute(evalMs + HOUR_MS) })}><Icon name="next" /></button>
-            </div>
-          )}
-          <p className="hint">{t(s.evaluationTime === null ? 'sim.evaluation.noneNote' : 'sim.evaluation.atNote')}</p>
         </div>
       )}
       <div className="field">
@@ -269,32 +317,19 @@ function AdvancedSettings({ scenario: s, patch }: { scenario: SimulationScenario
   );
 }
 
-function ViewToggle() {
-  const { t } = useI18n();
-  const view = useAppStore((s) => s.simView);
-  const setView = useAppStore((s) => s.setSimView);
-  return (
-    <div className="field">
-      <span className="field-label">{t('sim.view')}</span>
-      <div className="segmented" role="radiogroup" aria-label={t('sim.view')}>
-        {(['overlay', 'after', 'before'] as const).map((v) => (
-          <button key={v} type="button" role="radio" aria-checked={view === v} className={view === v ? 'is-active' : ''} onClick={() => setView(v)}>{t(`sim.view.${v}`)}</button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ExportBar({ scenario }: { scenario: SimulationScenario }) {
+function ExportBar({ scenario, ctx }: { scenario: SimulationScenario; ctx: SimContext }) {
   const { t } = useI18n();
   const network = useAppStore((s) => s.network)!;
   const status = useAppStore((s) => s.simStatus);
   const impact = useAppStore((s) => s.simImpact);
+  const series = useAppStore((s) => s.simSeries);
   const fileRef = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState<{ ok: boolean; lines: string[] } | null>(null);
   const out = status.state === 'ready' ? status.output : null;
   const imp = out && impact.state === 'ready' && impact.key === `${out.key}:impact` ? impact.result : null;
-  const base = out ? `1090web_sim_${scenarioHash(scenario, out.window)}` : '1090web_sim';
+  // the saved scenario carries the simulation time shown now
+  const saved = { ...scenario, evaluationTime: ctx.atMs !== null ? isoMinute(ctx.atMs) : scenario.evaluationTime };
+  const base = `1090web_sim_${scenarioHash(saved, out?.window)}`;
   const toResearch = () => {
     if (!out) return;
     const st = useAppStore.getState();
@@ -308,8 +343,8 @@ function ExportBar({ scenario }: { scenario: SimulationScenario }) {
       samples: scenario.analysisSettings.samples, seed: scenario.analysisSettings.seed,
       scenario: {
         model: scenario.simulationModel,
-        // a dynamic baseline counts the events that overlap the window: the same as no evaluation time
-        evaluationTime: scenario.baselineMode === 'fixed' && scenario.simulationModel === 'structural' ? scenario.evaluationTime : null,
+        // the structural state at the simulation time (Phase 9D); temporal: the records in the window
+        evaluationTime: scenario.simulationModel === 'structural' && ctx.atMs !== null ? isoMinute(ctx.atMs) : null,
         timeProxy: scenario.filters.timeProxy, events: scenario.events, name: scenario.name,
       },
     });
@@ -319,24 +354,21 @@ function ExportBar({ scenario }: { scenario: SimulationScenario }) {
   };
   const load = (file: File) => {
     void file.text().then((text) => {
-      const st = useAppStore.getState();
-      const range = { s: Date.UTC(2026, 0, 1), e: Date.UTC(2026, 9, 1) };
-      const ctx = scenarioContext(network, scenario.datasetVersion, range.s, range.e);
-      const r = parseScenario(text, ctx);
+      const range = ctx.meta?.range ?? { startMs: Date.UTC(2026, 0, 1), endMs: Date.UTC(2026, 9, 1) };
+      const sctx = scenarioContext(network, scenario.datasetVersion, range.startMs, range.endMs);
+      const r = parseScenario(text, sctx);
       if (!r.scenario) {
         setMsg({ ok: false, lines: r.issues.map((i) => issueText(t, i)) });
         return;
       }
-      st.setSimScenario(r.scenario);
-      if (r.scenario.baselineMode === 'dynamic' && st.exploreTime !== 'temporal') st.setExploreTime('temporal');
+      loadScenario(r.scenario);
       setMsg({ ok: true, lines: [t('sim.load.ok', { hash: scenarioHash(r.scenario) }), ...r.issues.map((i) => issueText(t, i))] });
     });
   };
   return (
-    <section className="sim-section">
-      <span className="field-label">{t('sim.save')}</span>
+    <div className="sim-export">
       <div className="sim-actions">
-        <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_scenario.json`, scenarioJson(scenario), 'application/json')}>{t('sim.save.scenario')}</button>
+        <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_scenario.json`, scenarioJson(saved), 'application/json')}>{t('sim.save.scenario')}</button>
         <button type="button" className="pill-btn" onClick={() => fileRef.current?.click()}>{t('sim.load')}</button>
         <input ref={fileRef} type="file" accept="application/json,.json" className="r-file" onChange={(e) => {
           const f = e.target.files?.[0];
@@ -345,35 +377,34 @@ function ExportBar({ scenario }: { scenario: SimulationScenario }) {
         }} />
         <button type="button" className="pill-btn" onClick={() => { void navigator.clipboard?.writeText(window.location.href); setMsg({ ok: true, lines: [t('sim.link.copied')] }); }}>{t('sim.link')}</button>
       </div>
-      {out && (
-        <div className="sim-actions">
-          <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_result.json`, resultJson(scenario, out, imp), 'application/json')}>{t('sim.export.json')}</button>
-          <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_metrics.csv`, metricsCsv(scenario, out, imp))}>{t('sim.export.metrics')}</button>
-          <button type="button" className="pill-btn" disabled={!imp} onClick={() => imp && downloadText(`${base}_airports.csv`, airportsCsv(scenario, out, imp, network))}>{t('sim.export.airports')}</button>
-          <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_routes.csv`, routesCsv(scenario, out, network))}>{t('sim.export.routes')}</button>
-          <button type="button" className="pill-btn" disabled={!imp} onClick={() => imp && downloadText(`${base}_lost_pairs.csv`, lostPairsCsv(scenario, out, imp, network))}>{t('sim.export.paths')}</button>
-          <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_areas.csv`, areasCsv(scenario, out))}>{t('sim.export.areas')}</button>
-        </div>
-      )}
-      {out && <button type="button" className="primary-btn sim-research" onClick={toResearch}>{t('sim.toResearch')}</button>}
+      <div className="sim-actions">
+        <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_events.csv`, eventsCsv(saved))}>{t('sim.export.events')}</button>
+        {series && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_timeseries.csv`, seriesCsv(saved, series.points, series.stepMs, series.method))}>{t('sim.export.series')}</button>}
+        {out && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_result.json`, resultJson(saved, out, imp, series, ctx.atMs), 'application/json')}>{t('sim.export.json')}</button>}
+        {out && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_metrics.csv`, metricsCsv(saved, out, imp))}>{t('sim.export.metrics')}</button>}
+        {out && <button type="button" className="pill-btn" disabled={!imp} onClick={() => imp && downloadText(`${base}_airports.csv`, airportsCsv(saved, out, imp, network))}>{t('sim.export.airports')}</button>}
+        {out && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_routes.csv`, routesCsv(saved, out, network))}>{t('sim.export.routes')}</button>}
+        {out && <button type="button" className="pill-btn" disabled={!imp} onClick={() => imp && downloadText(`${base}_lost_pairs.csv`, lostPairsCsv(saved, out, imp, network))}>{t('sim.export.paths')}</button>}
+        {out && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_areas.csv`, areasCsv(saved, out))}>{t('sim.export.areas')}</button>}
+      </div>
+      {out && <button type="button" className="primary-btn sim-research" onClick={toResearch}>{t('sim.toResearchAt', { time: ctx.atMs !== null ? formatUtc(ctx.atMs) : '' })}</button>}
       {msg && <ul className={msg.ok ? 'r-mini' : 'r-mini r-warn-text'}>{msg.lines.map((l) => <li key={l}>{l}</li>)}</ul>}
-    </section>
+    </div>
   );
 }
 
 function Assumptions({ model }: { model: SimulationScenario['simulationModel'] }) {
   const { t } = useI18n();
   return (
-    <details className="sim-section sim-assumptions">
-      <summary className="field-label">{t('sim.assumptions')}</summary>
+    <div>
       <p className="small">{t('sim.assumptions.sim')}</p>
       <ul className="r-mini">
-        {(['complete', 'noReroute', 'hypothetical', 'graph', ...(model === 'temporal' ? ['proxy'] : [])] as const).map((k) => <li key={k}>{t(`sim.assume.${k}` as MessageKey)}</li>)}
+        {(['complete', 'noReroute', 'hypothetical', 'graph', 'recovery', ...(model === 'temporal' ? ['proxy'] : [])] as const).map((k) => <li key={k}>{t(`sim.assume.${k}` as MessageKey)}</li>)}
       </ul>
       <p className="small">{t('sim.assumptions.obs')}</p>
       <ul className="r-mini">
         {(['missing', 'startMissing', 'tiers', 'regions', 'gap'] as const).map((k) => <li key={k}>{t(`sim.obs.${k}`)}</li>)}
       </ul>
-    </details>
+    </div>
   );
 }

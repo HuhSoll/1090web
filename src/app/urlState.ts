@@ -5,7 +5,8 @@ import { configContext, configFromParams, configToParams, sanitizeConfig, type R
 import { useAppStore, type AppMode, type ExploreTime, type ResearchCompare } from '../state/store';
 import { selectionFromParams, selectionToParams } from '../temporal/urlParams';
 import { scenarioFromParams, scenarioToParams } from '../simulation/urlParams';
-import type { SimulationScenario } from '../simulation/model';
+import { isoMinute, type SimulationScenario } from '../simulation/model';
+import { loadScenario } from '../simulation/start';
 import { defaultSelection, type TemporalSelection } from '../temporal/window';
 
 /**
@@ -127,7 +128,8 @@ export function serializeUrlState(state: SerializableState, network: StaticNetwo
     p.set('time', 'temporal');
     if (state.temporalSel) selectionToParams(state.temporalSel, p);
   }
-  if (state.simOpen && state.simScenario) scenarioToParams(state.simScenario, p);
+  // the simulation time is the app's clock (temporal cursor)
+  if (state.simOpen && state.simScenario) scenarioToParams(state.temporalSel ? { ...state.simScenario, evaluationTime: isoMinute(state.temporalSel.cursorMs) } : state.simScenario, p);
   if (state.appMode === 'research') {
     p.set('mode', 'research');
     if (state.researchConfig) configToParams(state.researchConfig, p);
@@ -162,10 +164,7 @@ export function useUrlState(): void {
       }
       st.setExploreTime('temporal');
     }
-    if (u.simulation) {
-      st.setSimScenario(u.simulation);
-      st.setSimOpen(true);
-    }
+    if (u.simulation) loadScenario(u.simulation);
     if (u.appMode === 'research') {
       st.setResearchConfig(sanitizeConfig(u.research ?? {}, configContext(network)).config);
       if (u.researchCompare) st.setResearchCompare({ enabled: true, ...u.researchCompare });

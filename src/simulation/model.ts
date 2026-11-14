@@ -13,7 +13,13 @@ import type { AircraftClass, PathMethod, TierSet } from '../research/model';
 // research/model.ts imports this module, so only types are imported from it (no value cycle)
 const CLASSES: readonly AircraftClass[] = ['passenger', 'cargo', 'unknown'];
 
-export const SIM_SCHEMA_VERSION = 1;
+/**
+ * 1: Phase 9C. 2: Phase 9D - event labels, the scenario timeline (range, step) and the method
+ * version. Version 1 files are migrated on load (see sanitizeScenario).
+ */
+export const SIM_SCHEMA_VERSION = 2;
+/** Version of the calculation (recorded in exports so results can be matched to the code). */
+export const METHOD_VERSION = '9d.1';
 export const SIM_FORMAT = '1090web-simulation-scenario';
 
 /** Event types that can be applied. */
@@ -34,6 +40,8 @@ export type RouteDirection = 'both' | 'directed';
 
 export interface SimulationEvent {
   eventId: string;
+  /** short name shown on the timeline ('' = generated from the targets) */
+  label: string;
   eventType: SimEventType;
   enabled: boolean;
   /** ISO 8601 UTC, minute precision ("2026-03-10T12:00Z"); null = from the start of the data */
@@ -102,7 +110,30 @@ export interface SimulationScenario {
   events: SimulationEvent[];
   filters: SimulationFilters;
   analysisSettings: AnalysisSettings;
+  /** Scenario timeline (Phase 9D): shown range (null = from the period and the events) and step */
+  timeline: ScenarioTimelineSettings;
+  methodVersion: string;
   createdAt: string;
+}
+
+export interface ScenarioTimelineSettings {
+  /** ISO UTC; null = automatic */
+  start: string | null;
+  end: string | null;
+  /** ISO 8601 duration of one step: 'PT1H', 'PT6H', 'P1D' */
+  step: string;
+}
+
+/** 'PT1H' / 'PT6H' / 'P1D' / 'P7D' <-> ms (only whole hours and days). */
+export function durationMs(iso: string): number | null {
+  const m = /^P(?:(\d+)D)?(?:T(?:(\d+)H)?)?$/.exec(iso);
+  if (!m || (!m[1] && !m[2])) return null;
+  const ms = (Number(m[1] ?? 0) * 24 + Number(m[2] ?? 0)) * 3_600_000;
+  return ms > 0 ? ms : null;
+}
+export function isoDuration(ms: number): string {
+  const h = Math.round(ms / 3_600_000);
+  return h % 24 === 0 ? `P${h / 24}D` : `PT${h}H`;
 }
 
 export const DEFAULT_FILTERS: SimulationFilters = { tiers: 'D', classes: [...CLASSES], minFlights: 1, basis: 'all', timeProxy: 'endpoint' };
@@ -150,6 +181,8 @@ export function newScenario(datasetId: string, datasetVersion: string | null, st
     events: [],
     filters: { ...DEFAULT_FILTERS, classes: [...DEFAULT_FILTERS.classes] },
     analysisSettings: { ...DEFAULT_SETTINGS },
+    timeline: { start: null, end: null, step: 'PT1H' },
+    methodVersion: METHOD_VERSION,
     createdAt: new Date().toISOString(),
   };
 }
@@ -157,6 +190,7 @@ export function newScenario(datasetId: string, datasetVersion: string | null, st
 export function airportClosure(ids: string[], startMs: number | null = null, endMs: number | null = null, side: AirportSide = 'both'): SimulationEvent {
   return {
     eventId: newId('evt'),
+    label: '',
     eventType: ids.length > 1 ? 'MULTIPLE_AIRPORT_CLOSURE' : 'AIRPORT_CLOSURE',
     enabled: true,
     startTimeUtc: startMs === null ? null : isoMinute(startMs),
@@ -173,6 +207,7 @@ export function airportClosure(ids: string[], startMs: number | null = null, end
 export function routeSuspension(a: string, b: string, direction: RouteDirection, startMs: number | null = null, endMs: number | null = null): SimulationEvent {
   return {
     eventId: newId('evt'),
+    label: '',
     eventType: 'ROUTE_SUSPENSION',
     enabled: true,
     startTimeUtc: startMs === null ? null : isoMinute(startMs),
@@ -192,7 +227,7 @@ export function routeSuspension(a: string, b: string, direction: RouteDirection,
  * Everything that changes a result, in a fixed order. Event ids, names, descriptions and the
  * creation time are left out; events are sorted, so their order does not change the key.
  */
-export function canonicalScenario(s: SimulationScenario, windowOverride?: { startMs: number; endMs: number }): string {
+export function canonicalScenario(s: SimulationScenario, windowOverride?: { startMs: number; endMs: number }, opts?: { withoutTime?: boolean }): string {
   const events = s.events
     .filter((e) => e.enabled)
     .map((e) => [e.eventType === 'MULTIPLE_AIRPORT_CLOSURE' ? 'AIRPORT_CLOSURE' : e.eventType, e.startTimeUtc, e.endTimeUtc, e.targetType,
@@ -203,7 +238,7 @@ export function canonicalScenario(s: SimulationScenario, windowOverride?: { star
     s.datasetId, s.datasetVersion, s.baselineMode, s.simulationModel,
     // the period as UTC ms, so the hash is the same with or without an explicit window
     windowOverride ? [windowOverride.startMs, windowOverride.endMs] : [parseIsoUtc(s.analysisStart), parseIsoUtc(s.analysisEnd)],
-    s.simulationModel === 'structural' && s.baselineMode === 'fixed' ? s.evaluationTime : null,
+    s.simulationModel === 'structural' && s.baselineMode === 'fixed' && !opts?.withoutTime ? s.evaluationTime : null,
     events, s.filters.tiers, [...s.filters.classes].sort(), s.filters.minFlights, s.filters.basis,
     s.simulationModel === 'temporal' ? s.filters.timeProxy : null, s.analysisSettings.directed,
   ]);
@@ -219,6 +254,11 @@ export function hashString(str: string): string {
 }
 
 export const scenarioHash = (s: SimulationScenario, w?: { startMs: number; endMs: number }) => hashString(canonicalScenario(s, w));
+/**
+ * Everything except the simulation time: results of the structural model are then keyed by the
+ * set of events in effect, so times with the same active events share one result (Phase 9D).
+ */
+export const baseHash = (s: SimulationScenario, w?: { startMs: number; endMs: number }) => hashString(canonicalScenario(s, w, { withoutTime: true }));
 
 // ---- validation (files, URLs) -----------------------------------------------------------------------
 
@@ -239,7 +279,8 @@ export type ScenarioIssue =
   | { code: 'invalid_period' | 'period_outside_data' }
   | { code: 'invalid_event_period' | 'no_targets' | 'event_not_implemented' | 'advisory_not_applied'; eventId: string }
   | { code: 'unknown_airport' | 'unknown_route'; eventId: string; id: string }
-  | { code: 'dropped_field'; field: string };
+  | { code: 'dropped_field'; field: string }
+  | { code: 'migrated_evaluation_time'; value: string };
 
 export const routeKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`);
 
@@ -316,6 +357,12 @@ export function sanitizeScenario(raw: Record<string, unknown>, ctx: ScenarioCont
   else if (raw.baselineMode !== undefined) issues.push({ code: 'dropped_field', field: 'baselineMode' });
   if (raw.simulationModel === 'structural' || raw.simulationModel === 'temporal') s.simulationModel = raw.simulationModel;
   else if (raw.simulationModel !== undefined) issues.push({ code: 'dropped_field', field: 'simulationModel' });
+  const tl = (raw.timeline ?? {}) as Partial<ScenarioTimelineSettings>;
+  const tlStart = isoOrNull(tl.start);
+  const tlEnd = isoOrNull(tl.end);
+  if (tlStart && tlEnd && tlStart !== '' && tlEnd !== '' && parseIsoUtc(tlEnd)! > parseIsoUtc(tlStart)!) s.timeline = { ...s.timeline, start: tlStart, end: tlEnd };
+  if (typeof tl.step === 'string' && durationMs(tl.step) !== null) s.timeline.step = tl.step;
+  if (typeof raw.methodVersion === 'string') s.methodVersion = raw.methodVersion.slice(0, 20);
   const ev = isoOrNull(raw.evaluationTime);
   if (ev === '') issues.push({ code: 'dropped_field', field: 'evaluationTime' });
   else s.evaluationTime = ev;
@@ -339,6 +386,7 @@ export function sanitizeScenario(raw: Record<string, unknown>, ctx: ScenarioCont
     const en = isoOrNull(e.endTimeUtc);
     const event: SimulationEvent = {
       eventId: str(e.eventId, newId('evt')),
+      label: str(e.label, '').slice(0, 120),
       eventType: e.eventType as SimEventType,
       enabled: e.enabled !== false,
       startTimeUtc: st === '' ? 'invalid' : st,
@@ -356,6 +404,19 @@ export function sanitizeScenario(raw: Record<string, unknown>, ctx: ScenarioCont
     issues.push(...eventIssues(event, ctx));
     s.events.push(event);
   }
+  // Version 1: a fixed structural scenario without an evaluation time applied every event that
+  // overlapped the period, for the whole period. Version 2 always evaluates at one instant: the
+  // earliest event start inside the period (or the period start), reported to the user.
+  if (version < 2 && s.simulationModel === 'structural' && s.baselineMode === 'fixed' && s.evaluationTime === null) {
+    const ps = parseIsoUtc(s.analysisStart)!;
+    const pe = parseIsoUtc(s.analysisEnd)!;
+    const starts = s.events.filter((e) => e.enabled && e.startTimeUtc).map((e) => parseIsoUtc(e.startTimeUtc)).filter((x): x is number => x !== null && x >= ps && x < pe);
+    if (starts.length) {
+      s.evaluationTime = isoMinute(Math.min(...starts));
+      issues.push({ code: 'migrated_evaluation_time', value: s.evaluationTime });
+    }
+  }
+  s.schemaVersion = SIM_SCHEMA_VERSION;
   return { scenario: s, issues };
 }
 

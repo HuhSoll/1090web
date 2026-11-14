@@ -6,7 +6,8 @@ import type { StaticNetwork } from '../data/model/network';
 import { csvEscape } from '../research/results';
 import type { SimulationOutput } from './engine';
 import type { ImpactResult, ReachStats } from './impact';
-import { isoMinute, scenarioHash, SIM_SCHEMA_VERSION, type SimulationScenario } from './model';
+import { isoMinute, METHOD_VERSION, scenarioHash, SIM_SCHEMA_VERSION, type SimulationScenario } from './model';
+import type { SeriesPoint } from './series';
 
 export const RESULT_FORMAT = '1090web-simulation-result';
 
@@ -101,13 +102,31 @@ export function areasCsv(s: SimulationScenario, out: SimulationOutput): string {
   ]);
 }
 
+/** Event list (one row per event; times UTC, end exclusive). */
+export function eventsCsv(s: SimulationScenario): string {
+  return csv(['scenario_hash', 'dataset_id', 'dataset_version', 'event_id', 'label', 'event_type', 'enabled', 'start_utc', 'end_utc_exclusive',
+    'target_type', 'targets', 'direction', 'source_type', 'source_reference'],
+  s.events.map((e) => [scenarioHash(s), s.datasetId, s.datasetVersion ?? '', e.eventId, e.label, e.eventType, e.enabled ? 'yes' : 'no',
+    e.startTimeUtc ?? '', e.endTimeUtc ?? '', e.targetType, e.targetIds.join(' '), e.direction, e.sourceType, e.sourceReference ?? '']));
+}
+
+/** The scenario over time: one row per computed instant / window; empty cells were not computed. */
+export function seriesCsv(s: SimulationScenario, points: readonly SeriesPoint[], stepMs: number, method: string): string {
+  return csv(['scenario_hash', 'dataset_id', 'dataset_version', 'simulation_model', 'baseline_mode', 'step_hours', 'method', 'time_utc', 'active_events',
+    'lost_connections', 'reduced_connections', 'selected_observed_flights', 'affected_airports', 'spillover_pairs_without_path', 'global_efficiency_after'],
+  points.map((p) => [scenarioHash(s), s.datasetId, s.datasetVersion ?? '', s.simulationModel, s.baselineMode, stepMs / 3_600_000, method, isoMinute(p.t),
+    p.active.join(' '), p.lostConnections, p.reducedConnections, p.flights, p.affectedAirports, p.unreachable, p.efficiency]));
+}
+
 /** Result document: the scenario (reproducible), what was computed, and the headline numbers. */
-export function resultJson(s: SimulationScenario, out: SimulationOutput, imp: ImpactResult | null): string {
+export function resultJson(s: SimulationScenario, out: SimulationOutput, imp: ImpactResult | null, series?: { points: readonly SeriesPoint[]; stepMs: number; method: string } | null, atMs?: number | null): string {
   return `${JSON.stringify({
     format: RESULT_FORMAT,
     schemaVersion: SIM_SCHEMA_VERSION,
     generatedAt: new Date().toISOString(),
     scenarioHash: scenarioHash(s, out.window),
+    methodVersion: METHOD_VERSION,
+    simulationTimeUtc: atMs != null ? isoMinute(atMs) : s.evaluationTime,
     scenario: s,
     analysedPeriod: { startTimeUtc: isoMinute(out.window.startMs), endTimeUtc: isoMinute(out.window.endMs) },
     algorithms: {
@@ -121,6 +140,7 @@ export function resultJson(s: SimulationScenario, out: SimulationOutput, imp: Im
     direct: { ...out.direct, routes: out.direct.routes.length },
     temporal: out.temporal,
     impact: imp ? { total: imp.total, spillover: imp.spillover, components: imp.components, edges: imp.edges, hopChange: imp.hopChange, lostPairs: imp.lostPairs.total, elapsedMs: imp.elapsedMs } : null,
+    series: series ? { stepHours: series.stepMs / 3_600_000, method: series.method, points: series.points } : null,
     interpretation: 'Structural statements about the observed ADS-B network under a hypothetical disruption. Not a forecast of cancellations, passengers or airline operations.',
   }, null, 1)}\n`;
 }

@@ -20,6 +20,8 @@ export interface SimMarks {
   airports: readonly number[];
   suspendedRoutes: readonly number[];
   pathRoutes: readonly number[];
+  /** airports affected by the scenario (not targets): drawn in the 'connected' style */
+  impacted?: readonly number[];
 }
 
 /** Directly suspended routes (scenario targets): warm amber, solid. Lost connections stay dashed orange. */
@@ -182,6 +184,7 @@ export function GlobeView({ view: monthView, comparison, marks = null }: Props) 
       highlightedRoutes: highlighted,
       focusRoute: listHoverRoute ?? hoveredRoute ?? selectedRoute,
       markedAirports: marks?.airports ?? [],
+      impactedAirports: marks?.impacted ?? [],
     });
   }, [view, connected, selectedAirport, hoveredAirport, hoveredRoute, listHoverRoute, selectedRoute, marks]);
 

@@ -220,8 +220,15 @@ export function compareConfig(base: ResearchConfig | null, cmp: ResearchCompare)
       const shift = cmp.value === 'previous' ? len : cmp.value === 'day' ? 86_400_000 : cmp.value === 'week' ? 7 * 86_400_000 : 0;
       return shift ? { ...base, window: { ...base.window, startMs: base.window.startMs - shift, endMs: base.window.endMs - shift } } : null;
     }
-    case 'scenario':
-      return base.scenario && cmp.value === 'off' ? { ...base, scenario: null } : null;
+    case 'scenario': {
+      if (!base.scenario) return null;
+      if (cmp.value === 'off') return { ...base, scenario: null };
+      // without:<n>: the same scenario without its n-th event (a counterfactual, same method)
+      const m = /^without:(\d+)$/.exec(String(cmp.value));
+      const i = m ? Number(m[1]) : -1;
+      if (i < 0 || i >= base.scenario.events.length) return null;
+      return { ...base, scenario: { ...base.scenario, events: base.scenario.events.filter((_, k) => k !== i) } };
+    }
     case 'area': {
       const v = String(cmp.value);
       const next = v.startsWith('C:') ? { ...base, country: v.slice(2), region: null } : v.startsWith('R:') ? { ...base, country: null, region: v.slice(2) } : null;

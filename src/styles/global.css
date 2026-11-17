@@ -1801,6 +1801,187 @@ input[type='range'] {
   }
 }
 
+/* ---------- research: collapsible conditions column, experiments (Phase 9E; existing tokens only) ---------- */
+
+.research.is-collapsed {
+  grid-template-columns: 40px minmax(0, 1fr);
+}
+
+.r-settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.r-collapse-btn {
+  border: 1px solid var(--panel-border);
+  background: none;
+  color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+}
+
+.r-collapse {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+}
+
+.r-collapse-label {
+  writing-mode: vertical-rl;
+  font-size: 12px;
+}
+
+.r-collapse:hover,
+.r-collapse-btn:hover {
+  color: var(--accent-strong);
+}
+
+.x-dim {
+  color: var(--text-dim);
+}
+
+.x-hl {
+  color: var(--accent-warm);
+}
+
+.x-views {
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 6px;
+}
+
+.x-narrow {
+  width: auto;
+}
+
+.x-rate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.x-rate .r-input {
+  width: 84px;
+}
+
+.x-advanced {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--panel-border);
+  padding-top: 10px;
+}
+
+.x-model {
+  gap: 8px;
+}
+
+.x-dist,
+.x-map {
+  width: 100%;
+  height: auto;
+  max-width: 760px;
+}
+
+.x-grid {
+  stroke: var(--panel-border);
+  stroke-width: 1;
+}
+
+.x-axis,
+.x-label {
+  fill: var(--text-dim);
+  font-size: 10px;
+}
+
+.x-row {
+  cursor: pointer;
+}
+
+.x-row.is-selected .x-label,
+.x-row.x-hl .x-label {
+  fill: var(--accent-warm);
+}
+
+.x-whisker {
+  stroke: var(--text-dim);
+  stroke-width: 1;
+}
+
+.x-box {
+  fill: rgba(127, 214, 255, 0.22);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.x-median {
+  stroke: var(--accent-strong);
+  stroke-width: 2;
+}
+
+.x-ref {
+  fill: var(--accent-warm);
+}
+
+.x-map-bg {
+  fill: rgba(255, 255, 255, 0.02);
+}
+
+.x-dot {
+  cursor: pointer;
+  fill-opacity: 0.85;
+}
+
+.x-dot.is-selected {
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+
+.x-legend {
+  display: grid;
+  grid-template-columns: auto minmax(160px, 320px);
+  gap: 2px 12px;
+  align-items: center;
+}
+
+.x-legend-bar {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.x-legend-ticks {
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.x-pre {
+  max-height: 280px;
+  overflow: auto;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 860px) {
+  .research.is-collapsed {
+    grid-template-columns: 1fr;
+  }
+  .r-collapse {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .r-collapse-label {
+    writing-mode: horizontal-tb;
+  }
+}
+
 /* ---------- simulation panel (Phase 9C; existing tokens only) ---------- */
 
 .sim-panel .info-head {
@@ -2526,4 +2707,37 @@ input[type='range'] {
   .tl-chart-row .tl-chart-label {
     width: 84px !important;
   }
+}
+
+/* numeric legend of the simulation 'airports' view (Phase 9E) */
+.sim-num-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sim-num-scale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+
+.r-file {
+  display: none;
+}
+
+.r-toolbar .segmented button {
+  white-space: nowrap;
+}
+
+.x-land {
+  fill: rgba(127, 214, 255, 0.06);
+  stroke: var(--panel-border-strong);
+  stroke-width: 0.5;
+}
+
+.sim-num-scale .legend-item {
+  display: inline-flex;
+  width: auto;
 }

@@ -8,6 +8,7 @@ import { DEFAULT_FILTERS, type NetworkFilters } from '../domain/networkView';
 import type { Locale } from '../i18n/messages';
 import type { AdvisoryFile } from '../data/model/advisory';
 import type { ResearchConfig } from '../research/model';
+import type { ExperimentResult } from '../experiments/model';
 import type { WindowSeries } from '../temporal/aggregate';
 import type { TemporalSelection, TimeBasisFilter, TimeWindow } from '../temporal/window';
 
@@ -62,7 +63,21 @@ export type SimImpactState =
   | { state: 'running'; key: string; done: number; total: number }
   | { state: 'ready'; key: string; result: ImpactResult }
   | { state: 'error'; key: string; message: string };
-export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'export';
+export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'export';
+/** A simulation result handed to Research > Experiments ("check how robust this result is"). */
+export interface ExperimentHandoff {
+  scenarioName: string;
+  /** stopped airports of the scenario (ids) */
+  airports: string[];
+  /** stopped routes / airlines: not single-airport stops, only noted */
+  otherEvents: number;
+}
+export interface ExperimentState {
+  result: ExperimentResult;
+  /** 'browser' or the imported file name */
+  origin: string;
+  warnings: string[];
+}
 /** What the comparison changes: exactly one condition at a time. */
 export type CompareField = 'month' | 'minFlights' | 'tiers' | 'area' | 'window' | 'scenario';
 export interface ResearchCompare {
@@ -130,6 +145,10 @@ interface AppState {
   researchCompare: ResearchCompare;
   /** Shown in Explore after "show on map": Research conditions Explore cannot express. */
   researchMapNote: string | null;
+  /** Research Mode left column collapsed */
+  researchSidebarCollapsed: boolean;
+  experiment: ExperimentState | null;
+  experimentHandoff: ExperimentHandoff | null;
   exploreTime: ExploreTime;
   temporalSel: TemporalSelection | null;
   temporalPlaying: boolean;
@@ -188,6 +207,9 @@ interface AppState {
   setResearchTab: (t: ResearchTab) => void;
   setResearchCompare: (c: Partial<ResearchCompare>) => void;
   setResearchMapNote: (n: string | null) => void;
+  setResearchSidebarCollapsed: (v: boolean) => void;
+  setExperiment: (e: ExperimentState | null) => void;
+  setExperimentHandoff: (h: ExperimentHandoff | null) => void;
   setExploreTime: (m: ExploreTime) => void;
   setTemporalSel: (s: TemporalSelection) => void;
   patchTemporalSel: (s: Partial<TemporalSelection>) => void;
@@ -273,6 +295,9 @@ export const useAppStore = create<AppState>((set) => ({
   researchTab: 'overview',
   researchCompare: { enabled: false, field: 'month', value: null },
   researchMapNote: null,
+  researchSidebarCollapsed: false,
+  experiment: null,
+  experimentHandoff: null,
   exploreTime: 'monthly',
   temporalSel: null,
   temporalPlaying: false,
@@ -351,6 +376,9 @@ export const useAppStore = create<AppState>((set) => ({
   setResearchTab: (researchTab) => set({ researchTab }),
   setResearchCompare: (c) => set((s) => ({ researchCompare: { ...s.researchCompare, ...c } })),
   setResearchMapNote: (researchMapNote) => set({ researchMapNote }),
+  setResearchSidebarCollapsed: (researchSidebarCollapsed) => set({ researchSidebarCollapsed }),
+  setExperiment: (experiment) => set({ experiment }),
+  setExperimentHandoff: (experimentHandoff) => set({ experimentHandoff }),
   // switching keeps the selection and filters; comparisons belong to one mode and are reset
   setExploreTime: (exploreTime) =>
     set((s) => (s.exploreTime === exploreTime ? s : {

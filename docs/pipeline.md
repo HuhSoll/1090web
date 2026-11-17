@@ -62,6 +62,17 @@ cd pipeline && ../.venv/Scripts/python -m pytest -q && cd ..
 
 研究用の Parquet は Git に入れず、GitHub Releases で配布します（[research-data-release.md](research-data-release.md)）。
 
+頑健性の実験のバッチ（Phase 9E）：研究用の Parquet（`data/research/<id>/temporal/flights_YYYY-MM.parquet`）から、空港を1つずつ止めたときの影響を、感度分析の条件や欠測の試行ごとに計算します。numpy と scipy が必要です（`requirements.txt`）。定義ファイルの形式と計算方法は [experiment-methodology.md](experiment-methodology.md)、例は `pipeline/experiments/configs/` にあります。
+
+```bash
+cd pipeline
+../.venv/Scripts/python -m experiments.run experiments/configs/march-sensitivity.json --out ../data/experiments/march-sensitivity --workers 11
+#   --resume で途中から再開（候補 48 件ごとに chunks/ に保存）
+#   出力：result.json（研究モードの「実験」で読み込める形式）、rankings.csv、runs/、chunks/
+```
+
+出力先の `data/experiments/` は Git 管理外です。結果は大きくなる（全空港・13 条件で約 6 MB）ため、公開サイトには含めず、必要なときに研究モードでローカルのファイルとして読み込みます。
+
 元データを新しい版に差し替えるときは、`inputs.lock.json` を更新し、新しいデータセット ID とバージョンで生成してください。既存のデータセットは上書きしません。
 
 出力（`<id>` はデータセット ID）：

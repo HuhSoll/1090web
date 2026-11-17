@@ -40,3 +40,6 @@ og-geometry.json
 
 # Local assistant instructions (not part of the project)
 CLAUDE.md
+
+# Batch experiment outputs (Phase 9E): large, local only
+data/experiments/

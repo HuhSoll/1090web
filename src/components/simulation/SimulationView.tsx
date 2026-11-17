@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { airportImpact } from '../../app/useSimMap';
 import { useI18n } from '../../i18n/useI18n';
 import type { MessageKey } from '../../i18n/messages';
 import { ChangeKind, type Comparison } from '../../domain/comparison';
@@ -115,6 +116,7 @@ function MapControls({ comparison, temporal }: { comparison: Comparison | null; 
       <ul>
         <li><span className="legend-item"><span className="swatch swatch-dot" style={{ background: '#ff6147' }} /><span>{t('sim.legend.target')}</span></span></li>
         {view === 'airports' && <li><span className="legend-item"><span className="swatch swatch-dot" style={{ background: '#e0faff' }} /><span>{t('sim.legend.impacted')}</span></span></li>}
+        {view === 'airports' && !peek && <AirportsLegend />}
         <li><span className="legend-item"><span className="swatch" style={{ background: '#ffd27a', height: 4 }} /><span>{t('sim.legend.suspended')}</span></span></li>
         {comparison && items.map((k) => {
           if (k === 'stable' && (view === 'focus' || view === 'airports')) return null;
@@ -132,5 +134,39 @@ function MapControls({ comparison, temporal }: { comparison: Comparison | null; 
       </ul>
       <span className="muted tiny">{t(peek || before ? 'sim.legend.before' : temporal ? 'sim.legend.hintTemporal' : 'sim.legend.hintStructural')}</span>
     </div>
+  );
+}
+
+/** Numeric legend of the 'airports' view (Phase 9E): what the dot size counts, and its range. */
+function AirportsLegend() {
+  const { t, number } = useI18n();
+  const status = useAppStore((s) => s.simStatus);
+  const impact = useAppStore((s) => s.simImpact);
+  const metric = useAppStore((s) => s.simAirportMetric);
+  const network = useAppStore((s) => s.network);
+  const out = status.state === 'ready' ? status.output : null;
+  const imp = out && impact.state === 'ready' && impact.key === `${out.key}:impact` ? impact.result : null;
+  const stats = useMemo(() => {
+    if (!out || !imp || !network) return null;
+    const { weights, impacted } = airportImpact(out, imp, metric, network.airports.length);
+    const v = impacted.map((g) => weights[g]!).sort((a, b) => a - b);
+    return v.length ? { n: v.length, min: v[0]!, med: v[Math.floor(v.length / 2)]!, max: v[v.length - 1]! } : { n: 0, min: 0, med: 0, max: 0 };
+  }, [out, imp, metric, network]);
+  if (!stats) return null;
+  return (
+    <li className="sim-num-legend">
+      <span className="small">{t(`sim.metric.${metric}` as MessageKey)}</span>
+      {stats.n > 0 ? (
+        <span className="sim-num-scale" aria-label={t('sim.legend.scale')}>
+          {[stats.min, stats.med, stats.max].map((v, i) => (
+            <span key={i} className="legend-item">
+              <span className="swatch swatch-dot" style={{ background: '#e0faff', width: 5 + 3 * i, height: 5 + 3 * i }} />
+              <span className="mono small">{number(v)}</span>
+            </span>
+          ))}
+          <span className="muted tiny">{t('sim.legend.scaleNote', { n: number(stats.n) })}</span>
+        </span>
+      ) : <span className="muted tiny">{t('sim.legend.noneImpacted')}</span>}
+    </li>
   );
 }

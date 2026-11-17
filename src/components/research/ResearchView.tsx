@@ -7,6 +7,7 @@ import { compareConfig, useAnalysis, useMetricsClients, useResearchMeta } from '
 import { useAppStore, type ResearchTab } from '../../state/store';
 import { Logo } from '../common/Logo';
 import { ComparisonPanel, Progress } from './ComparisonPanel';
+import { ExperimentsPanel } from './ExperimentsPanel';
 import { ExportPanel } from './ExportPanel';
 import { GeographyPanel } from './GeographyPanel';
 import { OverviewPanel } from './OverviewPanel';
@@ -14,7 +15,7 @@ import { RankingsPanel } from './RankingsPanel';
 import { ReliabilityPanel } from './ReliabilityPanel';
 import { SettingsPanel } from './SettingsPanel';
 
-const TABS: ResearchTab[] = ['overview', 'rankings', 'geography', 'reliability', 'comparison', 'export'];
+const TABS: ResearchTab[] = ['overview', 'rankings', 'geography', 'reliability', 'comparison', 'experiments', 'export'];
 
 /** Research Mode: analysis conditions on the left, results in tabs on the right. */
 export function ResearchView() {
@@ -25,6 +26,8 @@ export function ResearchView() {
   const tab = useAppStore((s) => s.researchTab);
   const setTab = useAppStore((s) => s.setResearchTab);
   const cmp = useAppStore((s) => s.researchCompare);
+  const collapsed = useAppStore((s) => s.researchSidebarCollapsed);
+  const setCollapsed = useAppStore((s) => s.setResearchSidebarCollapsed);
   const metaState = useResearchMeta();
   const meta = metaState.state === 'ready' ? metaState.meta : null;
   const clients = useMetricsClients();
@@ -70,15 +73,25 @@ export function ResearchView() {
   if (!network || !config) return null;
 
   return (
-    <div className="research" role="region" aria-label={t('r.title')}>
-      <aside className="research-settings panel">
-        <div className="brand"><Logo /></div>
-        <div className="r-settings-head">
-          <h2 className="section-title">{t('r.settings')}</h2>
-        </div>
-        <div className="sidebar-scroll">
-          <SettingsPanel config={config} />
-        </div>
+    <div className={collapsed ? 'research is-collapsed' : 'research'} role="region" aria-label={t('r.title')}>
+      <aside className="research-settings panel" aria-label={t('r.settings')}>
+        {collapsed ? (
+          <button type="button" className="r-collapse" onClick={() => setCollapsed(false)} aria-expanded={false} title={t('r.sidebar.expand')}>
+            <span aria-hidden="true">»</span>
+            <span className="r-collapse-label">{t('r.settings')}</span>
+          </button>
+        ) : (
+          <>
+            <div className="brand"><Logo /></div>
+            <div className="r-settings-head">
+              <h2 className="section-title">{t('r.settings')}</h2>
+              <button type="button" className="r-collapse-btn" onClick={() => setCollapsed(true)} aria-expanded title={t('r.sidebar.collapse')}>«</button>
+            </div>
+            <div className="sidebar-scroll">
+              <SettingsPanel config={config} />
+            </div>
+          </>
+        )}
       </aside>
       <section className="research-main panel">
         <header className="research-head">
@@ -99,8 +112,9 @@ export function ResearchView() {
             </div>
           )}
           {main.state === 'error' && <p className="hint warn">{t('r.status.error')} {main.message}</p>}
-          {meta && !result && main.state !== 'error' && <Progress state={main} />}
-          {meta && result && (
+          {meta && tab === 'experiments' && <ExperimentsPanel config={config} meta={meta} onShowOnMap={showOnMap} />}
+          {meta && tab !== 'experiments' && !result && main.state !== 'error' && <Progress state={main} />}
+          {meta && result && tab !== 'experiments' && (
             <>
               {tab === 'overview' && <OverviewPanel result={result} meta={meta} />}
               {tab === 'rankings' && <RankingsPanel result={result} focus={focusInNet} onFocus={setFocus} onShowOnMap={showOnMap} />}

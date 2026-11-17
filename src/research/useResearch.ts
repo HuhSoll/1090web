@@ -100,6 +100,18 @@ function withScenario(network: StaticNetwork, m: Promise<ResearchMonth>, s: Rese
   return Promise.all([m, loadTemporalMeta()]).then(([x, meta]) => applyStructural(network, x, s, { startMs: start, endMs: end }, meta.index.datasetVersion, meta.range));
 }
 
+/** The input rows of a config: its month or window, with its scenario applied. */
+export function loadConfigMonth(network: StaticNetwork, config: ResearchConfig, channel: string): Promise<ResearchMonth> {
+  return config.window
+    ? loadWindowMonth(network, config.window, channel, false, config.scenario).then((m) => m!) // throws instead of returning null
+    : withScenario(network, loadResearchMonth(network, config.month), config.scenario, config.month);
+}
+
+/** The shared research loader's metadata (tier split, quality, persistence). */
+export function loadResearchMeta(): Promise<ResearchMeta> {
+  return getResearchLoader().loadMeta();
+}
+
 export type MetaState = { state: 'loading' } | { state: 'error'; message: string } | { state: 'ready'; meta: ResearchMeta };
 
 export function useResearchMeta(): MetaState {
@@ -153,9 +165,7 @@ export function useAnalysis(config: ResearchConfig | null, meta: ResearchMeta | 
       continentOf: airportContinents(network, meta.quality.continents),
       persistence: meta.persistence,
     };
-    const current: Promise<ResearchMonth> = w
-      ? loadWindowMonth(network, w, `${channel}:current`, false, config.scenario).then((m) => m!) // throws instead of returning null
-      : withScenario(network, loadResearchMonth(network, config.month), config.scenario, config.month);
+    const current = loadConfigMonth(network, config, `${channel}:current`);
     // the previous period is the observed network (route changes are against what was flown)
     const previous = w ? loadWindowMonth(network, prevWindow!, `${channel}:previous`, true) : previousMonth ? loadResearchMonth(network, previousMonth) : Promise.resolve(null);
     Promise.all([current, previous])

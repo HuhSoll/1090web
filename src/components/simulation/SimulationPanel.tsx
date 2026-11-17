@@ -352,6 +352,25 @@ function ExportBar({ scenario, ctx }: { scenario: SimulationScenario; ctx: SimCo
     st.setResearchTab('comparison');
     st.setAppMode('research');
   };
+  // Phase 9E: the observed network of the same period, the stopped airports as candidates
+  const toExperiments = () => {
+    if (!out) return;
+    const st = useAppStore.getState();
+    const month = new Date(out.window.startMs).toISOString().slice(0, 7);
+    const months = network.manifest.months.map((m) => m.month);
+    const on = scenario.events.filter((e) => e.enabled);
+    const airports = [...new Set(on.filter((e) => e.targetType === 'airport' && (e.eventType === 'AIRPORT_CLOSURE' || e.eventType === 'MULTIPLE_AIRPORT_CLOSURE')).flatMap((e) => e.targetIds))];
+    st.setResearchConfig({
+      ...defaultConfig(months.includes(month) ? month : months[months.length - 1]!),
+      window: { startMs: out.window.startMs, endMs: out.window.endMs, basis: scenario.filters.basis, preset: 'custom', stepMs: 86_400_000 },
+      tiers: scenario.filters.tiers, classes: [...scenario.filters.classes], minFlights: scenario.filters.minFlights,
+      directed: scenario.analysisSettings.directed,
+    });
+    st.setExperiment(null);
+    st.setExperimentHandoff({ scenarioName: scenario.name, airports, otherEvents: on.length - on.filter((e) => e.targetType === 'airport').length });
+    st.setResearchTab('experiments');
+    st.setAppMode('research');
+  };
   const load = (file: File) => {
     void file.text().then((text) => {
       const range = ctx.meta?.range ?? { startMs: Date.UTC(2026, 0, 1), endMs: Date.UTC(2026, 9, 1) };
@@ -388,6 +407,7 @@ function ExportBar({ scenario, ctx }: { scenario: SimulationScenario; ctx: SimCo
         {out && <button type="button" className="pill-btn" onClick={() => downloadText(`${base}_areas.csv`, areasCsv(saved, out))}>{t('sim.export.areas')}</button>}
       </div>
       {out && <button type="button" className="primary-btn sim-research" onClick={toResearch}>{t('sim.toResearchAt', { time: ctx.atMs !== null ? formatUtc(ctx.atMs) : '' })}</button>}
+      {out && <button type="button" className="pill-btn sim-research" onClick={toExperiments} title={t('sim.robustness.title')}>{t('sim.robustness')}</button>}
       {msg && <ul className={msg.ok ? 'r-mini' : 'r-mini r-warn-text'}>{msg.lines.map((l) => <li key={l}>{l}</li>)}</ul>}
     </div>
   );

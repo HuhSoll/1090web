@@ -16,6 +16,7 @@ only what they lack, so nothing is published twice:
 Raw data, research Parquet files and large comparison tables are NOT published.
 
   python pipeline/research_web.py --dataset observed-2026-v2
+  python pipeline/research_web.py --dataset observed-2026-v2 --only-quality
 """
 
 from __future__ import annotations
@@ -33,7 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import provenance  # noqa: E402
 
 SCHEMA_VERSION = 1
-SCRIPT_VERSION = "8.1"
+SCRIPT_VERSION = "8.2"
 ROOT = Path(__file__).resolve().parents[1]
 TIER_CODE = {"T1_track": 1, "T2_track_conflict": 2, "T3_track_callsign": 3, "T4_callsign_only": 4}
 TIER_SETS = {"A": (1,), "B": (1, 2), "C": (1, 2, 3), "D": (1, 2, 3, 4)}
@@ -55,6 +56,30 @@ def _num(v: str):
     except ValueError:
         return v
     return int(f) if f.is_integer() and "." not in v else round(f, 4)
+
+
+CONTINENT_RULE = "airport-v1"
+
+
+def continent_maps(airports_csv: Path) -> tuple[dict[str, str], dict[str, str], dict[str, dict[str, int]]]:
+    """Per-airport continents (OurAirports), the majority continent per country, and the exceptions.
+
+    Before Phase 9F the country map took the continent of the first airport listed for each country,
+    which put all of Spain in Africa (the Canary Islands come first) and all of Russia in Europe.
+    Ties in the majority go to the alphabetically first continent so the result does not depend on
+    row order.
+    """
+    by_country: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    per_airport: dict[str, tuple[str, str]] = {}
+    with airports_csv.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            if r["country"] and r["continent"]:
+                by_country[r["country"]][r["continent"]] += 1
+                per_airport[r["id"]] = (r["country"], r["continent"])
+    majority = {c: min(v.items(), key=lambda kv: (-kv[1], kv[0]))[0] for c, v in by_country.items()}
+    exceptions = {a: cont for a, (c, cont) in per_airport.items() if majority[c] != cont}
+    multi = {c: dict(sorted(v.items())) for c, v in by_country.items() if len(v) > 1}
+    return dict(sorted(majority.items())), dict(sorted(exceptions.items())), dict(sorted(multi.items()))
 
 
 def _sha(path: Path) -> str:
@@ -158,11 +183,7 @@ def build_quality(con, parquet: Path, dataset_dir: Path, research_dir: Path, mon
                 "scope_type", "scope_id", "month", "flights_on_map", "share_T1", "share_T2", "share_T3", "share_T4",
                 "callsign_only_end_share", "track_end_share", "anomaly_days_low", "daily_cv")})
 
-    continents = {}
-    with (dataset_dir / "research" / "airports.csv").open(encoding="utf-8") as fh:
-        for r in csv.DictReader(fh):
-            if r["country"] and r["continent"]:
-                continents.setdefault(r["country"], r["continent"])
+    continents, airport_continents, multi = continent_maps(dataset_dir / "research" / "airports.csv")
 
     external = {"available": p7.exists()}
     if p7.exists():
@@ -211,7 +232,13 @@ def build_quality(con, parquet: Path, dataset_dir: Path, research_dir: Path, mon
         "anomalies": anomalies["anomalies"],
         "gapRuns": anomalies.get("gap_runs", []),
         "regions": regions,
-        "continents": dict(sorted(continents.items())),
+        # Phase 9F: continents are decided per airport (OurAirports `continent`). `continents` is the
+        # majority continent of each country, used only where a country (not an airport) is chosen;
+        # `airportContinents` lists the airports whose continent differs from their country's majority.
+        "continentRule": CONTINENT_RULE,
+        "continents": continents,
+        "airportContinents": airport_continents,
+        "multiContinentCountries": multi,
         "external": external,
     }
 
@@ -252,11 +279,30 @@ def build(dataset: str, data_root: Path = ROOT / "public" / "data", research_roo
     return web_manifest
 
 
+def rebuild_quality(dataset: str, data_root: Path = ROOT / "public" / "data", research_root: Path = ROOT / "data" / "research") -> dict:
+    """Rewrite only quality.json and its entry in the web manifest (tiers and persistence are untouched)."""
+    import duckdb
+
+    dataset_dir = data_root / dataset
+    out = dataset_dir / "research-web"
+    manifest = json.loads((dataset_dir / "manifest.json").read_text(encoding="utf-8"))
+    months = [m["month"] for m in manifest["months"]]
+    web_manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    q = build_quality(duckdb.connect(), dataset_dir / "research" / "routes_monthly.parquet", dataset_dir,
+                      research_root / dataset, months)
+    web_manifest["files"]["quality.json"] = _write(out / "quality.json", q)
+    web_manifest["script"] = {"name": "pipeline/research_web.py", "version": SCRIPT_VERSION}
+    web_manifest["qualityRebuiltAt"] = provenance.now_utc()
+    _write(out / "manifest.json", web_manifest)
+    return web_manifest
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dataset", default="observed-2026-v2")
+    p.add_argument("--only-quality", action="store_true", help="rewrite quality.json only (e.g. after a rule change)")
     a = p.parse_args()
-    m = build(a.dataset)
+    m = rebuild_quality(a.dataset) if a.only_quality else build(a.dataset)
     print(json.dumps({"files": len(m["files"]), "months": m["months"]}, indent=1))
 
 

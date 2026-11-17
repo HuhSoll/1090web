@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useI18n } from '../../i18n/useI18n';
 import type { MessageKey } from '../../i18n/messages';
+import { PILOT_AIRPORTS } from '../../islands/model';
 import { defaultConfig } from '../../research/model';
 import { useAppStore } from '../../state/store';
 import { eventActiveAt, scenarioContext } from '../../simulation/disruption';
@@ -353,6 +354,14 @@ function ExportBar({ scenario, ctx }: { scenario: SimulationScenario; ctx: SimCo
     st.setAppMode('research');
   };
   // Phase 9E: the observed network of the same period, the stopped airports as candidates
+  const islandAirports = [...new Set(scenario.events.filter((e) => e.enabled && e.targetType === 'airport').flatMap((e) => e.targetIds))]
+    .filter((id) => PILOT_AIRPORTS.includes(id));
+  const toIslands = () => {
+    const st = useAppStore.getState();
+    st.setIslandHandoff({ scenarioName: scenario.name, airports: islandAirports });
+    st.setResearchTab('islands');
+    st.setAppMode('research');
+  };
   const toExperiments = () => {
     if (!out) return;
     const st = useAppStore.getState();
@@ -408,6 +417,7 @@ function ExportBar({ scenario, ctx }: { scenario: SimulationScenario; ctx: SimCo
       </div>
       {out && <button type="button" className="primary-btn sim-research" onClick={toResearch}>{t('sim.toResearchAt', { time: ctx.atMs !== null ? formatUtc(ctx.atMs) : '' })}</button>}
       {out && <button type="button" className="pill-btn sim-research" onClick={toExperiments} title={t('sim.robustness.title')}>{t('sim.robustness')}</button>}
+      {out && islandAirports.length > 0 && <button type="button" className="pill-btn sim-research" onClick={toIslands} title={t('sim.residents.title')}>{t('sim.residents')}</button>}
       {msg && <ul className={msg.ok ? 'r-mini' : 'r-mini r-warn-text'}>{msg.lines.map((l) => <li key={l}>{l}</li>)}</ul>}
     </div>
   );

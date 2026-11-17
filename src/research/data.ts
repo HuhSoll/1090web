@@ -103,7 +103,13 @@ export interface QualityFile {
     share_T4: number;
     callsign_only_end_share: number;
   }[];
+  /** Majority continent of each country (only for choosing a region from a country). */
   continents: Record<string, string>;
+  /** Phase 9F: "airport-v1" when continents are decided per airport; absent in older files. */
+  continentRule?: string;
+  /** Airports whose own continent differs from their country's majority (e.g. the Canary Islands). */
+  airportContinents?: Record<string, string>;
+  multiContinentCountries?: Record<string, Record<string, number>>;
   external: {
     available: boolean;
     rowFields?: string[];
@@ -265,7 +271,16 @@ export function mergeMonth(explore: MonthData, tierRecords: readonly TierRecord[
   return m;
 }
 
-/** Airport index -> continent code, from the quality file's country map. */
-export function airportContinents(network: StaticNetwork, continents: Record<string, string>): string[] {
-  return network.airports.map((a) => continents[a.country] ?? '');
+/**
+ * Airport index -> continent code. Each airport's own continent (OurAirports) when the quality file
+ * lists it as an exception, otherwise its country's majority continent. Files from before Phase 9F
+ * only have the old country map ("first airport of the country"), which is used as is.
+ */
+export function airportContinents(network: StaticNetwork, quality: Pick<QualityFile, 'continents' | 'airportContinents'>): string[] {
+  const own = quality.airportContinents ?? {};
+  return network.airports.map((a) => own[a.id] ?? quality.continents[a.country] ?? '');
+}
+
+export function continentRule(quality: Pick<QualityFile, 'continentRule' | 'continents'>): string {
+  return quality.continentRule ?? 'country-first';
 }

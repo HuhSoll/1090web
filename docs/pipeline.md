@@ -150,3 +150,16 @@ v1 との違いと、その理由は [phase6a-report.md](phase6a-report.md) に�
 - 地図は国単位でしか塗れないため、一部の空域（FIR・州）や広域が対象のものは「国全体で表示」と明記しています。バーレーンなど小さな国は地図データにないため、一覧には出ますが塗られません。
 - 空域制限（FAA など）は HTML のみの提供、気象警報（aviationweather.gov）は過去30日分しか取得できず観測期間と合わないため、現時点では扱っていません。
 
+
+## 離島の依存性（Phase 9F）
+
+```bash
+.venv/Scripts/python pipeline/islands/fetch.py              # e-Stat・国土数値情報・沖縄県の資料・OSM を data/raw/islands/ に取得（sources.lock.json に記録）
+.venv/Scripts/python pipeline/islands/build.py              # public/data/islands/okinawa-pilot/ を作る
+.venv/Scripts/python pipeline/islands/global_importance.py  # Phase 9E の指標との比較（global.json）
+.venv/Scripts/python pipeline/islands/fixture.py            # ブラウザとの照合用のデータ（tests/islands/）
+```
+
+- 設定は `pipeline/islands/okinawa-pilot.json`（島の代表点、空港、港、路線、目的地、仮定）。路線は沖縄県の資料からページ付きで転記しています。
+- 元のファイルは公開しません。公開するのは集計・加工したデータ（約 1.3 MB）だけです。出典とライセンスは [island-data-sources.md](island-data-sources.md) にあります。
+- 大陸の対応（研究モードの `quality.json`）は Phase 9F で空港ごとの判定に変えました。規則を変えたときは `python pipeline/research_web.py --only-quality` で `quality.json` だけを作り直せます。

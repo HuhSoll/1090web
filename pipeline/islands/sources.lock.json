@@ -1,0 +1,202 @@
+{
+ "files": {
+  "estat/T001141_3622.zip": {
+   "file": "estat/T001141_3622.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3622&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3622",
+   "retrieved": "2026-11-17T10:25:39Z",
+   "bytes": 1205,
+   "sha256": "b1d110767ef62abffe2d2322ca879d0fb07b593fbf2418bb615bb222399f3b7c"
+  },
+  "estat/T001141_3623.zip": {
+   "file": "estat/T001141_3623.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3623&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3623",
+   "retrieved": "2026-11-17T10:13:08Z",
+   "bytes": 3505,
+   "sha256": "390c0552bc096c83c8d6e1581511495b9ec32f3ac389d17c094ffd1f41f746e0"
+  },
+  "estat/T001141_3624.zip": {
+   "file": "estat/T001141_3624.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3624&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3624",
+   "retrieved": "2026-11-17T10:13:12Z",
+   "bytes": 10958,
+   "sha256": "8c10475f7c0336c90b4a70c7d6aff8ce5a3ec4ff8eccf7fa7f7f52b268b91420"
+  },
+  "estat/T001141_3724.zip": {
+   "file": "estat/T001141_3724.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3724&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3724",
+   "retrieved": "2026-11-17T10:25:43Z",
+   "bytes": 1040,
+   "sha256": "fbd3f6fd297af8f38294a1534f3c0a667623f85f8ebe31dbdf895f5d2f0436b1"
+  },
+  "estat/T001141_3725.zip": {
+   "file": "estat/T001141_3725.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3725&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3725",
+   "retrieved": "2026-11-17T10:13:16Z",
+   "bytes": 16724,
+   "sha256": "be06920db243d3ecb3fb65185f7bb7f4ac2afe9fd5fb6648a5ef34e4e019f3d8"
+  },
+  "estat/T001141_3831.zip": {
+   "file": "estat/T001141_3831.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001141&code=3831&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 500 m mesh (4th level) population and households, 1st-level mesh 3831",
+   "retrieved": "2026-11-17T10:13:20Z",
+   "bytes": 3036,
+   "sha256": "2ad681c6a8058a8e6f1bf5ea206d8f5d10536650998f46e4af7620f674b994d3"
+  },
+  "estat/T001142_3622.zip": {
+   "file": "estat/T001142_3622.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3622&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3622",
+   "retrieved": "2026-11-17T10:25:38Z",
+   "bytes": 1430,
+   "sha256": "617d57e0f9b7d2b8a3a5c12be5a8c3a496cab5e42cd02d016ba6c038fab8324d"
+  },
+  "estat/T001142_3623.zip": {
+   "file": "estat/T001142_3623.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3623&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3623",
+   "retrieved": "2026-11-17T10:13:06Z",
+   "bytes": 4815,
+   "sha256": "42f975bfebeeb8453b387ea1b249958b0dd77b2ca7bce6e575f8de2943130c3e"
+  },
+  "estat/T001142_3624.zip": {
+   "file": "estat/T001142_3624.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3624&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3624",
+   "retrieved": "2026-11-17T10:13:10Z",
+   "bytes": 19094,
+   "sha256": "62c380a6f1efefe1be6923bbda9526136c208a4d2797e85320d1d7a9e1536c7f"
+  },
+  "estat/T001142_3724.zip": {
+   "file": "estat/T001142_3724.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3724&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3724",
+   "retrieved": "2026-11-17T10:25:41Z",
+   "bytes": 1311,
+   "sha256": "6b132ef9c34579f67293be8c773cbfa4a37a0ce06fa74080aa1447f39551eefb"
+  },
+  "estat/T001142_3725.zip": {
+   "file": "estat/T001142_3725.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3725&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3725",
+   "retrieved": "2026-11-17T10:13:14Z",
+   "bytes": 30274,
+   "sha256": "876e41c3db5c27019d30182966ab2522a66552378efbba156c6c4db5b33a918b"
+  },
+  "estat/T001142_3831.zip": {
+   "file": "estat/T001142_3831.zip",
+   "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001142&code=3831&downloadType=2",
+   "licence": "政府統計の総合窓口(e-Stat) 利用規約（政府標準利用規約 第2.0版準拠、CC BY 4.0 互換）",
+   "note": "2020 census, 250 m mesh (5th level) population and households, 1st-level mesh 3831",
+   "retrieved": "2026-11-17T10:13:18Z",
+   "bytes": 3958,
+   "sha256": "71c9cc6b14f4aae09beb30e296ebcc9a79c1c549645ef269e3ffd4ed753ccddb"
+  },
+  "ksj/N03-20260101_47_GML.zip": {
+   "file": "ksj/N03-20260101_47_GML.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N03/N03-2026/N03-20260101_47_GML.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "administrative areas of Okinawa as of 2026-01-01",
+   "retrieved": "2026-11-17T10:13:23Z",
+   "bytes": 17285048,
+   "sha256": "7970c476e0222b5f8cb0943b067193d4456604718991151bb418c0096451e885"
+  },
+  "ksj/N13-24_3622_GEOJSON.zip": {
+   "file": "ksj/N13-24_3622_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3622_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3622",
+   "retrieved": "2026-11-17T10:25:40Z",
+   "bytes": 66130,
+   "sha256": "62f040e429a224c8e56ce0cb3123f066906a5837d423e9ebad61daee8363a0c0"
+  },
+  "ksj/N13-24_3623_GEOJSON.zip": {
+   "file": "ksj/N13-24_3623_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3623_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3623",
+   "retrieved": "2026-11-17T10:13:09Z",
+   "bytes": 159126,
+   "sha256": "16d652d8ab3251ae2fcca2a6219bf8df4fc2d55a9a2fec6bb7238592b2d68819"
+  },
+  "ksj/N13-24_3624_GEOJSON.zip": {
+   "file": "ksj/N13-24_3624_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3624_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3624",
+   "retrieved": "2026-11-17T10:13:13Z",
+   "bytes": 1094561,
+   "sha256": "2009ce616a50e8068dfd2f7bb0a94da597917b226f6b13787f962a2e9ab3190e"
+  },
+  "ksj/N13-24_3724_GEOJSON.zip": {
+   "file": "ksj/N13-24_3724_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3724_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3724",
+   "retrieved": "2026-11-17T10:25:44Z",
+   "bytes": 22054,
+   "sha256": "70d7110ed6b67c869f413499f1c0a868a0614297ea7945d713a86434a7deeeea"
+  },
+  "ksj/N13-24_3725_GEOJSON.zip": {
+   "file": "ksj/N13-24_3725_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3725_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3725",
+   "retrieved": "2026-11-17T10:13:17Z",
+   "bytes": 1424873,
+   "sha256": "90a334bce1bfd07eaf547e3b9ed940bc769a1543fd19e9f21fc44533ac4b73f0"
+  },
+  "ksj/N13-24_3831_GEOJSON.zip": {
+   "file": "ksj/N13-24_3831_GEOJSON.zip",
+   "url": "https://nlftp.mlit.go.jp/ksj/gml/data/N13/N13-24/N13-24_3831_GEOJSON.zip",
+   "licence": "国土数値情報 オープンデータ（CC BY 4.0）",
+   "note": "roads (centre lines) 2024, 1st-level mesh 3831",
+   "retrieved": "2026-11-17T10:13:21Z",
+   "bytes": 102448,
+   "sha256": "64fb3e17879be859ebcc5055c492c3efc814fa886fdb61f004f1c6d21508a8ba"
+  },
+  "okinawa/03.chapter3.r8.pdf": {
+   "file": "okinawa/03.chapter3.r8.pdf",
+   "url": "https://www.pref.okinawa.jp/_res/projects/default_project/_page_/001/038/825/03.chapter3.r8.pdf",
+   "licence": "沖縄県ホームページの利用規約による（出典を明記して利用。PDF 自体は再配布しない）",
+   "note": "Okinawa Prefecture 離島関係資料 令和8年版 第3章 交通: air routes as of end Nov 2025 (p.65), sea routes as of 2025-10-01 (p.72-75)",
+   "retrieved": "2026-11-17T10:13:25Z",
+   "bytes": 2723915,
+   "sha256": "3d339d64a483f493b0da00c9b4ec2c677273c77be81914b4c82cb58faecabe03"
+  },
+  "osm/ferry.json": {
+   "file": "osm/ferry.json",
+   "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22amenity%22%3D%22ferry_terminal%22%5D%2824.0%2C122.9%2C26.1%2C131.4%29%3Bnwr%5B%22route%22%3D%22ferry%22%5D%2824.0%2C122.9%2C26.1%2C131.4%29%3B%29%3Bout%20center%20tags%3B",
+   "licence": "© OpenStreetMap contributors, ODbL 1.0",
+   "note": "ferry terminals and ferry routes (tags and centre points)",
+   "retrieved": "2026-11-17T10:13:57Z",
+   "bytes": 20443,
+   "sha256": "b0eb486d94ca79c12fcbc4c45442f7b88add76a20079232aa0599503131d480c"
+  },
+  "osm/ports.json": {
+   "file": "osm/ports.json",
+   "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22name%22~%22%E6%B8%AF%22%5D%2825.80%2C131.18%2C26.00%2C131.36%29%3Bnwr%5B%22name%22~%22%E6%B3%8A%22%5D%2826.20%2C127.66%2C26.24%2C127.70%29%3Bnwr%5B%22name%22~%22%E6%B8%AF%22%5D%2824.60%2C124.68%2C24.72%2C124.75%29%3B%29%3Bout%20center%20tags%3B",
+   "licence": "© OpenStreetMap contributors, ODbL 1.0",
+   "note": "named harbours of the Daito islands, Tarama and Naha Tomari",
+   "retrieved": "2026-11-17T10:16:46Z",
+   "bytes": 39520,
+   "sha256": "77db929a04bbc66765f650adc1679550b4fb262c54925867efa2b23cb145c488"
+  }
+ }
+}

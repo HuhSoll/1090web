@@ -162,7 +162,7 @@ export function useAnalysis(config: ResearchConfig | null, meta: ResearchMeta | 
     const channel = channelOf(client);
     const ctx: ScopeContext = {
       network,
-      continentOf: airportContinents(network, meta.quality.continents),
+      continentOf: airportContinents(network, meta.quality),
       persistence: meta.persistence,
     };
     const current = loadConfigMonth(network, config, `${channel}:current`);

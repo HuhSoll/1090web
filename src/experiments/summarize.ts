@@ -77,7 +77,7 @@ const roundStats = (s: Stats, nd: number): Stats => Object.fromEntries(Object.en
 export function summarize(
   d: ExperimentDefinition,
   hash: string,
-  dataset: { id: string; version: string | null },
+  dataset: { id: string; version: string | null; continentRule?: string },
   runs: RawRun[],
   candidates: string[],
   meta: (id: string) => AirportMeta,

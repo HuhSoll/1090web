@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { resolveDatasetId } from '../../app/config';
-import { airportContinents, type ResearchMeta, type ResearchMonth } from '../../research/data';
+import { airportContinents, continentRule, type ResearchMeta, type ResearchMonth } from '../../research/data';
 import { REGIONS, type ResearchConfig } from '../../research/model';
 import { loadConfigMonth } from '../../research/useResearch';
 import { ExperimentClient, planExperiment, runExperiment, CancelledRun, type ExperimentDeps, type RunProgress } from '../../experiments/engine';
@@ -96,10 +96,11 @@ function ExperimentSetup({ config, meta, network, datasetId, handoff, onClearHan
     if (!month || month.key !== baseKey || !('month' in month)) return null;
     return {
       network,
-      scope: { network, continentOf: airportContinents(network, meta.quality.continents), persistence: meta.persistence },
+      scope: { network, continentOf: airportContinents(network, meta.quality), persistence: meta.persistence },
       month: month.month,
       datasetId,
       datasetVersion: meta.manifest.datasetVersion,
+      continentRule: continentRule(meta.quality),
     };
   }, [month, baseKey, network, meta, datasetId]);
   const problems = definitionProblems(fullDef);
@@ -146,7 +147,7 @@ function ExperimentSetup({ config, meta, network, datasetId, handoff, onClearHan
         setImportMsg(t('x.import.notJson'));
         return;
       }
-      const r = checkImport(raw, datasetId, meta.manifest.datasetVersion);
+      const r = checkImport(raw, datasetId, meta.manifest.datasetVersion, continentRule(meta.quality));
       if (!r.ok) setImportMsg(t(r.error as never));
       else setExperiment({ result: r.result, origin: file.name, warnings: r.warnings });
     });

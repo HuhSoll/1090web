@@ -178,7 +178,7 @@ describe('definitions and statistics', () => {
       values: { systemicDrop: sys, spilloverDrop: sys, spilloverBefore: sys, unreachablePairs: sys, hop1Drop: sys, hop2Drop: sys, hop3Drop: sys, directLost: sys, flightsLost: sys },
     });
     const def: ExperimentDefinition = { ...d, topK: [1] };
-    const r = summarize(def, 'h', { id: 'x', version: '1' }, [run('t0000', 'reference', ['A', 'B'], [0.2, 0.1]), run('t0001', 'trial', ['A'], [0.05]), run('t0002', 'trial', ['A', 'B'], [0.1, 0.3])],
+    const r = summarize(def, 'h', { id: 'x', version: '1', continentRule: 'airport-v1' }, [run('t0000', 'reference', ['A', 'B'], [0.2, 0.1]), run('t0001', 'trial', ['A'], [0.05]), run('t0002', 'trial', ['A', 'B'], [0.1, 0.3])],
       ['A', 'B'], (id) => ({ id, iata: null, name: null, country: null, continent: '', lat: null, lon: null }), true);
     const b = r.airports.find((a) => a.id === 'B')!;
     expect(b.runs.systemic).toEqual([0.1, 0, 0.3]);
@@ -193,5 +193,13 @@ describe('definitions and statistics', () => {
     const broken = JSON.parse(JSON.stringify(r));
     broken.airports[0].runs.systemic.pop();
     expect(checkImport(broken, 'x', '1').ok).toBe(false);
+    // results computed with the pre-9F country rule (Spain in Africa) are flagged
+    const oldRule = JSON.parse(JSON.stringify(r));
+    delete oldRule.dataset.continentRule;
+    const o = checkImport(oldRule, 'x', '1');
+    expect(o.ok && o.warnings).toEqual(['x.import.continentRule']);
+    oldRule.definition.missingness = { model: 'regional', regionRates: { AF: 0.3 }, otherRate: 0.05, combine: 'max' };
+    const o2 = checkImport(oldRule, 'x', '1');
+    expect(o2.ok && o2.warnings).toEqual(['x.import.continentRuleRegional']);
   });
 });

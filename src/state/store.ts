@@ -63,7 +63,12 @@ export type SimImpactState =
   | { state: 'running'; key: string; done: number; total: number }
   | { state: 'ready'; key: string; result: ImpactResult }
   | { state: 'error'; key: string; message: string };
-export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'export';
+export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'export';
+/** Stopped island airports handed from the Simulation to Research > Island dependency (Phase 9F). */
+export interface IslandHandoff {
+  scenarioName: string;
+  airports: string[];
+}
 /** A simulation result handed to Research > Experiments ("check how robust this result is"). */
 export interface ExperimentHandoff {
   scenarioName: string;
@@ -149,6 +154,7 @@ interface AppState {
   researchSidebarCollapsed: boolean;
   experiment: ExperimentState | null;
   experimentHandoff: ExperimentHandoff | null;
+  islandHandoff: IslandHandoff | null;
   exploreTime: ExploreTime;
   temporalSel: TemporalSelection | null;
   temporalPlaying: boolean;
@@ -210,6 +216,7 @@ interface AppState {
   setResearchSidebarCollapsed: (v: boolean) => void;
   setExperiment: (e: ExperimentState | null) => void;
   setExperimentHandoff: (h: ExperimentHandoff | null) => void;
+  setIslandHandoff: (h: IslandHandoff | null) => void;
   setExploreTime: (m: ExploreTime) => void;
   setTemporalSel: (s: TemporalSelection) => void;
   patchTemporalSel: (s: Partial<TemporalSelection>) => void;
@@ -298,6 +305,7 @@ export const useAppStore = create<AppState>((set) => ({
   researchSidebarCollapsed: false,
   experiment: null,
   experimentHandoff: null,
+  islandHandoff: null,
   exploreTime: 'monthly',
   temporalSel: null,
   temporalPlaying: false,
@@ -379,6 +387,7 @@ export const useAppStore = create<AppState>((set) => ({
   setResearchSidebarCollapsed: (researchSidebarCollapsed) => set({ researchSidebarCollapsed }),
   setExperiment: (experiment) => set({ experiment }),
   setExperimentHandoff: (experimentHandoff) => set({ experimentHandoff }),
+  setIslandHandoff: (islandHandoff) => set({ islandHandoff }),
   // switching keeps the selection and filters; comparisons belong to one mode and are reset
   setExploreTime: (exploreTime) =>
     set((s) => (s.exploreTime === exploreTime ? s : {

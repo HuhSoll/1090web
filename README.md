@@ -57,6 +57,17 @@
 
 結果は条件や想定したモデルによる違いを示すもので、信頼区間ではありません。使い方は [docs/experiment-guide.md](docs/experiment-guide.md)、計算方法は [docs/experiment-methodology.md](docs/experiment-methodology.md) にあります。
 
+## 離島の依存性（沖縄パイロット）
+
+研究モードの「離島の依存性」タブでは、離島の空港が使えなくなったとき、住民が那覇や本土へ行く手段がどう変わるかを調べられます。シミュレーションで離島の空港を止めたときの「地域住民への影響を調べる」からも開けます。
+
+- 対象は宮古島（橋でつながる伊良部・下地・池間・来間を含む）、石垣島、西表島、与那国島、多良間島、南大東島、北大東島です
+- 人口は 2020年国勢調査の 250 m メッシュ、道路は国土数値情報、航空・船舶の路線は沖縄県の資料（2025年）を使います。メッシュから道路で空港・港へ行き、定期便に乗る経路を計算します
+- 停止前後で、行けなくなる住民、時間が増える住民、残る手段（橋の先の空港、船、なし）を、便の頻度（毎日／週1以上／回数を問わない）の条件ごとに数えます
+- 地図でメッシュごとの変化を表示し、Phase 9E の Systemic / Spillover の順位と並べて比べられます。CSV・JSON で保存できます
+
+時刻表を使わないモデルのため、出発までの待ち時間・座席数・欠航は含みません。琉球エアーコミューターの路線は ADS-B のデータにないため、県の資料から入れています。使い方は [docs/island-dependency-guide.md](docs/island-dependency-guide.md)、計算方法は [docs/island-dependency-methodology.md](docs/island-dependency-methodology.md)、データの出典は [docs/island-data-sources.md](docs/island-data-sources.md)、結果は [docs/phase9f-report.md](docs/phase9f-report.md) にあります。
+
 ## これから
 
 - 随時データ追加と拡充
@@ -68,6 +79,7 @@
 - 地図：Natural Earth（[world-atlas](https://github.com/topojson/world-atlas) 経由）
 - 便データ：[MrAirspace/aircraft-flight-schedules](https://github.com/MrAirspace/aircraft-flight-schedules)（ODbL-1.0）。元は [ADSBlol](https://github.com/adsblol) の受信データ、[vradarserver/standing-data](https://github.com/vradarserver/standing-data) の便名・路線データ、[adsbdb.com](https://www.adsbdb.com/) の機材データ
 - 空港：[OurAirports](https://ourairports.com/data/)
+- 離島の依存性：[e-Stat](https://www.e-stat.go.jp/gis) 2020年国勢調査 地域メッシュ統計、[国土数値情報](https://nlftp.mlit.go.jp/ksj/)（行政区域 N03・道路 N13、CC BY 4.0）を加工、沖縄県『離島関係資料（令和8年版）』、港の位置は [OpenStreetMap](https://www.openstreetmap.org/copyright)（ODbL）
 - 安全情報：[EASA Conflict Zone Information Bulletins](https://www.easa.europa.eu/en/domains/air-operations/czibs)（© EASA、出典明記で再利用可）
 - `public/data/observed-2026-v2/`（既定）と `public/data/observed-2026/`（旧版）の集計データは、上記の派生データベースとして ODbL-1.0 で提供します（詳細は [DATA_LICENSE.md](DATA_LICENSE.md)）
 

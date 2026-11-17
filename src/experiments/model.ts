@@ -140,7 +140,8 @@ export interface ExperimentResult {
   methodVersion: string;
   definitionHash: string;
   definition: ExperimentDefinition;
-  dataset: { id: string; version: string | null };
+  /** continentRule: how airports were put on continents ("airport-v1" since Phase 9F; absent = old country rule) */
+  dataset: { id: string; version: string | null; continentRule?: string };
   createdAt: string;
   source: string;
   computation: { exact: boolean; sources: number[]; sourceSeed: number; randomSeed: number; note: string };
@@ -298,7 +299,14 @@ export type ImportCheck =
   | { ok: false; error: string };
 
 /** Validates an imported result file (Python batch or a browser export). */
-export function checkImport(raw: unknown, datasetId: string, datasetVersion: string | null): ImportCheck {
+/** Does the definition use continents (regional missingness or a region filter)? */
+export function usesContinents(d: ExperimentDefinition): boolean {
+  if (d.missingness?.model === 'regional') return true;
+  if (d.baseline.region || d.baseline.research?.region) return true;
+  return (d.conditions ?? []).some((c) => !!c.region);
+}
+
+export function checkImport(raw: unknown, datasetId: string, datasetVersion: string | null, continentRule = 'airport-v1'): ImportCheck {
   if (!raw || typeof raw !== 'object') return { ok: false, error: 'x.import.notJson' };
   const r = raw as Partial<ExperimentResult>;
   if (r.format !== RESULT_FORMAT) return { ok: false, error: 'x.import.format' };
@@ -316,5 +324,8 @@ export function checkImport(raw: unknown, datasetId: string, datasetVersion: str
   if (!r.complete) warnings.push('x.import.incomplete');
   if (!r.computation.exact) warnings.push('x.import.approximate');
   if (r.methodVersion !== METHOD_VERSION) warnings.push('x.import.method');
+  if ((r.dataset.continentRule ?? 'country-first') !== continentRule) {
+    warnings.push(usesContinents(r.definition) ? 'x.import.continentRuleRegional' : 'x.import.continentRule');
+  }
   return { ok: true, result: r as ExperimentResult, warnings };
 }

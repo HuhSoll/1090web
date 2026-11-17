@@ -84,6 +84,8 @@ export interface ExperimentDeps {
   month: ResearchMonth;
   datasetId: string;
   datasetVersion: string | null;
+  /** how continents were assigned (quality.json continentRule) */
+  continentRule?: string;
 }
 
 export interface ExperimentPlan {
@@ -260,7 +262,7 @@ export async function runExperiment(
     });
   }
   if (!raw.length) throw new CancelledRun();
-  return summarize(d, plan.hash, { id: deps.datasetId, version: deps.datasetVersion }, raw, plan.candidates.map((a) => ids[a]!), meta,
+  return summarize(d, plan.hash, { id: deps.datasetId, version: deps.datasetVersion, continentRule: deps.continentRule ?? 'country-first' }, raw, plan.candidates.map((a) => ids[a]!), meta,
     complete && raw.length === plan.runs.length);
 }
 

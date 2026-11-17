@@ -7,12 +7,14 @@ import { researchEn, researchJa } from './researchMessages';
 import { temporalEn, temporalJa } from './temporalMessages';
 import { simulationEn, simulationJa } from './simulationMessages';
 import { experimentEn, experimentJa } from './experimentMessages';
+import { islandEn, islandJa } from './islandMessages';
 
 export const en = {
   ...researchEn,
   ...temporalEn,
   ...simulationEn,
   ...experimentEn,
+  ...islandEn,
   'app.loading': 'Loading network…',
   'app.loadingMonth': 'Loading {month}…',
   'app.error.title': 'Could not load the network data',
@@ -187,6 +189,7 @@ export const ja: Messages = {
   ...temporalJa,
   ...simulationJa,
   ...experimentJa,
+  ...islandJa,
   'app.loading': 'ネットワークを読み込み中…',
   'app.loadingMonth': '{month} を読み込み中…',
   'app.error.title': 'ネットワークデータを読み込めませんでした',

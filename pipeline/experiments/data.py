@@ -42,6 +42,7 @@ class Dataset:
     airport_ids: list[str]
     countries: list[str]
     continents: list[str]
+    continent_rule: str = "country-first"
 
 
 def load_dataset(dataset_id: str, root: Path = ROOT) -> Dataset:
@@ -49,9 +50,18 @@ def load_dataset(dataset_id: str, root: Path = ROOT) -> Dataset:
     airports = json.loads((base / "airports.json").read_text(encoding="utf-8"))
     manifest = json.loads((base / "temporal" / "manifest.json").read_text(encoding="utf-8"))
     q = json.loads((base / "research-web" / "quality.json").read_text(encoding="utf-8"))
-    cont = q.get("continents", {})
     return Dataset(dataset_id, manifest.get("datasetVersion"), [a["id"] for a in airports], [a["country"] for a in airports],
-                   [cont.get(a["country"], "") for a in airports])
+                   airport_continents(airports, q), q.get("continentRule", "country-first"))
+
+
+def airport_continents(airports: list[dict], quality: dict) -> list[str]:
+    """Continent of each airport: its own (Phase 9F rule), else its country's majority continent.
+
+    Quality files written before Phase 9F have no `airportContinents`; they fall back to the old
+    country map, and `continent_rule` says so ("country-first")."""
+    own = quality.get("airportContinents", {})
+    cont = quality.get("continents", {})
+    return [own.get(a["id"]) or cont.get(a["country"], "") for a in airports]
 
 
 def _months(start: datetime, end: datetime) -> list[str]:

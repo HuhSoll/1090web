@@ -252,7 +252,7 @@ function computeOutput(
     disruption: temporal ? { wire: toWire(disruption), proxy: scenario.filters.timeProxy, key: baseHash(scenario, window) } : null,
   };
   return Promise.all([client.aggregate(channel, req, onProgress), loadContinents()]).then(([r, rmeta]) => {
-    const continentOf = rmeta ? airportContinents(network, rmeta.quality.continents) : network.airports.map(() => '?');
+    const continentOf = rmeta ? airportContinents(network, rmeta.quality) : network.airports.map(() => '?');
     cachedContinents = continentOf;
     return buildSimulation({
       network, scope: { network, continentOf, persistence: null }, scenario, disruption, window,

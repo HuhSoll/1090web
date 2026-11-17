@@ -2741,3 +2741,128 @@ input[type='range'] {
   display: inline-flex;
   width: auto;
 }
+
+/* ---------- research: island dependency lab (Phase 9F; existing tokens only) ---------- */
+.i-setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: flex-end;
+}
+
+.i-airports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px 6px;
+  margin: 0;
+}
+
+.i-airports legend {
+  padding: 0 4px;
+}
+
+.i-adv,
+.i-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 6px 0;
+}
+
+.i-run {
+  border-color: var(--accent);
+}
+
+.stat-value.i-warn {
+  color: var(--warn);
+}
+
+.i-alt h4,
+.i-lab h4.small {
+  margin: 10px 0 4px;
+  font-weight: 600;
+}
+
+.i-map,
+.i-scatter {
+  width: 100%;
+  height: auto;
+  max-width: 760px;
+}
+
+.i-road {
+  fill: none;
+  stroke: var(--panel-border-strong);
+  stroke-width: 0.5;
+}
+
+.i-road-main {
+  stroke-width: 0.9;
+}
+
+.i-link {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 2;
+}
+
+.i-mesh {
+  stroke: rgba(2, 4, 10, 0.35);
+  stroke-width: 0.3;
+}
+
+.i-gw path,
+.i-gw rect {
+  fill: var(--text);
+  stroke: var(--bg-0);
+  stroke-width: 1;
+}
+
+.i-gw text {
+  fill: var(--text);
+  paint-order: stroke;
+  stroke: var(--bg-0);
+  stroke-width: 3px;
+}
+
+.i-gw.is-stopped path {
+  fill: var(--danger);
+}
+
+.i-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.i-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+  vertical-align: -1px;
+  border: 1px solid var(--panel-border-strong);
+}
+
+.i-swatch-ap {
+  background: var(--text);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  border: 0;
+}
+
+.i-swatch-port {
+  background: var(--text);
+}
+
+.i-pt {
+  fill: var(--accent-warm);
+  stroke: var(--bg-0);
+}
+
+.r-table tr.is-selected td {
+  background: rgba(127, 214, 255, 0.06);
+}

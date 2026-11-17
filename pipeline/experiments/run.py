@@ -323,7 +323,7 @@ def summarize(d: dict, h: str, ds: D.Dataset, out: Path, candidates: list[str]) 
     return {
         "format": RESULT_FORMAT, "schemaVersion": SCHEMA_VERSION, "methodVersion": METHOD_VERSION,
         "definitionHash": h, "definition": d,
-        "dataset": {"id": ds.dataset_id, "version": ds.version},
+        "dataset": {"id": ds.dataset_id, "version": ds.version, "continentRule": ds.continent_rule},
         "createdAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "source": "python batch (pipeline/experiments)",
         "computation": {

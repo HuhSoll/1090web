@@ -173,7 +173,7 @@ export function buildSimulation(inp: BuildInput): SimulationOutput {
   };
 }
 
-export function impactInputOf(before: ResearchNetwork, after: ResearchNetwork, d: Disruption, directed: boolean): { input: ImpactInput; nodes: number[] } {
+export function impactInputOf(before: ResearchNetwork, after: ResearchNetwork, d: Pick<Disruption, 'targetAirports' | 'targetRoutes'>, directed: boolean): { input: ImpactInput; nodes: number[] } {
   const nodes = before.airports;
   const local = new Map(nodes.map((a, i) => [a, i]));
   const eb = edgeArrays(before, directed);

@@ -11,14 +11,15 @@ import { ExperimentsPanel } from './ExperimentsPanel';
 import { ExportPanel } from './ExportPanel';
 import { GeographyPanel } from './GeographyPanel';
 import { IslandsPanel } from './IslandsPanel';
+import { EventsPanel } from './EventsPanel';
 import { OverviewPanel } from './OverviewPanel';
 import { RankingsPanel } from './RankingsPanel';
 import { ReliabilityPanel } from './ReliabilityPanel';
 import { SettingsPanel } from './SettingsPanel';
 
-const TABS: ResearchTab[] = ['overview', 'rankings', 'geography', 'reliability', 'comparison', 'experiments', 'islands', 'export'];
+const TABS: ResearchTab[] = ['overview', 'rankings', 'geography', 'reliability', 'comparison', 'experiments', 'islands', 'events', 'export'];
 /** tabs that do not use the analysis of the left column */
-const OWN_DATA: ResearchTab[] = ['experiments', 'islands'];
+const OWN_DATA: ResearchTab[] = ['experiments', 'islands', 'events'];
 
 /** Research Mode: analysis conditions on the left, results in tabs on the right. */
 export function ResearchView() {
@@ -108,7 +109,7 @@ export function ResearchView() {
           <span className="badge info-badge">{t('r.badge')}</span>
         </header>
         <div className="research-body">
-          {metaState.state === 'error' && tab !== 'islands' && (
+          {metaState.state === 'error' && !OWN_DATA.includes(tab) && (
             <div className="r-box r-warn">
               <h4 className="r-h4">{t('r.metaError')}</h4>
               <p className="small mono">{metaState.message}</p>
@@ -117,6 +118,7 @@ export function ResearchView() {
           {main.state === 'error' && !OWN_DATA.includes(tab) && <p className="hint warn">{t('r.status.error')} {main.message}</p>}
           {meta && tab === 'experiments' && <ExperimentsPanel config={config} meta={meta} onShowOnMap={showOnMap} />}
           {tab === 'islands' && <IslandsPanel />}
+          {tab === 'events' && <EventsPanel />}
           {meta && !OWN_DATA.includes(tab) && !result && main.state !== 'error' && <Progress state={main} />}
           {meta && result && !OWN_DATA.includes(tab) && (
             <>

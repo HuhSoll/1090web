@@ -34,6 +34,35 @@ export interface SeriesFilter {
   airport: number | null;
 }
 
+/**
+ * Phase 9G: extra series for groups of airports (event studies). A group is a set of airports
+ * (given by country indices and / or airport indices); `mode` says which flights count:
+ *   touch   at least one end in the set
+ *   within  both ends in the set
+ *   cross   exactly one end in the set
+ * `outside` (optional) restricts the other end of a "cross" or "touch" flight to a second set.
+ */
+export interface GroupSpec {
+  id: string;
+  countries: number[];
+  airports?: number[];
+  mode: 'touch' | 'within' | 'cross';
+  outsideCountries?: number[];
+  /** flights with either end in these countries are not counted (e.g. a comparison group must not include flights to the area) */
+  excludeCountries?: number[];
+  carrier: number | null;
+  includeT4: boolean;
+  passengerOnly: boolean;
+}
+
+export interface GroupSeries {
+  id: string;
+  /** flights per bin */
+  flights: number[];
+  /** distinct routes with >= 1 flight per bin */
+  routes: number[];
+}
+
 export interface AggregateRows {
   size: number;
   route: Int32Array;
@@ -67,6 +96,8 @@ export interface AggregateResult {
   /** flights kept after the basis filter */
   flights: number;
   series: WindowSeries;
+  /** Phase 9G: per-group series (empty without groups) */
+  groupSeries?: GroupSeries[];
   /** days in the window, the days with a file, the days loaded */
   days: string[];
   missingDays: string[];
@@ -111,6 +142,7 @@ export class WindowAggregator {
   private readonly binFlights: number[];
   private readonly binRoutes: Set<number>[];
   private readonly binPartners: Set<number>[] | null;
+  private readonly groupMember: { spec: GroupSpec; inSet: Uint8Array; outSet: Uint8Array | null; exSet: Uint8Array | null; flights: number[]; routes: Set<number>[] }[];
   private disruption: Disruption | null = null;
   private proxy: 'endpoint' | 'reference' = 'endpoint';
   private readonly affectedCounts = new Map<number, number>();
@@ -123,8 +155,29 @@ export class WindowAggregator {
     readonly binMs: number,
     readonly geo: RouteGeo | null = null,
     readonly filter: SeriesFilter | null = null,
+    groups: readonly GroupSpec[] = [],
   ) {
     const bins = Math.max(1, Math.ceil((window.endMs - window.startMs) / binMs));
+    this.groupMember = geo ? groups.map((spec) => {
+      const n = geo.airportCountry.length;
+      const inSet = new Uint8Array(n);
+      const countries = new Set(spec.countries);
+      for (let i = 0; i < n; i++) if (countries.has(geo.airportCountry[i]!)) inSet[i] = 1;
+      for (const i of spec.airports ?? []) if (i >= 0 && i < n) inSet[i] = 1;
+      let outSet: Uint8Array | null = null;
+      if (spec.outsideCountries) {
+        outSet = new Uint8Array(n);
+        const oc = new Set(spec.outsideCountries);
+        for (let i = 0; i < n; i++) if (oc.has(geo.airportCountry[i]!)) outSet[i] = 1;
+      }
+      let exSet: Uint8Array | null = null;
+      if (spec.excludeCountries?.length) {
+        exSet = new Uint8Array(n);
+        const ec = new Set(spec.excludeCountries);
+        for (let i = 0; i < n; i++) if (ec.has(geo.airportCountry[i]!)) exSet[i] = 1;
+      }
+      return { spec, inSet, outSet, exSet, flights: new Array<number>(bins).fill(0), routes: Array.from({ length: bins }, () => new Set<number>()) };
+    }) : [];
     this.binFlights = new Array<number>(bins).fill(0);
     this.binRoutes = Array.from({ length: bins }, () => new Set<number>());
     this.binPartners = filter?.airport != null ? Array.from({ length: bins }, () => new Set<number>()) : null;
@@ -208,6 +261,25 @@ export class WindowAggregator {
           st.series[Math.floor((ev.timeMs[i]! - this.window.startMs) / this.binMs)]!++;
         } else if (flags & MATCH.UNDETERMINED) st.undetermined++;
       }
+      if (this.groupMember.length && geo) {
+        const ra = geo.a[route]!;
+        const rb = geo.b[route]!;
+        for (const g of this.groupMember) {
+          const s = g.spec;
+          if (s.carrier !== null && carrier !== s.carrier) continue;
+          if (s.passengerOnly && cls !== 0) continue;
+          if (!s.includeT4 && tier === 4) continue;
+          if (g.exSet && (g.exSet[ra] === 1 || g.exSet[rb] === 1)) continue;
+          const ia = g.inSet[ra] === 1;
+          const ib = g.inSet[rb] === 1;
+          let ok = s.mode === 'within' ? ia && ib : s.mode === 'cross' ? ia !== ib : ia || ib;
+          if (ok && g.outSet && s.mode !== 'within') ok = ia && ib ? false : g.outSet[ia ? rb : ra] === 1;
+          if (!ok) continue;
+          const bin = Math.floor((ev.timeMs[i]! - this.window.startMs) / this.binMs);
+          g.flights[bin]!++;
+          g.routes[bin]!.add(route);
+        }
+      }
       if (this.passesSeries(route, carrier, tier, cls)) {
         const bin = Math.floor((ev.timeMs[i]! - this.window.startMs) / this.binMs);
         this.binFlights[bin]!++;
@@ -265,6 +337,10 @@ export class WindowAggregator {
       routes: this.binRoutes.map((s) => s.size),
       partners: this.binPartners ? this.binPartners.map((s) => s.size) : null,
     };
+  }
+
+  groupSeries(): GroupSeries[] {
+    return this.groupMember.map((g) => ({ id: g.spec.id, flights: [...g.flights], routes: g.routes.map((s) => s.size) }));
   }
 }
 

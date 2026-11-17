@@ -1,0 +1,15 @@
+{
+ "note": "EASA CZIBs whose period touches the 1090web observation period (January - September 2026). nid = EASA node id (stable across revisions); slugPrefixes = URL slugs of the bulletin's revisions, used to find archived captures.",
+ "bulletins": [
+  {"nid": 142977, "czib": "2026-01", "slugPrefixes": ["2026-01"]},
+  {"nid": 143048, "czib": "2026-02", "slugPrefixes": ["2026-02"]},
+  {"nid": 143294, "czib": "2026-03", "slugPrefixes": ["2026-03"]},
+  {"nid": 143861, "czib": "2026-04", "slugPrefixes": ["czib-2026-04"]},
+  {"nid": 143862, "czib": "2026-05", "slugPrefixes": ["czib-2026-05"]},
+  {"nid": 143863, "czib": "2026-06", "slugPrefixes": ["czib-2026-06"]},
+  {"nid": 143899, "czib": "2026-07", "slugPrefixes": ["czib-2026-07"]},
+  {"nid": 143944, "czib": "2026-08", "slugPrefixes": ["czib-2026-08"]},
+  {"nid": 144230, "czib": "2026-09", "slugPrefixes": ["czib-2026-09"]},
+  {"nid": 141480, "czib": "2025-01", "slugPrefixes": ["2025-01"]}
+ ]
+}

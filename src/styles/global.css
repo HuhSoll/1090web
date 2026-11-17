@@ -2866,3 +2866,96 @@ input[type='range'] {
 .r-table tr.is-selected td {
   background: rgba(127, 214, 255, 0.06);
 }
+
+/* ---------- research: historical events (Phase 9G; existing tokens only) ---------- */
+.ev-card .kv-row {
+  align-items: baseline;
+}
+
+.ev-codes .r-input {
+  min-width: 320px;
+}
+
+.ev-win {
+  stroke: none;
+}
+
+.ev-win-before {
+  fill: rgba(127, 214, 255, 0.07);
+}
+
+.ev-win-after {
+  fill: rgba(255, 210, 122, 0.08);
+}
+
+.ev-gap {
+  fill: rgba(242, 180, 90, 0.25);
+}
+
+.ev-rev line {
+  stroke: var(--text-dim);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.ev-rev.is-on line {
+  stroke: var(--text);
+  stroke-width: 1.6;
+  stroke-dasharray: none;
+}
+
+.ev-rev {
+  cursor: pointer;
+}
+
+.ev-ap-area {
+  fill: var(--danger);
+  stroke: var(--bg-0);
+  stroke-width: 0.8;
+}
+
+.i-swatch.ev-sw-area {
+  background: var(--danger);
+  border-radius: 50%;
+}
+
+.i-swatch.ev-sw-before {
+  background: rgba(127, 214, 255, 0.25);
+}
+
+.i-swatch.ev-sw-after {
+  background: rgba(255, 210, 122, 0.3);
+}
+
+.i-swatch.ev-sw-gap {
+  background: rgba(242, 180, 90, 0.5);
+}
+
+.i-swatch.ev-sw-rev {
+  background: none;
+  border: 0;
+  border-left: 2px dashed var(--text-dim);
+}
+
+/* real advisories on the scenario timeline: outlined and hatched, never like a scenario bar */
+.tl-bar-advisory {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border: 1px dashed var(--warn);
+  border-radius: 3px;
+  background: repeating-linear-gradient(135deg, rgba(242, 180, 90, 0.18) 0 4px, transparent 4px 8px);
+  cursor: pointer;
+}
+
+.tl-adv-tick {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: 0;
+  border-left: 2px solid var(--warn);
+}
+
+.tl-label.tl-label-advisory {
+  color: var(--warn);
+}

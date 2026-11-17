@@ -5,6 +5,7 @@ import fixture from './crosscheck.fixture.json';
 import { change, compare, evaluate } from '../../src/islands/access';
 import { baseScenario, type IslandNetwork, type IslandScenario, type MeshAccess, type MeshTable } from '../../src/islands/model';
 import { comparisonCsv, islandResultJson } from '../../src/islands/exports';
+import { alternatives, classify } from '../../src/islands/alternatives';
 
 const dir = resolve(__dirname, '../../public/data/islands/okinawa-pilot');
 const net = JSON.parse(readFileSync(resolve(dir, 'network.json'), 'utf-8')) as IslandNetwork;
@@ -83,5 +84,31 @@ describe('islands: model rules', () => {
     const j = JSON.parse(islandResultJson(r, base, after, 'okinawa-pilot', '9f.1')) as { format: string; conditions: { after: { stoppedAirports: string[] } }; totals: unknown };
     expect(j.format).toBe('1090web-island-dependency');
     expect(j.conditions.after.stoppedAirports).toEqual(['RORS']);
+  });
+});
+
+describe('islands: what is left after a stop (Phase 9G display fix)', () => {
+  const run = (level: 'daily' | 'any', extra: Partial<IslandScenario> = {}) => {
+    const b = { ...baseScenario(), serviceLevel: level, ...extra };
+    return compare(net, meshes, { ...b, stoppedAirports: [] }, { ...b, stoppedAirports: ['ROIG'] });
+  };
+  it('Ishigaki: no daily route but a low-frequency ship route -> not "no route"', () => {
+    const g = Object.fromEntries(alternatives(run('daily'), run('any'), 'ishigaki').map((x) => [x.cls, x.pop]));
+    expect(g).toEqual({ daily: 0, lowFreq: 47637, none: 0, noData: 0 });
+  });
+  it('without ships nothing verified is left; unreachable meshes of Iriomote stay "cannot be judged"', () => {
+    const g = Object.fromEntries(alternatives(run('daily', { sea: false }), run('any', { sea: false }), 'ishigaki').map((x) => [x.cls, x.pop]));
+    expect(g.none).toBe(47637);
+    const ir = Object.fromEntries(alternatives(run('daily'), run('any'), 'iriomote').map((x) => [x.cls, x.pop]));
+    expect(ir.noData).toBe(41);
+    expect((ir.lowFreq ?? 0) + (ir.noData ?? 0)).toBe(2226);
+  });
+  it('classify keeps the four cases apart', () => {
+    const ok: MeshAccess = { status: 'ok', time: 1 };
+    const un: MeshAccess = { status: 'unreachable' };
+    expect(classify(ok, ok)).toBe('daily');
+    expect(classify(un, { status: 'time-unknown' })).toBe('lowFreq');
+    expect(classify(un, un)).toBe('none');
+    expect(classify({ status: 'no-access' }, { status: 'no-access' })).toBe('noData');
   });
 });

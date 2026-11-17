@@ -63,7 +63,12 @@ export type SimImpactState =
   | { state: 'running'; key: string; done: number; total: number }
   | { state: 'ready'; key: string; result: ImpactResult }
   | { state: 'error'; key: string; message: string };
-export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'export';
+export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'events' | 'export';
+/** Phase 9G: an advisory version picked elsewhere (the scenario timeline) to open in Research > Events. */
+export interface EventFocus {
+  bulletinId: string;
+  revisionId: string;
+}
 /** Stopped island airports handed from the Simulation to Research > Island dependency (Phase 9F). */
 export interface IslandHandoff {
   scenarioName: string;
@@ -155,6 +160,9 @@ interface AppState {
   experiment: ExperimentState | null;
   experimentHandoff: ExperimentHandoff | null;
   islandHandoff: IslandHandoff | null;
+  eventFocus: EventFocus | null;
+  /** Phase 9G: show the real advisories on the scenario timeline */
+  showAdvisoriesOnTimeline: boolean;
   exploreTime: ExploreTime;
   temporalSel: TemporalSelection | null;
   temporalPlaying: boolean;
@@ -217,6 +225,8 @@ interface AppState {
   setExperiment: (e: ExperimentState | null) => void;
   setExperimentHandoff: (h: ExperimentHandoff | null) => void;
   setIslandHandoff: (h: IslandHandoff | null) => void;
+  setEventFocus: (f: EventFocus | null) => void;
+  setShowAdvisoriesOnTimeline: (v: boolean) => void;
   setExploreTime: (m: ExploreTime) => void;
   setTemporalSel: (s: TemporalSelection) => void;
   patchTemporalSel: (s: Partial<TemporalSelection>) => void;
@@ -306,6 +316,8 @@ export const useAppStore = create<AppState>((set) => ({
   experiment: null,
   experimentHandoff: null,
   islandHandoff: null,
+  eventFocus: null,
+  showAdvisoriesOnTimeline: false,
   exploreTime: 'monthly',
   temporalSel: null,
   temporalPlaying: false,
@@ -388,6 +400,8 @@ export const useAppStore = create<AppState>((set) => ({
   setExperiment: (experiment) => set({ experiment }),
   setExperimentHandoff: (experimentHandoff) => set({ experimentHandoff }),
   setIslandHandoff: (islandHandoff) => set({ islandHandoff }),
+  setEventFocus: (eventFocus) => set({ eventFocus }),
+  setShowAdvisoriesOnTimeline: (showAdvisoriesOnTimeline) => set({ showAdvisoriesOnTimeline }),
   // switching keeps the selection and filters; comparisons belong to one mode and are reset
   setExploreTime: (exploreTime) =>
     set((s) => (s.exploreTime === exploreTime ? s : {

@@ -68,6 +68,17 @@
 
 時刻表を使わないモデルのため、出発までの待ち時間・座席数・欠航は含みません。琉球エアーコミューターの路線は ADS-B のデータにないため、県の資料から入れています。使い方は [docs/island-dependency-guide.md](docs/island-dependency-guide.md)、計算方法は [docs/island-dependency-methodology.md](docs/island-dependency-methodology.md)、データの出典は [docs/island-data-sources.md](docs/island-data-sources.md)、結果は [docs/phase9f-report.md](docs/phase9f-report.md) にあります。
 
+## 過去のイベント（航空安全勧告）
+
+研究モードの「過去のイベント」タブでは、EASA の紛争地域情報（CZIB）の各版の前後で、観測された航空ネットワークがどう変わったかを調べられます。
+
+- 勧告の発行・改訂の履歴を版ごとに保存しています。EASA は最新版しか公開していないため、過去の版は Internet Archive の保存版で確認し、確認できない版は補完しません
+- 前後 7・14・28・30 日の比較（UTC の日、イベント日は除外）、対象地域内・地域と地域外・周辺国・比較対象群の推移、空港・路線・航空会社別の変化を表示します
+- 変化が勧告の前から始まっていなかったか（イベント前の傾き）、ほかの日にも同じような変化があるか（プラセボ）を確認し、条件を満たすときだけ差分の差分を示します
+- 観測された変化と、対象地域の空港を仮想的に止めたシミュレーションを並べて比べられます。シミュレーションのタイムラインにも実際の勧告を表示できます
+
+勧告は空域閉鎖・空港閉鎖ではなく、この機能は何も停止させません。結果は観測された変化の記述で、勧告の効果を示すものではありません。使い方は [docs/historical-events-guide.md](docs/historical-events-guide.md)、計算方法は [docs/historical-events-methodology.md](docs/historical-events-methodology.md)、出典は [docs/historical-event-sources.md](docs/historical-event-sources.md)、結果は [docs/phase9g-report.md](docs/phase9g-report.md) にあります。
+
 ## これから
 
 - 随時データ追加と拡充

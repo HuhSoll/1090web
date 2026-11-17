@@ -10,6 +10,7 @@ import { setEventTime, updateEvent } from '../../simulation/start';
 import type { SimContext } from '../../simulation/useSimulation';
 import { DAY_MS, formatUtc, HOUR_MS, type PlaybackSpeed, type WindowPreset } from '../../temporal/window';
 import { Icon } from '../common/Icon';
+import { useAdvisoryHistory, type Bulletin } from '../../events/model';
 
 const ROW_H = 22;
 const LABEL_W = 132;
@@ -47,6 +48,10 @@ export function ScenarioTimeline({ ctx }: { ctx: SimContext }) {
   const [zoomed, setZoomed] = useState<{ startMs: number; endMs: number } | null>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [showChart, setShowChart] = useState(true);
+  // Phase 9G: real EASA advisories as their own rows (never part of the scenario)
+  const showAdv = useAppStore((s) => s.showAdvisoriesOnTimeline);
+  const setShowAdv = useAppStore((s) => s.setShowAdvisoriesOnTimeline);
+  const hist = useAdvisoryHistory();
 
   // the lanes exist only once the scenario, clock and range are known
   const ready = scenario !== null && sel !== null && ctx.range !== null;
@@ -138,6 +143,21 @@ export function ScenarioTimeline({ ctx }: { ctx: SimContext }) {
   };
 
   const events = scenario.events;
+  const dayMs = (d: string) => Date.parse(`${d}T00:00:00Z`);
+  const advSpan = (b: Bulletin) => {
+    const first = b.revisions[0]!.effectiveDate;
+    const last = b.revisions[b.revisions.length - 1]!;
+    return { s: first ? dayMs(first) : NaN, e: last.validUntil ? dayMs(last.validUntil) + DAY_MS : NaN };
+  };
+  const advisories = showAdv && hist.state === 'ready'
+    ? hist.data.history.bulletins.filter((b) => { const sp = advSpan(b); return sp.s < view.endMs && (Number.isNaN(sp.e) || sp.e > view.startMs); })
+    : [];
+  const openEvent = (b: Bulletin, revisionId: string) => {
+    const st = useAppStore.getState();
+    st.setEventFocus({ bulletinId: b.bulletinId, revisionId });
+    st.setResearchTab('events');
+    st.setAppMode('research');
+  };
   const activeCount = events.filter((e) => eventActiveAt(e, at)).length;
   const ticks = axisTicks(view, width);
   const gap = ctx.meta?.quality.coverage.knownGap;
@@ -178,6 +198,10 @@ export function ScenarioTimeline({ ctx }: { ctx: SimContext }) {
         <span className="small tl-active" role="status">
           {computing ? t('sim.updating') : t('sim.tl.activeCount', { n: activeCount })}
         </span>
+        <label className="t-field" title={t('sim.tl.advisoriesTitle')}>
+          <input type="checkbox" checked={showAdv} onChange={(e) => setShowAdv(e.target.checked)} />
+          <span className="muted small">{t('sim.tl.advisories')}</span>
+        </label>
         <span className="tl-spacer" />
         <label className="t-field">
           <span className="muted small">{t('t.step')}</span>
@@ -227,6 +251,12 @@ export function ScenarioTimeline({ ctx }: { ctx: SimContext }) {
             </button>
           ))}
           {events.length === 0 && <div className="hint tl-empty">{t('sim.tl.empty')}</div>}
+          {advisories.map((b) => (
+            <button key={`adv-${b.bulletinId}`} type="button" className="tl-label tl-label-advisory" style={{ height: ROW_H }}
+              onClick={() => openEvent(b, b.revisions[0]!.revisionId)} title={`${b.title} — ${t('sim.tl.advisoryOpen')}`}>
+              <span className="tl-name">{t('sim.tl.advisoryRow', { id: b.bulletinId })}</span>
+            </button>
+          ))}
         </div>
         <div className="tl-lanes" ref={laneRef} onPointerDown={lanePointer} onPointerMove={move} onPointerUp={up} onPointerCancel={up}
           role="slider" tabIndex={0} aria-label={t('sim.tl.now')} aria-valuemin={range.startMs} aria-valuemax={range.endMs} aria-valuenow={at} aria-valuetext={formatUtc(at)}>
@@ -261,7 +291,25 @@ export function ScenarioTimeline({ ctx }: { ctx: SimContext }) {
               </div>
             );
           })}
-          <div className="tl-rows-spacer" style={{ height: 18 + Math.max(1, events.length) * ROW_H }} />
+          {advisories.map((b, j) => {
+            const sp = advSpan(b);
+            const left = Math.max(0, x(sp.s));
+            const right = Number.isNaN(sp.e) ? width : Math.min(width, x(sp.e));
+            return (
+              <div key={`adv-${b.bulletinId}`} className="tl-row" style={{ top: 18 + (events.length + j) * ROW_H, height: ROW_H }}>
+                {right > left && <div className="tl-bar-advisory" style={{ left, width: Math.max(3, right - left) }} title={`${t('sim.tl.advisories')}: ${b.title}`}
+                  onPointerDown={(ev) => ev.stopPropagation()} onClick={() => openEvent(b, b.revisions[0]!.revisionId)} />}
+                {b.revisions.map((v) => {
+                  if (!v.effectiveDate) return null;
+                  const px = x(dayMs(v.effectiveDate));
+                  if (px < 0 || px > width) return null;
+                  return <span key={v.revisionId} className="tl-adv-tick" style={{ left: px }} title={`CZIB ${v.czibNumber} — ${v.effectiveDate}${v.validUntil ? ` → ${v.validUntil}` : ''}`}
+                    onPointerDown={(ev) => ev.stopPropagation()} onClick={() => openEvent(b, v.revisionId)} />;
+                })}
+              </div>
+            );
+          })}
+          <div className="tl-rows-spacer" style={{ height: 18 + Math.max(1, events.length + advisories.length) * ROW_H }} />
           <div className="tl-cursor" style={{ left: x(at) }} aria-hidden="true" />
         </div>
       </div>

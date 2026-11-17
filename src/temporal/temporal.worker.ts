@@ -5,7 +5,7 @@
  * the same channel cancels the older one, which stops at the next day boundary.
  */
 import { fromWire, type DisruptionWire } from '../simulation/disruption';
-import { WindowAggregator, type RouteGeo, type SeriesFilter } from './aggregate';
+import { WindowAggregator, type GroupSpec, type RouteGeo, type SeriesFilter } from './aggregate';
 import { TemporalLoader } from './loader';
 import { daysForWindow } from './model';
 import type { TimeBasisFilter, TimeWindow } from './window';
@@ -15,6 +15,7 @@ export type WorkerMessage =
   | {
       type: 'aggregate'; id: number; channel: string; window: TimeWindow; basis: TimeBasisFilter; binMs: number; filter: SeriesFilter | null; carriers: number;
       disruption?: { wire: DisruptionWire; proxy: 'endpoint' | 'reference'; key: string } | null;
+      groups?: GroupSpec[];
     }
   | { type: 'prefetch'; days: string[] }
   | { type: 'cancel'; channel: string };
@@ -35,7 +36,7 @@ async function run(job: Extract<WorkerMessage, { type: 'aggregate' }>) {
   const idx = await loader.loadIndex();
   const available = new Set(idx.days.map((d) => d.day));
   const days = daysForWindow(job.window.startMs, job.window.endMs);
-  const agg = new WindowAggregator(job.window, job.basis, job.carriers, job.binMs, geo, job.filter);
+  const agg = new WindowAggregator(job.window, job.basis, job.carriers, job.binMs, geo, job.filter, job.groups ?? []);
   const dis = job.disruption ? fromWire(job.disruption.wire) : null;
   if (dis) agg.setDisruption(dis, job.disruption!.proxy);
   // track ends are needed only for airport sides under the endpoint proxy
@@ -60,7 +61,7 @@ async function run(job: Extract<WorkerMessage, { type: 'aggregate' }>) {
     affected: aff,
     disruption: agg.disruptionStats(),
     window: job.window, basis: job.basis, rows, trackStart: agg.trackStart, fallback: agg.fallback, flights: agg.flights,
-    series: agg.series(), days, missingDays: days.filter((d) => !available.has(d)), elapsedMs: Math.round(performance.now() - t0),
+    series: agg.series(), groupSeries: agg.groupSeries(), days, missingDays: days.filter((d) => !available.has(d)), elapsedMs: Math.round(performance.now() - t0),
     daysRead: bytesDays,
   };
   const buffers = (r: typeof rows) => [r.route.buffer, r.dir.buffer, r.carrier.buffer, r.tier.buffer, r.cls.buffer, r.count.buffer];

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useI18n } from '../../i18n/useI18n';
 import type { MessageKey } from '../../i18n/messages';
 import { compare } from '../../islands/access';
+import { alternatives } from '../../islands/alternatives';
 import { useIslandData, type IslandData } from '../../islands/data';
 import { comparisonCsv, islandResultJson } from '../../islands/exports';
 import { baseScenario, PILOT_AIRPORTS, type Change, type Comparison, type Gateway, type IslandScenario, type MeshAccess, type Service, type ServiceLevel } from '../../islands/model';
@@ -181,7 +182,7 @@ function IslandsLab({ data }: { data: IslandData }) {
               <Stat label={t('i.stat.delta')} value={tot.meanDeltaMin === null ? '—' : `+${f.dec(tot.meanDeltaMin, 0)} ${t('i.min')}`} sub={tot.deltaPop ? t('i.stat.deltaSub', { n: f.int(tot.deltaPop), max: f.dec(tot.deltaMax, 0) }) : t('i.stat.deltaNone')} />
               <Stat label={t('i.stat.undetermined')} value={f.int(tot.undetermined)} sub={t('i.stat.undeterminedSub')} />
             </div>
-            <Alternatives r={result} island={island} svc={svc} gw={gw} gwName={gwName} />
+            <Alternatives daily={both.daily} any={both.any} island={island} level={cond.serviceLevel} svc={svc} gw={gw} gwName={gwName} />
             <p className="small x-dim">{t('i.readAs', { level: t(`i.level.${cond.serviceLevel}`), dest: nm(dest) })}</p>
             <Quality data={data} />
           </section>
@@ -267,31 +268,36 @@ function useFreq() {
   return (s: Service) => (locale === 'ja' ? s.frequencyText : t('i.freqWeek', { n: f.dec(s.roundTripsPerWeek, s.roundTripsPerWeek % 1 ? 2 : 0) }));
 }
 
-function Alternatives({ r, island, svc, gw, gwName }: { r: Comparison; island: string; svc: Map<string, Service>; gw: Map<string, Gateway>; gwName: (g: Gateway | undefined) => string }) {
+function Alternatives({ daily, any, island, level, svc, gw, gwName }: { daily: Comparison; any: Comparison; island: string; level: ServiceLevel; svc: Map<string, Service>; gw: Map<string, Gateway>; gwName: (g: Gateway | undefined) => string }) {
   const { t } = useI18n();
   const freq = useFreq();
   const f = useFormat();
-  const groups = new Map<string, number>();
-  let pop = 0;
-  for (const [, isl, p, , a] of r.rows) {
-    if (isl !== island) continue;
-    pop += p;
-    let k: string;
-    if (a.status === 'unreachable') k = t('i.alt.none');
-    else if (a.status === 'no-access' || a.status === 'unassigned') k = t('i.alt.noData');
-    else {
+  const groups = alternatives(daily, any, island);
+  const total = groups.reduce((s, g) => s + g.pop, 0);
+  // the most common first leg of each class, with the scarcest service on the route
+  const route = (ex: MeshAccess[]) => {
+    const c = new Map<string, number>();
+    for (const a of ex) {
       const first = a.path?.[0] ? svc.get(a.path[0]) : undefined;
-      const board = gwName(gw.get(a.board ?? ''));
-      k = first ? t(first.mode === 'air' ? 'i.alt.air' : 'i.alt.sea', { at: board, freq: freq(first) }) : board;
-      if (a.status === 'time-unknown') k += ` ${t('i.alt.timeUnknown')}`;
+      if (!first) continue;
+      const k = `${t(first.mode === 'air' ? 'i.alt.air' : 'i.alt.sea', { at: gwName(gw.get(a.board ?? '')), freq: freq(first) })}${a.minFreq != null ? ` ${t('i.alt.scarcest', { n: f.dec(a.minFreq, a.minFreq % 1 ? 2 : 0) })}` : ''}${a.status === 'time-unknown' ? ` ${t('i.alt.timeUnknown')}` : ''}`;
+      c.set(k, (c.get(k) ?? 0) + 1);
     }
-    groups.set(k, (groups.get(k) ?? 0) + p);
-  }
-  const list = [...groups.entries()].sort((a, b) => b[1] - a[1]);
+    return [...c.entries()].sort((x, y) => y[1] - x[1]).slice(0, 2).map(([k]) => k);
+  };
   return (
     <div className="i-alt">
       <h4 className="small">{t('i.alt.title')}</h4>
-      <ul className="r-mini">{list.map(([k, p]) => <li key={k}>{t('i.alt.row', { k, n: f.int(p), p: f.pct(pop ? p / pop : 0, 0) })}</li>)}</ul>
+      <p className="small x-dim">{t('i.alt.levelNote', { level: t(`i.level.${level}`) })}</p>
+      <ul className="r-mini">
+        {groups.map((g) => (
+          <li key={g.cls} className={g.pop ? '' : 'x-dim'}>
+            <strong>{t(`i.alt.cls.${g.cls}`)}</strong> — {t('i.alt.count', { n: f.int(g.pop), p: f.pct(total ? g.pop / total : 0, 0) })}
+            {g.pop > 0 && (g.cls === 'daily' || g.cls === 'lowFreq') && <span className="small x-dim">：{route(g.examples).join(' / ')}</span>}
+          </li>
+        ))}
+      </ul>
+      {groups.find((g) => g.cls === 'lowFreq')!.pop > 0 && <p className="small x-dim">{t('i.alt.lowFreqNote')}</p>}
     </div>
   );
 }

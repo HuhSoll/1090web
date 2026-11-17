@@ -66,8 +66,8 @@ export type SimImpactState =
 export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'events' | 'export';
 /** Phase 9G: an advisory version picked elsewhere (the scenario timeline) to open in Research > Events. */
 export interface EventFocus {
-  bulletinId: string;
-  revisionId: string;
+  /** registry id; EASA CZIB versions are CZIB:<bulletin>/<revision> */
+  eventId: string;
 }
 /** Stopped island airports handed from the Simulation to Research > Island dependency (Phase 9F). */
 export interface IslandHandoff {

@@ -1,0 +1,156 @@
+{
+ "note": "Documents behind the non-EASA events (Phase 9H). sourceType: authority = document issued by the authority itself; state-news-agency = government news agency relaying an official statement; press = newspaper or broadcaster (supplementary, never enough alone for 'verified'); archive = Internet Archive capture of an authority page. Files are kept in data/raw/events/sources/ and never published; the registry keeps only references and short summaries in our own words.",
+ "sources": [
+  {
+   "id": "easa-czib-2026-03-current",
+   "url": "https://www.easa.europa.eu/en/node/143294",
+   "publisher": "EASA",
+   "sourceType": "authority",
+   "title": "EASA CZIB 2026-03 (current page, R14): description of the conflict"
+  },
+  {
+   "id": "faa-us-restrictions-20260212",
+   "url": "https://web.archive.org/web/20260212092221id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+   "publisher": "FAA",
+   "sourceType": "archive",
+   "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-02-12)",
+   "capturedAt": "2026-02-12T09:22:21Z"
+  },
+  {
+   "id": "faa-us-restrictions-20260301",
+   "url": "https://web.archive.org/web/20260301073543id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+   "publisher": "FAA",
+   "sourceType": "archive",
+   "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-03-01)",
+   "capturedAt": "2026-03-01T07:35:43Z"
+  },
+  {
+   "id": "faa-us-restrictions-20260313",
+   "url": "https://web.archive.org/web/20260313171229id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+   "publisher": "FAA",
+   "sourceType": "archive",
+   "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-03-13)",
+   "capturedAt": "2026-03-13T17:12:29Z"
+  },
+  {
+   "id": "faa-us-restrictions-20260407",
+   "url": "https://web.archive.org/web/20260407220620id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+   "publisher": "FAA",
+   "sourceType": "archive",
+   "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-04-07)",
+   "capturedAt": "2026-04-07T22:06:20Z"
+  },
+  {
+   "id": "faa-us-restrictions-live",
+   "url": "https://www.faa.gov/air_traffic/publications/us_restrictions",
+   "publisher": "FAA",
+   "sourceType": "authority",
+   "title": "FAA Prohibitions, Restrictions and Notices (current)"
+  },
+  {
+   "id": "faa-sfar-117",
+   "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/doc/Special-Federal-Aviation-Regulation-SFAR-117.pdf",
+   "publisher": "FAA",
+   "sourceType": "authority",
+   "title": "SFAR 117: Prohibition Against Certain Flights in the Tehran FIR (OIIX)"
+  },
+  {
+   "id": "faa-sfar-77",
+   "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/doc/SFAR_77.pdf",
+   "publisher": "FAA",
+   "sourceType": "authority",
+   "title": "SFAR 77: Prohibition Against Certain Flights in the Baghdad FIR (ORBB)"
+  },
+  {
+   "id": "faa-kicz-a0016-20",
+   "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0016-20_Advisory_NOTAM-Persian_Gulf_and_Gulf_of_Oman.pdf",
+   "publisher": "FAA",
+   "sourceType": "authority",
+   "title": "KICZ NOTAM A0016/20: advisory, overwater airspace above the Persian Gulf and the Gulf of Oman"
+  },
+  {
+   "id": "faa-kicz-a0056-26",
+   "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/kicz_advisory_notam_a0056_26_oejd.pdf",
+   "publisher": "FAA",
+   "sourceType": "authority",
+   "title": "KICZ NOTAM A0056/26: advisory, Jeddah FIR (OEJD)"
+  },
+  {
+   "id": "gcaa-safety-decision-2026-03",
+   "url": "https://www.gcaa.gov.ae/en/epublication/EPublications/Safety%20Decisions/2026/SAFETY%20DECISION%202026-03%20-%20TEMPORARY%20SUSPENSION%20OF%20OPERATION%20OF%20UNMANNED%20AIRCRAFT%20SYSTEMS%20%28DRONES%29%2C%20AND%20LIGHT%20SPORT%20AIRCRAFT%20WITHIN%20UAE%20AIRSPACE%20-%20ISSUE%2001.pdf",
+   "publisher": "GCAA (UAE)",
+   "sourceType": "authority",
+   "title": "GCAA Safety Decision 2026-03: temporary suspension of drones and light sport aircraft in UAE airspace"
+  },
+  {
+   "id": "qna-uae-partial-closure",
+   "url": "https://qna.org.qa/en/News-Area/News/2026-2/28/uae-civil-aviation-temporarily-partially-closes-airspace",
+   "publisher": "Qatar News Agency",
+   "sourceType": "state-news-agency",
+   "title": "UAE civil aviation temporarily, partially closes airspace"
+  },
+  {
+   "id": "peninsula-qatar-suspension",
+   "url": "https://thepeninsulaqatar.com/article/28/02/2026/temporary-suspension-of-air-navigation-in-qatar",
+   "publisher": "The Peninsula (Qatar)",
+   "sourceType": "press",
+   "title": "Temporary suspension of air navigation in Qatar"
+  },
+  {
+   "id": "peninsula-hia-suspension",
+   "url": "https://thepeninsulaqatar.com/article/28/02/2026/hamad-international-airport-confirms-temporary-suspension-of-air-traffic",
+   "publisher": "The Peninsula (Qatar)",
+   "sourceType": "press",
+   "title": "Hamad International Airport confirms temporary suspension of air traffic"
+  },
+  {
+   "id": "khaleej-uae-partial",
+   "url": "https://www.khaleejtimes.com/uae/uae-temporarily-closes-airspace-exceptional-precautionary-measure",
+   "publisher": "Khaleej Times",
+   "sourceType": "press",
+   "title": "UAE temporarily and partially closes airspace after US, Israel strike Iran"
+  },
+  {
+   "id": "israelhayom-closure",
+   "url": "https://www.israelhayom.com/2026/02/28/israel-closes-airspace-following-attack-in-iran/",
+   "publisher": "Israel Hayom",
+   "sourceType": "press",
+   "title": "Israel closes airspace following attack in Iran"
+  },
+  {
+   "id": "peninsula-kuwait-reopen",
+   "url": "https://thepeninsulaqatar.com/article/23/04/2026/kuwait-reopens-airspace-starting-this-evening",
+   "publisher": "The Peninsula (Qatar)",
+   "sourceType": "press",
+   "title": "Kuwait reopens airspace starting this evening"
+  },
+  {
+   "id": "egypttoday-kuwait-closed",
+   "url": "https://www.egypttoday.com/Article/1/146297/Kuwait%E2%80%99s-Civil-Aviation-Authority-denies-resumption-of-flights-airport-remains",
+   "publisher": "Egypt Today",
+   "sourceType": "press",
+   "title": "Kuwait's Civil Aviation Authority denies resumption of flights; airport remains closed since February 28"
+  },
+  {
+   "id": "iol-qatar-continues",
+   "url": "https://iol.co.za/travel/travel-news/2026-03-07-qatar-airways-announces-special-flights-for-stranded-passengers-as-qatari-airspace-closure-continues/",
+   "publisher": "IOL",
+   "sourceType": "press",
+   "title": "Qatar Airways special flights as Qatari airspace closure continues (7 March)"
+  },
+  {
+   "id": "eurocontrol-trends-11",
+   "url": "https://www.eurocontrol.int/publication/impact-current-middle-east-crisis-european-aviation",
+   "publisher": "EUROCONTROL",
+   "sourceType": "authority",
+   "title": "Aviation Trends 11: impact of the current Middle East crisis on European aviation (2026-03-31)"
+  },
+  {
+   "id": "eurocontrol-ead",
+   "url": "https://www.eurocontrol.int/service/european-ais-database",
+   "publisher": "EUROCONTROL",
+   "sourceType": "authority",
+   "title": "European AIS Database (EAD) service page"
+  }
+ ]
+}

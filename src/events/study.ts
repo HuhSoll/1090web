@@ -17,6 +17,44 @@ import { beforeAfter, DAY, differenceInDifferences, placebo, preTrend, ratioPreT
 import { observedChanges, type ChangeOptions, type Changes } from './changes';
 import { impactPair, windowNetwork } from './counterfactual';
 import { areaCountries, type AdvisoryVersion } from './model';
+import { startSpan, type UnifiedEvent } from './registry';
+
+/**
+ * What a study is about (Phase 9H): any real event of the registry. For an EASA CZIB version the
+ * Phase 9G record is kept in `version`, and saved results keep the Phase 9G fields.
+ */
+export interface StudySubject {
+  key: string;
+  label: string;
+  /** UTC day used as the event day (YYYY-MM-DD) */
+  effectiveDate: string;
+  /** how that day was chosen (precision of the source time) */
+  dayBasis: 'date' | 'utc-instant';
+  area: { iso2: string[]; basis: 'field' | 'airspaceText' | 'none' };
+  firs: string[];
+  archived: boolean;
+  variants: boolean;
+  version: AdvisoryVersion | null;
+  event: UnifiedEvent;
+}
+
+const isoDay = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+
+/** Subject of an event; null when the event has no known date. */
+export function subjectOf(e: UnifiedEvent, v: AdvisoryVersion | null = null): StudySubject | null {
+  const s = startSpan(e);
+  if (!s) return null;
+  // a date-only time is a local day: its own date is the event day; an instant gives its UTC day
+  const first = [...e.occurrence, ...e.effectiveFrom, ...e.publication].find((t) => t.precision === 'date' && t.local);
+  const effectiveDate = s.kind === 'day' && first?.local ? first.local.slice(0, 10) : isoDay(s.startMs);
+  const area = v ? areaCountries(v) : { iso2: e.coveredCountries, basis: e.coveredCountries.length ? 'field' as const : 'none' as const };
+  return {
+    key: e.eventId, label: v ? `EASA CZIB ${v.czibNumber}` : e.title, effectiveDate, dayBasis: s.kind === 'day' ? 'date' : 'utc-instant',
+    area, firs: e.coveredFIRs,
+    archived: v ? v.verificationStatus === 'archived-capture' : e.sourceReferences.every((x) => x.sourceType === 'archive'),
+    variants: v ? v.contentVariants > 1 : false, version: v, event: e,
+  };
+}
 
 export const STUDY_FORMAT = '1090web-event-study';
 export const METHOD_VERSION = '9g.1';
@@ -57,7 +95,9 @@ export interface SeriesSet {
 }
 
 export interface StudyResult {
-  version: AdvisoryVersion;
+  subject: StudySubject;
+  /** the Phase 9G record when the subject is an EASA CZIB version */
+  version: AdvisoryVersion | null;
   conditions: StudyConditions;
   area: { countries: string[]; basis: 'field' | 'airspaceText' | 'none'; firs: string[] };
   windows: WindowPair;
@@ -98,13 +138,14 @@ export interface StudyDeps {
   scope: ScopeContext;
 }
 
-export async function runStudy(deps: StudyDeps, version: AdvisoryVersion, c: StudyConditions, progress: (step: string) => void): Promise<StudyResult> {
+export async function runStudy(deps: StudyDeps, subject: StudySubject, c: StudyConditions, progress: (step: string) => void): Promise<StudyResult> {
   const { network, range } = deps;
-  const area = areaCountries(version);
+  const area = subject.area;
+  const version = subject.version;
   const countries = countryIndices(network);
   const idx = (iso: readonly string[]) => iso.map((x) => countries.get(x)).filter((x): x is number => x !== undefined);
   const areaIdx = idx(area.iso2);
-  const eventDay = utcDayMs(version.effectiveDate!);
+  const eventDay = utcDayMs(subject.effectiveDate);
   const w = windowPair(eventDay, c.windowDays, range.startMs, range.endMs, c.bufferDays);
   const gapDays = gapDaysOf(deps.index);
   const gaps = new Set(c.excludeGaps ? gapDays : []);
@@ -155,8 +196,9 @@ export async function runStudy(deps: StudyDeps, version: AdvisoryVersion, c: Stu
   if (gapIn) warnings.push(c.excludeGaps ? 'gapExcluded' : 'gapIncluded');
   if (area.basis === 'airspaceText') warnings.push('areaFromText');
   if (area.basis === 'none') warnings.push('noArea');
-  if (version.verificationStatus === 'archived-capture') warnings.push('archived');
-  if (version.contentVariants > 1) warnings.push('variants');
+  if (subject.archived) warnings.push('archived');
+  if (subject.variants) warnings.push('variants');
+  if (subject.event.verificationStatus !== 'Verified') warnings.push('notVerified');
   const t4Share = { before: t4Of(rb.rows), after: t4Of(ra.rows) };
   if (t4Share.before > 0.5 || t4Share.after > 0.5) warnings.push('t4');
   let impact: StudyResult['impact'] = null;
@@ -167,14 +209,14 @@ export async function runStudy(deps: StudyDeps, version: AdvisoryVersion, c: Stu
     const na = windowNetwork(deps.scope, ra.rows, w.after.days, 'after', cond);
     const areaAirports = new Set(network.airports.map((a, i) => (area.iso2.includes(a.country) ? i : -1)).filter((i) => i >= 0));
     const pair = impactPair(nb, na, areaAirports, c.directed);
-    const key = `${version.bulletinId}/${version.revisionId}/${JSON.stringify(c)}`;
+    const key = `${subject.key}/${JSON.stringify(c)}`;
     const observed = await deps.impact.run(`ev-obs:${key}`, pair.observed.input);
     const observedArea = await deps.impact.run(`ev-obsA:${key}`, pair.observedArea.input);
     const hypothetical = await deps.impact.run(`ev-hyp:${key}`, pair.hypothetical.input);
     impact = { observed, observedArea, hypothetical, targets: pair.targets, nodes: pair.observed.nodes.length };
   }
   return {
-    version, conditions: c, area: { countries: area.iso2, basis: area.basis, firs: version.firs },
+    subject, version, conditions: c, area: { countries: area.iso2, basis: area.basis, firs: subject.firs },
     windows: w, dataRange: range, gapDays, series, beforeAfter: ba,
     preTrend: { area: preTrend(ds('area'), w, gaps), comparison: preTrend(ds('comparison'), w, gaps), neighbours: preTrend(ds('neighbours'), w, gaps) },
     ratioPreTrend: ratioPreTrend(ds('area'), ds('comparison'), w, gaps),
@@ -189,11 +231,17 @@ const iso = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 export function studyJson(r: StudyResult, recordsVersion: string, dataset: { id: string; version: string | null }): string {
   return JSON.stringify({
     format: STUDY_FORMAT, schemaVersion: 1, methodVersion: METHOD_VERSION,
-    event: {
+    event: r.version ? {
       bulletinId: r.version.bulletinId, revisionId: r.version.revisionId, czibNumber: r.version.czibNumber, title: r.version.title,
       effectiveDate: r.version.effectiveDate, issueDate: r.version.issueDate, revisionDate: r.version.revisionDate, validUntil: r.version.validUntil,
       sourceUrl: r.version.sourceUrl, verificationStatus: r.version.verificationStatus, firstSeenAt: r.version.firstSeenAt,
       captures: r.version.captures, recordsVersion, kind: 'safety-advisory (not a closure)',
+    } : {
+      eventId: r.subject.event.eventId, eventType: r.subject.event.eventType, title: r.subject.event.title,
+      issuingAuthority: r.subject.event.issuingAuthority, documentId: r.subject.event.documentId,
+      times: { occurrence: r.subject.event.occurrence, publication: r.subject.event.publication, effectiveFrom: r.subject.event.effectiveFrom, effectiveUntil: r.subject.event.effectiveUntil },
+      eventDayUtc: r.subject.effectiveDate, eventDayBasis: r.subject.dayBasis,
+      verificationStatus: r.subject.event.verificationStatus, sources: r.subject.event.sourceReferences, recordsVersion,
     },
     dataset,
     conditions: r.conditions,

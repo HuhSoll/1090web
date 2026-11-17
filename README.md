@@ -70,7 +70,7 @@
 
 ## 過去のイベント（航空安全勧告）
 
-研究モードの「過去のイベント」タブでは、EASA の紛争地域情報（CZIB）の各版の前後で、観測された航空ネットワークがどう変わったかを調べられます。
+研究モードの「イベント調査」タブ（旧「過去のイベント」）では、EASA の紛争地域情報（CZIB）の各版の前後で、観測された航空ネットワークがどう変わったかを調べられます。
 
 - 勧告の発行・改訂の履歴を版ごとに保存しています。EASA は最新版しか公開していないため、過去の版は Internet Archive の保存版で確認し、確認できない版は補完しません
 - 前後 7・14・28・30 日の比較（UTC の日、イベント日は除外）、対象地域内・地域と地域外・周辺国・比較対象群の推移、空港・路線・航空会社別の変化を表示します
@@ -79,11 +79,24 @@
 
 勧告は空域閉鎖・空港閉鎖ではなく、この機能は何も停止させません。結果は観測された変化の記述で、勧告の効果を示すものではありません。使い方は [docs/historical-events-guide.md](docs/historical-events-guide.md)、計算方法は [docs/historical-events-methodology.md](docs/historical-events-methodology.md)、出典は [docs/historical-event-sources.md](docs/historical-event-sources.md)、結果は [docs/phase9g-report.md](docs/phase9g-report.md) にあります。
 
+## イベント調査（空域制限・閉鎖・安全保障上の出来事）
+
+「イベント調査」タブでは、EASA の勧告に加えて、FAA の措置、各国の空域制限・閉鎖、空港の閉鎖、安全保障上の出来事、再開を 1 本のタイムラインで見られます。
+
+- 各イベントは、ダウンロードして SHA-256 を記録した出典にもとづきます。検証状態（検証済み・一部検証・資料間に矛盾・不完全・未検証）は出典の種類で決まり、報道だけの出来事は「未検証」です
+- 発生、発表、有効の開始・終了、初めて確認した時刻を分けて持ち、出典ごとの値と精度を残します。日付しかわからない出来事を 00:00 UTC に置くことはしません
+- 国、FIR、空港、高度、運航者の範囲を分けて記録します（FAA の措置は米国の運航者だけが対象です）
+- 期間、地域、種類、検証状態で絞り込めます。どのイベントについても Phase 9G と同じ前後比較ができ、比較期間に重なるほかのイベントも一覧にします
+- 初期のケースは 2026年2〜3月の中東（UAE・カタール・クウェートの措置、FAA の SFAR と NOTAM、EASA CZIB 2026-03）です
+
+時間的に近いことは原因を意味せず、勧告・制限・閉鎖を空港の停止に自動で変えることもしません。使い方は [docs/event-intelligence-guide.md](docs/event-intelligence-guide.md)、計算方法は [docs/event-intelligence-methodology.md](docs/event-intelligence-methodology.md)、出典は [docs/event-intelligence-sources.md](docs/event-intelligence-sources.md)、結果は [docs/phase9h-report.md](docs/phase9h-report.md) にあります。
+
 ## これから
 
 - 随時データ追加と拡充
 - 航空会社名の表示
-- 空域制限・気象警報の追加（使える公式データの調査中）
+- 各国当局の文書・NOTAM と、ほかの地域の事例の追加
+- 気象警報の追加（使える公式データの調査中）
 
 ## データ・クレジット
 

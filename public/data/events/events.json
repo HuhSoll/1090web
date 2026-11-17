@@ -1,0 +1,1143 @@
+{
+ "schemaVersion": 1,
+ "registryVersion": "36d5769e668e",
+ "generatedAt": "2026-11-17T16:49:04Z",
+ "eventTypes": {
+  "SAFETY_ADVISORY": "Safety advisory (recommendation to operators; not a closure)",
+  "AIRSPACE_RESTRICTION": "Official restriction of an airspace for some operators, aircraft, altitudes or times",
+  "AIRSPACE_CLOSURE": "Officially confirmed closure of an airspace",
+  "AIRPORT_CLOSURE": "Officially confirmed suspension of an airport's operations",
+  "SECURITY_INCIDENT": "Military action, attack or security incident that may affect air traffic",
+  "AIRSPACE_REOPENING": "Lifting of a restriction or closure (not a return to normal operations)",
+  "OTHER_VERIFIED_EVENT": "Other event with a checkable source"
+ },
+ "statuses": [
+  "Verified",
+  "Partially Verified",
+  "Disputed",
+  "Incomplete",
+  "Unverified"
+ ],
+ "note": "Facts as stated by the sources. Relations marked basis=temporal are only closeness in time. Nothing here is a cause of an observed change.",
+ "czibHistory": "data/events/easa-czib-history.json (SAFETY_ADVISORY, EASA, Phase 9G)",
+ "events": [
+  {
+   "schemaVersion": 1,
+   "eventId": "SEC-2026-02-28-STRIKES-IRAN",
+   "eventType": "SECURITY_INCIDENT",
+   "title": "Military strikes on Iran and Iranian retaliation",
+   "titleJa": "イランへの軍事攻撃とイランの報復",
+   "description": "EASA's bulletin states that on 28 February 2026 the United States and Israel conducted military strikes on sites in Iran and that Iran carried out retaliatory attacks.",
+   "issuingAuthority": null,
+   "documentType": "statement in an aviation safety bulletin",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [
+    {
+     "utc": null,
+     "local": "2026-02-28",
+     "tz": null,
+     "precision": "date",
+     "basis": "date stated in EASA CZIB 2026-03; no time of day",
+     "sourceId": "easa-czib-2026-03-current"
+    }
+   ],
+   "publication": [],
+   "effectiveFrom": [],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:47:03Z",
+   "coveredCountries": [
+    "IR"
+   ],
+   "coveredFIRs": [],
+   "affectedAirports": [],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": null,
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "easa-czib-2026-03-current",
+     "publisher": "EASA",
+     "sourceType": "authority",
+     "title": "EASA CZIB 2026-03 (current page, R14): description of the conflict",
+     "url": "https://www.easa.europa.eu/en/node/143294",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:47:03Z",
+     "sha256": "075b257ce697313bfd0c805fca3896896a4ca3074b04aa177df8435572cfd11b",
+     "supports": [
+      "occurrence",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "CZIB:2026-03/R0",
+     "relation": "documented-by",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Partially Verified",
+   "verified": [
+    "EASA (an aviation authority, not a party) states the date of the strikes and of the retaliation."
+   ],
+   "notVerified": [
+    "No government statement of the parties was captured.",
+    "The time of day is not known.",
+    "Which places were struck is not recorded here."
+   ],
+   "confidenceNotes": "Date only. Shown on the timeline as a whole day, not as 00:00 UTC.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "OTH-2026-04-08-CEASEFIRE",
+   "eventType": "OTHER_VERIFIED_EVENT",
+   "title": "Temporary US-Iran ceasefire announced",
+   "titleJa": "米国とイランの一時停戦の発表",
+   "description": "EASA's bulletin states that a temporary ceasefire between the United States and Iran was initially announced on 8 April 2026 and remained in effect until 17 June 2026, when it was extended for 60 days by a memorandum of understanding.",
+   "issuingAuthority": null,
+   "documentType": "statement in an aviation safety bulletin",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [
+    {
+     "utc": null,
+     "local": "2026-04-08",
+     "tz": null,
+     "precision": "date",
+     "basis": "date stated in EASA CZIB 2026-03 R14",
+     "sourceId": "easa-czib-2026-03-current"
+    }
+   ],
+   "publication": [],
+   "effectiveFrom": [],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:47:03Z",
+   "coveredCountries": [
+    "IR"
+   ],
+   "coveredFIRs": [],
+   "affectedAirports": [],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": null,
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "easa-czib-2026-03-current",
+     "publisher": "EASA",
+     "sourceType": "authority",
+     "title": "EASA CZIB 2026-03 (current page, R14): description of the conflict",
+     "url": "https://www.easa.europa.eu/en/node/143294",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:47:03Z",
+     "sha256": "075b257ce697313bfd0c805fca3896896a4ca3074b04aa177df8435572cfd11b",
+     "supports": [
+      "occurrence",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "SEC-2026-02-28-STRIKES-IRAN",
+     "relation": "follows",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Partially Verified",
+   "verified": [
+    "EASA states the announcement date (8 April) and the extension on 17 June."
+   ],
+   "notVerified": [
+    "No statement of the parties was captured.",
+    "The time of the announcement is not known."
+   ],
+   "confidenceNotes": "Date only.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "RST-AE-2026-02-28-PARTIAL",
+   "eventType": "AIRSPACE_RESTRICTION",
+   "title": "UAE: temporary and partial closure of the airspace (GCAA)",
+   "titleJa": "UAE：空域の一時的・部分的な閉鎖（GCAA）",
+   "description": "The Qatar News Agency reports that the UAE General Civil Aviation Authority announced the temporary and partial closure of UAE airspace as an exceptional precautionary measure.",
+   "issuingAuthority": "GCAA (UAE)",
+   "documentType": "statement relayed by a state news agency",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": null,
+     "local": "2026-02-28",
+     "tz": "Asia/Dubai",
+     "precision": "date",
+     "basis": "dateline of the QNA report",
+     "sourceId": "qna-uae-partial-closure"
+    },
+    {
+     "utc": "2026-02-28T09:42:00Z",
+     "local": "2026-02-28T13:42:48+04:00",
+     "tz": "+04:00",
+     "precision": "minute",
+     "basis": "publication time of the Khaleej Times article (an upper bound of the announcement time)",
+     "sourceId": "khaleej-uae-partial"
+    }
+   ],
+   "effectiveFrom": [],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:45:42Z",
+   "coveredCountries": [
+    "AE"
+   ],
+   "coveredFIRs": [
+    "OMAE"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": "partial",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "qna-uae-partial-closure",
+     "publisher": "Qatar News Agency",
+     "sourceType": "state-news-agency",
+     "title": "UAE civil aviation temporarily, partially closes airspace",
+     "url": "https://qna.org.qa/en/News-Area/News/2026-2/28/uae-civil-aviation-temporarily-partially-closes-airspace",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:42Z",
+     "sha256": "371f7be9a424514339df48ac25ffd676c8e30c283a88c98ee0bce4eb49a41868",
+     "supports": [
+      "publication",
+      "description",
+      "closureScope"
+     ]
+    },
+    {
+     "sourceId": "khaleej-uae-partial",
+     "publisher": "Khaleej Times",
+     "sourceType": "press",
+     "title": "UAE temporarily and partially closes airspace after US, Israel strike Iran",
+     "url": "https://www.khaleejtimes.com/uae/uae-temporarily-closes-airspace-exceptional-precautionary-measure",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:49Z",
+     "sha256": "e13fe9c5e86b0269679c32902199b0c9c2a135b201897bd8c525c64b6cc38015",
+     "supports": [
+      "publication"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "SEC-2026-02-28-STRIKES-IRAN",
+     "relation": "same-day",
+     "basis": "temporal"
+    }
+   ],
+   "verificationStatus": "Partially Verified",
+   "verified": [
+    "A state news agency reports the GCAA announcement of a temporary, partial closure on 28 February."
+   ],
+   "notVerified": [
+    "The GCAA statement itself and the NOTAM were not captured.",
+    "Which parts of the airspace, which flights and from what time are not known.",
+    "When it ended is not known."
+   ],
+   "confidenceNotes": "Partial closure: not all flights were prohibited according to the reports.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "RST-AE-2026-02-28-UAS-LSA",
+   "eventType": "AIRSPACE_RESTRICTION",
+   "title": "UAE: suspension of drones and light sport aircraft (GCAA Safety Decision 2026-03)",
+   "titleJa": "UAE：無人機・軽スポーツ機の運航停止（GCAA 安全決定 2026-03）",
+   "description": "GCAA Safety Decision 2026-03, issue 01, dated 28 February 2026, suspends with immediate effect all authorisations for unmanned aircraft systems and light sport aircraft and prohibits their operation in UAE airspace during the suspension period.",
+   "issuingAuthority": "GCAA (UAE)",
+   "documentType": "Safety Decision",
+   "documentId": "SD 2026-03",
+   "revisionId": "Issue 01",
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": null,
+     "local": "2026-02-28",
+     "tz": "Asia/Dubai",
+     "precision": "date",
+     "basis": "'Date of Issue' of the decision",
+     "sourceId": "gcaa-safety-decision-2026-03"
+    }
+   ],
+   "effectiveFrom": [
+    {
+     "utc": null,
+     "local": "2026-02-28",
+     "tz": "Asia/Dubai",
+     "precision": "date",
+     "basis": "'effective immediately' on the date of issue; no time stated",
+     "sourceId": "gcaa-safety-decision-2026-03"
+    }
+   ],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:45:40Z",
+   "coveredCountries": [
+    "AE"
+   ],
+   "coveredFIRs": [
+    "OMAE"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": {
+    "scope": "specified",
+    "text": "Operators of drones (commercial and recreational) and of light sport aircraft of all types"
+   },
+   "affectedAircraftTypes": [
+    "unmanned aircraft systems (drones)",
+    "light sport aircraft"
+   ],
+   "altitudeRestrictions": null,
+   "closureScope": "aircraft-types",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "gcaa-safety-decision-2026-03",
+     "publisher": "GCAA (UAE)",
+     "sourceType": "authority",
+     "title": "GCAA Safety Decision 2026-03: temporary suspension of drones and light sport aircraft in UAE airspace",
+     "url": "https://www.gcaa.gov.ae/en/epublication/EPublications/Safety%20Decisions/2026/SAFETY%20DECISION%202026-03%20-%20TEMPORARY%20SUSPENSION%20OF%20OPERATION%20OF%20UNMANNED%20AIRCRAFT%20SYSTEMS%20%28DRONES%29%2C%20AND%20LIGHT%20SPORT%20AIRCRAFT%20WITHIN%20UAE%20AIRSPACE%20-%20ISSUE%2001.pdf",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:40Z",
+     "sha256": "1626745ddfdedf862ed3aa192ffe01612b7b27f1d456c2e4fb0382f0523027bc",
+     "supports": [
+      "publication",
+      "effectiveFrom",
+      "affectedAircraftTypes",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "RST-AE-2026-02-28-PARTIAL",
+     "relation": "same-day",
+     "basis": "temporal"
+    }
+   ],
+   "verificationStatus": "Verified",
+   "verified": [
+    "The authority's own document states the suspension, its scope and its date of issue."
+   ],
+   "notVerified": [
+    "The end of the suspension was not captured."
+   ],
+   "confidenceNotes": "Applies to drones and light sport aircraft only; it is not a closure for airliners.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "CLS-QA-2026-02-28",
+   "eventType": "AIRSPACE_CLOSURE",
+   "title": "Qatar: temporary suspension of air navigation (QCAA), as reported",
+   "titleJa": "カタール：航空交通の一時停止（QCAA、報道による）",
+   "description": "The Peninsula reports that the Qatar Civil Aviation Authority announced the temporary suspension of air navigation in Qatari airspace as a precautionary step. On 7 March, IOL reported that the closure of Qatari airspace was continuing.",
+   "issuingAuthority": "QCAA (Qatar)",
+   "documentType": "statement reported by the press",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": "2026-02-28T09:21:00Z",
+     "local": "2026-02-28T12:21+03:00",
+     "tz": "+03:00",
+     "precision": "minute",
+     "basis": "publication time of The Peninsula article (an upper bound of the announcement time)",
+     "sourceId": "peninsula-qatar-suspension"
+    }
+   ],
+   "effectiveFrom": [],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:45:46Z",
+   "coveredCountries": [
+    "QA"
+   ],
+   "coveredFIRs": [
+    "OTDF"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": "unknown",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "peninsula-qatar-suspension",
+     "publisher": "The Peninsula (Qatar)",
+     "sourceType": "press",
+     "title": "Temporary suspension of air navigation in Qatar",
+     "url": "https://thepeninsulaqatar.com/article/28/02/2026/temporary-suspension-of-air-navigation-in-qatar",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:46Z",
+     "sha256": "877e3e9a03baf67e24a7e80405e904a5b1f2703b1032fa4adb58f404ae8e262f",
+     "supports": [
+      "publication",
+      "description"
+     ]
+    },
+    {
+     "sourceId": "iol-qatar-continues",
+     "publisher": "IOL",
+     "sourceType": "press",
+     "title": "Qatar Airways special flights as Qatari airspace closure continues (7 March)",
+     "url": "https://iol.co.za/travel/travel-news/2026-03-07-qatar-airways-announces-special-flights-for-stranded-passengers-as-qatari-airspace-closure-continues/",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:46:01Z",
+     "sha256": "2817327830f92ca62da85cd3775c8967c064b41741b56ee07e3f10c0ac660766",
+     "supports": [
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "APT-QA-OTHH-2026-02-28",
+     "relation": "related",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Unverified",
+   "verified": [],
+   "notVerified": [
+    "Only press reports were captured; no QCAA statement or NOTAM.",
+    "Whether all flights or only some were suspended (exemptions) is not known.",
+    "Start and end times are not known."
+   ],
+   "confidenceNotes": "Press only. Kept to show what was reported at the time, not as an established fact.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "APT-QA-OTHH-2026-02-28",
+   "eventType": "AIRPORT_CLOSURE",
+   "title": "Doha Hamad International: suspension of all aircraft movements, as reported",
+   "titleJa": "ドーハ・ハマド国際空港：全機の運航停止（報道による）",
+   "description": "The Peninsula reports that Hamad International Airport confirmed the temporary suspension of all aircraft movements following the suspension of air navigation in Qatar.",
+   "issuingAuthority": "Hamad International Airport",
+   "documentType": "statement reported by the press",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": "2026-02-28T10:13:00Z",
+     "local": "2026-02-28T13:13+03:00",
+     "tz": "+03:00",
+     "precision": "minute",
+     "basis": "publication time of The Peninsula article",
+     "sourceId": "peninsula-hia-suspension"
+    }
+   ],
+   "effectiveFrom": [],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:45:47Z",
+   "coveredCountries": [
+    "QA"
+   ],
+   "coveredFIRs": [],
+   "affectedAirports": [
+    "OTHH"
+   ],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": "full",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "peninsula-hia-suspension",
+     "publisher": "The Peninsula (Qatar)",
+     "sourceType": "press",
+     "title": "Hamad International Airport confirms temporary suspension of air traffic",
+     "url": "https://thepeninsulaqatar.com/article/28/02/2026/hamad-international-airport-confirms-temporary-suspension-of-air-traffic",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:47Z",
+     "sha256": "96a1492e7caa915bc1d6ffdc7dcbefb20711ea67195e073937cbe6d1ef3cd993",
+     "supports": [
+      "publication",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "CLS-QA-2026-02-28",
+     "relation": "consequence-of",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Unverified",
+   "verified": [],
+   "notVerified": [
+    "Press only.",
+    "Start and end times are not known."
+   ],
+   "confidenceNotes": "Airport-wide suspension as reported; whether runways were closed is not stated.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "CLS-KW-2026-02-28",
+   "eventType": "AIRSPACE_CLOSURE",
+   "title": "Kuwait: airspace and airport closed from 28 February, as reported",
+   "titleJa": "クウェート：2月28日からの空域・空港の閉鎖（報道による）",
+   "description": "Egypt Today reports (10 April) that the Kuwait Civil Aviation Authority denied a circulating announcement of resumed flights and that the airport had remained closed since 28 February.",
+   "issuingAuthority": "Kuwait Civil Aviation Authority",
+   "documentType": "statement reported by the press",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [],
+   "effectiveFrom": [
+    {
+     "utc": null,
+     "local": "2026-02-28",
+     "tz": "Asia/Kuwait",
+     "precision": "date",
+     "basis": "'closed since February 28' in a report published on 10 April",
+     "sourceId": "egypttoday-kuwait-closed"
+    }
+   ],
+   "effectiveUntil": [
+    {
+     "utc": null,
+     "local": "2026-04-23",
+     "tz": "Asia/Kuwait",
+     "precision": "date",
+     "basis": "reopening reported for the evening of 23 April",
+     "sourceId": "peninsula-kuwait-reopen"
+    }
+   ],
+   "firstVerifiedAt": "2026-11-17T16:45:52Z",
+   "coveredCountries": [
+    "KW"
+   ],
+   "coveredFIRs": [
+    "OKAC"
+   ],
+   "affectedAirports": [
+    "OKKK"
+   ],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": "unknown",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "egypttoday-kuwait-closed",
+     "publisher": "Egypt Today",
+     "sourceType": "press",
+     "title": "Kuwait's Civil Aviation Authority denies resumption of flights; airport remains closed since February 28",
+     "url": "https://www.egypttoday.com/Article/1/146297/Kuwait%E2%80%99s-Civil-Aviation-Authority-denies-resumption-of-flights-airport-remains",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:54Z",
+     "sha256": "4614ddbf6ea11686db336482f60844925e239a2dccfa1aeb803f0170259eebb6",
+     "supports": [
+      "effectiveFrom",
+      "description"
+     ]
+    },
+    {
+     "sourceId": "peninsula-kuwait-reopen",
+     "publisher": "The Peninsula (Qatar)",
+     "sourceType": "press",
+     "title": "Kuwait reopens airspace starting this evening",
+     "url": "https://thepeninsulaqatar.com/article/23/04/2026/kuwait-reopens-airspace-starting-this-evening",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:52Z",
+     "sha256": "13af20f2d11f11ed759977dd039bedd3d174b889d079f26631db53dc2979ecd7",
+     "supports": [
+      "effectiveUntil"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "REO-KW-2026-04-23",
+     "relation": "reopened-by",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Unverified",
+   "verified": [],
+   "notVerified": [
+    "Press only; no Kuwaiti statement or NOTAM captured.",
+    "Whether some flights were allowed is not known.",
+    "The start date comes from a report written six weeks later."
+   ],
+   "confidenceNotes": "Press only.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "REO-KW-2026-04-23",
+   "eventType": "AIRSPACE_REOPENING",
+   "title": "Kuwait: phased reopening of the airspace, as reported",
+   "titleJa": "クウェート：空域の段階的な再開（報道による）",
+   "description": "The Peninsula reports that Kuwait's civil aviation director announced the reopening of the airspace from the evening of 23 April as part of a phased plan to resume air traffic.",
+   "issuingAuthority": "Kuwait Civil Aviation Authority",
+   "documentType": "statement reported by the press",
+   "documentId": null,
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": "2026-04-23T18:48:00Z",
+     "local": "2026-04-23T21:48+03:00",
+     "tz": "+03:00",
+     "precision": "minute",
+     "basis": "publication time of The Peninsula article",
+     "sourceId": "peninsula-kuwait-reopen"
+    }
+   ],
+   "effectiveFrom": [
+    {
+     "utc": null,
+     "local": "2026-04-23 evening",
+     "tz": "Asia/Kuwait",
+     "precision": "date",
+     "basis": "'starting this evening' (no hour)",
+     "sourceId": "peninsula-kuwait-reopen"
+    }
+   ],
+   "effectiveUntil": [],
+   "firstVerifiedAt": "2026-11-17T16:45:52Z",
+   "coveredCountries": [
+    "KW"
+   ],
+   "coveredFIRs": [
+    "OKAC"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": null,
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": null,
+   "closureScope": null,
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "peninsula-kuwait-reopen",
+     "publisher": "The Peninsula (Qatar)",
+     "sourceType": "press",
+     "title": "Kuwait reopens airspace starting this evening",
+     "url": "https://thepeninsulaqatar.com/article/23/04/2026/kuwait-reopens-airspace-starting-this-evening",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:52Z",
+     "sha256": "13af20f2d11f11ed759977dd039bedd3d174b889d079f26631db53dc2979ecd7",
+     "supports": [
+      "publication",
+      "effectiveFrom",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [
+    {
+     "eventId": "CLS-KW-2026-02-28",
+     "relation": "reopens",
+     "basis": "source"
+    }
+   ],
+   "verificationStatus": "Unverified",
+   "verified": [],
+   "notVerified": [
+    "Press only.",
+    "A phased reopening: it does not mean that operations returned to normal."
+   ],
+   "confidenceNotes": "Reopening is not recovery.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "RST-FAA-SFAR117-OIIX",
+   "eventType": "AIRSPACE_RESTRICTION",
+   "title": "FAA SFAR 117: prohibition of flights in the Tehran FIR for U.S. operators",
+   "titleJa": "FAA SFAR 117：米国の運航者によるテヘラン FIR での飛行の禁止",
+   "description": "SFAR No. 117 (14 CFR 91.1617) prohibits flight operations in the Tehran FIR (OIIX) by U.S. air carriers, U.S. commercial operators, FAA airman certificate holders (except for a foreign air carrier) and operators of U.S.-registered aircraft (except foreign air carriers). A final rule published on 3 October 2024 extended it from 31 October 2024 to 31 October 2027. Listed on the FAA restrictions page in every capture from 12 February to 7 April 2026.",
+   "issuingAuthority": "FAA",
+   "documentType": "Special Federal Aviation Regulation",
+   "documentId": "SFAR 117",
+   "revisionId": "extension published 2024-10-03",
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": null,
+     "local": "2024-10-03",
+     "tz": "America/New_York",
+     "precision": "date",
+     "basis": "Federal Register issue date of the extension",
+     "sourceId": "faa-sfar-117"
+    }
+   ],
+   "effectiveFrom": [],
+   "effectiveUntil": [
+    {
+     "utc": null,
+     "local": "2027-10-31",
+     "tz": null,
+     "precision": "date",
+     "basis": "expiration date set by the extension",
+     "sourceId": "faa-sfar-117"
+    }
+   ],
+   "firstVerifiedAt": "2026-02-12T09:22:21Z",
+   "coveredCountries": [
+    "IR"
+   ],
+   "coveredFIRs": [
+    "OIIX"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": {
+    "scope": "us-operators",
+    "text": "U.S. air carriers and commercial operators, FAA certificate holders (except for foreign air carriers), U.S.-registered aircraft (except foreign air carriers)"
+   },
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": {
+    "lower": "SFC",
+    "upper": "UNL",
+    "text": "all altitudes"
+   },
+   "closureScope": "operators",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "faa-sfar-117",
+     "publisher": "FAA",
+     "sourceType": "authority",
+     "title": "SFAR 117: Prohibition Against Certain Flights in the Tehran FIR (OIIX)",
+     "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/doc/Special-Federal-Aviation-Regulation-SFAR-117.pdf",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:33Z",
+     "sha256": "3f3ef7f27be09af61b843d6e452271b268fc3415acb953768cb72d0505b81df2",
+     "supports": [
+      "publication",
+      "effectiveUntil",
+      "affectedOperators",
+      "description"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260212",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-02-12)",
+     "url": "https://web.archive.org/web/20260212092221id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-02-12T09:22:21Z",
+     "retrievedAt": "2026-11-17T16:45:08Z",
+     "sha256": "f21a875aa0ed9195fec5d1d8e26f2edc540749d9e5d1aadf25bb0a8eb41eef31",
+     "supports": [
+      "listed"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260301",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-03-01)",
+     "url": "https://web.archive.org/web/20260301073543id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-03-01T07:35:43Z",
+     "retrievedAt": "2026-11-17T16:45:15Z",
+     "sha256": "78672362a878763d531b1d7317b042f74843b845075489adda28513d5041486e",
+     "supports": [
+      "listed"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260313",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-03-13)",
+     "url": "https://web.archive.org/web/20260313171229id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-03-13T17:12:29Z",
+     "retrievedAt": "2026-11-17T16:45:20Z",
+     "sha256": "66671f701f6859b609b2a8c3fa2a3f5446d83fc99aac819de7bdf40670344652",
+     "supports": [
+      "listed"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260407",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-04-07)",
+     "url": "https://web.archive.org/web/20260407220620id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-04-07T22:06:20Z",
+     "retrievedAt": "2026-11-17T16:45:25Z",
+     "sha256": "19dec5d7f191b00120c31283ff1faee394e740ba731f3c8415080523a7e4c2e5",
+     "supports": [
+      "listed"
+     ]
+    }
+   ],
+   "relatedEvents": [],
+   "verificationStatus": "Verified",
+   "verified": [
+    "The Federal Register text states the scope, the operators and the expiry."
+   ],
+   "notVerified": [],
+   "confidenceNotes": "Applies to U.S. operators only. It is not a closure of the Tehran FIR for other airlines.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "RST-FAA-SFAR77-ORBB",
+   "eventType": "AIRSPACE_RESTRICTION",
+   "title": "FAA SFAR 77: prohibition below FL320 in the Baghdad FIR for U.S. operators",
+   "titleJa": "FAA SFAR 77：米国の運航者によるバグダッド FIR の FL320 未満での飛行の禁止",
+   "description": "SFAR No. 77 (14 CFR 91.1605) prohibits flight operations in the Baghdad FIR (ORBB) below FL320 by U.S. air carriers, commercial operators, FAA certificate holders and U.S.-registered aircraft (with the foreign air carrier exceptions). A final rule of 16 October 2024 extended it from 26 October 2024 to 26 October 2027.",
+   "issuingAuthority": "FAA",
+   "documentType": "Special Federal Aviation Regulation",
+   "documentId": "SFAR 77",
+   "revisionId": "extension published 2024-10-16",
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": null,
+     "local": "2024-10-16",
+     "tz": "America/New_York",
+     "precision": "date",
+     "basis": "Federal Register issue date of the extension",
+     "sourceId": "faa-sfar-77"
+    }
+   ],
+   "effectiveFrom": [],
+   "effectiveUntil": [
+    {
+     "utc": null,
+     "local": "2027-10-26",
+     "tz": null,
+     "precision": "date",
+     "basis": "expiration date set by the extension",
+     "sourceId": "faa-sfar-77"
+    }
+   ],
+   "firstVerifiedAt": "2026-03-01T07:35:43Z",
+   "coveredCountries": [
+    "IQ"
+   ],
+   "coveredFIRs": [
+    "ORBB"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": {
+    "scope": "us-operators",
+    "text": "U.S. air carriers and commercial operators, FAA certificate holders (except for foreign air carriers), U.S.-registered aircraft (except foreign air carriers)"
+   },
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": {
+    "lower": "SFC",
+    "upper": "FL320 (below)",
+    "text": "below FL320"
+   },
+   "closureScope": "operators",
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "faa-sfar-77",
+     "publisher": "FAA",
+     "sourceType": "authority",
+     "title": "SFAR 77: Prohibition Against Certain Flights in the Baghdad FIR (ORBB)",
+     "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/doc/SFAR_77.pdf",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:35Z",
+     "sha256": "2258d8c052550bbf8a8876fecd8d65b0cafa3a10ee57214cdb3af0c730082ce1",
+     "supports": [
+      "publication",
+      "effectiveUntil",
+      "affectedOperators",
+      "altitudeRestrictions",
+      "description"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260301",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-03-01)",
+     "url": "https://web.archive.org/web/20260301073543id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-03-01T07:35:43Z",
+     "retrievedAt": "2026-11-17T16:45:15Z",
+     "sha256": "78672362a878763d531b1d7317b042f74843b845075489adda28513d5041486e",
+     "supports": [
+      "listed"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260407",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-04-07)",
+     "url": "https://web.archive.org/web/20260407220620id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-04-07T22:06:20Z",
+     "retrievedAt": "2026-11-17T16:45:25Z",
+     "sha256": "19dec5d7f191b00120c31283ff1faee394e740ba731f3c8415080523a7e4c2e5",
+     "supports": [
+      "listed"
+     ]
+    }
+   ],
+   "relatedEvents": [],
+   "verificationStatus": "Verified",
+   "verified": [
+    "The Federal Register text states the scope, the altitude limit, the operators and the expiry."
+   ],
+   "notVerified": [],
+   "confidenceNotes": "U.S. operators only, below FL320 only.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "ADV-FAA-KICZ-A0016-20",
+   "eventType": "SAFETY_ADVISORY",
+   "title": "FAA KICZ A0016/20: advisory for the Persian Gulf and the Gulf of Oman (U.S. operators)",
+   "titleJa": "FAA KICZ A0016/20：ペルシャ湾・オマーン湾の上空に関する注意喚起（米国の運航者）",
+   "description": "Advisory NOTAM asking U.S. operators to exercise caution in the overwater airspace above the Persian Gulf and the Gulf of Oman in the Kuwait, Jeddah, Bahrain, Emirates and Muscat FIRs. It is a caution, not a prohibition.",
+   "issuingAuthority": "FAA",
+   "documentType": "KICZ NOTAM (advisory)",
+   "documentId": "KICZ A0016/20",
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": "2020-02-14T20:20:00Z",
+     "local": "14 FEB 20:20 2020",
+     "tz": "UTC",
+     "precision": "minute",
+     "basis": "'CREATED' line of the NOTAM",
+     "sourceId": "faa-kicz-a0016-20"
+    }
+   ],
+   "effectiveFrom": [
+    {
+     "utc": "2020-02-17T19:54:00Z",
+     "local": "17 FEB 19:54 2020",
+     "tz": "UTC",
+     "precision": "minute",
+     "basis": "validity line of the NOTAM",
+     "sourceId": "faa-kicz-a0016-20"
+    }
+   ],
+   "effectiveUntil": [
+    {
+     "utc": null,
+     "local": "PERM",
+     "tz": "UTC",
+     "precision": "unknown",
+     "basis": "'UNTIL PERM' (no end date)",
+     "sourceId": "faa-kicz-a0016-20"
+    }
+   ],
+   "firstVerifiedAt": "2026-02-12T09:22:21Z",
+   "coveredCountries": [],
+   "coveredFIRs": [
+    "OKAC",
+    "OEJD",
+    "OBBB",
+    "OMAE",
+    "OOMM"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": {
+    "scope": "us-operators",
+    "text": "U.S. air carriers and commercial operators, FAA certificate holders (except for foreign air carriers), U.S.-registered aircraft (except foreign air carriers)"
+   },
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": {
+    "lower": "SFC",
+    "upper": "UNL",
+    "text": "overwater airspace, surface to unlimited"
+   },
+   "closureScope": null,
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "faa-kicz-a0016-20",
+     "publisher": "FAA",
+     "sourceType": "authority",
+     "title": "KICZ NOTAM A0016/20: advisory, overwater airspace above the Persian Gulf and the Gulf of Oman",
+     "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/media/KICZ_A0016-20_Advisory_NOTAM-Persian_Gulf_and_Gulf_of_Oman.pdf",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:36Z",
+     "sha256": "616a75aceac8a3c978d0ec01daf07d4a2401bd53b7e87152870f0010bdca74bc",
+     "supports": [
+      "publication",
+      "effectiveFrom",
+      "effectiveUntil",
+      "affectedOperators",
+      "description"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260212",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-02-12)",
+     "url": "https://web.archive.org/web/20260212092221id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-02-12T09:22:21Z",
+     "retrievedAt": "2026-11-17T16:45:08Z",
+     "sha256": "f21a875aa0ed9195fec5d1d8e26f2edc540749d9e5d1aadf25bb0a8eb41eef31",
+     "supports": [
+      "listed"
+     ]
+    },
+    {
+     "sourceId": "faa-us-restrictions-20260407",
+     "publisher": "FAA",
+     "sourceType": "archive",
+     "title": "FAA Prohibitions, Restrictions and Notices (capture 2026-04-07)",
+     "url": "https://web.archive.org/web/20260407220620id_/https://www.faa.gov/air_traffic/publications/us_restrictions/",
+     "capturedAt": "2026-04-07T22:06:20Z",
+     "retrievedAt": "2026-11-17T16:45:25Z",
+     "sha256": "19dec5d7f191b00120c31283ff1faee394e740ba731f3c8415080523a7e4c2e5",
+     "supports": [
+      "listed"
+     ]
+    }
+   ],
+   "relatedEvents": [],
+   "verificationStatus": "Verified",
+   "verified": [
+    "The NOTAM text states its area, applicability and times (UTC, minute)."
+   ],
+   "notVerified": [],
+   "confidenceNotes": "Only the overwater parts of the FIRs; countries are not listed because the NOTAM names FIRs, not states.",
+   "supersedesEventId": null
+  },
+  {
+   "schemaVersion": 1,
+   "eventId": "ADV-FAA-KICZ-A0056-26",
+   "eventType": "SAFETY_ADVISORY",
+   "title": "FAA KICZ A0056/26: advisory for the Jeddah FIR (U.S. operators)",
+   "titleJa": "FAA KICZ A0056/26：ジッダ FIR に関する注意喚起（米国の運航者）",
+   "description": "Advisory NOTAM asking U.S. operators to exercise caution in the Jeddah FIR because of ongoing military activities and GNSS interference, at all altitudes.",
+   "issuingAuthority": "FAA",
+   "documentType": "KICZ NOTAM (advisory)",
+   "documentId": "KICZ A0056/26",
+   "revisionId": null,
+   "occurrence": [],
+   "publication": [
+    {
+     "utc": "2026-10-11T21:03:00Z",
+     "local": "11 OCT 2103 UTC 2026",
+     "tz": "UTC",
+     "precision": "minute",
+     "basis": "'CREATED' line",
+     "sourceId": "faa-kicz-a0056-26"
+    }
+   ],
+   "effectiveFrom": [
+    {
+     "utc": "2026-10-11T21:00:00Z",
+     "local": "11 OCT 2100 UTC 2026",
+     "tz": "UTC",
+     "precision": "minute",
+     "basis": "validity line",
+     "sourceId": "faa-kicz-a0056-26"
+    }
+   ],
+   "effectiveUntil": [
+    {
+     "utc": "2026-12-10T05:00:00Z",
+     "local": "10 DEC 0500 UTC 2026",
+     "tz": "UTC",
+     "precision": "minute",
+     "basis": "validity line",
+     "sourceId": "faa-kicz-a0056-26"
+    }
+   ],
+   "firstVerifiedAt": "2026-11-17T16:45:38Z",
+   "coveredCountries": [],
+   "coveredFIRs": [
+    "OEJD"
+   ],
+   "affectedAirports": [],
+   "affectedOperators": {
+    "scope": "us-operators",
+    "text": "U.S. air carriers and commercial operators, FAA certificate holders (except for foreign air carriers), U.S.-registered aircraft (except foreign air carriers)"
+   },
+   "affectedAircraftTypes": [],
+   "altitudeRestrictions": {
+    "lower": "SFC",
+    "upper": "UNL",
+    "text": "all altitudes"
+   },
+   "closureScope": null,
+   "geometry": null,
+   "sourceReferences": [
+    {
+     "sourceId": "faa-kicz-a0056-26",
+     "publisher": "FAA",
+     "sourceType": "authority",
+     "title": "KICZ NOTAM A0056/26: advisory, Jeddah FIR (OEJD)",
+     "url": "https://www.faa.gov/air_traffic/publications/us_restrictions/kicz_advisory_notam_a0056_26_oejd.pdf",
+     "capturedAt": null,
+     "retrievedAt": "2026-11-17T16:45:38Z",
+     "sha256": "51492ded28268f6b9485e1e41180c4d479b5da3c0093421b5cad41b3932f9e39",
+     "supports": [
+      "publication",
+      "effectiveFrom",
+      "effectiveUntil",
+      "affectedOperators",
+      "description"
+     ]
+    }
+   ],
+   "relatedEvents": [],
+   "verificationStatus": "Verified",
+   "verified": [
+    "The NOTAM text states its area, applicability and times."
+   ],
+   "notVerified": [],
+   "confidenceNotes": "Outside the observed period (from 11 October 2026).",
+   "supersedesEventId": null
+  }
+ ],
+ "rejected": [],
+ "notCaptured": [
+  {
+   "subject": "Israel: closure of the airspace on 28 February and the staged reopening",
+   "reason": "The press article found could not be downloaded (HTTP 403) and no Israel Airports Authority statement was captured.",
+   "file": "middle-east-2026.json"
+  },
+  {
+   "subject": "Bahrain: closure and reopening",
+   "reason": "No official or press document was captured (the link found was about Kuwait).",
+   "file": "middle-east-2026.json"
+  },
+  {
+   "subject": "Iran, Iraq, Jordan, Saudi Arabia, Oman: national closures or restrictions",
+   "reason": "Not searched in this phase.",
+   "file": "middle-east-2026.json"
+  },
+  {
+   "subject": "NOTAMs of the states (EUROCONTROL EAD)",
+   "reason": "EAD Basic requires registration; past NOTAMs are not available for redistribution. The service page returned HTTP 403 to the pipeline.",
+   "file": "middle-east-2026.json"
+  },
+  {
+   "subject": "FAA notices issued for the region during the crisis",
+   "reason": "The FAA restrictions page listed the same three Middle East documents in every capture from 12 February to 7 April 2026; NOTAMs not listed on that page were not searched.",
+   "file": "middle-east-2026.json"
+  }
+ ]
+}

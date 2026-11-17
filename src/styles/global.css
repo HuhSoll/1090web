@@ -2959,3 +2959,101 @@ input[type='range'] {
 .tl-label.tl-label-advisory {
   color: var(--warn);
 }
+
+/* ---------- research: event investigation (Phase 9H; existing tokens only) ---------- */
+.ei-filters .i-adv {
+  margin: 4px 0;
+}
+
+.ei-timeline {
+  max-width: 100%;
+}
+
+.ei-bar {
+  cursor: pointer;
+}
+
+.ei-bar.is-day rect {
+  stroke-dasharray: 3 2;
+}
+
+.ei-bar.is-unverified rect {
+  fill-opacity: 0.2;
+  stroke-dasharray: 2 2;
+}
+
+.ei-bar.is-selected rect {
+  stroke: var(--text);
+  stroke-width: 1.6;
+}
+
+.ei-overlap {
+  fill: var(--warn);
+  fill-opacity: 0.55;
+}
+
+.ei-hypo {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.2;
+}
+
+.ei-list {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ei-verify {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px 16px;
+}
+
+.ei-chip {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.i-swatch.ei-sw-exact {
+  background: var(--accent);
+}
+
+.i-swatch.ei-sw-day {
+  background: repeating-linear-gradient(135deg, var(--accent) 0 2px, transparent 2px 4px);
+  border-style: dashed;
+}
+
+.i-swatch.ei-sw-unverified {
+  background: rgba(127, 214, 255, 0.2);
+  border-style: dashed;
+}
+
+.i-swatch.ei-sw-overlap {
+  background: var(--warn);
+}
+
+.i-swatch.ei-sw-hypo {
+  background: none;
+  border: 1.2px solid var(--text-dim);
+}
+
+/* real events on the scenario timeline, by layer */
+.tl-bar-advisory.tl-real-A {
+  border-color: var(--danger);
+  background: repeating-linear-gradient(135deg, rgba(255, 122, 122, 0.22) 0 4px, transparent 4px 8px);
+}
+
+.tl-bar-advisory.tl-real-B {
+  border-color: var(--accent-warm);
+  background: repeating-linear-gradient(135deg, rgba(255, 210, 122, 0.22) 0 4px, transparent 4px 8px);
+}
+
+.tl-bar-advisory.tl-real-C {
+  border-color: var(--accent);
+  background: repeating-linear-gradient(135deg, rgba(127, 214, 255, 0.2) 0 4px, transparent 4px 8px);
+}
+
+.tl-bar-advisory.is-unverified {
+  opacity: 0.55;
+  border-style: dotted;
+}

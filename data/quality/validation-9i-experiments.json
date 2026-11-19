@@ -1,0 +1,1763 @@
+{
+ "conv-1024-1": {
+  "candidates": 3883,
+  "sysSpillStored": 0.2786,
+  "sysSpillTied": 0.5413,
+  "zeroSpillover": 2695,
+  "runs": [
+   {
+    "run": "baseline k=1024 seed 1",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "baseline k=1024 seed 1",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "conv-256-2": {
+  "candidates": 3883,
+  "sysSpillStored": 0.4021,
+  "sysSpillTied": 0.6341,
+  "zeroSpillover": 2945,
+  "runs": [
+   {
+    "run": "baseline k=256 seed 2",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "baseline k=256 seed 2",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "conv-256-3": {
+  "candidates": 3883,
+  "sysSpillStored": 0.5624,
+  "sysSpillTied": 0.6261,
+  "zeroSpillover": 2923,
+  "runs": [
+   {
+    "run": "baseline k=256 seed 3",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "baseline k=256 seed 3",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-exact-baseline": {
+  "candidates": 3883,
+  "sysSpillStored": 0.6798,
+  "sysSpillTied": 0.7606,
+  "zeroSpillover": 2484,
+  "runs": [
+   {
+    "run": "baseline (exact)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "baseline (exact)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-missing-regional": {
+  "candidates": 3883,
+  "sysSpillStored": 0.3053,
+  "sysSpillTied": 0.6358,
+  "zeroSpillover": 2912,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9921,
+    "tied": 0.9922
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.5321,
+    "tied": 0.9783
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9899,
+    "tied": 0.9899
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.4583,
+    "tied": 0.9739
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9944,
+    "tied": 0.9944
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.5251,
+    "tied": 0.9875
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9907,
+    "tied": 0.9907
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.4828,
+    "tied": 0.9806
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.989,
+    "tied": 0.9891
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.4635,
+    "tied": 0.9712
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9932,
+    "tied": 0.9932
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.7004,
+    "tied": 0.9807
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9906,
+    "tied": 0.9906
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.6306,
+    "tied": 0.9784
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9872,
+    "tied": 0.9872
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.6722,
+    "tied": 0.9736
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9904,
+    "tied": 0.9904
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.4859,
+    "tied": 0.9784
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9883,
+    "tied": 0.9883
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.6376,
+    "tied": 0.975
+   },
+   {
+    "run": "trial 11",
+    "metric": "systemic",
+    "stored": 0.9911,
+    "tied": 0.9912
+   },
+   {
+    "run": "trial 11",
+    "metric": "spillover",
+    "stored": 0.6608,
+    "tied": 0.9785
+   },
+   {
+    "run": "trial 12",
+    "metric": "systemic",
+    "stored": 0.9912,
+    "tied": 0.9911
+   },
+   {
+    "run": "trial 12",
+    "metric": "spillover",
+    "stored": 0.5857,
+    "tied": 0.9744
+   },
+   {
+    "run": "trial 13",
+    "metric": "systemic",
+    "stored": 0.9908,
+    "tied": 0.9908
+   },
+   {
+    "run": "trial 13",
+    "metric": "spillover",
+    "stored": 0.5855,
+    "tied": 0.9767
+   },
+   {
+    "run": "trial 14",
+    "metric": "systemic",
+    "stored": 0.9935,
+    "tied": 0.9935
+   },
+   {
+    "run": "trial 14",
+    "metric": "spillover",
+    "stored": 0.6598,
+    "tied": 0.9782
+   },
+   {
+    "run": "trial 15",
+    "metric": "systemic",
+    "stored": 0.9908,
+    "tied": 0.9908
+   },
+   {
+    "run": "trial 15",
+    "metric": "spillover",
+    "stored": 0.6129,
+    "tied": 0.9779
+   },
+   {
+    "run": "trial 16",
+    "metric": "systemic",
+    "stored": 0.9904,
+    "tied": 0.9904
+   },
+   {
+    "run": "trial 16",
+    "metric": "spillover",
+    "stored": 0.581,
+    "tied": 0.9769
+   },
+   {
+    "run": "trial 17",
+    "metric": "systemic",
+    "stored": 0.9919,
+    "tied": 0.9919
+   },
+   {
+    "run": "trial 17",
+    "metric": "spillover",
+    "stored": 0.5826,
+    "tied": 0.9769
+   },
+   {
+    "run": "trial 18",
+    "metric": "systemic",
+    "stored": 0.992,
+    "tied": 0.9921
+   },
+   {
+    "run": "trial 18",
+    "metric": "spillover",
+    "stored": 0.4961,
+    "tied": 0.9779
+   },
+   {
+    "run": "trial 19",
+    "metric": "systemic",
+    "stored": 0.9905,
+    "tied": 0.9905
+   },
+   {
+    "run": "trial 19",
+    "metric": "spillover",
+    "stored": 0.5112,
+    "tied": 0.9696
+   },
+   {
+    "run": "trial 20",
+    "metric": "systemic",
+    "stored": 0.9867,
+    "tied": 0.9867
+   },
+   {
+    "run": "trial 20",
+    "metric": "spillover",
+    "stored": 0.4739,
+    "tied": 0.9709
+   }
+  ],
+  "maxRunDifference": 0.5156
+ },
+ "march-missing-regional-exact": {
+  "candidates": 157,
+  "sysSpillStored": 0.9908,
+  "sysSpillTied": 0.9908,
+  "zeroSpillover": 0,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.994,
+    "tied": 0.994
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.9928,
+    "tied": 0.9928
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9854,
+    "tied": 0.9854
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.9836,
+    "tied": 0.9836
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9916,
+    "tied": 0.9916
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.9909,
+    "tied": 0.9909
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9884,
+    "tied": 0.9884
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.9878,
+    "tied": 0.9878
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.99,
+    "tied": 0.99
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.9909,
+    "tied": 0.9909
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9889,
+    "tied": 0.9889
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.9885,
+    "tied": 0.9885
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9875,
+    "tied": 0.9875
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.9841,
+    "tied": 0.9841
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9865,
+    "tied": 0.9865
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.9849,
+    "tied": 0.9849
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9907,
+    "tied": 0.9907
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.9889,
+    "tied": 0.9889
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9902,
+    "tied": 0.9902
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.9917,
+    "tied": 0.9917
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-missing-regional-exact-v2": {
+  "candidates": 157,
+  "sysSpillStored": 0.9908,
+  "sysSpillTied": 0.9908,
+  "zeroSpillover": 0,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9934,
+    "tied": 0.9934
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.9923,
+    "tied": 0.9923
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9866,
+    "tied": 0.9866
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.9849,
+    "tied": 0.9849
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9916,
+    "tied": 0.9916
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.9909,
+    "tied": 0.9909
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9884,
+    "tied": 0.9884
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.988,
+    "tied": 0.988
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.9904,
+    "tied": 0.9904
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.9914,
+    "tied": 0.9914
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.989,
+    "tied": 0.989
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.9887,
+    "tied": 0.9887
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9871,
+    "tied": 0.9871
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.9839,
+    "tied": 0.9839
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9867,
+    "tied": 0.9867
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.9855,
+    "tied": 0.9855
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9907,
+    "tied": 0.9907
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.9886,
+    "tied": 0.9886
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9902,
+    "tied": 0.9902
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.9917,
+    "tied": 0.9917
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-missing-route": {
+  "candidates": 3883,
+  "sysSpillStored": 0.3053,
+  "sysSpillTied": 0.6358,
+  "zeroSpillover": 2912,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9705,
+    "tied": 0.9704
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.53,
+    "tied": 0.9383
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9705,
+    "tied": 0.9706
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.5997,
+    "tied": 0.9248
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.975,
+    "tied": 0.975
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.5245,
+    "tied": 0.9254
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9654,
+    "tied": 0.9656
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.5462,
+    "tied": 0.9244
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.9658,
+    "tied": 0.9658
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.4919,
+    "tied": 0.9161
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9729,
+    "tied": 0.9729
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.5691,
+    "tied": 0.9278
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.967,
+    "tied": 0.9671
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.6151,
+    "tied": 0.9223
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9616,
+    "tied": 0.9616
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.6136,
+    "tied": 0.9257
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9656,
+    "tied": 0.9658
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.6409,
+    "tied": 0.9248
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9655,
+    "tied": 0.9656
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.5466,
+    "tied": 0.9241
+   },
+   {
+    "run": "trial 11",
+    "metric": "systemic",
+    "stored": 0.9657,
+    "tied": 0.9657
+   },
+   {
+    "run": "trial 11",
+    "metric": "spillover",
+    "stored": 0.6035,
+    "tied": 0.9233
+   },
+   {
+    "run": "trial 12",
+    "metric": "systemic",
+    "stored": 0.9674,
+    "tied": 0.9675
+   },
+   {
+    "run": "trial 12",
+    "metric": "spillover",
+    "stored": 0.4493,
+    "tied": 0.9173
+   },
+   {
+    "run": "trial 13",
+    "metric": "systemic",
+    "stored": 0.9674,
+    "tied": 0.967
+   },
+   {
+    "run": "trial 13",
+    "metric": "spillover",
+    "stored": 0.5034,
+    "tied": 0.9218
+   },
+   {
+    "run": "trial 14",
+    "metric": "systemic",
+    "stored": 0.9691,
+    "tied": 0.9691
+   },
+   {
+    "run": "trial 14",
+    "metric": "spillover",
+    "stored": 0.5821,
+    "tied": 0.929
+   },
+   {
+    "run": "trial 15",
+    "metric": "systemic",
+    "stored": 0.9662,
+    "tied": 0.9661
+   },
+   {
+    "run": "trial 15",
+    "metric": "spillover",
+    "stored": 0.5721,
+    "tied": 0.9199
+   },
+   {
+    "run": "trial 16",
+    "metric": "systemic",
+    "stored": 0.9722,
+    "tied": 0.9722
+   },
+   {
+    "run": "trial 16",
+    "metric": "spillover",
+    "stored": 0.5917,
+    "tied": 0.9314
+   },
+   {
+    "run": "trial 17",
+    "metric": "systemic",
+    "stored": 0.9702,
+    "tied": 0.9704
+   },
+   {
+    "run": "trial 17",
+    "metric": "spillover",
+    "stored": 0.4544,
+    "tied": 0.9243
+   },
+   {
+    "run": "trial 18",
+    "metric": "systemic",
+    "stored": 0.9754,
+    "tied": 0.9752
+   },
+   {
+    "run": "trial 18",
+    "metric": "spillover",
+    "stored": 0.5263,
+    "tied": 0.9274
+   },
+   {
+    "run": "trial 19",
+    "metric": "systemic",
+    "stored": 0.9705,
+    "tied": 0.9704
+   },
+   {
+    "run": "trial 19",
+    "metric": "spillover",
+    "stored": 0.5481,
+    "tied": 0.9121
+   },
+   {
+    "run": "trial 20",
+    "metric": "systemic",
+    "stored": 0.9641,
+    "tied": 0.9641
+   },
+   {
+    "run": "trial 20",
+    "metric": "spillover",
+    "stored": 0.5592,
+    "tied": 0.9135
+   }
+  ],
+  "maxRunDifference": 0.4699
+ },
+ "march-missing-route-exact": {
+  "candidates": 157,
+  "sysSpillStored": 0.9908,
+  "sysSpillTied": 0.9908,
+  "zeroSpillover": 0,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9661,
+    "tied": 0.9661
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.9665,
+    "tied": 0.9665
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9641,
+    "tied": 0.9641
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.9617,
+    "tied": 0.9617
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9744,
+    "tied": 0.9744
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.9726,
+    "tied": 0.9726
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9656,
+    "tied": 0.9656
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.9625,
+    "tied": 0.9625
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.9633,
+    "tied": 0.9633
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.9601,
+    "tied": 0.9601
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9714,
+    "tied": 0.9714
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.9687,
+    "tied": 0.9687
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9702,
+    "tied": 0.9702
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.9678,
+    "tied": 0.9678
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9568,
+    "tied": 0.9568
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.9567,
+    "tied": 0.9567
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9762,
+    "tied": 0.9762
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.9725,
+    "tied": 0.9725
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9695,
+    "tied": 0.9695
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.9701,
+    "tied": 0.9701
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-missing-uniform": {
+  "candidates": 3883,
+  "sysSpillStored": 0.3053,
+  "sysSpillTied": 0.6358,
+  "zeroSpillover": 2912,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9911,
+    "tied": 0.9911
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.4988,
+    "tied": 0.9749
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.9923,
+    "tied": 0.9923
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.6201,
+    "tied": 0.9704
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9923,
+    "tied": 0.9923
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.4845,
+    "tied": 0.9793
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9911,
+    "tied": 0.9911
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.6226,
+    "tied": 0.9772
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.9899,
+    "tied": 0.9899
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.5236,
+    "tied": 0.9683
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9898,
+    "tied": 0.9898
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.51,
+    "tied": 0.976
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9917,
+    "tied": 0.9917
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.5992,
+    "tied": 0.9717
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9881,
+    "tied": 0.988
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.5651,
+    "tied": 0.9691
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9926,
+    "tied": 0.9926
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.5129,
+    "tied": 0.9825
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9883,
+    "tied": 0.9883
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.6076,
+    "tied": 0.9701
+   },
+   {
+    "run": "trial 11",
+    "metric": "systemic",
+    "stored": 0.9924,
+    "tied": 0.9924
+   },
+   {
+    "run": "trial 11",
+    "metric": "spillover",
+    "stored": 0.5683,
+    "tied": 0.9756
+   },
+   {
+    "run": "trial 12",
+    "metric": "systemic",
+    "stored": 0.9891,
+    "tied": 0.9891
+   },
+   {
+    "run": "trial 12",
+    "metric": "spillover",
+    "stored": 0.618,
+    "tied": 0.9651
+   },
+   {
+    "run": "trial 13",
+    "metric": "systemic",
+    "stored": 0.9879,
+    "tied": 0.988
+   },
+   {
+    "run": "trial 13",
+    "metric": "spillover",
+    "stored": 0.6505,
+    "tied": 0.9661
+   },
+   {
+    "run": "trial 14",
+    "metric": "systemic",
+    "stored": 0.9944,
+    "tied": 0.9944
+   },
+   {
+    "run": "trial 14",
+    "metric": "spillover",
+    "stored": 0.5841,
+    "tied": 0.9739
+   },
+   {
+    "run": "trial 15",
+    "metric": "systemic",
+    "stored": 0.9925,
+    "tied": 0.9924
+   },
+   {
+    "run": "trial 15",
+    "metric": "spillover",
+    "stored": 0.6908,
+    "tied": 0.9723
+   },
+   {
+    "run": "trial 16",
+    "metric": "systemic",
+    "stored": 0.9915,
+    "tied": 0.9915
+   },
+   {
+    "run": "trial 16",
+    "metric": "spillover",
+    "stored": 0.4676,
+    "tied": 0.9708
+   },
+   {
+    "run": "trial 17",
+    "metric": "systemic",
+    "stored": 0.9901,
+    "tied": 0.9901
+   },
+   {
+    "run": "trial 17",
+    "metric": "spillover",
+    "stored": 0.5545,
+    "tied": 0.973
+   },
+   {
+    "run": "trial 18",
+    "metric": "systemic",
+    "stored": 0.9924,
+    "tied": 0.9924
+   },
+   {
+    "run": "trial 18",
+    "metric": "spillover",
+    "stored": 0.5481,
+    "tied": 0.9699
+   },
+   {
+    "run": "trial 19",
+    "metric": "systemic",
+    "stored": 0.9914,
+    "tied": 0.9914
+   },
+   {
+    "run": "trial 19",
+    "metric": "spillover",
+    "stored": 0.5933,
+    "tied": 0.967
+   },
+   {
+    "run": "trial 20",
+    "metric": "systemic",
+    "stored": 0.9864,
+    "tied": 0.9864
+   },
+   {
+    "run": "trial 20",
+    "metric": "spillover",
+    "stored": 0.5874,
+    "tied": 0.9629
+   }
+  ],
+  "maxRunDifference": 0.5032
+ },
+ "march-missing-uniform-exact": {
+  "candidates": 157,
+  "sysSpillStored": 0.9908,
+  "sysSpillTied": 0.9908,
+  "zeroSpillover": 0,
+  "runs": [
+   {
+    "run": "reference (no added missingness)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "reference (no added missingness)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "trial 1",
+    "metric": "systemic",
+    "stored": 0.9954,
+    "tied": 0.9954
+   },
+   {
+    "run": "trial 1",
+    "metric": "spillover",
+    "stored": 0.9947,
+    "tied": 0.9947
+   },
+   {
+    "run": "trial 2",
+    "metric": "systemic",
+    "stored": 0.989,
+    "tied": 0.989
+   },
+   {
+    "run": "trial 2",
+    "metric": "spillover",
+    "stored": 0.987,
+    "tied": 0.987
+   },
+   {
+    "run": "trial 3",
+    "metric": "systemic",
+    "stored": 0.9901,
+    "tied": 0.9901
+   },
+   {
+    "run": "trial 3",
+    "metric": "spillover",
+    "stored": 0.9901,
+    "tied": 0.9901
+   },
+   {
+    "run": "trial 4",
+    "metric": "systemic",
+    "stored": 0.9897,
+    "tied": 0.9897
+   },
+   {
+    "run": "trial 4",
+    "metric": "spillover",
+    "stored": 0.9894,
+    "tied": 0.9894
+   },
+   {
+    "run": "trial 5",
+    "metric": "systemic",
+    "stored": 0.9926,
+    "tied": 0.9926
+   },
+   {
+    "run": "trial 5",
+    "metric": "spillover",
+    "stored": 0.9922,
+    "tied": 0.9922
+   },
+   {
+    "run": "trial 6",
+    "metric": "systemic",
+    "stored": 0.9915,
+    "tied": 0.9915
+   },
+   {
+    "run": "trial 6",
+    "metric": "spillover",
+    "stored": 0.9909,
+    "tied": 0.9909
+   },
+   {
+    "run": "trial 7",
+    "metric": "systemic",
+    "stored": 0.9857,
+    "tied": 0.9857
+   },
+   {
+    "run": "trial 7",
+    "metric": "spillover",
+    "stored": 0.9837,
+    "tied": 0.9837
+   },
+   {
+    "run": "trial 8",
+    "metric": "systemic",
+    "stored": 0.9893,
+    "tied": 0.9893
+   },
+   {
+    "run": "trial 8",
+    "metric": "spillover",
+    "stored": 0.9883,
+    "tied": 0.9883
+   },
+   {
+    "run": "trial 9",
+    "metric": "systemic",
+    "stored": 0.9896,
+    "tied": 0.9896
+   },
+   {
+    "run": "trial 9",
+    "metric": "spillover",
+    "stored": 0.988,
+    "tied": 0.988
+   },
+   {
+    "run": "trial 10",
+    "metric": "systemic",
+    "stored": 0.9892,
+    "tied": 0.9892
+   },
+   {
+    "run": "trial 10",
+    "metric": "spillover",
+    "stored": 0.9899,
+    "tied": 0.9899
+   }
+  ],
+  "maxRunDifference": 0.0
+ },
+ "march-sensitivity": {
+  "candidates": 3883,
+  "sysSpillStored": 0.3053,
+  "sysSpillTied": 0.6358,
+  "zeroSpillover": 2912,
+  "runs": [
+   {
+    "run": "T1-T4 min1 (baseline)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "T1-T4 min1 (baseline)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "T1-T4 min4",
+    "metric": "systemic",
+    "stored": 0.6534,
+    "tied": 0.6528
+   },
+   {
+    "run": "T1-T4 min4",
+    "metric": "spillover",
+    "stored": 0.3228,
+    "tied": 0.7398
+   },
+   {
+    "run": "T1-T4 min10",
+    "metric": "systemic",
+    "stored": 0.5634,
+    "tied": 0.5633
+   },
+   {
+    "run": "T1-T4 min10",
+    "metric": "spillover",
+    "stored": 0.2669,
+    "tied": 0.6727
+   },
+   {
+    "run": "T1-T3 min1",
+    "metric": "systemic",
+    "stored": 0.6406,
+    "tied": 0.6336
+   },
+   {
+    "run": "T1-T3 min1",
+    "metric": "spillover",
+    "stored": 0.5105,
+    "tied": 0.8184
+   },
+   {
+    "run": "T1-T3 min4",
+    "metric": "systemic",
+    "stored": 0.5786,
+    "tied": 0.5786
+   },
+   {
+    "run": "T1-T3 min4",
+    "metric": "spillover",
+    "stored": 0.333,
+    "tied": 0.6827
+   },
+   {
+    "run": "T1-T3 min10",
+    "metric": "systemic",
+    "stored": 0.525,
+    "tied": 0.5275
+   },
+   {
+    "run": "T1-T3 min10",
+    "metric": "spillover",
+    "stored": 0.3777,
+    "tied": 0.6233
+   },
+   {
+    "run": "T1 min1",
+    "metric": "systemic",
+    "stored": 0.5277,
+    "tied": 0.5278
+   },
+   {
+    "run": "T1 min1",
+    "metric": "spillover",
+    "stored": 0.3968,
+    "tied": 0.7601
+   },
+   {
+    "run": "T1 min4",
+    "metric": "systemic",
+    "stored": 0.531,
+    "tied": 0.5336
+   },
+   {
+    "run": "T1 min4",
+    "metric": "spillover",
+    "stored": 0.3264,
+    "tied": 0.637
+   },
+   {
+    "run": "T1 min10",
+    "metric": "systemic",
+    "stored": 0.5257,
+    "tied": 0.5303
+   },
+   {
+    "run": "T1 min10",
+    "metric": "spillover",
+    "stored": 0.1349,
+    "tied": 0.5803
+   },
+   {
+    "run": "undirected",
+    "metric": "systemic",
+    "stored": 0.9462,
+    "tied": 0.9462
+   },
+   {
+    "run": "undirected",
+    "metric": "spillover",
+    "stored": 0.5209,
+    "tied": 0.8968
+   },
+   {
+    "run": "passenger only",
+    "metric": "systemic",
+    "stored": 0.5943,
+    "tied": 0.6013
+   },
+   {
+    "run": "passenger only",
+    "metric": "spillover",
+    "stored": 0.359,
+    "tied": 0.6968
+   },
+   {
+    "run": "track-start time only",
+    "metric": "systemic",
+    "stored": 0.8362,
+    "tied": 0.8362
+   },
+   {
+    "run": "track-start time only",
+    "metric": "spillover",
+    "stored": 0.5623,
+    "tied": 0.8974
+   },
+   {
+    "run": "first half (1-15 Mar)",
+    "metric": "systemic",
+    "stored": 0.7471,
+    "tied": 0.7469
+   },
+   {
+    "run": "first half (1-15 Mar)",
+    "metric": "spillover",
+    "stored": 0.4774,
+    "tied": 0.8285
+   }
+  ],
+  "maxRunDifference": 0.4454
+ },
+ "march-sensitivity-exact": {
+  "candidates": 157,
+  "sysSpillStored": 0.9908,
+  "sysSpillTied": 0.9908,
+  "zeroSpillover": 0,
+  "runs": [
+   {
+    "run": "T1-T4 min1 (baseline)",
+    "metric": "systemic",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "T1-T4 min1 (baseline)",
+    "metric": "spillover",
+    "stored": 1.0,
+    "tied": 1.0
+   },
+   {
+    "run": "T1-T4 min4",
+    "metric": "systemic",
+    "stored": 0.8644,
+    "tied": 0.8644
+   },
+   {
+    "run": "T1-T4 min4",
+    "metric": "spillover",
+    "stored": 0.8609,
+    "tied": 0.8609
+   },
+   {
+    "run": "T1-T4 min10",
+    "metric": "systemic",
+    "stored": 0.8143,
+    "tied": 0.8143
+   },
+   {
+    "run": "T1-T4 min10",
+    "metric": "spillover",
+    "stored": 0.7982,
+    "tied": 0.7983
+   },
+   {
+    "run": "T1-T3 min1",
+    "metric": "systemic",
+    "stored": 0.6036,
+    "tied": 0.6036
+   },
+   {
+    "run": "T1-T3 min1",
+    "metric": "spillover",
+    "stored": 0.5927,
+    "tied": 0.5926
+   },
+   {
+    "run": "T1-T3 min4",
+    "metric": "systemic",
+    "stored": 0.55,
+    "tied": 0.55
+   },
+   {
+    "run": "T1-T3 min4",
+    "metric": "spillover",
+    "stored": 0.5357,
+    "tied": 0.5361
+   },
+   {
+    "run": "T1-T3 min10",
+    "metric": "systemic",
+    "stored": 0.5238,
+    "tied": 0.5238
+   },
+   {
+    "run": "T1-T3 min10",
+    "metric": "spillover",
+    "stored": 0.4992,
+    "tied": 0.5017
+   },
+   {
+    "run": "T1 min1",
+    "metric": "systemic",
+    "stored": 0.2338,
+    "tied": 0.2338
+   },
+   {
+    "run": "T1 min1",
+    "metric": "spillover",
+    "stored": 0.2178,
+    "tied": 0.2225
+   },
+   {
+    "run": "T1 min4",
+    "metric": "systemic",
+    "stored": 0.2385,
+    "tied": 0.2385
+   },
+   {
+    "run": "T1 min4",
+    "metric": "spillover",
+    "stored": 0.2382,
+    "tied": 0.24
+   },
+   {
+    "run": "T1 min10",
+    "metric": "systemic",
+    "stored": 0.2305,
+    "tied": 0.2305
+   },
+   {
+    "run": "T1 min10",
+    "metric": "spillover",
+    "stored": 0.2518,
+    "tied": 0.2222
+   },
+   {
+    "run": "undirected",
+    "metric": "systemic",
+    "stored": 0.9344,
+    "tied": 0.9344
+   },
+   {
+    "run": "undirected",
+    "metric": "spillover",
+    "stored": 0.9305,
+    "tied": 0.9305
+   },
+   {
+    "run": "passenger only",
+    "metric": "systemic",
+    "stored": 0.8285,
+    "tied": 0.8285
+   },
+   {
+    "run": "passenger only",
+    "metric": "spillover",
+    "stored": 0.8091,
+    "tied": 0.809
+   },
+   {
+    "run": "track-start time only",
+    "metric": "systemic",
+    "stored": 0.9711,
+    "tied": 0.9711
+   },
+   {
+    "run": "track-start time only",
+    "metric": "spillover",
+    "stored": 0.967,
+    "tied": 0.967
+   },
+   {
+    "run": "first half (1-15 Mar)",
+    "metric": "systemic",
+    "stored": 0.8856,
+    "tied": 0.8856
+   },
+   {
+    "run": "first half (1-15 Mar)",
+    "metric": "spillover",
+    "stored": 0.8795,
+    "tied": 0.8795
+   }
+  ],
+  "maxRunDifference": 0.0296
+ }
+}

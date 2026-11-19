@@ -1,0 +1,148 @@
+{
+ "duplicateMeshCodes": 0,
+ "islands": {
+  "miyako": {
+   "meshes": 47676,
+   "meta": 47676
+  },
+  "irabu": {
+   "meshes": 4489,
+   "meta": 4489
+  },
+  "shimoji": {
+   "meshes": 93,
+   "meta": 93
+  },
+  "ikema": {
+   "meshes": 511,
+   "meta": 511
+  },
+  "kurima": {
+   "meshes": 139,
+   "meta": 139
+  },
+  "ishigaki": {
+   "meshes": 47637,
+   "meta": 47637
+  },
+  "iriomote": {
+   "meshes": 2226,
+   "meta": 2226
+  },
+  "yonaguni": {
+   "meshes": 1676,
+   "meta": 1676
+  },
+  "tarama": {
+   "meshes": 1054,
+   "meta": 1054
+  },
+  "minamidaito": {
+   "meshes": 1285,
+   "meta": 1285
+  },
+  "kitadaito": {
+   "meshes": 590,
+   "meta": 590
+  }
+ },
+ "cases": {
+  "ISG": {
+   "daily": {
+    "lost": 49822,
+    "byIsland": {
+     "iriomote": 2185,
+     "ishigaki": 47637
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  },
+  "MMY": {
+   "daily": {
+    "lost": 1054,
+    "byIsland": {
+     "tarama": 1054
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  },
+  "OGN": {
+   "daily": {
+    "lost": 1676,
+    "byIsland": {
+     "yonaguni": 1676
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  },
+  "TRA": {
+   "daily": {
+    "lost": 1054,
+    "byIsland": {
+     "tarama": 1054
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  },
+  "MMD": {
+   "daily": {
+    "lost": 1285,
+    "byIsland": {
+     "minamidaito": 1285
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  },
+  "KTD": {
+   "daily": {
+    "lost": 590,
+    "byIsland": {
+     "kitadaito": 590
+    }
+   },
+   "weekly": {
+    "lost": 0,
+    "byIsland": {}
+   },
+   "any": {
+    "lost": 0,
+    "byIsland": {}
+   }
+  }
+ }
+}

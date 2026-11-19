@@ -563,10 +563,27 @@ function Summary({ r }: { r: StudyResult }) {
 function Timing({ r }: { r: StudyResult }) {
   const { t } = useI18n();
   const f = useFormat();
-  const tr = (x: StudyResult['ratioPreTrend']) => (x ? t('ev.trendCell', { c: pct(x.impliedChange, f), tv: f.dec(x.t, 2) }) : t('ev.tooFew'));
+  const tr = (x: StudyResult['ratioPreTrend']) => (x ? t('ev.trendCellHac', { c: pct(x.impliedChange, f), tv: f.dec(x.t, 2), to: f.dec(x.tOls, 2) }) : t('ev.tooFew'));
   const pl = r.placebo;
+  const w = r.windows;
+  const at = (ms: number) => { const v = r.series.flights.area[Math.round((ms - r.series.startMs) / DAY)]; return v === undefined ? '—' : f.int(v); };
+  const largest = pl.placebos.reduce<number | null>((m, p) => (m === null || Math.abs(p.logChange) > Math.abs(m) ? p.logChange : m), null);
+  const did = r.did;
+  const didLarge = did.placebos.filter((x) => Math.abs(x) >= Math.abs(did.logDifference)).length;
   return (
     <>
+      <h4 className="small">{t('ev.phases')}</h4>
+      <table className="r-table r-compact">
+        <tbody>
+          <tr><td>{t('ev.phase.before', { s: day(w.before.startMs), e: day(w.before.endMs - DAY) })}</td><td className="num">{f.dec(r.beforeAfter.area.beforeMean, 0)}</td><td className="small">{r.preTrend.area ? t('ev.phase.trend', { c: pct(r.preTrend.area.impliedChange, f) }) : ''}</td></tr>
+          <tr><td>{t('ev.phase.lastBefore', { d: day(w.eventDayMs - DAY) })}</td><td className="num">{at(w.eventDayMs - DAY)}</td><td /></tr>
+          <tr><td>{t('ev.phase.event', { d: day(w.eventDayMs) })}</td><td className="num">{at(w.eventDayMs)}</td><td className="small">{t('ev.phase.eventNote')}</td></tr>
+          <tr><td>{t('ev.phase.firstAfter', { d: day(w.after.startMs) })}</td><td className="num">{at(w.after.startMs)}</td><td /></tr>
+          <tr><td>{t('ev.phase.after', { s: day(w.after.startMs), e: day(w.after.endMs - DAY) })}</td><td className="num">{f.dec(r.beforeAfter.area.afterMean, 0)}</td><td /></tr>
+        </tbody>
+      </table>
+      <p className="small x-dim">{t('ev.phaseNote')}</p>
+      <h4 className="small">{t('ev.timing')}</h4>
       <table className="r-table r-compact">
         <thead><tr><th>{t('ev.col.series')}</th><th className="num">{t('ev.col.preTrend')}</th><th className="num">{t('ev.col.change')}</th></tr></thead>
         <tbody>
@@ -576,13 +593,24 @@ function Timing({ r }: { r: StudyResult }) {
       </table>
       <p className="small x-dim">{t('ev.preTrendNote')}</p>
       <h4 className="small">{t('ev.placebo')}</h4>
-      <p className="small">{pl.placebos.length ? t('ev.placeboLine', { n: pl.placebos.length, share: f.pct(pl.shareAsLarge ?? 0, 0), a: pct(Math.exp(pl.actual) - 1, f), max: pct(Math.exp(Math.max(...pl.placebos.map((p) => Math.abs(p.logChange)))) - 1, f) }) : t('ev.placeboNone')}</p>
+      <p className="small">{pl.placebos.length
+        ? t('ev.placeboCount', { k: pl.asLarge, n: pl.placebos.length, tried: pl.tried, o: pl.overlapping, a: pct(Math.exp(pl.actual) - 1, f), max: largest === null ? '—' : pct(Math.exp(largest) - 1, f) })
+        : t('ev.placeboNone')}</p>
       <p className="small x-dim">{pl.placebos.map((p) => `${day(p.dayMs)} ${pct(Math.exp(p.logChange) - 1, f)}`).join(' · ')}</p>
-      <h4 className="small">{t('ev.did')}</h4>
-      {r.did.estimate !== null
-        ? <p className="small">{t('ev.didValue', { v: pct(Math.exp(r.did.estimate) - 1, f) })}</p>
-        : <p className="small">{t('ev.didNone', { v: pct(Math.exp(r.did.logDifference) - 1, f) })}</p>}
-      <ul className="r-mini">{r.did.conditions.map((c) => <li key={c.id} className={c.ok ? '' : 'r-warn-text'}>{c.ok ? '✓' : '×'} {t(`ev.cond.${c.id}` as MessageKey)}: {c.detail}</li>)}</ul>
+      {pl.placebos.length > 0 && <p className="small x-dim">{t('ev.placeboNote', { n: pl.placebos.length, min: f.pct(1 / (pl.placebos.length + 1), 0) })}</p>}
+      <h4 className="small">{t('ev.didDesc')}</h4>
+      <p className="small">{t('ev.didDescValue', { v: pct(Math.exp(did.logDifference) - 1, f), c: pct(Math.exp(did.comparisonLogChange) - 1, f), lvl: did.levelRatioBefore === null ? '—' : f.dec(did.levelRatioBefore, 2) })}</p>
+      <p className="small x-dim">{t('ev.didPlacebo', { k: didLarge, n: did.placebos.length })}</p>
+      <h4 className="small">{t('ev.checksTitle')}</h4>
+      <ul className="r-mini">{did.conditions.map((c) => <li key={c.id} className={c.ok ? '' : 'r-warn-text'}>{c.ok ? '✓' : '×'} {t(`ev.cond.${c.id}` as MessageKey)}: {c.detail}</li>)}</ul>
+      <h4 className="small">{t('ev.unchecked')}</h4>
+      <ul className="r-mini">
+        <li>{t('ev.unchecked.comparison', { c: pct(Math.exp(did.comparisonLogChange) - 1, f) })}</li>
+        <li>{t('ev.unchecked.season')}</li>
+        <li>{t('ev.unchecked.concurrent')}</li>
+        <li>{t('ev.unchecked.coverage')}</li>
+        <li>{t('ev.unchecked.power')}</li>
+      </ul>
       <p className="small x-dim">{t('ev.causalNote')}</p>
     </>
   );

@@ -1,6 +1,20 @@
 /// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+
+/** Build stamp shown with research results (Phase 9I): package version and git commit. */
+function buildStamp(): { version: string; commit: string | null; builtAt: string } {
+  const version = (JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf-8')) as { version: string }).version;
+  let commit: string | null;
+  try {
+    commit = execSync('git rev-parse --short=12 HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || null;
+  } catch {
+    commit = null;
+  }
+  return { version, commit, builtAt: new Date().toISOString().slice(0, 19) + 'Z' };
+}
 
 /**
  * GitHub Pages serves project sites from a sub path (https://<user>.github.io/<repo>/).
@@ -31,6 +45,7 @@ function siteUrlPlugin(): Plugin {
 export default defineConfig({
   base: resolveBase(),
   plugins: [react(), siteUrlPlugin()],
+  define: { __APP_BUILD__: JSON.stringify(buildStamp()) },
   build: {
     target: 'es2022',
     sourcemap: true,

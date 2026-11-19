@@ -74,7 +74,7 @@
 
 - 勧告の発行・改訂の履歴を版ごとに保存しています。EASA は最新版しか公開していないため、過去の版は Internet Archive の保存版で確認し、確認できない版は補完しません
 - 前後 7・14・28・30 日の比較（UTC の日、イベント日は除外）、対象地域内・地域と地域外・周辺国・比較対象群の推移、空港・路線・航空会社別の変化を表示します
-- 変化が勧告の前から始まっていなかったか（イベント前の傾き）、ほかの日にも同じような変化があるか（プラセボ）を確認し、条件を満たすときだけ差分の差分を示します
+- 変化が勧告の前から始まっていなかったか（イベント前の傾き。日ごとの自己相関を考慮）、ほかの日にも同じような変化があるか（プラセボ。件数を併記）を確認します。比較対象群に対する変化は記述的な値として示し、効果の推定値としては扱いません（Phase 9I）
 - 観測された変化と、対象地域の空港を仮想的に止めたシミュレーションを並べて比べられます。シミュレーションのタイムラインにも実際の勧告を表示できます
 
 勧告は空域閉鎖・空港閉鎖ではなく、この機能は何も停止させません。結果は観測された変化の記述で、勧告の効果を示すものではありません。使い方は [docs/historical-events-guide.md](docs/historical-events-guide.md)、計算方法は [docs/historical-events-methodology.md](docs/historical-events-methodology.md)、出典は [docs/historical-event-sources.md](docs/historical-event-sources.md)、結果は [docs/phase9g-report.md](docs/phase9g-report.md) にあります。
@@ -90,6 +90,19 @@
 - 初期のケースは 2026年2〜3月の中東（UAE・カタール・クウェートの措置、FAA の SFAR と NOTAM、EASA CZIB 2026-03）です
 
 時間的に近いことは原因を意味せず、勧告・制限・閉鎖を空港の停止に自動で変えることもしません。使い方は [docs/event-intelligence-guide.md](docs/event-intelligence-guide.md)、計算方法は [docs/event-intelligence-methodology.md](docs/event-intelligence-methodology.md)、出典は [docs/event-intelligence-sources.md](docs/event-intelligence-sources.md)、結果は [docs/phase9h-report.md](docs/phase9h-report.md) にあります。
+
+## 研究結果の検証と研究成果
+
+研究モードの最初の「はじめに」タブでは、調べたいこと（重要な空港、空港の停止、データの不完全さ、離島の住民、実際の航空危機、研究成果）から各機能へ進めます。表示中のデータセット・計算方法・アプリの版もここで確認できます。
+
+「研究成果」タブでは、Phase 9A〜9H の主な主張を一覧にしています。
+
+- 各成果には、根拠・条件・限界・検証状態（検証済み・条件付きで支持・予備的・要再検証・支持されない）を記しています。
+- 成果を選ぶと、元の分析を開けます。
+- 主な数値は、別の実装（`pipeline/validation/`）で計算し直して確かめています。
+- 誤りが見つかった主張は、消さずに「支持されない」として残し、元の報告に訂正を追記しています。
+
+検証の記録は [docs/research-validation.md](docs/research-validation.md)、成果の一覧は [docs/research-findings.md](docs/research-findings.md)、再現の方法は [docs/research-reproducibility.md](docs/research-reproducibility.md)、用語集は [docs/research-glossary.md](docs/research-glossary.md)、結果は [docs/phase9i-report.md](docs/phase9i-report.md) にあります。
 
 ## これから
 

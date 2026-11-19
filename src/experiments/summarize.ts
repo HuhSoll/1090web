@@ -8,6 +8,7 @@
  * describe the spread under the ASSUMED missingness, they are not confidence intervals.
  */
 import { kendallTauB, spearman } from '../research/stats';
+import { APP_BUILD } from '../app/build';
 import { rankValue } from './criticality';
 import {
   METHOD_VERSION, METRICS, RESULT_FORMAT, SCHEMA_VERSION,
@@ -102,8 +103,10 @@ export function summarize(
     const present = r.candidates.map((a) => idx.get(a)!).filter((i) => i !== undefined);
     const both = present.filter((i) => refPresent.has(i));
     const cmp = (metric: Metric) => {
-      const x = Array.from(ref[metric]);
-      const y = Array.from(full[j]![metric]);
+      // rank correlations on the values the ranks use (9e.2): impacts that are zero in exact
+      // arithmetic come out as +-1e-17 and must tie, not be ordered by floating-point noise
+      const x = Array.from(ref[metric], rankValue);
+      const y = Array.from(full[j]![metric], rankValue);
       const entry: Record<string, number | null> = {
         spearman: round(spearman(x, y), 4),
         kendall: round(kendallTauB(x, y), 4),
@@ -121,8 +124,8 @@ export function summarize(
     void _v;
     return { ...rest, comparison: { systemic: cmp('systemicDrop'), spillover: cmp('spilloverDrop') }, absent: C - present.length };
   });
-  const sx = Array.from(ref.systemicDrop);
-  const sp = Array.from(ref.spilloverDrop);
+  const sx = Array.from(ref.systemicDrop, rankValue);
+  const sp = Array.from(ref.spilloverDrop, rankValue);
   const sysSpill: Record<string, number | null> = { spearman: round(spearman(sx, sp), 4), kendall: round(kendallTauB(sx, sp), 4) };
   for (const k of d.topK) sysSpill[`top${k}`] = round(topkOverlap(sx, sp, k)[0], 4);
   const trials = runs.map((r, i) => (r.kind === 'trial' ? i : -1)).filter((i) => i >= 0);
@@ -164,6 +167,7 @@ export function summarize(
     dataset,
     createdAt: new Date().toISOString(),
     source,
+    environment: { runtime: 'browser', app: { version: APP_BUILD.version, commit: APP_BUILD.commit } },
     computation: {
       exact: runs.every((r) => r.exact),
       sources: [...new Set(runs.map((r) => r.sources))].sort((x, y) => x - y),

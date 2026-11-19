@@ -1,0 +1,308 @@
+{
+ "format": "1090web-findings",
+ "schemaVersion": 1,
+ "updatedAt": "2026-11-19",
+ "note": "Research findings of Phases 9A-9H as audited in Phase 9I. 'Validated' means checked for the stated data, conditions and scope (independent computation or a full re-check), not that the statement is true of the real world.",
+ "findings": [
+  {
+   "findingId": "F-9E-TIERS",
+   "title": { "ja": "空港の推定の範囲（T 区分）で重要空港の順位が大きく変わる", "en": "The tier set changes the ranking of critical airports a lot" },
+   "researchQuestion": { "ja": "重要空港の順位は、ネットワークの作り方にどれだけ左右されるか", "en": "How much does the ranking of critical airports depend on how the network is built?" },
+   "statement": { "ja": "2026年3月、厳密計算・候補 157 空港の中で、T1〜T4 を T1〜T3 にすると Spillover の順位の Spearman は 0.50〜0.59、T1 のみでは 0.22〜0.24 に下がる。閾値・向き・機材・時刻の基準の変更では 0.80〜0.97 にとどまる。", "en": "March 2026, exact computation, within 157 candidate airports: going from T1-T4 to T1-T3 lowers the Spearman of the Spillover ranking to 0.50-0.59, and T1 only to 0.22-0.24; changing the threshold, direction, aircraft class or time basis keeps it at 0.80-0.97." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-03-01", "end": "2026-03-31" },
+   "method": { "ja": "候補の空港を 1 つずつ止めたときのネットワーク効率の低下（Spillover）の順位を、条件ごとに基準と比べる（Phase 9E、厳密計算）", "en": "Rank of the drop in network efficiency when each candidate is stopped (Spillover), compared with the reference for each condition (Phase 9E, exact)" },
+   "conditions": { "candidates": "157 airports: top 150 by Systemic or Spillover in the exact reference ranking", "reference": "directed, T1-T4, at least 1 flight", "computation": "exact (all sources)" },
+   "evidence": [
+    { "ja": "march-sensitivity-exact の 13 条件の Spearman（9I で同順位を正しく扱って再計算。T1 のみ・閾値 10 は 0.25 → 0.22、ほかは ±0.005 以内で変わらない）", "en": "Spearman of the 13 conditions of march-sensitivity-exact (recomputed in 9I with ties handled; T1 only, threshold 10 moves 0.25 -> 0.22, the others by less than 0.005)" },
+    { "ja": "基準の Systemic・Spillover の値を、別の実装（SQL でネットワークを作り直し、scipy の最短経路）で 8 空港について 9 桁まで再現", "en": "Reference Systemic and Spillover reproduced to 9 digits for 8 airports with a separate implementation (network rebuilt in SQL, scipy shortest paths)" }
+   ],
+   "validationStatus": "Conditionally Supported",
+   "validation": { "ja": "基準の値は独立に再現。条件ごとの実験は再実行していない（保存値から順位相関を再計算）", "en": "Reference values reproduced independently; the condition runs were not re-run (rank correlations recomputed from stored values)" },
+   "limitations": [
+    { "ja": "157 空港の中の順位で、全 3,883 空港の安定性ではない。基準の上位から選んだ候補なので、全体より安定に見えやすい", "en": "Ranks within 157 airports, not the stability among all 3,883. Candidates taken from the top of the reference ranking can look more stable than the whole network" },
+    { "ja": "T1 のみは「より正確」な条件ではなく、受信網の薄い地域の便を落とした条件", "en": "T1 only is not a 'more accurate' network: it drops the flights of regions with thin receiver coverage" }
+   ],
+   "relatedExperiments": ["march-sensitivity-exact", "march-exact-baseline"],
+   "sourceReferences": [{ "label": "docs/phase9e-report.md §12", "path": "docs/phase9e-report.md" }, { "label": "pipeline/research_validation/network_impact.py", "path": "pipeline/research_validation/network_impact.py" }],
+   "calculationVersion": "experiments 9e.1 (stored runs), rank correlations 9e.2",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "experiments" },
+   "reproduce": { "command": "python pipeline/experiments/run.py pipeline/experiments/configs/march-sensitivity-exact.json" }
+  },
+  {
+   "findingId": "F-9E-LOWFREQ",
+   "title": { "ja": "低頻度路線への欠測は順位に影響しやすい", "en": "Missing flights on low-frequency routes move the ranking more" },
+   "researchQuestion": { "ja": "受信できなかった便があると、重要空港の順位はどれだけ変わるか", "en": "How much do flights the receivers missed change the ranking of critical airports?" },
+   "statement": { "ja": "想定した欠測モデルの下で、4 便未満の路線の便を 30% 落とすと、弧は約 1 割減るだけだが「条件に依存」の空港は 157 空港中 71 になる（一様 10% の欠測では 19）。Spearman の範囲は 0.957〜0.973（一様は 0.984〜0.995）。", "en": "Under the assumed missingness models, dropping 30% of the flights on routes with fewer than 4 flights removes only about a tenth of the arcs but makes 71 of 157 airports condition-dependent (19 with uniform 10% missingness); Spearman 0.957-0.973 (uniform 0.984-0.995)." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-03-01", "end": "2026-03-31" },
+   "method": { "ja": "便ごとに欠測モデルで取り除き、ネットワークを作り直して候補を停止（各 10 試行、空港の集合は固定）", "en": "Flights removed per flight under a missingness model, the network rebuilt and each candidate stopped (10 trials each, node set fixed)" },
+   "conditions": { "candidates": "157 airports (as F-9E-TIERS)", "trials": "10 per model", "models": "A uniform 10%, B regional, C routes with < 4 flights at 30%" },
+   "evidence": [
+    { "ja": "march-missing-uniform-exact / -route-exact / -regional-exact-v2 の結果（保存値から 9I で順位相関を再計算、差は 0.001 未満）", "en": "march-missing-uniform-exact / -route-exact / -regional-exact-v2 (rank correlations recomputed in 9I from stored values; differences below 0.001)" }
+   ],
+   "validationStatus": "Conditionally Supported",
+   "validation": { "ja": "保存値の再集計のみ。欠測の試行は再実行していない", "en": "Stored values re-summarised only; the trials were not re-run" },
+   "limitations": [
+    { "ja": "欠測モデルは想定で、実際に受信できなかった便の分布は未知", "en": "The missingness models are assumptions; the real distribution of missed flights is unknown" },
+    { "ja": "10 試行の幅で、信頼区間ではない。157 空港の外については何も示さない", "en": "Range over 10 trials, not a confidence interval; says nothing about airports outside the 157" }
+   ],
+   "relatedExperiments": ["march-missing-route-exact", "march-missing-uniform-exact", "march-missing-regional-exact-v2"],
+   "sourceReferences": [{ "label": "docs/phase9e-report.md §12", "path": "docs/phase9e-report.md" }],
+   "calculationVersion": "experiments 9e.1 (stored runs), rank correlations 9e.2",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "experiments" },
+   "reproduce": { "command": "python pipeline/experiments/run.py pipeline/experiments/configs/march-missing-route-exact.json" }
+  },
+  {
+   "findingId": "F-9E-SYS-SPILL",
+   "title": { "ja": "Systemic と Spillover は上位の空港でほぼ同じ順位になる", "en": "Systemic and Spillover rank the top airports almost the same way" },
+   "researchQuestion": { "ja": "止めた空港自身を含む指標と含まない指標で、重要空港は違うか", "en": "Do the measures with and without the stopped airport's own pairs pick different critical airports?" },
+   "statement": { "ja": "2026年3月の厳密な基準で、Systemic の上位 50 と Spillover の上位 50 は完全に一致し、上位 157 空港の Spearman は 0.99。全 3,883 空港では 0.76 で、Spillover が 0 の 2,484 空港（ほかの空港どうしの経路に関わらない空港）の同順位が一致度を下げる。", "en": "In the exact March 2026 reference, the top 50 of Systemic and of Spillover are the same airports and the Spearman over the top 157 is 0.99. Over all 3,883 airports it is 0.76, lowered by the 2,484 airports tied at a Spillover of 0 (not on any path between other airports)." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-03-01", "end": "2026-03-31" },
+   "method": { "ja": "厳密な基準ランキング（全 3,883 空港）の 2 指標の順位相関", "en": "Rank correlation of the two measures in the exact reference ranking (all 3,883 airports)" },
+   "conditions": { "network": "directed, T1-T4, at least 1 flight; 3,883 airports, 92,592 arcs", "ties": "values rounded like the ranks (1e-12)" },
+   "evidence": [
+    { "ja": "scipy で再計算：全空港 0.7606、上位 157（Systemic 順）0.992、上位 50 の重なり 50 / 50", "en": "Recomputed with scipy: all airports 0.7606, top 157 by Systemic 0.992, top-50 overlap 50 / 50" },
+    { "ja": "PER・ANC・BOG・HND・ORD・LIM・ISG・MMY の Systemic・Spillover を独立の実装で 9 桁まで再現", "en": "Systemic and Spillover of PER, ANC, BOG, HND, ORD, LIM, ISG and MMY reproduced to 9 digits by an independent implementation" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "独立の実装で値を再現し、順位相関を再計算。9E が報告した全空港の 0.68 は、0 になるはずの値の浮動小数点の誤差で同順位が崩れた値で、0.76 に訂正", "en": "Values reproduced independently and the correlation recomputed. The 0.68 over all airports reported in 9E came from ties broken by floating-point noise in values that are zero; corrected to 0.76" },
+   "limitations": [
+    { "ja": "2026年3月・有向・T1〜T4 の 1 つのネットワークについての結果", "en": "One network: March 2026, directed, T1-T4" }
+   ],
+   "relatedExperiments": ["march-exact-baseline"],
+   "sourceReferences": [{ "label": "docs/phase9e-report.md §14", "path": "docs/phase9e-report.md" }, { "label": "pipeline/research_validation/experiment_ties.py", "path": "pipeline/research_validation/experiment_ties.py" }],
+   "calculationVersion": "experiments 9e.2",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "experiments" },
+   "reproduce": { "command": "python pipeline/research_validation/network_impact.py PER ANC BOG HND ORD LIM ISG MMY && python pipeline/research_validation/experiment_ties.py" }
+  },
+  {
+   "findingId": "F-9F-ISG",
+   "title": { "ja": "世界的な重要度が低くても、離島の住民にとっては唯一の毎日の経路になる空港がある", "en": "An airport of low global importance can be the islanders' only daily link" },
+   "researchQuestion": { "ja": "世界のネットワークでの重要度と、地域の住民の依存度は一致するか", "en": "Does importance in the world network match how much local residents depend on an airport?" },
+   "statement": { "ja": "新石垣空港（ISG）は 2026年3月の世界のネットワークで Systemic 1,828 位、Spillover 0 だが、止めると石垣島と西表島の 49,822 人（2020年人口）が毎日運航の便では那覇へ行けなくなる。週 1 便以上の便を含めれば、行けなくなる人はいない。", "en": "New Ishigaki (ISG) ranks 1,828th by Systemic and has a Spillover of 0 in the March 2026 world network, yet stopping it leaves 49,822 people of Ishigaki and Iriomote (2020 population) without a daily-service route to Naha. Counting services of at least once a week, nobody is cut off." },
+   "dataset": { "id": "okinawa-pilot 9f.1 + observed-2026-v2", "version": "9f.1 / 2.0.0" },
+   "period": { "start": "2026-03-01", "end": "2026-03-31" },
+   "method": { "ja": "250 m メッシュの人口から道路で空港・港へ行き、条件を満たす航路・航空路で目的地へ行けるかを判定（運航回数で条件づけ、待ち時間は含まない）", "en": "From 250 m population meshes by road to airports and ports, then by services that meet the frequency condition to the destination (no waiting time)" },
+   "conditions": { "destination": "Naha", "serviceLevel": "daily (at least 7 round trips a week)", "population": "2020 census meshes", "services": "Okinawa Prefecture 2025", "globalRank": "March 2026 exact reference" },
+   "evidence": [
+    { "ja": "到達可能性だけを素朴な幅優先探索で再計算：毎日の便で 49,822 人（石垣島 47,637・西表島 2,185）、週 1 便以上・回数を問わない場合 0 人", "en": "Reachability recomputed with a plain breadth-first search: 49,822 people with daily services (Ishigaki 47,637, Iriomote 2,185), 0 with weekly or any services" },
+    { "ja": "メッシュの重複なし、島ごとの人口が国勢調査の値と一致", "en": "No duplicate meshes; island totals equal the census figures" },
+    { "ja": "ISG の Systemic・Spillover と順位（1,828 位・0）を独立の実装で再現", "en": "ISG's Systemic, Spillover and rank (1,828th, 0) reproduced independently" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "記載した条件（毎日の便、那覇、2020年人口、2025年の運航）について独立に再計算", "en": "Recomputed independently for the stated conditions (daily services, Naha, 2020 population, 2025 services)" },
+   "limitations": [
+    { "ja": "「毎日の便で行けなくなる」で、「島から出られなくなる」ではない（船で与那国経由の週 2 便などが残る）", "en": "'No daily route', not 'cannot leave the island' (a twice-weekly ship via Yonaguni remains)" },
+    { "ja": "基準年が異なる：人口 2020年、運航 2025年、ADS-B 2026年。所要時間は時刻表ではなく利用可能性のモデル", "en": "Different base years: population 2020, services 2025, ADS-B 2026. Times come from an availability model, not a timetable" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9f-report.md §4–5", "path": "docs/phase9f-report.md" }, { "label": "pipeline/research_validation/island_access.py", "path": "pipeline/research_validation/island_access.py" }],
+   "calculationVersion": "islands 9f.1",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "islands", "airports": ["ROIG"] },
+   "reproduce": { "command": "python pipeline/research_validation/island_access.py" }
+  },
+  {
+   "findingId": "F-9G-DROP",
+   "title": { "ja": "中東の観測便数は 2026年2月28日に大きく減った", "en": "Observed flights in the Middle East fell sharply on 28 February 2026" },
+   "researchQuestion": { "ja": "2026年2月末の中東の危機の前後で、観測された便はどう変わったか", "en": "How did observed flights change around the Middle East crisis of late February 2026?" },
+   "statement": { "ja": "EASA CZIB 2026-03 の対象 11 か国の空港を発着する観測便は、前の 14 日（2/14〜27）の 1 日 4,706 便から、後の 14 日（3/1〜14）の 1 日 1,412 便に減った（−70.0%）。1 時間ごとに見ると、2月28日 06〜09 UTC ごろから減っている。", "en": "Observed flights to or from airports of the 11 countries of EASA CZIB 2026-03 fell from 4,706 a day in the 14 days before (14-27 Feb) to 1,412 a day in the 14 days after (1-14 Mar), -70.0%. Hour by hour, the fall starts around 06-09 UTC on 28 February." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-02-14", "end": "2026-03-14" },
+   "method": { "ja": "UTC の日ごとの観測便数（基準時刻＝航跡の開始、なければ終了）、イベント日を除いた前後 14 日の平均", "en": "Observed flights per UTC day (reference time = track start, else end), mean of 14 days before and after, event day left out" },
+   "conditions": { "area": "BH IR IQ IL JO KW LB OM QA SA AE (airport country, either end)", "tiers": "T1-T4", "eventDay": "2026-02-28 (excluded)" },
+   "evidence": [
+    { "ja": "研究用の便ごとのデータから SQL で独立に数え直し、ブラウザの値と一致（4,705.6 → 1,412.2）", "en": "Recounted independently in SQL from the per-flight research data; equal to the browser values (4,705.6 -> 1,412.2)" },
+    { "ja": "1 時間ごとの便数：2/27 は 1 時間 113〜240 便、2/28 は 00〜08 時 107〜191 便、09 時以降 22〜56 便", "en": "Flights per hour: 113-240 on 27 Feb; 107-191 from 00 to 08 UTC on 28 Feb, 22-56 from 09 UTC" },
+    { "ja": "T1〜T3 だけでも 1 日 2,016 → 232 便（−88.5%）", "en": "T1-T3 only: 2,016 -> 232 a day (-88.5%)" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "観測便数の集計を別の実装で再現", "en": "Counting reproduced by a separate implementation" },
+   "limitations": [
+    { "ja": "ADS-B で観測された便で、運航便数や欠航数ではない。後の期間の便は多くが便名からの推定（T4）", "en": "Flights observed via ADS-B, not operations or cancellations. Most flights of the after window have airports inferred from the callsign (T4)" },
+    { "ja": "勧告・攻撃・各国の閉鎖・航空会社の判断が同じ日に重なり、どれによる変化かは分けられない", "en": "The advisory, the strikes, national closures and airline decisions fall on the same day and cannot be separated" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9g-report.md §C", "path": "docs/phase9g-report.md" }, { "label": "pipeline/research_validation/event_series.py", "path": "pipeline/research_validation/event_series.py" }],
+   "calculationVersion": "events 9i.1",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "events", "eventId": "CZIB:2026-03/R0" },
+   "reproduce": { "command": "python pipeline/research_validation/event_series.py" }
+  },
+  {
+   "findingId": "F-9G-PRETREND",
+   "title": { "ja": "中東の観測便数は勧告の前から減っていた", "en": "Observed flights in the Middle East were already falling before the advisory" },
+   "researchQuestion": { "ja": "変化はイベントの日より前から始まっていたか", "en": "Did the change start before the event day?" },
+   "statement": { "ja": "11 か国の観測便は 2月17〜18日ごろから 1 日 4,800〜5,200 便から 4,400〜4,800 便に減っていた（前の 14 日の直線の傾き −10.8%、Newey-West の t = −4.36）。この減少は 2月28日の出来事より前に起きており、28日の勧告・攻撃・各国の措置では説明できない。原因は特定していない。", "en": "Observed flights of the 11 countries fell from 4,800-5,200 to 4,400-4,800 a day from around 17-18 February (trend over the 14 days before -10.8%, Newey-West t = -4.36). This happened before 28 February and cannot be explained by the advisory, the strikes or the national measures of that day. Its cause is not identified." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-02-14", "end": "2026-02-27" },
+   "method": { "ja": "前の期間の log(便数+1) の直線の傾き。t は自己相関を考慮した Newey-West の標準誤差（ラグ 2）", "en": "Straight-line trend of log(flights + 1) in the before window; t with a Newey-West standard error (lag 2)" },
+   "conditions": { "area": "11 countries of CZIB 2026-03", "window": "14 days", "tiers": "T1-T4" },
+   "evidence": [
+    { "ja": "OLS の t = −4.52、Newey-West の t = −4.36（scipy と独立の実装で一致）。比較対象群との比の傾きは t = −7.59（Newey-West）", "en": "OLS t = -4.52, Newey-West t = -4.36 (equal in scipy and an independent implementation); the ratio to the comparison group has t = -7.59 (Newey-West)" },
+    { "ja": "比較対象群（東南アジア 6 か国）は同じ期間に横ばい（1 日 6,300〜6,900 便）", "en": "The comparison group (6 South-East Asian countries) stayed flat over the same days (6,300-6,900 a day)" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "傾きと t を独立に再計算。原因については何も主張しない", "en": "Trend and t recomputed independently. Nothing is claimed about the cause" },
+   "limitations": [
+    { "ja": "国ごとでは弱い：UAE t = −2.01、カタール −1.55、クウェート −1.39（Newey-West）", "en": "Weaker per country: UAE t = -2.01, Qatar -1.55, Kuwait -1.39 (Newey-West)" },
+    { "ja": "前年のデータがなく季節性を確かめられない。2026年のラマダンは 2月18日ごろに始まり時期が近いが、検証していない", "en": "No earlier year to check seasonality. Ramadan 2026 began around 18 February, close in time; not tested" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9g-report.md §D", "path": "docs/phase9g-report.md" }, { "label": "docs/phase9i-report.md", "path": "docs/phase9i-report.md" }],
+   "calculationVersion": "events 9i.1",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "events", "eventId": "CZIB:2026-03/R0" },
+   "reproduce": { "command": "python pipeline/research_validation/event_series.py" }
+  },
+  {
+   "findingId": "F-9G-CONNECTIVITY",
+   "title": { "ja": "観測便数の減少と、ネットワークの接続性の低下は一致しない", "en": "The fall in observed flights does not match the loss of connectivity" },
+   "researchQuestion": { "ja": "便が大きく減ると、ほかの空港どうしの行き来はどれだけ失われるか", "en": "When flights fall sharply, how much travel between other airports is lost?" },
+   "statement": { "ja": "カタールの観測便は −97.6% だが、前後の観測ネットワークでほかの空港どうしで経路がなくなる組は 0（対象地域の路線だけを変えた場合）。11 か国では −70% で、経路がなくなる組は 9,828、対象地域の空港を仮想的に止めた場合は 62,556。", "en": "Qatar's observed flights fell 97.6%, yet no pair of other airports lost every path (area routes only changed). For the 11 countries (-70%), 9,828 pairs lost every path, against 62,556 when the area airports are stopped hypothetically." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-02-14", "end": "2026-03-14" },
+   "method": { "ja": "前後 14 日の観測ネットワーク（有向、ホップ数）で Phase 9C の影響計算", "en": "Phase 9C impact computation on the observed networks of the 14 days before and after (directed, hops)" },
+   "conditions": { "network": "directed, T1-T4, at least 1 flight per window", "metric": "pairs of other airports that lose every path" },
+   "evidence": [
+    { "ja": "ブラウザのイベント調査で得た値（Phase 9G・9H）。影響計算そのものは小さなグラフの手計算と、世界のネットワークでの独立の実装で検証済み", "en": "Values from the event investigation in the browser (Phases 9G and 9H). The impact computation itself is checked by hand on small graphs and by an independent implementation on the world network" }
+   ],
+   "validationStatus": "Conditionally Supported",
+   "validation": { "ja": "影響計算の方法は検証済み。前後の期間のネットワークでの値は独立に再計算していない", "en": "The impact computation is checked; the values on the window networks were not recomputed independently" },
+   "limitations": [
+    { "ja": "接続性はホップ数の構造で、座席数・便の頻度・乗り継ぎの可否を含まない", "en": "Connectivity is a hop structure without seats, frequency or connection rules" },
+    { "ja": "「全路線」の比較には期間中の世界中の変化が入り、使えない", "en": "The 'all routes' comparison contains every change in the world between the windows and is not used" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9h-report.md §C", "path": "docs/phase9h-report.md" }],
+   "calculationVersion": "events 9i.1, impact 9c",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "events", "eventId": "CLS-QA-2026-02-28" },
+   "reproduce": { "command": "Research > Event investigation > Qatar suspension > Compare before and after (14 days, T1-T4)" }
+  },
+  {
+   "findingId": "F-9H-DID",
+   "title": { "ja": "UAE・カタール・クウェートの「差分の差分」は効果の推定値ではない", "en": "The 'difference in differences' for the UAE, Qatar and Kuwait is not an effect estimate" },
+   "researchQuestion": { "ja": "各国の閉鎖による便数の変化を、比較対象群を使って推定できるか", "en": "Can the comparison group give an estimate of what the national closures did to flights?" },
+   "statement": { "ja": "Phase 9H は 3 か国で 6 つの確認を満たしたとして −77%・−97%・−98% を示したが、これは効果の推定値としては支持できない。自己相関を考慮すると UAE の比の事前トレンドは t = −2.73 で確認を満たさない。比較対象群も同じ期間に −9% 変化し、事前トレンドの確認は 14 日で検出力が低く、プラセボは 4 日しかない。値は記述的な比較として残す。", "en": "Phase 9H showed -77%, -97% and -98% for the three countries as meeting six checks; as effect estimates these are not supported. Allowing for autocorrelation, the UAE ratio pre-trend has t = -2.73 and fails its check; the comparison group itself changed by -9%; a 14-day pre-trend check has little power; only 4 placebo days exist. The figures stay as descriptive comparisons." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-02-14", "end": "2026-03-14" },
+   "method": { "ja": "対象地域と比較対象群の log 平均の変化の差", "en": "Difference of the log mean changes of the area and the comparison group" },
+   "conditions": { "comparison": "TH MY SG ID VN PH, no flight to or from the area or neighbours", "window": "14 days" },
+   "evidence": [
+    { "ja": "独立に再計算した値：UAE −77.0%（比の傾き t：OLS −1.69、Newey-West −2.73）、カタール −97.2%（−1.77 / −1.73）、クウェート −98.1%（−1.17 / −1.49）", "en": "Recomputed independently: UAE -77.0% (ratio trend t: OLS -1.69, Newey-West -2.73), Qatar -97.2% (-1.77 / -1.73), Kuwait -98.1% (-1.17 / -1.49)" },
+    { "ja": "Phase 9G のプラセボは日ごとの log 比の平均で、実際の値（log 平均の差）と別の量を比べていた。9I で同じ計算方法に揃えた", "en": "The 9G placebo used the mean of daily log ratios, a different quantity from the actual figure (difference of log means); aligned in 9I" }
+   ],
+   "validationStatus": "Not Supported",
+   "validation": { "ja": "効果の推定値としての主張は支持できない。記述的な値は再現できる", "en": "Not supported as an effect estimate; the descriptive figures reproduce" },
+   "limitations": [
+    { "ja": "同じ日に攻撃・勧告・複数国の閉鎖が重なる。国ごとの閉鎖は報道でしか確認できていないものが多い", "en": "Strikes, the advisory and several closures fall on the same day; most national closures are confirmed only by the press" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9h-report.md §C", "path": "docs/phase9h-report.md" }, { "label": "docs/phase9i-report.md §B", "path": "docs/phase9i-report.md" }],
+   "calculationVersion": "events 9i.1",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "events", "eventId": "RST-AE-2026-02-28-PARTIAL" },
+   "reproduce": { "command": "python pipeline/research_validation/event_series.py" }
+  },
+  {
+   "findingId": "F-9H-TIMING",
+   "title": { "ja": "2月28日の各国の措置は、それより前の減少を説明できない", "en": "The national measures of 28 February cannot explain the earlier decline" },
+   "researchQuestion": { "ja": "勧告前の減少は、同じ日の各国の措置と重なっていたか", "en": "Did the pre-advisory decline overlap with the national measures of the same day?" },
+   "statement": { "ja": "Phase 9H の報告は、R0 の前の減少の一部が 2月28日の各国の措置と重なると書いたが、誤り。前の期間（2/14〜27）の減少は 2月28日より前に起きている。時差で重なるのは、UTC より進んだ地域の日付だけのイベントが前日の UTC の最後の数時間（UAE で 4 時間）にかかる分だけ。", "en": "The Phase 9H report said that part of the decline before R0 overlapped with the national measures of 28 February. That is wrong: the decline in the before window (14-27 Feb) happened before 28 February. The only overlap is that a date-only event in a time zone ahead of UTC reaches the last few hours of the previous UTC day (4 hours for the UAE)." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-02-14", "end": "2026-02-28" },
+   "method": { "ja": "日別・時間別の観測便数とイベントの時刻の比較", "en": "Daily and hourly observed flights against the event times" },
+   "conditions": {},
+   "evidence": [
+    { "ja": "日別の便数（2/17 ごろから減少）と時間別の便数（2/28 06〜09 UTC から急減）", "en": "Daily flights (falling from around 17 Feb) and hourly flights (sharp fall from 06-09 UTC on 28 Feb)" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "時刻の関係を再確認し、9H の記述を訂正", "en": "Time relation re-checked; the 9H statement corrected" },
+   "limitations": [],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/phase9h-report.md §D", "path": "docs/phase9h-report.md" }],
+   "calculationVersion": "events 9i.1",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "events", "eventId": "CZIB:2026-03/R0" },
+   "reproduce": { "command": "python pipeline/research_validation/event_series.py" }
+  },
+  {
+   "findingId": "F-9A-GAP",
+   "title": { "ja": "2026年5月5〜7日の観測ゼロは収集停止で、航空交通の停止ではない", "en": "The near-zero observations of 5-7 May 2026 are a collection gap, not a stop of air traffic" },
+   "researchQuestion": { "ja": "観測便がほぼ 0 の時間帯は、何を意味するか", "en": "What do the hours with almost no observed flights mean?" },
+   "statement": { "ja": "2026-05-05 00:00〜05-07 17:00 UTC の 66 時間は、世界全体で観測便が 6 便しかなく（通常は約 27 万便）、全地域で同時に止まっている。データの収集停止で、航空交通の停止と解釈してはいけない。再開直後の 05-07 18:00 は通常の約 2 倍の便が記録される。5月4日にも、12 時・16〜18 時 UTC に収集停止とは判定されない部分的な欠け（通常の 1〜4 割）がある。", "en": "In the 66 hours from 00:00 UTC on 5 May to 17:00 UTC on 7 May 2026, only 6 flights were observed worldwide (about 270,000 normally), in every region at once: a collection gap, not a stop of air traffic. Right after it, 18:00 UTC on 7 May records about twice the usual flights. On 4 May, 12:00 and 16-18 UTC are partly missing (10-40% of usual) without being flagged as a gap." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-05-04", "end": "2026-05-08" },
+   "method": { "ja": "時間別の世界の観測便数と、Phase 6B の収集停止の判定（通常の 5% 未満）", "en": "Hourly world observed flights and the Phase 6B gap rule (below 5% of usual)" },
+   "conditions": { "gapRule": "hour below 5% of its baseline" },
+   "evidence": [
+    { "ja": "temporal/quality.json の gapRuns と burstHours、index.json の時間別便数。日別ファイルの便数は研究用データと全 273 日で一致", "en": "gapRuns and burstHours of temporal/quality.json, hourly counts of index.json; day files equal the research data on all 273 days" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "日別の便数を元データ・研究用データ・公開データで独立に照合", "en": "Daily counts checked across the raw, research and public data" },
+   "limitations": [
+    { "ja": "5月4日の部分的な欠けは収集停止に含まれず、イベント研究の「収集停止の日を除く」でも除かれない", "en": "The partial losses of 4 May are not part of the gap and are not left out by the event study's gap exclusion" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "docs/temporal-data-model.md", "path": "docs/temporal-data-model.md" }, { "label": "pipeline/research_validation/temporal_counts.py", "path": "pipeline/research_validation/temporal_counts.py" }],
+   "calculationVersion": "temporal 9a",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "temporal", "start": "2026-05-04", "end": "2026-05-09" },
+   "reproduce": { "command": "python pipeline/research_validation/temporal_counts.py" }
+  },
+  {
+   "findingId": "F-9A-QUARTER",
+   "title": { "ja": "四半期の境界の日は、元ファイルによって便数が最大 6.6% 違う", "en": "At quarter boundaries the counts differ by up to 6.6% between source files" },
+   "researchQuestion": { "ja": "元データの区切りが日別の便数に影響していないか", "en": "Do the source file boundaries affect daily counts?" },
+   "statement": { "ja": "元データの四半期ファイルは数日重なっており、重なった行は同一ではない。1090web は各日をその日の四半期のファイルから取るため二重には数えないが、3月30日は Q2 ファイルなら 6.5%、6月29日は Q3 ファイルなら 6.6% 多い。", "en": "The quarterly source files overlap by a few days and the overlapping rows are not identical. 1090web takes each day from the file of its own quarter, so nothing is counted twice, but 30 March would have 6.5% more rows from the Q2 file and 29 June 6.6% more from the Q3 file." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-03-30", "end": "2026-07-02" },
+   "method": { "ja": "元の四半期ファイルの日別の行数の比較", "en": "Daily row counts of the raw quarter files compared" },
+   "conditions": { "scope": "rows with an operator code" },
+   "evidence": [
+    { "ja": "3/30：Q1 100,339 行・Q2 106,876 行（同一の行 87,159）。6/29：Q2 105,673 行・Q3 112,636 行（同一 92,632）", "en": "30 Mar: Q1 100,339 rows, Q2 106,876 (87,159 identical). 29 Jun: Q2 105,673, Q3 112,636 (92,632 identical)" }
+   ],
+   "validationStatus": "Preliminary",
+   "validation": { "ja": "行数の違いは確認。どちらのファイルが正しいかは判断できていない", "en": "The difference is confirmed; which file is right is not known" },
+   "limitations": [
+    { "ja": "境界の日をまたぐ時間窓の比較では、数 % の差がデータの区切りから生じうる", "en": "Windows across a boundary day can differ by a few percent because of the file boundary alone" }
+   ],
+   "relatedExperiments": [],
+   "sourceReferences": [{ "label": "pipeline/research_validation/temporal_counts.py", "path": "pipeline/research_validation/temporal_counts.py" }],
+   "calculationVersion": "temporal 9a",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "temporal", "start": "2026-03-28", "end": "2026-04-04" },
+   "reproduce": { "command": "python pipeline/research_validation/temporal_counts.py" }
+  },
+  {
+   "findingId": "F-9E-APPROX",
+   "title": { "ja": "256 起点の近似は、全体の順位相関より上位の一致が問題", "en": "With 256 sources, the problem is the top of the ranking more than the overall correlation" },
+   "researchQuestion": { "ja": "起点をサンプルした近似は、厳密計算の順位をどこまで再現するか", "en": "How well does the sampled-source approximation reproduce the exact ranking?" },
+   "statement": { "ja": "全 3,883 空港で、256 起点の近似の Spillover と厳密計算の Spearman は 0.85 前後（9E は同順位の扱いの誤りで 0.52〜0.58 と報告）。一方、上位 50 の一致は 0.62〜0.64、上位 50 の相対誤差の中央値は約 45% で、上位の空港の比較には使えないという判断は変わらない。", "en": "Over all 3,883 airports, the Spearman between 256-source Spillover and the exact values is about 0.85 (9E reported 0.52-0.58 because ties were broken by noise). The top-50 overlap is 0.62-0.64 and the median relative error of the top 50 about 45%, so the approximation is still unfit for comparing top airports." },
+   "dataset": { "id": "observed-2026-v2", "version": "2.0.0" },
+   "period": { "start": "2026-03-01", "end": "2026-03-31" },
+   "method": { "ja": "保存された近似と厳密の値を、同順位を正しく扱って比較", "en": "Stored approximate and exact values compared with ties handled" },
+   "conditions": { "sources": "256 (seeds 2, 3), 1,024 (seed 1)" },
+   "evidence": [
+    { "ja": "Spillover の Spearman：256 起点 0.846・0.851、1,024 起点 0.933。上位 50 の重なり 0.64・0.62・0.80（9E と一致）", "en": "Spillover Spearman: 256 sources 0.846 and 0.851, 1,024 sources 0.933. Top-50 overlap 0.64, 0.62, 0.80 (as in 9E)" }
+   ],
+   "validationStatus": "Validated",
+   "validation": { "ja": "保存値から scipy で再計算", "en": "Recomputed with scipy from the stored values" },
+   "limitations": [
+    { "ja": "シード 1 の 256 起点の結果は保存されておらず再計算していない", "en": "The 256-source run with seed 1 was not stored and is not recomputed" }
+   ],
+   "relatedExperiments": ["conv-256-2", "conv-256-3", "conv-1024-1", "march-exact-baseline"],
+   "sourceReferences": [{ "label": "docs/phase9e-report.md §9", "path": "docs/phase9e-report.md" }],
+   "calculationVersion": "experiments 9e.2",
+   "lastVerifiedAt": "2026-11-19",
+   "link": { "tab": "experiments" },
+   "reproduce": { "command": "python pipeline/research_validation/experiment_ties.py" }
+  }
+ ]
+}

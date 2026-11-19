@@ -17,6 +17,7 @@ import { beforeAfter, DAY, differenceInDifferences, placebo, preTrend, ratioPreT
 import { observedChanges, type ChangeOptions, type Changes } from './changes';
 import { impactPair, windowNetwork } from './counterfactual';
 import { areaCountries, type AdvisoryVersion } from './model';
+import { APP_BUILD } from '../app/build';
 import { startSpan, type UnifiedEvent } from './registry';
 
 /**
@@ -57,7 +58,8 @@ export function subjectOf(e: UnifiedEvent, v: AdvisoryVersion | null = null): St
 }
 
 export const STUDY_FORMAT = '1090web-event-study';
-export const METHOD_VERSION = '9g.1';
+/** 9i.1: trend t values use a Newey-West standard error; the DiD is descriptive; placebo counts. */
+export const METHOD_VERSION = '9i.1';
 
 export interface StudyConditions {
   windowDays: number;
@@ -244,6 +246,7 @@ export function studyJson(r: StudyResult, recordsVersion: string, dataset: { id:
       verificationStatus: r.subject.event.verificationStatus, sources: r.subject.event.sourceReferences, recordsVersion,
     },
     dataset,
+    environment: { runtime: 'browser', app: { version: APP_BUILD.version, commit: APP_BUILD.commit } },
     conditions: r.conditions,
     area: { ...r.area, note: 'Airport countries of the advisory area. FIRs and flight levels are listed but not used to select flights: 1090web has no flight paths.' },
     windows: {
@@ -255,9 +258,9 @@ export function studyJson(r: StudyResult, recordsVersion: string, dataset: { id:
     method: {
       counting: 'flights whose reference time (track start, else track end) falls in the UTC day (Phase 9A)',
       beforeAfter: 'mean daily flights, gap days left out when conditions.excludeGaps',
-      preTrend: 'OLS of log(flights + 1) on the day in the before window',
-      placebo: 'the same comparison on earlier days, every 7 days, with no day after the event',
-      did: 'log difference of the area minus the comparison group, reported only when every condition holds; not a causal effect',
+      preTrend: 'least squares of log(flights + 1) on the day in the before window; t with a Newey-West (Bartlett, lag floor(4 (n/100)^(2/9))) standard error, tOls = plain OLS t',
+      placebo: 'the same comparison on earlier days, every 7 days, with no day after the event; tried / overlapping / asLarge give the counts behind the share (not a significance test)',
+      did: 'difference of log mean changes, area minus comparison group; descriptive only (interpretation), estimate kept for 9G files when every check passes; placebos use the same estimator; not a causal effect',
       impact: 'Phase 9C impact computation; observed = before vs after network, hypothetical = before network without the area airports',
     },
     results: {

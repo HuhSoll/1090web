@@ -98,6 +98,7 @@ function Overview({ r, k }: { r: ExperimentResult; k: Key }) {
         </div>
         <p className="small">{t('x.ov.reference', { label: ref.label })}</p>
         <Note>{t(`x.interp.${r.definition.experimentType}`)}</Note>
+        {r.candidates.count < ref.nodes && <Note>{t('x.scope.subset', { c: f.int(r.candidates.count), n: f.int(ref.nodes) })}</Note>}
         {!r.computation.exact && <Note>{t('x.interp.approx')}</Note>}
         {r.definition.experimentType === 'sensitivity' && <Note>{t('x.t1.note')}</Note>}
       </section>

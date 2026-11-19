@@ -171,6 +171,26 @@ describe('definitions and statistics', () => {
     expect(s.sd).toBeCloseTo(Math.sqrt(5 / 3)); // ddof = 1
   });
 
+  it('summarize: zero impacts computed as +-1e-17 tie in the rank correlations (9e.2)', () => {
+    const run = (runId: string, kind: RawRun['kind'], sys: number[], spill: number[]): RawRun => ({
+      runId, label: runId, kind, trial: 0, conditions: {}, nodes: 6, arcs: 5, flights: 5, pairs: 1, exact: true, sources: 6, sourceSeed: 1, randomSeed: 1,
+      complete: true, errors: [], seconds: 0, isolated: [], candidates: ['A', 'B', 'C', 'D', 'E', 'F'],
+      values: { systemicDrop: sys, spilloverDrop: spill, spilloverBefore: sys, unreachablePairs: sys, hop1Drop: sys, hop2Drop: sys, hop3Drop: sys, directLost: sys, flightsLost: sys },
+    });
+    const ids = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const sys = [0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+    // two airports with a real Spillover, four end airports whose Spillover is 0 up to noise
+    const noisy = [0.2, 0.1, 1e-17, -1e-17, 3e-18, 0];
+    const clean = [0.2, 0.1, 0, 0, 0, 0];
+    const def: ExperimentDefinition = { ...d, topK: [2] };
+    const meta = { id: 'x', version: '1', continentRule: 'airport-v1' };
+    const ap = (id: string) => ({ id, iata: null, name: null, country: null, continent: '', lat: null, lon: null });
+    const a = summarize(def, 'h', meta, [run('t0000', 'reference', sys, noisy), run('t0001', 'trial', sys, clean)], ids, ap, true);
+    const b = summarize(def, 'h', meta, [run('t0000', 'reference', sys, clean), run('t0001', 'trial', sys, clean)], ids, ap, true);
+    expect(a.systemicVsSpillover.spearman).toBe(b.systemicVsSpillover.spearman);
+    expect(a.runs[1]!.comparison.spillover.spearman).toBe(1);
+  });
+
   it('summarize: fixed candidate list, absent = 0, stats over trials only', () => {
     const run = (runId: string, kind: RawRun['kind'], cands: string[], sys: number[]): RawRun => ({
       runId, label: runId, kind, trial: 0, conditions: {}, nodes: 3, arcs: 2, flights: 2, pairs: 1, exact: true, sources: 3, sourceSeed: 1, randomSeed: 1,

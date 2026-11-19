@@ -35,10 +35,10 @@ function IslandsLab({ data }: { data: IslandData }) {
     const h = useAppStore.getState().islandHandoff;
     const aps = h ? h.airports.filter((a) => PILOT_AIRPORTS.includes(a)) : [];
     const cond0: IslandScenario = { ...baseScenario(meta.defaultDestination), serviceLevel: 'daily' };
-    if (!aps.length) return { island: 'ishigaki', stopped: ['ROIG'], cond: cond0, ran: null as IslandScenario | null, fromSim: null as string | null };
+    if (!aps.length) return { island: 'ishigaki', stopped: ['ROIG'], cond: cond0, ran: null as IslandScenario | null, fromSim: null as string | null, fromFinding: false };
     const isl = network.gateways.find((g) => g.id === aps[0])?.island ?? 'ishigaki';
     const name = h!.scenarioName || aps.map((a) => network.gateways.find((g) => g.id === a)?.iata ?? a).join(', ');
-    return { island: isl, stopped: aps, cond: cond0, ran: { ...cond0, stoppedAirports: aps }, fromSim: name };
+    return { island: isl, stopped: aps, cond: cond0, ran: { ...cond0, stoppedAirports: aps }, fromSim: name, fromFinding: h!.from === 'finding' };
   });
   useEffect(() => {
     if (useAppStore.getState().islandHandoff) setHandoff(null);
@@ -114,7 +114,7 @@ function IslandsLab({ data }: { data: IslandData }) {
       <section className="r-box">
         <h3 className="r-h4">{t('i.title')}</h3>
         <p className="small x-dim">{t('i.lead')}</p>
-        {fromSim && <p className="hint">{t('i.fromSim', { name: fromSim })}</p>}
+        {fromSim && <p className="hint">{t(start.fromFinding ? 'i.fromFinding' : 'i.fromSim', { name: fromSim })}</p>}
         <div className="i-setup">
           <label className="r-inline"><span className="small">{t('i.island')}</span>
             <select className="r-input" value={island} onChange={(e) => chooseIsland(e.target.value)}>

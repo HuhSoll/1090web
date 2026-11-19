@@ -43,6 +43,8 @@ export interface CarrierInfo {
 export interface DatasetManifest {
   schemaVersion: 1;
   datasetId: string;
+  /** version of the published dataset (observed datasets; e.g. 2.0.0) */
+  datasetVersion?: string;
   kind: DatasetKind;
   title: string;
   generatedAt: string;

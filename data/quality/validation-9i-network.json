@@ -1,0 +1,55 @@
+{
+ "nodes": 3883,
+ "arcs": 92592,
+ "efficiency": 0.28287330242497055,
+ "airports": {
+  "PER": {
+   "systemic": 0.005727803660898811,
+   "spillover": 0.005545232197711969,
+   "baselineSystemic": 0.005727804,
+   "baselineSpillover": 0.005545232
+  },
+  "ANC": {
+   "systemic": 0.0030082458461863637,
+   "spillover": 0.00280096995298329,
+   "baselineSystemic": 0.003008246,
+   "baselineSpillover": 0.00280097
+  },
+  "BOG": {
+   "systemic": 0.005174686409499085,
+   "spillover": 0.004978496390378007,
+   "baselineSystemic": 0.005174686,
+   "baselineSpillover": 0.004978496
+  },
+  "HND": {
+   "systemic": 0.0019322241130456663,
+   "spillover": 0.0017153125836620875,
+   "baselineSystemic": 0.001932224,
+   "baselineSpillover": 0.001715313
+  },
+  "ORD": {
+   "systemic": 0.0013590279594635768,
+   "spillover": 0.0011161086950505217,
+   "baselineSystemic": 0.001359028,
+   "baselineSpillover": 0.001116109
+  },
+  "LIM": {
+   "systemic": 0.0018016306533587545,
+   "spillover": 0.0016125169184480481,
+   "baselineSystemic": 0.001801631,
+   "baselineSpillover": 0.001612517
+  },
+  "ISG": {
+   "systemic": 0.0001537136672721262,
+   "spillover": 0.0,
+   "baselineSystemic": 0.000153714,
+   "baselineSpillover": 0.0
+  },
+  "MMY": {
+   "systemic": 0.00015045525551660166,
+   "spillover": 0.0,
+   "baselineSystemic": 0.000150455,
+   "baselineSpillover": 0.0
+  }
+ }
+}

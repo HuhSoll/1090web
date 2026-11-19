@@ -63,7 +63,7 @@ export type SimImpactState =
   | { state: 'running'; key: string; done: number; total: number }
   | { state: 'ready'; key: string; result: ImpactResult }
   | { state: 'error'; key: string; message: string };
-export type ResearchTab = 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'events' | 'export';
+export type ResearchTab = 'home' | 'findings' | 'overview' | 'rankings' | 'geography' | 'reliability' | 'comparison' | 'experiments' | 'islands' | 'events' | 'export';
 /** Phase 9G: an advisory version picked elsewhere (the scenario timeline) to open in Research > Events. */
 export interface EventFocus {
   /** registry id; EASA CZIB versions are CZIB:<bulletin>/<revision> */
@@ -73,6 +73,8 @@ export interface EventFocus {
 export interface IslandHandoff {
   scenarioName: string;
   airports: string[];
+  /** where it comes from (Phase 9I: a research finding); absent = the simulation */
+  from?: 'finding';
 }
 /** A simulation result handed to Research > Experiments ("check how robust this result is"). */
 export interface ExperimentHandoff {
@@ -309,7 +311,7 @@ export const useAppStore = create<AppState>((set) => ({
   stressRouteCount: null,
   appMode: 'explore',
   researchConfig: null,
-  researchTab: 'overview',
+  researchTab: 'home',
   researchCompare: { enabled: false, field: 'month', value: null },
   researchMapNote: null,
   researchSidebarCollapsed: false,

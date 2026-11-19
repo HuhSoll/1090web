@@ -12,14 +12,16 @@ import { ExportPanel } from './ExportPanel';
 import { GeographyPanel } from './GeographyPanel';
 import { IslandsPanel } from './IslandsPanel';
 import { EventsPanel } from './EventsPanel';
+import { FindingsPanel } from './FindingsPanel';
+import { HomePanel } from './HomePanel';
 import { OverviewPanel } from './OverviewPanel';
 import { RankingsPanel } from './RankingsPanel';
 import { ReliabilityPanel } from './ReliabilityPanel';
 import { SettingsPanel } from './SettingsPanel';
 
-const TABS: ResearchTab[] = ['overview', 'rankings', 'geography', 'reliability', 'comparison', 'experiments', 'islands', 'events', 'export'];
+const TABS: ResearchTab[] = ['home', 'overview', 'rankings', 'geography', 'reliability', 'comparison', 'experiments', 'islands', 'events', 'findings', 'export'];
 /** tabs that do not use the analysis of the left column */
-const OWN_DATA: ResearchTab[] = ['experiments', 'islands', 'events'];
+const OWN_DATA: ResearchTab[] = ['home', 'findings', 'experiments', 'islands', 'events'];
 
 /** Research Mode: analysis conditions on the left, results in tabs on the right. */
 export function ResearchView() {
@@ -119,6 +121,8 @@ export function ResearchView() {
           {meta && tab === 'experiments' && <ExperimentsPanel config={config} meta={meta} onShowOnMap={showOnMap} />}
           {tab === 'islands' && <IslandsPanel />}
           {tab === 'events' && <EventsPanel />}
+          {tab === 'home' && <HomePanel />}
+          {tab === 'findings' && <FindingsPanel />}
           {meta && !OWN_DATA.includes(tab) && !result && main.state !== 'error' && <Progress state={main} />}
           {meta && result && !OWN_DATA.includes(tab) && (
             <>

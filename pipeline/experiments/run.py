@@ -28,6 +28,7 @@ import hashlib
 import json
 import math
 import multiprocessing as mp
+import platform
 import sys
 import time
 import traceback
@@ -43,7 +44,8 @@ from experiments import impact as I  # noqa: E402
 FORMAT = "1090web-experiment"
 RESULT_FORMAT = "1090web-experiment-result"
 SCHEMA_VERSION = 1
-METHOD_VERSION = "9e.1"
+# 9e.2 (Phase 9I): Spearman / Kendall on values rounded like the ranks (ties as ties)
+METHOD_VERSION = "9e.2"
 CHUNK = 48
 METRICS = ("systemicDrop", "spilloverDrop", "spilloverBefore", "unreachablePairs", "hop1Drop", "hop2Drop", "hop3Drop", "directLost", "flightsLost")
 
@@ -273,7 +275,9 @@ def summarize(d: dict, h: str, ds: D.Dataset, out: Path, candidates: list[str]) 
         present = [idx[a] for a in r["candidates"]]
         cmp = {}
         for key, metric in (("systemic", "systemicDrop"), ("spillover", "spilloverDrop")):
-            x, y = ref[metric].tolist(), m[metric].tolist()
+            # rank correlations on the same rounded values as the ranks (9e.2): exact zeros computed
+            # as tiny +-1e-17 differences must tie, not be ordered by floating-point noise
+            x, y = [I.rank_value(v) for v in ref[metric].tolist()], [I.rank_value(v) for v in m[metric].tolist()]
             both = [i for i in present if i in ref_present]
             entry = {
                 "spearman": _r(spearman(x, y)), "kendall": _r(kendall_tau_b(x, y)),
@@ -288,8 +292,9 @@ def summarize(d: dict, h: str, ds: D.Dataset, out: Path, candidates: list[str]) 
         del r["values"]
         del r["candidates"]
     # Systemic vs Spillover agreement in the reference run
-    sys_spill = {"spearman": _r(spearman(ref["systemicDrop"].tolist(), ref["spilloverDrop"].tolist())),
-                 "kendall": _r(kendall_tau_b(ref["systemicDrop"].tolist(), ref["spilloverDrop"].tolist()))}
+    rs = [I.rank_value(v) for v in ref["systemicDrop"].tolist()]
+    rp = [I.rank_value(v) for v in ref["spilloverDrop"].tolist()]
+    sys_spill = {"spearman": _r(spearman(rs, rp)), "kendall": _r(kendall_tau_b(rs, rp))}
     for k in ks:
         sys_spill[f"top{k}"] = round(topk_overlap(ref["systemicDrop"].tolist(), ref["spilloverDrop"].tolist(), k)[0], 4)
     airports_json = json.loads((D.ROOT / "public" / "data" / ds.dataset_id / "airports.json").read_text(encoding="utf-8"))
@@ -326,6 +331,7 @@ def summarize(d: dict, h: str, ds: D.Dataset, out: Path, candidates: list[str]) 
         "dataset": {"id": ds.dataset_id, "version": ds.version, "continentRule": ds.continent_rule},
         "createdAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "source": "python batch (pipeline/experiments)",
+        "environment": {"runtime": "python", "python": platform.python_version(), "numpy": np.__version__, "platform": platform.system()},
         "computation": {
             "exact": all(r["exact"] for r in runs), "sources": sorted({r["sources"] for r in runs}),
             "sourceSeed": d["computation"].get("sourceSeed", 1), "randomSeed": d["randomSeed"],

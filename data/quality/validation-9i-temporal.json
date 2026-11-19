@@ -1,0 +1,107 @@
+{
+ "days": 273,
+ "rawVsResearch": [],
+ "researchVsPublic": [],
+ "months": {
+  "2026-01": {
+   "monthly": 2385019,
+   "sumOfDays": 2385019,
+   "equal": true
+  },
+  "2026-02": {
+   "monthly": 2250329,
+   "sumOfDays": 2250329,
+   "equal": true
+  },
+  "2026-03": {
+   "monthly": 2505703,
+   "sumOfDays": 2505703,
+   "equal": true
+  },
+  "2026-04": {
+   "monthly": 2512945,
+   "sumOfDays": 2512945,
+   "equal": true
+  },
+  "2026-05": {
+   "monthly": 2357603,
+   "sumOfDays": 2357603,
+   "equal": true
+  },
+  "2026-06": {
+   "monthly": 2569324,
+   "sumOfDays": 2569324,
+   "equal": true
+  },
+  "2026-07": {
+   "monthly": 2827243,
+   "sumOfDays": 2827243,
+   "equal": true
+  },
+  "2026-08": {
+   "monthly": 2782084,
+   "sumOfDays": 2782084,
+   "equal": true
+  },
+  "2026-09": {
+   "monthly": 2718365,
+   "sumOfDays": 2718365,
+   "equal": true
+  }
+ },
+ "rawNoTime": 0,
+ "quarterOverlapRowsLeftOut": [
+  {
+   "day": "2026-03-30",
+   "rows": 106876
+  },
+  {
+   "day": "2026-03-31",
+   "rows": 98824
+  },
+  {
+   "day": "2026-04-01",
+   "rows": 98646
+  },
+  {
+   "day": "2026-04-02",
+   "rows": 87032
+  },
+  {
+   "day": "2026-04-03",
+   "rows": 4
+  },
+  {
+   "day": "2026-06-29",
+   "rows": 112636
+  },
+  {
+   "day": "2026-06-30",
+   "rows": 105223
+  },
+  {
+   "day": "2026-07-01",
+   "rows": 107066
+  },
+  {
+   "day": "2026-07-02",
+   "rows": 108821
+  },
+  {
+   "day": "2026-07-03",
+   "rows": 2
+  },
+  {
+   "day": "2026-10-01",
+   "rows": 109174
+  },
+  {
+   "day": "2026-10-02",
+   "rows": 110509
+  },
+  {
+   "day": "2026-10-03",
+   "rows": 4
+  }
+ ]
+}

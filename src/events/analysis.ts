@@ -7,8 +7,11 @@
  *   a date in its local time, no hour), so the event day itself is a buffer and belongs to
  *   neither window by default: before = [E - n, E), after = [E + b, E + b + n) with b = 1 day.
  * - Windows are never filled in: a window that leaves the observed period is shortened and flagged.
- * - Nothing here is a causal effect. The difference-in-differences is computed only when its
- *   conditions hold, and even then it is an estimate under the parallel-trends assumption.
+ * - Nothing here is a causal effect. The comparison with the comparison group (a difference in
+ *   differences of log means) is reported as a descriptive figure; its checks can fail to reject
+ *   a pre-trend, but cannot show that the trends would have stayed parallel (Phase 9I).
+ * - Daily flight counts are autocorrelated, so trend t values use a Newey-West (HAC) standard
+ *   error; the plain OLS t is kept alongside (Phase 9I).
  */
 
 export const DAY = 86_400_000;
@@ -101,13 +104,23 @@ export interface Trend {
   n: number;
   /** slope of log(y + 1) per day */
   slope: number;
+  /** Newey-West (Bartlett kernel) standard error of the slope, lag `lag` (Phase 9I) */
   se: number;
   t: number;
+  lag: number;
+  /** ordinary OLS standard error and t (assume independent days; kept for comparison with 9G) */
+  seOls: number;
+  tOls: number;
   /** relative change implied over the window: exp(slope * (n - 1)) - 1 */
   impliedChange: number;
 }
 
-/** Ordinary least squares of y on day index. */
+/** Lag of the Newey-West estimator: floor(4 (n / 100)^(2/9)) (Newey and West 1994 rule of thumb). */
+export function neweyWestLag(n: number): number {
+  return Math.floor(4 * (n / 100) ** (2 / 9));
+}
+
+/** Least squares of y on day index; t with a Newey-West (HAC) standard error and the plain OLS one. */
 export function trend(y: number[]): Trend | null {
   const n = y.length;
   if (n < 5) return null;
@@ -121,10 +134,21 @@ export function trend(y: number[]): Trend | null {
     sxy += (x[i]! - mx) * (y[i]! - my);
   }
   const slope = sxy / sxx;
-  let sse = 0;
-  for (let i = 0; i < n; i++) sse += (y[i]! - (my + slope * (x[i]! - mx))) ** 2;
-  const se = Math.sqrt(sse / (n - 2) / sxx);
-  return { n, slope, se, t: se > 0 ? slope / se : slope === 0 ? 0 : Infinity, impliedChange: Math.exp(slope * (n - 1)) - 1 };
+  const u = y.map((v, i) => v - (my + slope * (x[i]! - mx)));
+  const sse = u.reduce((a, v) => a + v * v, 0);
+  const seOls = Math.sqrt(sse / (n - 2) / sxx);
+  // HAC variance of the slope: sum over lags of Bartlett-weighted autocovariances of (x - mx) u, / sxx^2
+  const lag = neweyWestLag(n);
+  const g = x.map((xi, i) => (xi - mx) * u[i]!);
+  let s = g.reduce((a, v) => a + v * v, 0);
+  for (let l = 1; l <= lag; l++) {
+    let c = 0;
+    for (let i = l; i < n; i++) c += g[i]! * g[i - l]!;
+    s += 2 * (1 - l / (lag + 1)) * c;
+  }
+  const se = Math.sqrt(Math.max(0, s) * (n / (n - 2))) / sxx;
+  const tOf = (e: number) => (e > 0 ? slope / e : slope === 0 ? 0 : Infinity);
+  return { n, slope, se, t: tOf(se), lag, seOls, tOls: tOf(seOls), impliedChange: Math.exp(slope * (n - 1)) - 1 };
 }
 
 /** Trend of log(y + 1) in the before window: did the change start before the event? */
@@ -145,6 +169,12 @@ export interface PlaceboResult {
   actual: number;
   /** share of placebos whose |log change| is at least the actual one */
   shareAsLarge: number | null;
+  /** placebo days looked at (every step back until the data run out) */
+  tried: number;
+  /** of those, left out because their after window would reach the event day */
+  overlapping: number;
+  /** placebos with |log change| at least the actual one */
+  asLarge: number;
 }
 
 /**
@@ -155,23 +185,37 @@ export interface PlaceboResult {
 export function placebo(s: DailySeries, w: WindowPair, dataStartMs: number, dataEndMs: number, stepDays = 7, exclude: ReadonlySet<number> = new Set(), maxPlacebos = 12): PlaceboResult {
   const actual = beforeAfter(s, w, exclude).logChange;
   const out: { dayMs: number; logChange: number }[] = [];
+  let tried = 0;
+  let overlapping = 0;
   for (let k = 1; out.length < maxPlacebos; k++) {
     const d = w.eventDayMs - k * stepDays * DAY;
     const p = windowPair(d, w.length, dataStartMs, dataEndMs, w.bufferDays);
     if (p.before.truncated || p.before.startMs < dataStartMs) break;
-    if (p.after.endMs > w.eventDayMs) continue; // would include the event
+    tried++;
+    if (p.after.endMs > w.eventDayMs) { overlapping++; continue; } // would include the event
     out.push({ dayMs: d, logChange: beforeAfter(s, p, exclude).logChange });
   }
   const large = out.filter((p) => Math.abs(p.logChange) >= Math.abs(actual)).length;
-  return { placebos: out, actual, shareAsLarge: out.length ? large / out.length : null };
+  return { placebos: out, actual, shareAsLarge: out.length ? large / out.length : null, tried, overlapping, asLarge: large };
 }
 
 export interface DidResult {
-  /** computed only when every condition holds */
+  /**
+   * The log difference when every check passes, else null. Kept for the saved JSON of Phase 9G;
+   * since Phase 9I it is shown as a descriptive figure either way, never as an effect.
+   */
   estimate: number | null;
   /** log change of the target minus log change of the comparison group */
   logDifference: number;
   conditions: { id: string; ok: boolean; detail: string }[];
+  /** always 'descriptive' (Phase 9I) */
+  interpretation: 'descriptive';
+  /** log change of the comparison group itself (it can be touched by the same crisis) */
+  comparisonLogChange: number;
+  /** target / comparison daily mean in the before window (level difference) */
+  levelRatioBefore: number | null;
+  /** the same difference on the placebo days (same estimator as the actual one) */
+  placebos: number[];
 }
 
 /**
@@ -191,14 +235,14 @@ export function differenceInDifferences(
   const diff = bt.logChange - bc.logChange;
   const rt = ratioPreTrend(target, comp, w);
   const gapIn = [...gaps].some((g) => (g >= w.before.startMs && g < w.before.endMs) || (g >= w.after.startMs && g < w.after.endMs));
-  // placebo on the difference series: log(target+1) - log(comparison+1)
-  const ratio: DailySeries = { startMs: target.startMs, values: target.values.map((v, i) => Math.log((v + 1) / ((comp.values[i] ?? 0) + 1))) };
+  // placebos with the same estimator as the actual figure (difference of log means). Phase 9G used
+  // the mean of daily log ratios here, a different quantity from the one it was compared with.
   const pl: number[] = [];
   for (let k = 1; pl.length < 12; k++) {
     const p = windowPair(w.eventDayMs - k * 7 * DAY, w.length, dataStartMs, dataEndMs, w.bufferDays);
     if (p.before.truncated) break;
     if (p.after.endMs > w.eventDayMs) continue;
-    pl.push(mean(slice(ratio, p.after.startMs, p.after.endMs).map((x) => x.v)) - mean(slice(ratio, p.before.startMs, p.before.endMs).map((x) => x.v)));
+    pl.push(beforeAfter(target, p).logChange - beforeAfter(comp, p).logChange);
   }
   const conditions = [
     { id: 'complete', ok: !w.before.truncated && !w.after.truncated && w.length >= 14, detail: `${w.before.days} / ${w.after.days} days` },
@@ -208,7 +252,10 @@ export function differenceInDifferences(
     { id: 'preTrend', ok: rt !== null && Math.abs(rt.t) < 2, detail: rt ? `t = ${rt.t.toFixed(2)}` : 'too few days' },
     { id: 'placebo', ok: pl.length >= 3 && pl.every((x) => Math.abs(x) < Math.abs(diff)), detail: `${pl.length} placebos, max |${Math.max(0, ...pl.map(Math.abs)).toFixed(3)}|` },
   ];
-  return { estimate: conditions.every((c) => c.ok) ? diff : null, logDifference: diff, conditions };
+  return {
+    estimate: conditions.every((c) => c.ok) ? diff : null, logDifference: diff, conditions, interpretation: 'descriptive',
+    comparisonLogChange: bc.logChange, levelRatioBefore: bc.beforeMean > 0 ? bt.beforeMean / bc.beforeMean : null, placebos: pl,
+  };
 }
 
 /** A daily series of `n` days starting at `startMs` from bins of the aggregator (bin = 1 day). */

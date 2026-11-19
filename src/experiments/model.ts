@@ -11,7 +11,8 @@ import type { ResearchConfig, TierSet, AircraftClass } from '../research/model';
 export const DEFINITION_FORMAT = '1090web-experiment';
 export const RESULT_FORMAT = '1090web-experiment-result';
 export const SCHEMA_VERSION = 1;
-export const METHOD_VERSION = '9e.1';
+/** 9e.2 (Phase 9I): Spearman / Kendall on values rounded like the ranks, so exact ties stay ties. */
+export const METHOD_VERSION = '9e.2';
 
 export type ExperimentType = 'sensitivity' | 'missingness';
 export type CombineRule = 'origin' | 'destination' | 'max' | 'either' | 'both';
@@ -144,6 +145,8 @@ export interface ExperimentResult {
   dataset: { id: string; version: string | null; continentRule?: string };
   createdAt: string;
   source: string;
+  /** where it was computed (Phase 9I; absent in older files) */
+  environment?: { runtime: string; app?: { version: string; commit: string | null }; python?: string; numpy?: string; platform?: string };
   computation: { exact: boolean; sources: number[]; sourceSeed: number; randomSeed: number; note: string };
   candidates: { count: number; rule: unknown };
   complete: boolean;
